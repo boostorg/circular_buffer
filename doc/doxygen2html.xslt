@@ -89,7 +89,7 @@ template &lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select
 class <xsl:value-of select="$container"/>
 {
 public:
-<xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="synopsis"/><xsl:text disable-output-escaping="yes">
+<xsl:call-template name="member-types"/><xsl:text disable-output-escaping="yes">
 </xsl:text>
 <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="synopsis">
   <xsl:sort select="name"/>
@@ -107,12 +107,13 @@ public:
   </xsl:template>
   
   <xsl:template match="memberdef[@kind='typedef']" mode="synopsis">
+    <xsl:param name="link-prefix" select="''"/>
     <xsl:if test="normalize-space(briefdescription) != ''">&nbsp;&nbsp;&nbsp;typedef&nbsp;<xsl:value-of select="substring('typename ', 1 div (contains(type, '::') and not(contains(type, '&gt;'))))"/>
       <xsl:choose>
         <xsl:when test="contains(type, '&gt;')"><i>implementation-defined</i>&nbsp;</xsl:when>
         <xsl:otherwise><xsl:value-of select="type"/>&nbsp;</xsl:otherwise>
       </xsl:choose>
-      <a href="#{@id}"><xsl:value-of select="name"/></a>;<xsl:text disable-output-escaping="yes">
+      <a href="{$link-prefix}#{@id}"><xsl:value-of select="name"/></a>;<xsl:text disable-output-escaping="yes">
 </xsl:text>
     </xsl:if>
   </xsl:template>
@@ -125,8 +126,8 @@ public:
         <xsl:with-param name="name" select="name"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; 80"/>
     <xsl:if test="not(boolean(string($exclude-method)))">
+      <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; 80"/>
       <xsl:value-of select="$indent"/>
       <xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
       <xsl:if test="count(templateparamlist) &gt; 0">template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<xsl:text disable-output-escaping="yes">
@@ -164,11 +165,11 @@ public:
   
   <xsl:template match="compounddef[@kind = 'class']" mode="description">
     <div id="srcdoc_types">
-      <!--
-      <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description">
-        <xsl:sort select="name"/>
-      </xsl:apply-templates>
-      -->
+      <table border="1">
+        <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description">
+          <xsl:sort select="name"/>
+        </xsl:apply-templates>
+      </table>
     </div>
     <div id="srcdoc_constructors">
       <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
@@ -184,7 +185,15 @@ public:
     </div>
   </xsl:template>
   
-  <xsl:template match="memberdef[@kind='function' or @kind='typedef']" mode="description">
+  <xsl:template match="memberdef[@kind='typedef']" mode="description">
+    <xsl:if test="normalize-space(briefdescription) != ''"><tr><td>
+      <a name="{@id}"><xsl:value-of select="name"/></a></td><td>
+      <xsl:value-of select="briefdescription"/>
+      </td></tr>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="memberdef[@kind='function']" mode="description">
     <a name="{@id}" />
     <b><pre>&nbsp;<xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
       <xsl:if test="count(templateparamlist) &gt; 0">
