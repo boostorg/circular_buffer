@@ -164,6 +164,11 @@ public:
   <!-- Description mode -->
   
   <xsl:template match="compounddef[@kind = 'class']" mode="description">
+    <div id="srcdoc_params">
+      <table border="1">
+        <xsl:apply-templates select="detaileddescription//parameterlist[@kind='param']/parameteritem" mode="description"/>
+      </table>
+    </div>
     <div id="srcdoc_types">
       <table border="1">
         <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description">
@@ -185,11 +190,15 @@ public:
     </div>
   </xsl:template>
   
+  <xsl:template match="parameteritem" mode="description">
+    <tr><td><a name="param_{parameternamelist/parametername}"><code><xsl:value-of select="parameternamelist/parametername"/></code></a></td><td>
+    <xsl:value-of select="parameterdescription"/></td></tr>
+  </xsl:template>
+  
   <xsl:template match="memberdef[@kind='typedef']" mode="description">
     <xsl:if test="normalize-space(briefdescription) != ''"><tr><td>
-      <a name="{@id}"><xsl:value-of select="name"/></a></td><td>
-      <xsl:value-of select="briefdescription"/>
-      </td></tr>
+      <a name="{@id}"><code><xsl:value-of select="name"/></code></a></td><td>
+      <xsl:value-of select="briefdescription"/></td></tr>
     </xsl:if>
   </xsl:template>
   
