@@ -1,0 +1,823 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Templated Circular Buffer Container</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+	</head>
+	<body bgColor="#ffffff">
+		<table id="Title" border="0">
+			<tr>
+				<td>
+					<h1>Templated Circular Buffer Container</h1>
+					<h1>circular_buffer&lt;T, Alloc&gt;</h1>
+				</td>
+				<td><a href="http://boost.org"><IMG width="277" height="86" src="../../../c++boost.gif" border="0"></a></td>
+			</tr>
+		</table>
+		<h3>Contents</h3>
+		<p>&nbsp;&nbsp; <A href="#synopsis">Synopsis</A><br>
+			&nbsp;&nbsp; <A href="#rationale">Rationale</A><br>
+			&nbsp;&nbsp; <A href="#simpleexample">Simple Example</A><br>
+			&nbsp;&nbsp; <A href="#definition">Definition</A><br>
+			&nbsp;&nbsp; <A href="#parameters">Template Parameters</A><br>
+			&nbsp;&nbsp; <A href="#members">Members</A><br>
+			&nbsp;&nbsp; <A href="#friendfunc">Friend Functions</A><BR>
+			&nbsp;&nbsp; <A href="#model">Model of</A><br>
+			&nbsp;&nbsp; <A href="#type">Type Requirements</A><br>
+			&nbsp;&nbsp; <A href="#semantics">Semantics</A><br>
+			&nbsp;&nbsp; <A href="#caveats">Caveats</A><br>
+			&nbsp;&nbsp; <A href="#debug">Debug Support</A><br>
+			&nbsp;&nbsp; <A href="#example">Example</A><br>
+			&nbsp;&nbsp; <A href="#notes">Notes</A><br>
+			&nbsp;&nbsp; <A href="#see">See also</A><br>
+			&nbsp;&nbsp; <A href="#ack">Acknowledgments</A>
+		</p>
+		<hr SIZE="1">
+		<table id="Figure" align="right" border="0">
+			<tr>
+				<td><IMG width="300" height="332" src="circular_buffer.png"></td>
+			</tr>
+			<tr>
+				<td width="300">
+					<table id="FigureDesc" align="right" border="0" cellpadding="5">
+						<tr>
+							<td valign="top"><b>Figure:</b></td>
+							<td valign="top">The circular buffer (for someone known as ring or cyclic buffer).</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<h3><a name="synopsis">Synopsis</a></h3>
+		<p>The <code>circular_buffer</code> container provides fixed capacity storage with 
+			constant time insertion and removal of elements at each end of a circular 
+			buffer. When the capacity of the <code>circular_buffer</code> is exhausted, 
+			inserted elements will cause elements at the opposite end to be overwritten. 
+			(See the Figure.) The <code>circular_buffer</code> only allocates memory when 
+			created, when the capacity is adjusted explicitly, or as necessary to 
+			accommodate a resizing or assign operation. (There is also a <code><A href="circular_buffer_adaptor.html">circular_buffer_space_optimized</A>
+			</code>available. It is an adaptor of the <code>circular_buffer</code> 
+			which does not allocate memory at once when created rather it allocates memory as needed.)
+		<hr SIZE="1">
+		<h3><a name="rationale">Rationale</a></h3>
+		<p>A contiguous region of memory utilized as a circular buffer has several unique 
+			and useful characteristics:
+		</p>
+		<ol>
+			<li>
+			Fixed memory use and no implicit or unexpected memory allocation.
+			<li>
+			Fast constant-time insertion and removal of elements from the front and back.
+			<li>
+			Fast constant-time random access of elements.
+			<li>
+				Suitability for real-time and performance critical applications.
+			</li>
+		</ol>
+		<p>The <code>circular_buffer</code> container provides a similar interface to <code>std::vector</code>,
+			<code>std::deque</code> and <code>std::list</code> including <code>push</code>, <code>
+				pop</code>, <code>insert</code>, <code>erase</code>, iterators and 
+			compatibility with <code>std</code> algorithms.
+		</p>
+		<p>Possible applications of the <code>circular_buffer</code> include:
+		</p>
+		<ul>
+			<li>
+			Storage of the most recently received samples, overwriting the oldest as new 
+			samples arrive.
+			<li>
+			Efficient fixed capacity FIFO (First In, First Out) queue.
+			<li>
+			Efficient fixed capacity LIFO (Last In, First Out) queue.
+			<li>
+				In a producer-consumer arrangement elements are inserted at one end of the 
+				buffer by a producer thread, and removed from the other end by a consumer 
+				thread (both threads need to get synchronized in this).
+			</li>
+		</ul>
+		<p>The design of the <code>circular_buffer</code> container is guided by the 
+			following principles:
+		</p>
+		<ol>
+			<li>
+				Maximum <em>efficiency</em>
+			for envisaged applications.
+			<li>
+				Suitable for <em>general purpose</em>
+			use.
+			<li>
+				<em>Interoperable</em> with other <code>std</code>
+			containers and algorithms.
+			<li>
+				The behaviour of the buffer as <em>intuitive</em>
+			as possible.
+			<li>
+				Suitable for <em>specialization</em> by means of adaptors. (The <code><A href="circular_buffer_adaptor.html">circular_buffer_space_optimized</A>
+			</code> is such an example of the adaptor.)
+			<LI>
+				Guarantee of <EM>basic exception safety</EM>.</LI></ol>
+		<hr SIZE="1">
+		<h3><a name="simpleexample">Simple Example</a></h3>
+		<p>A brief example using the <code>circular_buffer</code>:
+		</p>
+		<pre>   #include &lt;boost/circular_buffer.hpp&gt;
+
+   int main(int argc, char* argv[]) {
+
+      // Create a circular buffer with capacity for 3 integers.
+      boost::circular_buffer&lt;int&gt; cb(3);
+
+      cb.push_back(1);  // Insert the first element.
+      cb.push_back(2);  // Insert the second element.
+      cb.push_back(3);  // Insert the third element.
+
+      // The buffer is full now, pushing subsequent
+      // elements will overwrite the front-most elements.
+      
+      cb.push_back(4);  // Overwrite 1 with 4.
+      cb.push_back(5);  // Overwrite 2 with 5.
+
+      // The buffer now contains 3, 4 and 5.
+      int a = cb[0];  // a == 3
+      int b = cb[1];  // b == 4
+      int c = cb[2];  // c == 5
+
+      // Elements can be popped from either the front or back.
+
+      cb.pop_back();  // 5 is removed.
+      cb.pop_front(); // 3 is removed.
+
+      int d = cb[0];  // d == 4
+
+      return 0;
+   }
+</pre>
+		<hr SIZE="1">
+		<h3><a name="definition">Definition</a></h3>
+		<p><code>#include &lt;boost/circular_buffer.hpp&gt;</code>
+		</p>
+		<P>
+			In fact the <code>circular_buffer</code> is defined in the file <code><A href="../../../boost/circular_buffer/base.hpp">
+					boost/circular_buffer/base.hpp</A></code>, but it is necessary to 
+			include the <code><A href="../../../boost/circular_buffer.hpp">boost/circular_buffer.hpp</A></code>
+			in order to use this container. Also, there is a forward declaration for <code>circular_buffer</code>
+			in the header <code><A href="../../../boost/circular_buffer_fwd.hpp">boost/circular_buffer_fwd.hpp</A></code>.
+		</P>
+		<hr SIZE="1">
+		<h3><a name="parameters">Template Parameters</a></h3>
+		<table id="Table Template parameters" border="1">
+			<tr>
+				<th>
+					Parameter</th>
+				<th>
+					Description</th>
+				<th>
+					Default</th></tr>
+			<tr>
+				<td><code>T</code></td>
+				<td>The type of the elements stored in the circular buffer.</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td><code>Alloc</code></td>
+				<td>The allocator type used for all internal memory management.</td>
+				<td><code>std::allocator<T></code></td>
+			</tr>
+		</table>
+		<br>
+		<hr SIZE="1">
+		<h3><a name="members">Members</a></h3>
+		<p>Refer the <A href="srcdoc/index.html">source code documentation</A> for a 
+			detailed description.</p>
+		<table id="Table Members Types" border="1">
+			<tr>
+				<th>
+					Type</th>
+				<th>
+					Description</th></tr>
+			<tr>
+				<td><code>value_type</code>
+				</td>
+				<td>The type of the elements stored in the circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code>allocator_type</code></td>
+				<td>The type of the allocator used in the circular buffer.</td>
+			</tr>
+			<tr>
+				<td><code>iterator</code>
+				</td>
+				<td>Iterator (random access) used to iterate through a circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code>pointer</code>
+				</td>
+				<td>Pointer to the element.
+				</td>
+			</tr>
+			<tr>
+				<td><code>reference</code>
+				</td>
+				<td>Reference to the element.
+				</td>
+			</tr>
+			<tr>
+				<td><code>reverse_iterator</code>
+				</td>
+				<td>Iterator used to iterate backwards through a circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code>const_iterator</code>
+				</td>
+				<td>Const (random access) iterator used to iterate through a circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code>const_pointer</code>
+				</td>
+				<td>Const pointer to the element.
+				</td>
+			</tr>
+			<tr>
+				<td><code>const_reference</code>
+				</td>
+				<td>Const reference to the element.
+				</td>
+			</tr>
+			<tr>
+				<td><code>const_reverse_iterator</code>
+				</td>
+				<td>Const iterator used to iterate backwards through a circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code>difference_type</code>
+				</td>
+				<td>Distance type. A signed integral type used to represent the distance between 
+					two iterators.
+				</td>
+			</tr>
+			<tr>
+				<td><code>size_type</code>
+				</td>
+				<td>Size type. An unsigned integral type that can represent any nonnegative value 
+					of the container's distance type.
+				</td>
+			</tr>
+		</table>
+		<br>
+		<table id="Table Members Operations" width="85%" border="1">
+			<tr>
+				<TH>
+					Method
+				</TH>
+				<TH>
+					Description
+				</TH>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a26">circular_buffer</A>(size_type 
+						capacity, const allocator_type&amp; alloc = allocator_type())</code>
+				</td>
+				<td>Create an empty circular buffer with a given capacity.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a27">circular_buffer</A>(size_type 
+						capacity, const T&amp; item, const allocator_type&amp; alloc = 
+						allocator_type())</code>
+				</td>
+				<td>Create a full circular buffer with a given capacity and filled with copies of <code>
+						item</code>.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a28">circular_buffer</A>(const 
+						circular_buffer&amp; cb)</code>
+				</td>
+				<td>Copy constructor.
+				</td>
+			</tr>
+			<tr>
+				<td><code>template&lt;InputIterator&gt; <A href="srcdoc/classboost_1_1circular__buffer.html#a29">
+							circular_buffer</A>(size_type capacity, InputIterator first, InputIterator 
+						last, const allocator_type&amp; alloc = allocator_type())</code>
+				</td>
+				<td>Create a circular buffer with a copy of a range.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a30">~circular_buffer</A>()</code>
+				</td>
+				<td>Destructor.
+				</td>
+			</tr>
+			<tr>
+				<td><code>template&lt;InputIterator&gt; <A href="srcdoc/classboost_1_1circular__buffer.html#a33">
+							assign</A>(InputIterator first, InputIterator last)</code>
+				</td>
+				<td>Assign a copy of range.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a32">assign</A>(size_type 
+						n, const T&amp; item)</code>
+				</td>
+				<td>Assign <code>n</code> items into the circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a36">push_back</A>()</code>
+				</td>
+				<td>Insert a new element with the default value at the end.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a35">push_back</A>(const 
+						T&amp; item)</code>
+				</td>
+				<td>Insert a new element at the end.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a38">push_front</A>()</code>
+				</td>
+				<td>Inserts a new element with the default value at the start.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a37">push_front</A>(const 
+						T&amp; item)</code>
+				</td>
+				<td>Insert a new element at the start.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a39">pop_back</A>()</code>
+				</td>
+				<td>Remove the last (rightmost) element.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a40">pop_front</A>()</code>
+				</td>
+				<td>Remove the first (left-most) element.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a14">front</A>()<A href="#asterix"><sup>*</sup></A></code>
+				</td>
+				<td>Return the first (leftmost) element.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a15">back</A>()<A href="#asterix"><sup>*</sup></A></code>
+				</td>
+				<td>Return the last (rightmost) element.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a12">at</A>(size_type 
+						index)<A href="#asterix"><sup>*</sup></A></code>
+				</td>
+				<td>Return the element at the <code>index</code> position.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a10">operator[]</A>(size_type 
+						index)<A href="#asterix"><sup>*</sup></A></code>
+				</td>
+				<td>Return the element at the <code>index</code> position.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a18">data</A>()</code>
+				</td>
+				<td>Return pointer to data stored in the circular buffer as a continuous array of 
+					values.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a42">insert</A>(iterator 
+						pos)</code>
+				</td>
+				<td>Insert a new element with the default value before the given position.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a41">insert</A>(iterator 
+						pos, const T&amp; item)</code>
+				</td>
+				<td>Insert the <code>item</code> before the given position.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a43">insert</A>(iterator 
+						pos, size_type n, const T&amp; item)</code>
+				</td>
+				<td>Insert <code>n</code> copies of the <code>item</code> before the given 
+					position.
+				</td>
+			</tr>
+			<tr>
+				<td><code>template&lt;InputIterator&gt; <A href="srcdoc/classboost_1_1circular__buffer.html#a44">
+							insert</A>(iterator pos, InputIterator first, InputIterator last)</code>
+				</td>
+				<td>Insert the range <code>[first, last)</code> before the given position.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a46">rinsert</A>(iterator 
+						pos)</code>
+				</td>
+				<td>Insert a new element with the default value before the given position.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a45">rinsert</A>(iterator 
+						pos, const T&amp; item)</code>
+				</td>
+				<td>Insert the <code>item</code> before the given position.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a47">rinsert</A>(iterator 
+						pos, size_type n, const T&amp; item)</code>
+				</td>
+				<td>Insert <code>n</code> copies of the <code>item</code> before the given 
+					position.
+				</td>
+			</tr>
+			<tr>
+				<td><code>template&lt;InputIterator&gt; <A href="srcdoc/classboost_1_1circular__buffer.html#a48">
+							rinsert</A>(iterator pos, InputIterator first, InputIterator last)</code>
+				</td>
+				<td>Insert the range <code>[first, last)</code> before the given position.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a49">erase</A>(iterator 
+						pos)</code>
+				</td>
+				<td>Erase the element at the given position.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a50">erase</A>(iterator 
+						first, iterator last)</code>
+				</td>
+				<td>Erase the range <code>[first, last)</code>.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a51">clear</A>()</code>
+				</td>
+				<td>Erase all the stored elements.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a21">empty</A>() const</code>
+				</td>
+				<td>Is the circular buffer empty?
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a22">full</A>() const</code>
+				</td>
+				<td>Is the circular buffer full?
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a19">size</A>() const</code>
+				</td>
+				<td>Return the number of elements currently stored in the circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a25">resize</A>(size_type 
+						new_size, param_value_type item = T(), bool remove_front = true)</code>
+				</td>
+				<td>Change the size of the circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a20">max_size</A>() const</code>
+				</td>
+				<td>Return the largest possible size (or capacity) of the circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a23">capacity</A>() const</code>
+				</td>
+				<td>Return the capacity of the circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a24">set_capacity</A>(size_type 
+						new_capacity, bool remove_front = true)</code>
+				</td>
+				<td>Change the capacity of the circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a2">begin</A>()<A href="#asterix"><sup>*</sup></A></code>
+				</td>
+				<td>Return an iterator pointing to the beginning of the circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a3">end</A>()<A href="#asterix"><sup>*</sup></A></code>
+				</td>
+				<td>Return an iterator pointing to the end of the circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a6">rbegin</A>()<A href="#asterix"><sup>*</sup></A></code>
+				</td>
+				<td>Return a reverse iterator pointing to the beginning of the reversed circular 
+					buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a7">rend</A>()<A href="#asterix"><sup>*</sup></A></code>
+				</td>
+				<td>Return a reverse iterator pointing to the end of the reversed circular buffer.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a1">get_allocator</A>()<A href="#asterix"><sup>*</sup></A></code>
+				</td>
+				<td>Return the allocator.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a31">operator=</A>(const 
+						circular_buffer&amp; cb)</code>
+				</td>
+				<td>Assignment operator.
+				</td>
+			</tr>
+			<tr>
+				<td><code><A href="srcdoc/classboost_1_1circular__buffer.html#a34">swap</A>(circular_buffer&amp; 
+						cb)</code>
+				</td>
+				<td>Swap the contents of two circular buffers.
+				</td>
+			</tr>
+		</table>
+		<a name="asterix">*</a> The method also has its <code>const</code> counterpart.
+		<br>
+		<br>
+		<hr SIZE="1">
+		<h3><a name="friendfunc">Friend Functions</a></h3>
+		<table id="Table Members Operations" width="85%" border="1">
+			<tr>
+				<TH>
+					Method
+				</TH>
+				<TH>
+					Description
+				</TH>
+			</tr>
+			<tr>
+				<td><code>operator&lt;(const circular_buffer&amp; lhs, const circular_buffer&amp; rhs)</code></td>
+				<td>Lexicographical comparison.</td>
+			</tr>
+			<tr>
+				<td><code>operator==(const circular_buffer&amp; lhs, const circular_buffer&amp; rhs)</code>
+				</td>
+				<td>Test two circular buffers for equality.
+				</td>
+			</tr>
+		</table>
+		<br>
+		<hr SIZE="1">
+		<h3><a name="model">Model of</a></h3>
+		<p><a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">Random Access 
+				Container</a>, <a href="http://www.sgi.com/tech/stl/FrontInsertionSequence.html">
+				Front Insertion Sequence</a>, <a href="http://www.sgi.com/tech/stl/BackInsertionSequence.html">
+				Back Insertion Sequence</a>, <a href="http://www.sgi.com/tech/stl/Assignable.html">
+				Assignable</a> (SGI), <a href="http://www.sgi.com/tech/stl/EqualityComparable.html">
+				Equality Comparable</a>, <a href="http://www.sgi.com/tech/stl/LessThanComparable.html">
+				LessThan Comparable</a> (SGI)
+		</p>
+		<hr SIZE="1">
+		<h3><a name="type">Type Requirements</a></h3>
+		<ul>
+			<li>
+				<code>T</code> is <a href="http://boost.org/libs/utility/CopyConstructible.html">CopyConstructible</a>.
+			</li>
+		</ul>
+		<hr SIZE="1">
+		<h3><a name="semantics">Semantics</a></h3>
+		<p>The behaviour of insertion for <code>circular_buffer</code> is as follows:
+		</p>
+		<ul>
+			<li>
+				The capacity of a <code>circular_buffer</code> remains fixed unless adjusted 
+				via <code>set_capacity</code> or <code>resize</code>.
+			<li>
+				<code>insert</code>
+			will overwrite front elements as necessary.
+			<li>
+				<code>rinsert</code> will overwrite back elements as necessary.
+			</li>
+		</ul>
+		<p>The behaviour of resizing a <code>circular_buffer</code> is as follows:
+		</p>
+		<ul>
+			<li>
+				The capacity will be adjusted to accommodate a <code>resize</code>. (The 
+				capacity can be only increased, not decreased.)
+			</li>
+		</ul>
+		<p>The behaviour of assigning to a <code>circular_buffer</code> is as follows:
+		</p>
+		<ul>
+			<li>
+				The capacity will be adjusted to accommodate an <code>assign</code>. (The 
+				capacity can be only increased, not decreased.)
+			</li>
+		</ul>
+		<p><a name="invalidation"></a>The rules for iterator (and result of <code>data()</code>) 
+			invalidation for <code>circular_buffer</code> are as follows:
+		</p>
+		<ul>
+			<li>
+				<code>insert</code> at the end of the <code>circular_buffer</code> (including <code>
+					push_back</code>) does not invalidate any iterator except the case the 
+			iterator points to the overwritten element.
+			<li>
+				<code>rinsert</code> at the beginning of the <code>circular_buffer</code> (including
+				<code>push_front</code>) does not invalidate any iterator except the case 
+			the iterator points to the overwritten element.
+			<li>
+				<code>insert</code> in the middle of the <code>circular_buffer</code>
+			invalidates iterators pointing to the elements at the insertion point and 
+			behind the insertion point. It also invalidates iterators pointing to the 
+			overwritten element(s).
+			<li>
+				<code>rinsert</code> in the middle of the <code>circular_buffer</code>
+			invalidates iterators pointing to the elements before the insertion point and 
+			iterators pointing to the overwritten element(s).
+			<li>
+				<code>erase</code> at the end of the <code>circular_buffer</code> (including <code>pop_back</code>) 
+			invalidates only iterators pointing to the erased element(s).
+			<li>
+				<code>pop_front</code>
+			invalidates only iterators pointing to the erased element.
+			<li>
+				<code>erase</code> at the beginning or in the middle of the <code>circular_buffer</code>
+			invalidates iterators pointing to the erased element(s) and iterators pointing 
+			to the elements behind the erase point.
+			<li>
+				<code>data</code>, <code>set_capacity</code>, <code>resize</code>, <code>operator=</code>,
+				<code>assign</code>, <code>swap</code> and <code>clear</code> invalidate all 
+				iterators pointing to the <code>circular_buffer</code>.
+			</li>
+		</ul>
+		<p>In addition to the preceding rules the iterators get also invalidated due to 
+			overwritting (e.g. iterator pointing to the front-most element gets invalidated 
+			when inserting into the full <code>circular_buffer</code>). They get 
+			invalidated in that sense they do not point to the same element as before but 
+			they do still point to the same <b>valid</b> place in the memory. If you want 
+			to rely on this feature you have to turn of the <A href="#debug">Debug Support</A>
+			otherwise an assertion will report an error if such invalidated iterator is used.</p>
+		<hr SIZE="1">
+		<h3><a name="caveats">Caveats</a></h3>
+		<p>The <code>circular_buffer</code> should not be used for storing pointers to 
+			dynamically allocated objects. When a <code>circular_buffer</code> becomes 
+			full, further insertion will overwrite the stored pointers - resulting in a <b>memory 
+				leak</b>. One recommend alternative is the use of smart pointers <A href="#1">[1]</A>. 
+			(Any container of <code>std::auto_ptr</code> is considered particularly 
+			hazardous. <A href="#2">[2]</A>)</A>
+		</p>
+		<p>Elements inserted near the front of a full <code>circular_buffer</code> can be 
+			lost. According to the <A href="#semantics">semantics</A> of <code>insert</code>, 
+			insertion overwrites front-most items as necessary - possibly including 
+			elements currently being <b>inserted at the front</b> of the buffer. 
+			Conversely, <code>push_front</code> to a full <code>circular_buffer</code> is 
+			guaranteed to overwrite the back-most element.
+		</p>
+		<p>Elements inserted near the back of a full <code>circular_buffer</code> can be 
+			lost. According to the <A href="#semantics">semantics</A> of <code>rinsert</code>, 
+			insertion overwrites front-most items as necessary - possibly including 
+			elements currently being <b>inserted at the back</b> of the buffer. Conversely, <code>
+				push_back</code> to a full <code>circular_buffer</code> is guaranteed to 
+			overwrite the front-most element.
+		</p>
+		<p>
+		<P>While internals of a <code>circular_buffer</code> are circular, iterators are <b>not</b>. 
+			Iterators of a <code>circular_buffer</code> are only valid for the range <code>[begin(), 
+				end()]</code>. E.g. iterators <code>(begin() - 1)</code> and <code>(end() + 1)</code>
+			are invalid.
+		</P>
+		<hr SIZE="1">
+		<h3><a name="debug">Debug Support</a></h3>
+		<p>In order to help a programmer to avoid and find common bugs, the <code>circular_buffer</code>
+			contains a kind of debug support.</p>
+		<P>
+			The <CODE>circular_buffer</CODE> maintains a list of valid iterators. As soon 
+			as any element gets destroyed all iterators pointing to this element are 
+			removed from this list and explicitly invalidated (an invalidation flag is 
+			set). The debug support also consists of many assertions (<a href="http://boost.org/libs/utility/assert.html"><code>BOOST_ASSERT</code></a>
+			macros) which ensure the <code>circular_buffer</code> and its iterators are 
+			used in the correct manner at runtime. In case an invalid iterator is used the 
+			assertion will report an error. The connection of explicit iterator 
+			invalidation and assertions makes a very robust debug technique which catches 
+			most of the errors.</P>
+		<p>Moreover, the uninitialized memory allocated by <code>circular_buffer</code> is 
+			filled with the value <code>0xcc</code> in the debug mode. This can help the 
+			programmer when debugging the code to recognize the initialized memory from the 
+			uninitialized. For details refer the <A href="../../../boost/circular_buffer/base.hpp">
+				source code</A>.
+		</p>
+		<P>The debug support is enabled only in the debug mode (when the <CODE>NDEBUG</CODE>
+			is not defined). It can also be explicitly disabled by defining <CODE>BOOST_DISABLE_CB_DEBUG</CODE>
+			macro.</P>
+		<hr SIZE="1">
+		<h3><a name="example">Example</a></h3>
+		<p>The following example includes various usage of the <code>circular_buffer</code>.
+		</p>
+		<pre>   #include &lt;boost/circular_buffer.hpp&gt;
+   #include &lt;numeric&gt;
+   #include &lt;assert.h&gt;
+
+   int main(int argc, char* argv[])
+   {
+      // create a circular buffer of capacity 3
+      boost::circular_buffer&lt;int&gt; cb(3); 
+
+      // insert some elements into the circular buffer
+      cb.push_back(1);
+      cb.push_back(2);
+
+      // assertions
+      assert(cb[0] == 1);
+      assert(cb[1] == 2);
+      assert(!cb.full());
+      assert(cb.size() == 2);
+      assert(cb.capacity() == 3);
+
+      // insert some other elements
+      cb.push_back(3);
+      cb.push_back(4);
+      int sum = std::accumulate(cb.begin(), cb.end(), 0); // evaluate sum
+
+      // assertions
+      assert(cb[0] == 2);
+      assert(cb[1] == 3);
+      assert(cb[2] == 4);
+      assert(sum == 9);
+      assert(cb.full());
+      assert(cb.size() == 3);
+      assert(cb.capacity() == 3);
+      return 0;
+   }
+</pre>
+		<p>The <code>circular_buffer</code> has a capacity of three <code>int</code>. 
+			Therefore, the size of the buffer will not exceed three. The <code><a href="http://www.sgi.com/tech/stl/accumulate.html">
+					accumulate</a></code> algorithm evaluates the sum of the stored 
+			elements. The semantics the <code>circular_buffer</code> can be inferred from 
+			the assertions.
+		</p>
+		<hr SIZE="1">
+		<h3><a name="notes">Notes</a></h3>
+		<p><a name="1">[1]</a> A good implementation of smart pointers is included in <A href="http://boost.org/libs/smart_ptr">
+				Boost</A>.
+		</p>
+		<p><a name="2">[2]</a> Never create a circular buffer of <code>std::auto_ptr</code>. 
+			Refer to <a href="http://www.aristeia.com">Scott Meyers</a>' excellent book <em>Effective 
+				STL</em> for a detailed discussion. (Meyers S., <i>Effective STL: 50 Specific 
+				Ways to Improve Your Use of the Standard Template Library</i>. 
+			Addison-Wesley, 2001.)
+		</p>
+		<hr SIZE="1">
+		<h3><a name="see">See also</a></h3>
+		<p><code><A href="circular_buffer_adaptor.html">boost::circular_buffer_space_optimized</A>,
+				<a href="http://www.sgi.com/tech/stl/Vector.html">std::vector</a>, <a href="http://www.sgi.com/tech/stl/List.html">
+					std::list</a>, <a href="http://www.sgi.com/tech/stl/Deque.html">std::deque</a></code>
+		</p>
+		<hr SIZE="1">
+		<h3><a name="ack">Acknowledgments</a></h3>
+		<p>I would like to thank the Boost community for help when developing the <code>circular_buffer</code>.</p>
+		<p>The <code>circular_buffer</code> has a short history. Its first version was a <code>std::deque</code>
+			adaptor. This container was not very effective because of many reallocations 
+			when inserting/removing an element. Thomas Wenish did a review of this version 
+			and motivated me to create a circular buffer which allocates memory at once 
+			when created.</p>
+		<p>The second version adapted <code>std::vector</code> but it has been abandoned 
+			soon because of limited control over iterator invalidation.</p>
+		<p>The current version is a full-fledged STL compliant container. Pavel Vozenilek 
+			did a thorough review of this version and came with many good ideas and 
+			improvements. Also, I would like to thank Howard Hinnant and Nigel Stewart for 
+			valuable comments and ideas. And once again I want to thank Nigel Stewart for 
+			this document revision.
+		</p>
+		<hr>
+		<small>Copyright © 2003-2004 <a href="mailto:jano_gaspar[at]yahoo.com">Jan Gaspar</a></small>
+	</body>
+</html>
