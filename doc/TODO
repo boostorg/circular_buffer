@@ -1,2 +1,135 @@
-- apply changes from formal review (see formal_review.txt)
-- change boost.org links to local
+Tasks based mainly on the formal review (see formal_review.txt for details):
+
+t01  docs: change boost.org links to local
+
+t02  docs: paragraph "Rationale": remove the "producer-consumer" usage (it is
+     confusing)
+
+t03  docs: "Friend Functions" should be rather "Standalone Functions"
+     and should mention swap, <=, >= as well
+
+t04  docs: paragraph "Model of": change (SGI) to (SGI specific)
+
+t05  docs: change "Type Requirements" to "Element Type Requirements"
+
+t06  docs: define the type requirements (as a precondition) for every method
+
+t07  adaptor.hpp: fix needed to compile the test with BCB 6.4
+
+t08  base_test.cpp: fix needed to compile with VC 6.5
+
+t09  fix needed to compile the tests with GCC 3.4
+
+t10  docs: define exception safety for every method
+     "Guarantee of basic exception safety" as a design criteria for the whole
+     container should be removed or amended.
+
+t11  docs: remove/amend "In fact the circular_buffer is defined in the file
+     boost/circular_buffer/base.hpp, but it is necessary to " (user should'n
+     be bothered with the implementation details)
+
+t12  provide default arguments for push_back()/push_front() and
+     insert()/rinsert() methods and remove the non-argument versions
+
+t13  docs: fix precondition "*(this).size() > index" to "(*this).size()"
+     or remove (*this) entirely (in the whole docs)
+
+t14  docs: explicitly document methods which do not throw any exception,
+     e.g. "Exceptions: none"
+
+t15  rename the data() method to something meaningful concerning its mutation
+     status; mention its linear complexity in the docs REFINE!!!
+
+t16  docs: document that push_back() or other methods that they can choose NOT
+     to insert something -> in general document the boundary conditions
+     in greater details
+
+t17  docs: delete the "Semantics" paragraph and move its content directly
+     into the documentation of the particular methods
+
+t18  Perhaps in addition to a data() function, it would be useful if the
+     container provided constant-time access to the data as two arrays.
+     Perhaps something like std::pair<T *, T *> first_range() and 
+     std::pair<T *, T *> second_range(). REFINE!!!
+
+t19  docs: merge the source documentation with the main documentation
+
+t20  docs: define requirements on the Alloc type parameter
+
+t21  docs: consider better documentation for the "overwrite" term
+
+t22  implement a "hook" for the overwrite operation (maybe as an adaptor)
+
+t23  amend the source code according to the formal review (line 1578); use
+     the new iterator if possible
+
+t24  ammend the test in order to compile with the new iterator if really
+     needed (line 1857)
+
+t25  add constructor taking just two iterators as a parameter
+
+t26  change the current implementation of "overwrite" operation -> overwrite
+     will be equivalent to assign; adaptor can change the meaning of overwrite
+     operation (to destruct/construct) REFINE!!!
+
+t27  docs: apply the DefaultConstructible and Assignable type requirements
+
+t28  docs: the difference between resize() and set_capacity() should be 
+     mentioned more explicitly
+
+t29  add rerase method REFINE!!!
+
+t30  The insert() function has its rinsert() counterpart. The same issue
+     for resize and set_capacity is solved with the boolean parameter
+     remove_front, which is not consistent. CONSIDER!!!
+
+t31  docs: "... According to the semantics of rinsert, insertion overwrites
+     front-most items as necessary ..." should probably read "back-most items"
+     if this is a valid english word
+
+t32  CONSIDER!!! reimplementing the comparison functions (line 3801) 
+
+t33  fix needed to compile the tests with Comeau 4.3.0 compiler
+
+t34  CONSIDER!!! throwing exception when push_back() to empty container
+
+t35  docs: there should be warning for data() documentation that the returned
+     pointer gets very easily invalidated
+
+t36  docs: Synopsis in circular_buffer.html could be splitted by <p> into
+     two paragraphs - it would look less "heavy"
+
+t37  the macros as BOOST_CB_TRY should be at some time replaced by common
+     Boost macros (BOOST_TRY/BOOST_CATCH/BOOST_RETHROW)
+
+t38  circular_buffer.hpp: #include <boost/type_traits.hpp> should be replaced
+     by finer granularity includes - this line big huge impact on compilation
+     time
+
+t39  #include <cstring> instedad of <string.h>
+
+t40  base.hpp: remove warning Intel C++ 7.0 on line: void replace(...)
+     (line 4438)
+
+t41  typedef for circular_buffer<T, Alloc> (line 4450)
+
+t42  documentation may add some rationale on its internal data structures
+     and their advantage over std::deque
+
+t43  adaptor.hpp: apply workaround for borland (line 5764)
+
+
+-------------------------------------------------------------------------------
+
+Some routine tasks:
+
+r01  check for memory leaks
+
+r02  check for test coverage (doesn't have to be 100% but it would be good
+     if every line is hit at least once)
+
+r03  update version number/date
+
+r04  format source files
+
+r05  spellcheck
