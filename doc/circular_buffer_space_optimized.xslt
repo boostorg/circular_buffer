@@ -5,9 +5,9 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  
+
   <xsl:import href="doxygen2html.xslt"/>
-  
+
   <xsl:output method="xml" version="1.0" encoding="iso-8859-1" indent="yes" media-type="text/xml"/>
 
   <xsl:template name="standalone_functions">
@@ -16,5 +16,26 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
       <xsl:sort select="name"/>
     </xsl:apply-templates>
   </xsl:template>
+
+  <xsl:template match="memberdef[@kind='typedef']" mode="synopsis">
+    <xsl:choose>
+      <xsl:when test="/doxygen/compounddef/compoundname = 'boost::circular_buffer_space_optimized'">
+        <xsl:variable name="container-ref" select="document(concat($xmldir, '/', 'index.xml'))//compound[name='boost::circular_buffer' and @kind='class']/@refid"/>
+        <xsl:variable name="class-file" select="concat($xmldir, '/', $container-ref, '.xml')"/>
+        <xsl:variable name="class" select="document($class-file)/doxygen/compounddef[@id = $container-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef[name=current()/name]"/>
+        <xsl:message><xsl:value-of select="$class/name"/></xsl:message>
+        <xsl:apply-templates select="$class" mode="synopsis"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-imports/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
   
+  <xsl:template match="memberdef[@kind='function']" mode="synopsis">
+    <xsl:if test="name != 'internal_capacity'">
+      <xsl:apply-imports/>
+    </xsl:if>
+  </xsl:template>
+
 </xsl:stylesheet>
