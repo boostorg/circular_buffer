@@ -11,7 +11,10 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   <xsl:output method="xml" version="1.0" encoding="iso-8859-1" indent="yes" media-type="text/xml"/>
 
   <xsl:template name="standalone_functions">
-    <xsl:apply-templates select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']/memberdef[contains(argsstring, 'circular_buffer_space_optimized&lt;')]" mode="synopsis"/>
+    <xsl:apply-templates select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']/memberdef[contains(argsstring, 'circular_buffer_space_optimized&lt;')]" mode="synopsis">
+      <xsl:with-param name="indent" select="''"/>
+      <xsl:sort select="name"/>
+    </xsl:apply-templates>
   </xsl:template>
   
 </xsl:stylesheet>

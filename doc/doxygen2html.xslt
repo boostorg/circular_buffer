@@ -79,8 +79,8 @@
     
   <xsl:template match="compounddef[@kind = 'class']" mode="synopsis">
     <div id="srcdoc_synopsis">
-    <table border="0" cellpadding="5">
-      <tr><td></td><td>
+      <table border="0" cellpadding="5">
+        <tr><td></td><td>
 <pre>
 namespace boost {
 
@@ -88,15 +88,19 @@ template &lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select
 class <xsl:value-of select="$container"/>
 {
 public:
-<xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="synopsis"/>
+<xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="synopsis"/><xsl:text disable-output-escaping="yes">
+</xsl:text>
 <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="synopsis">
-    <xsl:sort select="name"/>
-</xsl:apply-templates>
-<br />
+  <xsl:with-param name="indent" select="'&nbsp;&nbsp;&nbsp;'"/>
+  <xsl:sort select="name"/>
+</xsl:apply-templates><xsl:text disable-output-escaping="yes">
+</xsl:text>
 <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="synopsis">
-    <xsl:sort select="name"/>
-</xsl:apply-templates>
-};
+  <xsl:with-param name="indent" select="'&nbsp;&nbsp;&nbsp;'"/>
+  <xsl:sort select="name"/>
+</xsl:apply-templates><xsl:text disable-output-escaping="yes">};
+
+</xsl:text>
 <xsl:call-template name="standalone_functions"/>
 } // namespace boost
 </pre>
@@ -106,66 +110,43 @@ public:
   </xsl:template>
   
   <xsl:template match="memberdef[@kind='typedef']" mode="synopsis">
-    <xsl:if test="normalize-space(briefdescription) != ''">
-        <xsl:text disable-output-escaping="yes">   typedef </xsl:text><xsl:value-of select="substring('typename ', 1 div (contains(type, '::') and not(contains(type, '&gt;'))))"/>
-        <xsl:choose>
-            <xsl:when test="contains(type, '&gt;')"><i>implementation-defined</i> </xsl:when>
-            <xsl:otherwise><xsl:value-of select="type"/></xsl:otherwise>
-        </xsl:choose>
-        <xsl:text disable-output-escaping="yes"> </xsl:text>
-        <a href="#{@id}"><xsl:value-of select="name"/></a><xsl:text>;
+    <xsl:if test="normalize-space(briefdescription) != ''">&nbsp;&nbsp;&nbsp;typedef&nbsp;<xsl:value-of select="substring('typename ', 1 div (contains(type, '::') and not(contains(type, '&gt;'))))"/>
+      <xsl:choose>
+        <xsl:when test="contains(type, '&gt;')"><i>implementation-defined</i>&nbsp;</xsl:when>
+        <xsl:otherwise><xsl:value-of select="type"/>&nbsp;</xsl:otherwise>
+      </xsl:choose>
+      <a href="#{@id}"><xsl:value-of select="name"/></a>;<xsl:text disable-output-escaping="yes">
 </xsl:text>
-</xsl:if>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="memberdef[@kind='function']" mode="synopsis">
-    <xsl:variable name="long-args" select="string-length(argsstring) &gt; 70"/>
-    <xsl:text disable-output-escaping="yes">
-   </xsl:text>
+    <xsl:param name="indent"/>
+    <xsl:value-of select="$indent"/>
     <xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
-    <xsl:if test="count(templateparamlist) &gt; 0">
-        <xsl:text disable-output-escaping="yes">template </xsl:text>&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<xsl:text disable-output-escaping="yes">
-      </xsl:text>
+    <xsl:if test="count(templateparamlist) &gt; 0">template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<xsl:text disable-output-escaping="yes">
+&nbsp;&nbsp;&nbsp;</xsl:text><xsl:value-of select="$indent"/>
     </xsl:if>
-    <xsl:value-of select="substring(concat(type, ' '), 1 div (type != ''))"/>
+    <xsl:if test="type != ''"><xsl:apply-templates select="type" mode="synopsis"/>&nbsp;</xsl:if>
     <a href="#{@id}">
-        <xsl:value-of select="name"/>
+      <xsl:value-of select="name"/>
     </a>(<xsl:for-each select="param">
-        <xsl:if test="not((count(preceding-sibling::param) + 1) mod 3) and $long-args">
-        <xsl:text disable-output-escaping="yes">
-      </xsl:text>
-            <xsl:if test="count(../templateparamlist) &gt; 0">
-                <xsl:text disable-output-escaping="yes">   </xsl:text>
-            </xsl:if>
-        </xsl:if>
-        <xsl:apply-templates select="type" mode="synopsis"/>
-        <xsl:text disable-output-escaping="yes"> </xsl:text>
-        <xsl:value-of select="declname"/>
-        <xsl:value-of select="substring(concat(' = ', defval), 1 div (normalize-space(defval) != ''))"/>
-        <xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>
-    </xsl:for-each>)<xsl:value-of select="substring(' const', 1 div (@const = 'yes'))"/>;<xsl:text></xsl:text>
+    <xsl:apply-templates select="type" mode="synopsis"/>&nbsp;<xsl:value-of select="declname"/>
+    <xsl:value-of select="substring(concat(' = ', defval), 1 div (normalize-space(defval) != ''))"/>
+    <xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>
+    </xsl:for-each>)<xsl:value-of select="substring(' const', 1 div (@const = 'yes'))"/>;<xsl:text disable-output-escaping="yes">
+</xsl:text>
   </xsl:template>
 
   <xsl:template match="type" mode="synopsis">
+    <xsl:variable name="item-count" select="count(text() | ref)"/>
     <xsl:for-each select="text() | ref">
-        <xsl:choose>
-        <xsl:when test="name(.) = 'ref'">
-            <xsl:value-of select="."/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:choose>
-                <xsl:when test=". = 'return_value_type' or . = 'param_value_type'">
-                    <xsl:text>value_type</xsl:text>
-                </xsl:when>
-                <xsl:when test=". = ' &amp;'">
-                    <xsl:text>&amp;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="."/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:otherwise>
-    </xsl:choose>
+      <xsl:variable name="item" select="translate(., '&#32;', '')"/>
+      <xsl:choose>
+        <xsl:when test="$item = 'return_value_type' or $item = 'param_value_type'">value_type</xsl:when>
+        <xsl:otherwise><xsl:value-of select="$item"/></xsl:otherwise>
+      </xsl:choose>
+      <xsl:if test="name(.) != 'ref' and position() != $item-count">&nbsp;</xsl:if>
     </xsl:for-each>
   </xsl:template>
   
