@@ -93,12 +93,17 @@ public:
    explicit <a href="#classboost_1_1circular__buffer__space__optimized_1a5">circular_buffer_space_optimized</a>(size_type capacity, 
       size_type min_capacity = 0, const allocator_type&amp; alloc = allocator_type());
 
+   template &lt;class InputIterator&gt;
+      void <a href="circular_buffer.html#classboost_1_1circular__buffer_1a0">assign</a>(InputIterator first, InputIterator last);
+   void <a href="circular_buffer.html#classboost_1_1circular__buffer_1a1">assign</a>(size_type n, value_type item);
    value_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a2">at</a>(size_type index) const;
    reference <a href="circular_buffer.html#classboost_1_1circular__buffer_1a3">at</a>(size_type index);
    value_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a4">back</a>() const;
    reference <a href="circular_buffer.html#classboost_1_1circular__buffer_1a5">back</a>();
    const_iterator <a href="circular_buffer.html#classboost_1_1circular__buffer_1a6">begin</a>() const;
    iterator <a href="circular_buffer.html#classboost_1_1circular__buffer_1a7">begin</a>();
+   size_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a8">capacity</a>() const;
+   void <a href="circular_buffer.html#classboost_1_1circular__buffer_1a13">clear</a>();
    pointer <a href="circular_buffer.html#classboost_1_1circular__buffer_1a14">data</a>();
    bool <a href="circular_buffer.html#classboost_1_1circular__buffer_1a15">empty</a>() const;
    const_iterator <a href="circular_buffer.html#classboost_1_1circular__buffer_1a16">end</a>() const;
@@ -107,6 +112,7 @@ public:
    iterator <a href="#classboost_1_1circular__buffer__space__optimized_1a8">erase</a>(iterator pos);
    value_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a20">front</a>() const;
    reference <a href="circular_buffer.html#classboost_1_1circular__buffer_1a21">front</a>();
+   bool <a href="circular_buffer.html#classboost_1_1circular__buffer_1a22">full</a>() const;
    allocator_type&amp; <a href="circular_buffer.html#classboost_1_1circular__buffer_1a23">get_allocator</a>();
    allocator_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a24">get_allocator</a>() const;
    template &lt;class InputIterator&gt;
@@ -117,6 +123,8 @@ public:
    size_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a29">max_size</a>() const;
    size_type <a href="#classboost_1_1circular__buffer__space__optimized_1a15">min_capacity</a>() const;
    circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; <a href="circular_buffer.html#classboost_1_1circular__buffer_1a30">operator=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; cb);
+   value_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a31">operator[]</a>(size_type index) const;
+   reference <a href="circular_buffer.html#classboost_1_1circular__buffer_1a32">operator[]</a>(size_type index);
    void <a href="#classboost_1_1circular__buffer__space__optimized_1a19">pop_back</a>();
    void <a href="#classboost_1_1circular__buffer__space__optimized_1a20">pop_front</a>();
    void <a href="#classboost_1_1circular__buffer__space__optimized_1a21">push_back</a>();
@@ -127,6 +135,7 @@ public:
    reverse_iterator <a href="circular_buffer.html#classboost_1_1circular__buffer_1a40">rbegin</a>();
    const_reverse_iterator <a href="circular_buffer.html#classboost_1_1circular__buffer_1a41">rend</a>() const;
    reverse_iterator <a href="circular_buffer.html#classboost_1_1circular__buffer_1a42">rend</a>();
+   void <a href="circular_buffer.html#classboost_1_1circular__buffer_1a43">resize</a>(size_type new_size, value_type item = T(), bool remove_front = true);
    template &lt;class InputIterator&gt;
       void <a href="#classboost_1_1circular__buffer__space__optimized_1a26">rinsert</a>(iterator pos, InputIterator first, InputIterator last);
    void <a href="#classboost_1_1circular__buffer__space__optimized_1a27">rinsert</a>(iterator pos, size_type n, value_type item);
@@ -139,25 +148,25 @@ public:
 };
 
 template &lt;class T, class Alloc&gt;
-   bool <a href="#namespaceboost_1a2">operator!=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a9">operator!=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="#namespaceboost_1a1">operator&lt;</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a8">operator&lt;</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="#namespaceboost_1a4">operator&lt;=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a11">operator&lt;=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="#namespaceboost_1a0">operator==</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a7">operator==</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="#namespaceboost_1a3">operator&gt;</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a10">operator&gt;</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="#namespaceboost_1a5">operator&gt;=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a12">operator&gt;=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   void <a href="#namespaceboost_1a6">swap</a>(circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   void <a href="circular_buffer.html#namespaceboost_1a13">swap</a>(circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
       circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 
 } // namespace boost

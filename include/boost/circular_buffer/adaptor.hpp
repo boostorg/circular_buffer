@@ -82,7 +82,7 @@ private:
 public:
 // Overridden
 
-    // See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     bool full() const { return size() == capacity(); }
 
     //! Return the minimal guaranteed amount of allocated memory.
@@ -137,7 +137,7 @@ public:
         m_capacity = new_capacity;
     }
 
-    // See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     void resize(size_type new_size, param_value_type item = T(), bool remove_front = true) {
         if (new_size > size()) {
             if (new_size > capacity())
@@ -253,14 +253,14 @@ public:
 
 #endif // #if defined(BOOST_CB_NEVER_DEFINED)
 
-    // See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     void assign(size_type n, param_value_type item) {
         if (n > m_capacity)
             m_capacity = n;
         circular_buffer<T, Alloc>::assign(n, item);
     }
 
-    // See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
         circular_buffer<T, Alloc>::assign(first, last);
@@ -269,7 +269,7 @@ public:
             m_capacity = capacity;
     }
 
-    // See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     void swap(circular_buffer_space_optimized& cb) {
         std::swap(m_capacity, cb.m_capacity);
         std::swap(m_min_capacity, cb.m_min_capacity);
@@ -448,7 +448,7 @@ public:
         return begin() + index;
     }
 
-    // See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     void clear() { erase(begin(), end()); }
 
 private:

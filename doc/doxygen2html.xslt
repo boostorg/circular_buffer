@@ -189,6 +189,7 @@ public:
       </xsl:apply-templates>
     </div>
     <div id="srcdoc_functions">
+      <xsl:call-template name="standalone-functions-details"/>
     </div>
   </xsl:template>
   

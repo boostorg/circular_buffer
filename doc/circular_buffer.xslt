@@ -9,32 +9,36 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   <xsl:import href="doxygen2html.xslt"/>
   
   <xsl:output method="xml" version="1.0" encoding="iso-8859-1" indent="yes" media-type="text/xml"/>
+  
+  <xsl:variable name="standalone-functions" select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']"/>
 
   <xsl:template name="template-parameters">
-    <xsl:for-each select="templateparamlist/param">
-      <xsl:apply-templates select="." mode="synopsis"/>
-    </xsl:for-each>
+    <xsl:apply-templates select="templateparamlist/param" mode="synopsis"/>
   </xsl:template>
   
   <xsl:template name="public-types">
-    <xsl:for-each select="sectiondef[@kind='public-type']/memberdef">
-      <xsl:sort select="name"/>
-      <xsl:apply-templates select="." mode="synopsis"/>
-    </xsl:for-each>
-  </xsl:template>
-  
-  <xsl:template name="member-functions">
-    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != '']">
-      <xsl:sort select="name"/>
-      <xsl:apply-templates select="." mode="synopsis"/>
-    </xsl:for-each>
-  </xsl:template>
-
-  <xsl:template name="standalone-functions">
-    <xsl:apply-templates select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']/memberdef[contains(argsstring, 'circular_buffer&lt;')]" mode="synopsis">
-      <xsl:with-param name="indent" select="''"/>
+    <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="synopsis">
       <xsl:sort select="name"/>
     </xsl:apply-templates>
   </xsl:template>
   
+  <xsl:template name="member-functions">
+    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="synopsis">
+      <xsl:sort select="name"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template name="standalone-functions">
+    <xsl:apply-templates select="$standalone-functions/memberdef[contains(argsstring, 'circular_buffer&lt;')]" mode="synopsis">
+      <xsl:sort select="name"/>
+      <xsl:with-param name="indent" select="''"/>
+    </xsl:apply-templates>
+  </xsl:template>
+ 
+  <xsl:template name="standalone-functions-details">
+    <xsl:apply-templates select="$standalone-functions/memberdef[contains(argsstring, 'circular_buffer&lt;')]" mode="description">
+      <xsl:sort select="name"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
 </xsl:stylesheet>
