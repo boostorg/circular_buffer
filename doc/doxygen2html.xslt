@@ -2,6 +2,7 @@
 
 <!DOCTYPE stylesheet [
   <!ENTITY nbsp "&#160;">
+  <!ENTITY space "&#32;">
 ]>
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
@@ -139,14 +140,13 @@ public:
   </xsl:template>
 
   <xsl:template match="type" mode="synopsis">
-    <xsl:variable name="item-count" select="count(text() | ref)"/>
     <xsl:for-each select="text() | ref">
-      <xsl:variable name="item" select="translate(., '&#32;', '')"/>
+      <xsl:variable name="item" select="translate(., '&space;', '')"/>
       <xsl:choose>
         <xsl:when test="$item = 'return_value_type' or $item = 'param_value_type'">value_type</xsl:when>
         <xsl:otherwise><xsl:value-of select="$item"/></xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="name(.) != 'ref' and position() != $item-count">&nbsp;</xsl:if>
+      <xsl:if test="name(.) != 'ref' and position() != last()">&nbsp;</xsl:if>
     </xsl:for-each>
   </xsl:template>
   
