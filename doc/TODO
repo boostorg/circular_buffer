@@ -2,17 +2,22 @@ Tasks based mainly on the formal review (see formal_review.txt for details):
 
 t01  docs: change boost.org links to local
 
-t02  docs: paragraph "Rationale": remove the "producer-consumer" usage (it is
+t02  DONE
+     docs: paragraph "Rationale": remove the "producer-consumer" usage (it is
      confusing)
 
 t03  docs: "Friend Functions" should be rather "Standalone Functions"
      and should mention swap, <=, >= as well
 
-t04  docs: paragraph "Model of": change (SGI) to (SGI specific)
+t04  DONE
+     docs: paragraph "Model of": change (SGI) to (SGI specific)
 
-t05  docs: change "Type Requirements" to "Element Type Requirements"
+t05  docs: "Type Requirements" will be part of "Template Parameters"
+     and will be taken from the source doc.
+     (was: change "Type Requirements" to "Element Type Requirements")
 
-t06  docs: define the type requirements (as a precondition) for every method
+t06  docs: define the element type requirements (as a precondition) for every
+     method
 
 t07  adaptor.hpp: fix needed to compile the test with BCB 6.4
 
@@ -24,7 +29,8 @@ t10  docs: define exception safety for every method
      "Guarantee of basic exception safety" as a design criteria for the whole
      container should be removed or amended.
 
-t11  docs: remove/amend "In fact the circular_buffer is defined in the file
+t11  DONE
+     docs: remove/amend "In fact the circular_buffer is defined in the file
      boost/circular_buffer/base.hpp, but it is necessary to " (user should'n
      be bothered with the implementation details)
 
@@ -52,8 +58,7 @@ t18  Perhaps in addition to a data() function, it would be useful if the
      Perhaps something like std::pair<T *, T *> first_range() and 
      std::pair<T *, T *> second_range(). REFINE!!!
 
-t19  IN PROGRESS
-     docs: merge the source documentation with the main documentation
+t19  docs: merge the source documentation with the main documentation
 
 t20  docs: define requirements on the Alloc type parameter
 
@@ -114,8 +119,8 @@ t40  base.hpp: remove warning Intel C++ 7.0 on line: void replace(...)
 
 t41  typedef for circular_buffer<T, Alloc> (line 4450)
 
-t42  docs: some rationale on its internal data structures and their advantage
-     over std::deque
+t42  documentation may add some rationale on its internal data structures
+     and their advantage over std::deque
 
 t43  adaptor.hpp: apply workaround for borland (line 5764)
 
