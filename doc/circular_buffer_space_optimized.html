@@ -15,7 +15,7 @@
 				<td><a href="http://boost.org"><img height="86" src="../../../c++boost.gif" width="277" border="0" alt="Boost"></a></td>
 			</tr>
     </table>
-    <h3>Contents</h3>
+    <h2>Contents</h2>
     <dl>
 <dd><a href="#description">Description</a></dd>
 			<dd><a href="#synopsis">Synopsis</a></dd>
@@ -28,9 +28,9 @@
 			<dd><a href="#see">See also</a></dd>
 			<dd><a href="#ack">Acknowledgments</a></dd>
 		</dl>
-    <h3>
+    <h2>
       <a name="description">Description</a>
-    </h3>
+    </h2>
     <p>The <code>circular_buffer_space_optimized</code> container is an adaptor of the <code>
 				<a href="circular_buffer.html">circular_buffer</a></code>. The 
 			functionality of the <code>circular_buffer_space_optimized</code> is similar to 
@@ -55,9 +55,9 @@
 			</tr>
     </table>
     <br>
-    <h3>
+    <h2>
       <a name="synopsis">Synopsis</a>
-    </h3>
+    </h2>
     <div id="srcdoc_synopsis">
       <table border="0" cellpadding="5">
         <tr>
@@ -175,27 +175,27 @@ template &lt;class T, class Alloc&gt;
         </tr>
       </table>
     </div>
-    <h3>
+    <h2>
       <a name="rationale">Rationale</a>
-    </h3>
+    </h2>
     <p>The auto-resizing mode of the space optimized circular buffer can be useful in 
 			situations when the container can possibly store large number of elements but 
 			most of its lifetime the container stores just few of them. The usage of the <code>circular_buffer_space_optimized</code>
 			will result in decreased memory consumption and can improve the CPU cache 
 			effectiveness.
 		</p>
-    <h3>
+    <h2>
       <a name="header">Header files</a>
-    </h3>
+    </h2>
     <p>
 			The <code>circular_buffer_space_optimized</code> is defined in the file
       <code><a href="../../../boost/circular_buffer.hpp">boost/circular_buffer.hpp</a></code>.
       There is also a forward declaration for the <code>circular_buffer_space_optimized</code> in the header file
       <code><a href="../../../boost/circular_buffer_fwd.hpp">boost/circular_buffer_fwd.hpp</a></code>.
 		</p>
-    <h3>
+    <h2>
       <a name="model">Modeled concepts</a>
-    </h3>
+    </h2>
     <p><a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">Random Access 
 				Container</a>, <a href="http://www.sgi.com/tech/stl/FrontInsertionSequence.html">
 				Front Insertion Sequence</a>, <a href="http://www.sgi.com/tech/stl/BackInsertionSequence.html">
@@ -204,9 +204,9 @@ template &lt;class T, class Alloc&gt;
 				Equality Comparable</a>, <a href="http://www.sgi.com/tech/stl/LessThanComparable.html">
 				LessThan Comparable</a> (SGI specific)
 		</p>
-    <h3>
+    <h2>
       <a name="members">Template Parameters, Members and Friend Functions</a>
-    </h3>
+    </h2>
     <p>Template parameters, members and friend functions of the <code>circular_buffer_space_optimized</code>
 			are almost the same as for the base <code>circular_buffer</code>. Refer the <code>circular_buffer</code>
 			<a href="circular_buffer.html#parameters">documentation</a> and also its <a href="srcdoc/index.html">
@@ -269,9 +269,9 @@ template &lt;class T, class Alloc&gt;
 			</tr>
     </table>
     <br>
-    <h3>
+    <h2>
       <a name="semantics">Semantics</a>
-    </h3>
+    </h2>
     <p>The behaviour of memory auto-resizing is as follows:
 		</p>
     <ul>
@@ -315,15 +315,15 @@ template &lt;class T, class Alloc&gt;
 				the <code>circular_buffer_space_optimized</code>.
 			</li>
 		</ul>
-    <h3>
+    <h2>
       <a name="see">See also</a>
-    </h3>
+    </h2>
     <p><code><a href="circular_buffer.html">boost::circular_buffer</a>, <a href="http://www.sgi.com/tech/stl/Vector.html">
 					std::vector</a></code>
 		</p>
-    <h3>
+    <h2>
       <a name="ack">Acknowledgments</a>
-    </h3>
+    </h2>
     <p>The idea of the space optimized circular buffer has been introduced by Pavel 
 			Vozenilek.
 		</p>

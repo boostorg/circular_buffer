@@ -81,8 +81,8 @@
     
   <xsl:template match="compounddef[@kind = 'class']" mode="synopsis">
     <div id="srcdoc_synopsis">
-      <table border="0" cellpadding="5">
-        <tr><td></td><td>
+      <table id="table_synopsis" border="0" cellpadding="10">
+        <tr><td>
 <pre>
 namespace boost {
 
@@ -165,13 +165,13 @@ public:
   
   <xsl:template match="compounddef[@kind = 'class']" mode="description">
     <div id="srcdoc_params">
-      <table id="template_params" border="1">
+      <table id="table_template_params" border="1">
         <tr><th>Parameter</th><th>Description</th><th>Default</th></tr>
         <xsl:apply-templates select="detaileddescription//parameterlist[@kind='param']/parameteritem" mode="description"/>
       </table>
     </div>
     <div id="srcdoc_types">
-      <table id="public_types" border="1">
+      <table id="table_public_types" border="1">
         <tr><th>Type</th><th>Description</th></tr>
         <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description">
           <xsl:sort select="name"/>
@@ -179,17 +179,23 @@ public:
       </table>
     </div>
     <div id="srcdoc_constructors">
-      <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
-          <xsl:sort select="name"/>
-      </xsl:apply-templates>
+      <table id="table_constructors" border="1" width="100%">
+        <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
+            <xsl:sort select="name"/>
+        </xsl:apply-templates>
+      </table>
     </div>
     <div id="srcdoc_methods">
-      <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="description">
-        <xsl:sort select="name"/>
-      </xsl:apply-templates>
+      <table id="table_methods" border="1" width="100%">
+        <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="description">
+          <xsl:sort select="name"/>
+        </xsl:apply-templates>
+      </table>
     </div>
     <div id="srcdoc_functions">
-      <xsl:call-template name="standalone-functions-details"/>
+      <table id="table_functions" border="1" width="100%">
+        <xsl:call-template name="standalone-functions-details"/>
+      </table>
     </div>
   </xsl:template>
   
@@ -215,47 +221,38 @@ public:
   </xsl:template>
   
   <xsl:template match="memberdef[@kind='function']" mode="description">
-    <a name="{@id}" />
-    <b><pre>&nbsp;<xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
-      <xsl:if test="count(templateparamlist) &gt; 0">
-          <xsl:text disable-output-escaping="yes">template </xsl:text>&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;
-      </xsl:if>
-      <xsl:apply-templates select="type" mode="description"/>
-      <xsl:value-of select="substring(' ', 1 div (normalize-space(type) != ''))"/>
-          <xsl:value-of select="name"/>(<xsl:for-each select="param">
-          <xsl:apply-templates select="type" mode="description"/>&nbsp;<xsl:value-of select="declname"/>
-          <xsl:value-of select="substring(concat(' = ', defval), 1 div (normalize-space(defval) != ''))"/>
-          <xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>
-      </xsl:for-each>)<xsl:value-of select="substring(' const', 1 div (@const = 'yes'))"/>;</pre></b>
-    <dl>
-      <dd>
-        <xsl:apply-templates select="briefdescription"/>
-        <xsl:apply-templates select="detaileddescription"/>
-      </dd>
-    </dl>
-    <hr align="left" size="1" />
+    <tr><td><a name="{@id}" /><code><b><xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/><xsl:text/>
+    <xsl:if test="count(templateparamlist) &gt; 0"><xsl:text/>
+template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;
+    </xsl:if><xsl:text/>
+<xsl:apply-templates select="type" mode="description"/>
+    <xsl:value-of select="substring(' ', 1 div (normalize-space(type) != ''))"/>
+      <xsl:value-of select="name"/>(<xsl:for-each select="param">
+      <xsl:apply-templates select="type" mode="description"/>&nbsp;<xsl:value-of select="declname"/>
+      <xsl:value-of select="substring(concat(' = ', defval), 1 div (normalize-space(defval) != ''))"/>
+      <xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>
+    </xsl:for-each>)<xsl:value-of select="substring(' const', 1 div (@const = 'yes'))"/>;</b></code>
+    <table id="table_function_desc_{generate-id(.)}" cellpadding="5">
+      <tr><td>
+      <xsl:apply-templates select="briefdescription"/>
+      <xsl:apply-templates select="detaileddescription"/>
+      </td></tr>
+    </table>
+    </td></tr>
   </xsl:template>
 
   <xsl:template match="type" mode="description">
     <xsl:for-each select="text() | ref">
-        <xsl:choose>
-        <xsl:when test="name(.) = 'ref'">
-            <a href="#{@refid}"><xsl:value-of select="."/></a>
-        </xsl:when>
+      <xsl:choose>
+        <xsl:when test="name(.) = 'ref'"><a href="#{@refid}"><xsl:value-of select="."/></a></xsl:when>
         <xsl:otherwise>
-            <xsl:choose>
-                <xsl:when test=". = 'return_value_type' or . = 'param_value_type'">
-                    <a href="#{../../../../sectiondef[@kind='public-type']/memberdef[name = 'value_type']/@id}">value_type</a>
-                </xsl:when>
-                <xsl:when test=". = ' &amp;'">
-                    <xsl:text>&amp;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="."/>
-                </xsl:otherwise>
-            </xsl:choose>
+          <xsl:choose>
+            <xsl:when test=". = 'return_value_type' or . = 'param_value_type'"><a href="#{../../../../sectiondef[@kind='public-type']/memberdef[name = 'value_type']/@id}">value_type</a></xsl:when>
+            <xsl:when test=". = ' &amp;'"><xsl:text>&amp;</xsl:text></xsl:when>
+            <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
+          </xsl:choose>
         </xsl:otherwise>
-    </xsl:choose>
+      </xsl:choose>
     </xsl:for-each>
   </xsl:template>
 
