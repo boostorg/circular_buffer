@@ -13,23 +13,7 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
 
   <xsl:param name="srcdoc"/>
 
-  <xsl:template match="div[@id='srcdoc_synopsis']">
-    <xsl:copy-of select="document($srcdoc)//body/div[@id=current()/@id]"/>
-  </xsl:template>
-
-  <xsl:template match="div[@id='srcdoc_types']">
-    <xsl:copy-of select="document($srcdoc)//body/div[@id=current()/@id]"/>
-  </xsl:template>
-
-  <xsl:template match="div[@id='srcdoc_constructors']">
-    <xsl:copy-of select="document($srcdoc)//body/div[@id=current()/@id]"/>
-  </xsl:template>
-
-  <xsl:template match="div[@id='srcdoc_methods']">
-    <xsl:copy-of select="document($srcdoc)//body/div[@id=current()/@id]"/>
-  </xsl:template>
-
-  <xsl:template match="div[@id='srcdoc_functions']">
+  <xsl:template match="div[contains(@id, 'srcdoc')]">
     <xsl:copy-of select="document($srcdoc)//body/div[@id=current()/@id]"/>
   </xsl:template>
 

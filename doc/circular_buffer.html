@@ -324,15 +324,963 @@ template &lt;class T, class Alloc&gt;
     <h3>
       <a name="types">Public Types</a>
     </h3>
+    <div id="srcdoc_types"></div>
     <h3>
       <a name="constructors">Constructors / Destructor</a>
     </h3>
+    <div id="srcdoc_constructors">
+      <a name="classboost_1_1circular__buffer_1a9"></a>
+      <b>
+        <pre> template &lt;class InputIterator&gt;
+      circular_buffer(<a href="#classboost_1_1circular__buffer_1w12">size_type</a> capacity, InputIterator first, InputIterator last, const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</pre>
+      </b>
+      <dl>
+        <dd>
+Create a circular buffer with a copy of a range.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid range <code>[first, last)</code>. </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a8">capacity()</a> == capacity</code><br>
+ If the number of items to copy from the range <code>[first, last)</code> is greater than the specified <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code> will be copied. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a10"></a>
+      <b>
+        <pre> circular_buffer(const <a href="#classboost_1_1circular__buffer">circular_buffer</a>&lt; T, Alloc &gt; &amp; cb);</pre>
+      </b>
+      <dl>
+        <dd>
+Copy constructor.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>*this == cb</code> </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a11"></a>
+      <b>
+        <pre> circular_buffer(<a href="#classboost_1_1circular__buffer_1w12">size_type</a> capacity, <a href="#classboost_1_1circular__buffer_1w7">param_value_type</a> item, const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</pre>
+      </b>
+      <dl>
+        <dd>
+Create a full circular buffer with a given capacity and filled with copies of <code>item</code>.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> == capacity &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this).<a href="#classboost_1_1circular__buffer_1a5">back()</a> == item</code> </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a12"></a>
+      <b>
+        <pre> explicit circular_buffer(<a href="#classboost_1_1circular__buffer_1w12">size_type</a> capacity, const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</pre>
+      </b>
+      <dl>
+        <dd>
+Create an empty circular buffer with a given capacity.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a8">capacity()</a> == capacity &amp;&amp; (*this).size == 0</code> </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a51"></a>
+      <b>
+        <pre> ~circular_buffer();</pre>
+      </b>
+      <dl>
+        <dd>
+Destructor.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+    </div>
     <h3>
       <a name="methods">Public Member Functions</a>
     </h3>
+    <div id="srcdoc_methods">
+      <a name="classboost_1_1circular__buffer_1a0"></a>
+      <b>
+        <pre> template &lt;class InputIterator&gt;
+      void assign(InputIterator first, InputIterator last);</pre>
+      </b>
+      <dl>
+        <dd>
+Assign a copy of range.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid range <code>[first, last)</code>. </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> == std::distance(first, last)</code><br>
+ If the number of items to be assigned exceeds the capacity of the circular buffer the capacity is set to that number otherwise is stays unchanged. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a1"></a>
+      <b>
+        <pre> void assign(<a href="#classboost_1_1circular__buffer_1w12">size_type</a> n, <a href="#classboost_1_1circular__buffer_1w7">param_value_type</a> item);</pre>
+      </b>
+      <dl>
+        <dd>
+Assign <code>n</code> items into the circular buffer.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> == n &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this).<a href="#classboost_1_1circular__buffer_1a5">back()</a> == item</code><br>
+ If the number of items to be assigned exceeds the capacity of the circular buffer the capacity is increased to <code>n</code> otherwise it stays unchanged. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a2"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w10">return_value_type</a> at(<a href="#classboost_1_1circular__buffer_1w12">size_type</a> index) const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return the element at the <code>index</code> position.         
+<dl><dt><b>Throws:</b></dt></dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a3"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w9">reference</a> at(<a href="#classboost_1_1circular__buffer_1w12">size_type</a> index);</pre>
+      </b>
+      <dl>
+        <dd>
+Return the element at the <code>index</code> position.         
+<dl><dt><b>Throws:</b></dt></dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a4"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w10">return_value_type</a> back() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return the last (rightmost) element.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>
+<code>!*(this).<a href="#classboost_1_1circular__buffer_1a15">empty()</a></code> </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a5"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w9">reference</a> back();</pre>
+      </b>
+      <dl>
+        <dd>
+Return the last (rightmost) element.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>
+<code>!*(this).<a href="#classboost_1_1circular__buffer_1a15">empty()</a></code> </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a6"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w1">const_iterator</a> begin() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return a const iterator pointing to the beginning of the circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a7"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w6">iterator</a> begin();</pre>
+      </b>
+      <dl>
+        <dd>
+Return an iterator pointing to the beginning of the circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a8"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w12">size_type</a> capacity() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return the capacity of the circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a13"></a>
+      <b>
+        <pre> void clear();</pre>
+      </b>
+      <dl>
+        <dd>
+Erase all the stored elements.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>(*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> == 0 </dd>
+</dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a14"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w8">pointer</a> data();</pre>
+      </b>
+      <dl>
+        <dd>
+Return pointer to data stored in the circular buffer as a continuous array of values.         
+This method can be useful e.g. when passing the stored data into the legacy C API. <dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>&amp;(*this)[0] &lt; &amp;(*this)[1] &lt; ... &lt; &amp;(*this).<a href="#classboost_1_1circular__buffer_1a5">back()</a></code> </dd>
+</dl>
+<dl>
+<dt><b>Returns:</b></dt>
+<dd>0 if empty. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a15"></a>
+      <b>
+        <pre> bool empty() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Is the circular buffer empty?         
+<dl>
+<dt><b>Returns:</b></dt>
+<dd>
+<code>true</code> if there are no elements stored in the circular buffer. <code>false</code> otherwise. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a16"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w1">const_iterator</a> end() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return a const iterator pointing to the end of the circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a17"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w6">iterator</a> end();</pre>
+      </b>
+      <dl>
+        <dd>
+Return an iterator pointing to the end of the circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a18"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w6">iterator</a> erase(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> first, <a href="#classboost_1_1circular__buffer_1w6">iterator</a> last);</pre>
+      </b>
+      <dl>
+        <dd>
+Erase the range <code>[first, last)</code>.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid range <code>[first, last)</code>. <code>size_type old_size = (*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a></code> </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> == old_size - std::distance(first, last)</code><br>
+ Removes the elements from the range <code>[first, last)</code>. </dd>
+</dl>
+<dl>
+<dt><b>Returns:</b></dt>
+<dd>iterator to the first element remaining beyond the removed element or <code>(*this).<a href="#classboost_1_1circular__buffer_1a17">end()</a></code> if no such element exists. </dd>
+</dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a19"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w6">iterator</a> erase(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> pos);</pre>
+      </b>
+      <dl>
+        <dd>
+Erase the element at the given position.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid <code>pos</code> iterator. <code>size_type old_size = (*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a></code> </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> == old_size - 1</code><br>
+ Removes an element at the position <code>pos</code>. </dd>
+</dl>
+<dl>
+<dt><b>Returns:</b></dt>
+<dd>iterator to the first element remaining beyond the removed element or <code>(*this).<a href="#classboost_1_1circular__buffer_1a17">end()</a></code> if no such element exists. </dd>
+</dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a20"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w10">return_value_type</a> front() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return the first (leftmost) element.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>
+<code>!*(this).<a href="#classboost_1_1circular__buffer_1a15">empty()</a></code> </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a21"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w9">reference</a> front();</pre>
+      </b>
+      <dl>
+        <dd>
+Return the first (leftmost) element.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>
+<code>!*(this).<a href="#classboost_1_1circular__buffer_1a15">empty()</a></code> </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a22"></a>
+      <b>
+        <pre> bool full() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Is the circular buffer full?         
+<dl>
+<dt><b>Returns:</b></dt>
+<dd>
+<code>true</code> if the number of elements stored in the circular buffer equals the capacity of the circular buffer. <code>false</code> otherwise. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a23"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; get_allocator();</pre>
+      </b>
+      <dl>
+        <dd>
+Return the allocator.         
+<dl>
+<dt><b>Note:</b></dt>
+<dd>This method was added in order to optimize obtaining of the allocator with a state, although use of stateful allocators in STL is discouraged. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a24"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a> get_allocator() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return the allocator.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a25"></a>
+      <b>
+        <pre> template &lt;class InputIterator&gt;
+      void insert(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> pos, InputIterator first, InputIterator last);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert the range <code>[first, last)</code> before the given position.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid <code>pos</code> iterator and valid range <code>[first, last)</code>. </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>This operation preserves the capacity of the circular buffer. If the insertion would result in exceeding the capacity of the circular buffer then the necessary number of elements from the beginning (left) of the circular buffer will be removed or not the whole range will be inserted or both. In case the whole range cannot be inserted it will be inserted just some elements from the end (right) of the range (see the example).<code><br>
+ Example:<br>
+ array to insert: int array[] = { 5, 6, 7, 8, 9 };<br>
+ original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
+ position ---------------------^<br>
+ insert(position, array, array + 5);<br>
+ (If the operation won't preserve capacity, the buffer would look like this |1|2|5|6|7|8|9|3|4|)<br>
+ RESULTING circular buffer |6|7|8|9|3|4| - capacity: 6, size: 6</code> </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a26"></a>
+      <b>
+        <pre> void insert(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> pos, <a href="#classboost_1_1circular__buffer_1w12">size_type</a> n, <a href="#classboost_1_1circular__buffer_1w7">param_value_type</a> item);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert <code>n</code> copies of the item before the given position.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid <code>pos</code> iterator. </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>This operation preserves the capacity of the circular buffer. If the insertion would result in exceeding the capacity of the circular buffer then the necessary number of elements from the beginning (left) of the circular buffer will be removed or not all <code>n</code> elements will be inserted or both.<code><br>
+ Example:<br>
+ original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
+ position ---------------------^<br>
+ insert(position, (size_t)5, 6);<br>
+ (If the operation won't preserve capacity, the buffer would look like this |1|2|6|6|6|6|6|3|4|)<br>
+ RESULTING circular buffer |6|6|6|6|3|4| - capacity: 6, size: 6</code> </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a27"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w6">iterator</a> insert(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> pos);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert a new element with the default value before the given position.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code><a href="#classboost_1_1circular__buffer_1w13">value_type()</a></code> will be inserted at the position <code>pos</code>.<br>
+ If the circular buffer is full, the first (leftmost) element will be removed. </dd>
+</dl>
+<dl>
+<dt><b>Returns:</b></dt>
+<dd>iterator to the inserted element. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a28"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w6">iterator</a> insert(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> pos, <a href="#classboost_1_1circular__buffer_1w7">param_value_type</a> item);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert the <code>item</code> before the given position.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid <code>pos</code> iterator. </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>The <code>item</code> will be inserted at the position <code>pos</code>.<br>
+ If the circular buffer is full, the first (leftmost) element will be removed. </dd>
+</dl>
+<dl>
+<dt><b>Returns:</b></dt>
+<dd>iterator to the inserted element. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a29"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w12">size_type</a> max_size() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return the largest possible size (or capacity) of the circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a30"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer">circular_buffer</a>&lt; T, Alloc &gt; &amp; operator=(const <a href="#classboost_1_1circular__buffer">circular_buffer</a>&lt; T, Alloc &gt; &amp; cb);</pre>
+      </b>
+      <dl>
+        <dd>
+Assignment operator.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>*this == cb</code> </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a31"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w10">return_value_type</a> operator[](<a href="#classboost_1_1circular__buffer_1w12">size_type</a> index) const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return the element at the <code>index</code> position.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>
+<code>*(this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> &gt; index</code> </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a32"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w9">reference</a> operator[](<a href="#classboost_1_1circular__buffer_1w12">size_type</a> index);</pre>
+      </b>
+      <dl>
+        <dd>
+Return the element at the <code>index</code> position.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>
+<code>*(this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> &gt; index</code> </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a33"></a>
+      <b>
+        <pre> void pop_back();</pre>
+      </b>
+      <dl>
+        <dd>
+Remove the last (rightmost) element.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>
+<code>!*(this).<a href="#classboost_1_1circular__buffer_1a15">empty()</a></code> <code>iterator it = ((*this).<a href="#classboost_1_1circular__buffer_1a17">end()</a> - 1)</code> </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>((*this).<a href="#classboost_1_1circular__buffer_1a17">end()</a> - 1) != it</code> </dd>
+</dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a34"></a>
+      <b>
+        <pre> void pop_front();</pre>
+      </b>
+      <dl>
+        <dd>
+Remove the first (leftmost) element.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>
+<code>!*(this).<a href="#classboost_1_1circular__buffer_1a15">empty()</a></code> <code>iterator it = (*this).<a href="#classboost_1_1circular__buffer_1a7">begin()</a></code> </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a7">begin()</a> != it</code> </dd>
+</dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a35"></a>
+      <b>
+        <pre> void push_back();</pre>
+      </b>
+      <dl>
+        <dd>
+Insert a new element with the default value at the end.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a5">back()</a> == <a href="#classboost_1_1circular__buffer_1w13">value_type()</a></code><br>
+ If the circular buffer is full, the first (leftmost) element will be removed. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a36"></a>
+      <b>
+        <pre> void push_back(<a href="#classboost_1_1circular__buffer_1w7">param_value_type</a> item);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert a new element at the end.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a5">back()</a> == item</code><br>
+ If the circular buffer is full, the first (leftmost) element will be removed. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a37"></a>
+      <b>
+        <pre> void push_front();</pre>
+      </b>
+      <dl>
+        <dd>
+Insert a new element with the default value at the start.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a21">front()</a> == <a href="#classboost_1_1circular__buffer_1w13">value_type()</a></code><br>
+ If the circular buffer is full, the last (rightmost) element will be removed. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a38"></a>
+      <b>
+        <pre> void push_front(<a href="#classboost_1_1circular__buffer_1w7">param_value_type</a> item);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert a new element at the start.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a21">front()</a> == item</code><br>
+ If the circular buffer is full, the last (rightmost) element will be removed. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a39"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w4">const_reverse_iterator</a> rbegin() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return a const reverse iterator pointing to the beginning of the reversed circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a40"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w11">reverse_iterator</a> rbegin();</pre>
+      </b>
+      <dl>
+        <dd>
+Return a reverse iterator pointing to the beginning of the reversed circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a41"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w4">const_reverse_iterator</a> rend() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return a const reverse iterator pointing to the end of the reversed circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a42"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w11">reverse_iterator</a> rend();</pre>
+      </b>
+      <dl>
+        <dd>
+Return a reverse iterator pointing to the end of the reversed circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a43"></a>
+      <b>
+        <pre> void resize(<a href="#classboost_1_1circular__buffer_1w12">size_type</a> new_size, <a href="#classboost_1_1circular__buffer_1w7">param_value_type</a> item = T(), bool remove_front = true);</pre>
+      </b>
+      <dl>
+        <dd>
+Change the size of the circular buffer.         
+<dl><dt><b>Parameters:</b></dt></dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> == new_size</code><br>
+ If the new size is greater than the current size, the rest of the circular buffer is filled with copies of <code>item</code>. In case the resulting size exceeds the current capacity the capacity is set to <code>new_size</code>. If the new size is lower than the current size then <code>((*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> - new_size)</code> elements will be removed according to the <code>remove_front</code> parameter. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a44"></a>
+      <b>
+        <pre> template &lt;class InputIterator&gt;
+      void rinsert(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> pos, InputIterator first, InputIterator last);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert the range <code>[first, last)</code> before the given position.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid <code>pos</code> iterator and valid range <code>[first, last)</code>. </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>This operation preserves the capacity of the circular buffer. If the insertion would result in exceeding the capacity of the circular buffer then the necessary number of elements from the end (right) of the circular buffer will be removed or not the whole range will be inserted or both. In case the whole range cannot be inserted it will be inserted just some elements from the beginning (left) of the range (see the example).<code><br>
+ Example:<br>
+ array to insert: int array[] = { 5, 6, 7, 8, 9 };<br>
+ original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
+ position ---------------------^<br>
+ insert(position, array, array + 5);<br>
+ (If the operation won't preserve capacity, the buffer would look like this |1|2|5|6|7|8|9|3|4|)<br>
+ RESULTING circular buffer |1|2|5|6|7|8| - capacity: 6, size: 6</code> </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a45"></a>
+      <b>
+        <pre> void rinsert(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> pos, <a href="#classboost_1_1circular__buffer_1w12">size_type</a> n, <a href="#classboost_1_1circular__buffer_1w7">param_value_type</a> item);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert <code>n</code> copies of the item before the given position.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid <code>pos</code> iterator. </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>This operation preserves the capacity of the circular buffer. If the insertion would result in exceeding the capacity of the circular buffer then the necessary number of elements from the end (right) of the circular buffer will be removed or not all <code>n</code> elements will be inserted or both.<code><br>
+ Example:<br>
+ original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
+ position ---------------------^<br>
+ insert(position, (size_t)5, 6);<br>
+ (If the operation won't preserve capacity, the buffer would look like this |1|2|6|6|6|6|6|3|4|)<br>
+ RESULTING circular buffer |1|2|6|6|6|6| - capacity: 6, size: 6</code> </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a46"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w6">iterator</a> rinsert(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> pos);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert a new element with the default value before the given position.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code><a href="#classboost_1_1circular__buffer_1w13">value_type()</a></code> will be inserted at the position <code>pos</code>.<br>
+ If the circular buffer is full, the last (rightmost) element will be removed. </dd>
+</dl>
+<dl>
+<dt><b>Returns:</b></dt>
+<dd>iterator to the inserted element. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a47"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w6">iterator</a> rinsert(<a href="#classboost_1_1circular__buffer_1w6">iterator</a> pos, <a href="#classboost_1_1circular__buffer_1w7">param_value_type</a> item);</pre>
+      </b>
+      <dl>
+        <dd>
+Insert an <code>item</code> before the given position.         
+<dl>
+<dt><b>Precondition:</b></dt>
+<dd>Valid <code>pos</code> iterator. </dd>
+</dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>The <code>item</code> will be inserted at the position <code>pos</code>.<br>
+ If the circular buffer is full, the last element (rightmost) will be removed. </dd>
+</dl>
+<dl>
+<dt><b>Returns:</b></dt>
+<dd>iterator to the inserted element. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a48"></a>
+      <b>
+        <pre> void set_capacity(<a href="#classboost_1_1circular__buffer_1w12">size_type</a> new_capacity, bool remove_front = true);</pre>
+      </b>
+      <dl>
+        <dd>
+Change the capacity of the circular buffer.         
+<dl><dt><b>Parameters:</b></dt></dl>
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>(*this).<a href="#classboost_1_1circular__buffer_1a8">capacity()</a> == new_capacity</code><br>
+ If the current number of elements stored in the circular buffer is greater than the desired new capacity then <code>((*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> - new_capacity)</code> elements will be removed according to the <code>remove_front</code> parameter. </dd>
+</dl>
+<dl><dt><b>Throws:</b></dt></dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a49"></a>
+      <b>
+        <pre> <a href="#classboost_1_1circular__buffer_1w12">size_type</a> size() const;</pre>
+      </b>
+      <dl>
+        <dd>
+Return the number of elements currently stored in the circular buffer.         
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+      <a name="classboost_1_1circular__buffer_1a50"></a>
+      <b>
+        <pre> void swap(<a href="#classboost_1_1circular__buffer">circular_buffer</a>&amp; cb);</pre>
+      </b>
+      <dl>
+        <dd>
+Swap the contents of two circular buffers.         
+<dl>
+<dt><b>Postcondition:</b></dt>
+<dd>
+<code>this</code> contains elements of <code>cb</code> and vice versa. </dd>
+</dl>
+<dl>
+<dt><b>Note:</b></dt>
+<dd>For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>. </dd>
+</dl>
+        </dd>
+      </dl>
+      <hr align="left" size="1">
+    </div>
     <h3>
       <a name="functions">Standalone Functions</a>
     </h3>
+    <div id="srcdoc_functions"></div>
     <h3>
       <a name="semantics">Semantics</a>
     </h3>

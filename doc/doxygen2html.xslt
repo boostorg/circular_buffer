@@ -163,19 +163,25 @@ public:
   <!-- Description mode -->
   
   <xsl:template match="compounddef[@kind = 'class']" mode="description">
-    <hr align="left" size="1" />
-    <h3><a name="consructors">Constructors/Desctructor</a></h3>
-    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
+    <div id="srcdoc_types">
+      <!--
+      <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description">
         <xsl:sort select="name"/>
-    </xsl:apply-templates>
-    <h3><a name="typedefs">Typesdefs</a></h3>
-    <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
-    <h3><a name="members">Members</a></h3>
-    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="description">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
+      </xsl:apply-templates>
+      -->
+    </div>
+    <div id="srcdoc_constructors">
+      <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
+          <xsl:sort select="name"/>
+      </xsl:apply-templates>
+    </div>
+    <div id="srcdoc_methods">
+      <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="description">
+        <xsl:sort select="name"/>
+      </xsl:apply-templates>
+    </div>
+    <div id="srcdoc_functions">
+    </div>
   </xsl:template>
   
   <xsl:template match="memberdef[@kind='function' or @kind='typedef']" mode="description">
