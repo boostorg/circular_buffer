@@ -9,22 +9,15 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   <xsl:import href="doxygen2html.xslt"/>
 
   <xsl:output method="xml" version="1.0" encoding="iso-8859-1" indent="yes" media-type="text/xml"/>
-
-  <xsl:template name="standalone_functions">
-    <xsl:apply-templates select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']/memberdef[contains(argsstring, 'circular_buffer_space_optimized&lt;')]" mode="synopsis">
-      <xsl:with-param name="indent" select="''"/>
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
-  </xsl:template>
+  
+  <xsl:variable name="circular_buffer-ref" select="//compound[name='boost::circular_buffer' and @kind='class']/@refid"/>
+  <xsl:variable name="circular_buffer-file" select="concat($xmldir, '/', $circular_buffer-ref, '.xml')"/>
 
   <xsl:template match="memberdef[@kind='typedef']" mode="synopsis">
+    <xsl:variable name="original-type" select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef[name=current()/name]"/>
     <xsl:choose>
-      <xsl:when test="/doxygen/compounddef/compoundname = 'boost::circular_buffer_space_optimized'">
-        <xsl:variable name="container-ref" select="document(concat($xmldir, '/', 'index.xml'))//compound[name='boost::circular_buffer' and @kind='class']/@refid"/>
-        <xsl:variable name="class-file" select="concat($xmldir, '/', $container-ref, '.xml')"/>
-        <xsl:variable name="class" select="document($class-file)/doxygen/compounddef[@id = $container-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef[name=current()/name]"/>
-        <xsl:message><xsl:value-of select="$class/name"/></xsl:message>
-        <xsl:apply-templates select="$class" mode="synopsis"/>
+      <xsl:when test="(/doxygen/compounddef/compoundname = 'boost::circular_buffer_space_optimized') and (count($original-type) &gt; 0)">
+        <xsl:apply-templates select="$original-type" mode="synopsis"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-imports/>
@@ -32,10 +25,33 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template match="memberdef[@kind='function']" mode="synopsis">
-    <xsl:if test="name != 'internal_capacity'">
-      <xsl:apply-imports/>
-    </xsl:if>
+  <xsl:template name="member-functions">
+    <xsl:variable name="inherited" select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']"/>
+    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != ''] | $inherited">
+      <xsl:sort select="name"/>
+      <xsl:choose>
+        <xsl:when test="count($inherited[name=current()/name and argsstring=current()/argsstring]) = 0">
+          <xsl:apply-templates select="." mode="synopsis"/>
+        </xsl:when>
+        <xsl:when test="../../compoundname != 'boost::circular_buffer_space_optimized'">
+          <xsl:apply-templates select="." mode="synopsis">
+            <xsl:with-param name="link-prefix" select="'circular_buffer.html'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="exclude-method">
+    <xsl:param name="name"/>
+    <xsl:if test="$name = 'internal_capacity'">true</xsl:if>
+  </xsl:template>
+
+  <xsl:template name="standalone-functions">
+    <xsl:apply-templates select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']/memberdef[contains(argsstring, 'circular_buffer_space_optimized&lt;')]" mode="synopsis">
+      <xsl:with-param name="indent" select="''"/>
+      <xsl:sort select="name"/>
+    </xsl:apply-templates>
   </xsl:template>
 
 </xsl:stylesheet>

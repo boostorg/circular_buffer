@@ -129,9 +129,12 @@ public:
    typedef typename Alloc::value_type <a href="#classboost_1_1circular__buffer_1w13">value_type</a>;
 
    template &lt;class InputIterator&gt;
-      <a href="#classboost_1_1circular__buffer_1a9">circular_buffer</a>(size_type capacity, InputIterator first, InputIterator last, const allocator_type&amp; alloc = allocator_type());
+      <a href="#classboost_1_1circular__buffer_1a9">circular_buffer</a>(size_type capacity, 
+         InputIterator first, InputIterator last, 
+         const allocator_type&amp; alloc = allocator_type());
    <a href="#classboost_1_1circular__buffer_1a10">circular_buffer</a>(const circular_buffer&lt;T,Alloc&gt;&amp; cb);
-   <a href="#classboost_1_1circular__buffer_1a11">circular_buffer</a>(size_type capacity, value_type item, const allocator_type&amp; alloc = allocator_type());
+   <a href="#classboost_1_1circular__buffer_1a11">circular_buffer</a>(size_type capacity, 
+      value_type item, const allocator_type&amp; alloc = allocator_type());
    explicit <a href="#classboost_1_1circular__buffer_1a12">circular_buffer</a>(size_type capacity, const allocator_type&amp; alloc = allocator_type());
    <a href="#classboost_1_1circular__buffer_1a51">~circular_buffer</a>();
 

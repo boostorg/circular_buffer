@@ -10,7 +10,18 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   
   <xsl:output method="xml" version="1.0" encoding="iso-8859-1" indent="yes" media-type="text/xml"/>
 
-  <xsl:template name="standalone_functions">
+  <xsl:template name="member-functions">
+    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != '']">
+      <xsl:sort select="name"/>
+      <xsl:apply-templates select="." mode="synopsis"/>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="exclude-method">
+    <xsl:param name="name"/>
+  </xsl:template>
+  
+  <xsl:template name="standalone-functions">
     <xsl:apply-templates select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']/memberdef[contains(argsstring, 'circular_buffer&lt;')]" mode="synopsis">
       <xsl:with-param name="indent" select="''"/>
       <xsl:sort select="name"/>
