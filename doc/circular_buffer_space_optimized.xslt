@@ -22,11 +22,10 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   </xsl:template>
 
   <xsl:template name="public-types">
-    <xsl:variable name="inherited" select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef"/>
-    <xsl:for-each select="sectiondef[@kind='public-type']/memberdef | $inherited">
+    <xsl:for-each select="sectiondef[@kind='public-type']/memberdef | document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef">
       <xsl:sort select="name"/>
       <xsl:if test="string-length(normalize-space(briefdescription)) &gt; 0 and count(reimplements) = 0">
-        <xsl:choose> <!-- TODO maybe it is possible to rely on the link in the reimplements node -->
+        <xsl:choose>
           <xsl:when test="../../compoundname = 'boost::circular_buffer_space_optimized'">
             <xsl:apply-templates select="." mode="synopsis"/>
           </xsl:when>
@@ -41,11 +40,11 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   </xsl:template>
   
   <xsl:template name="member-functions">
-    <xsl:variable name="inherited" select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']"/>
     <xsl:variable name="current" select="sectiondef[@kind='public-func']/memberdef[type != '']"/>
-    <xsl:for-each select="$current | $inherited">
+    <xsl:for-each select="$current | document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']">
       <xsl:sort select="name"/>
-      <xsl:if test="string-length(normalize-space(briefdescription)) &gt; 0">
+      <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
+      <xsl:if test="string-length($briefdescription) &gt; 0 and (starts-with($briefdescription, '!') or count(reimplements) = 0)">
         <xsl:choose>
           <xsl:when test="count($current[name=current()/name]) &gt; 0 and count(param/type[ref='circular_buffer']) &gt; 0">
             <xsl:apply-templates select="$current[name=current()/name]" mode="synopsis">
@@ -56,11 +55,11 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
           <xsl:when test="../../compoundname = 'boost::circular_buffer_space_optimized'">
             <xsl:apply-templates select="." mode="synopsis"/>
           </xsl:when>
-          <xsl:otherwise>
+          <xsl:when test="count($current[name=current()/name]) = 0">
             <xsl:apply-templates select="." mode="synopsis">
               <xsl:with-param name="link-prefix" select="'circular_buffer.html'"/>
             </xsl:apply-templates>
-          </xsl:otherwise>
+          </xsl:when>
         </xsl:choose>
       </xsl:if>
     </xsl:for-each>

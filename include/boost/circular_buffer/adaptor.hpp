@@ -114,21 +114,21 @@ public:
 
 #if defined(BOOST_CB_TEST)
 
-    //! Return the current capacity of the adapted circular buffer.
-    /*!
-        \note This method is not intended to be used directly by the user.
-              It is defined only for testing purposes.
+    // Return the current capacity of the adapted circular buffer.
+    /*
+       \note This method is not intended to be used directly by the user.
+             It is defined only for testing purposes.
     */
     size_type internal_capacity() const { return circular_buffer<T, Alloc>::capacity(); }
 
 #endif // #if defined(BOOST_CB_TEST)
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \pre <code>(*this).min_capacity() <= new_capacity</code>
-        \note It is considered as a bug if the precondition is not met (i.e. if
-              <code>new_capacity > (*this).min_capacity()</code>) and an assertion
-              will be invoked in the debug mode.
+         \pre <code>(*this).min_capacity() <= new_capacity</code>
+         \note It is considered as a bug if the precondition is not met (i.e. if
+               <code>new_capacity > (*this).min_capacity()</code>) and an assertion
+               will be invoked in the debug mode.
     */
     void set_capacity(size_type new_capacity, bool remove_front = true) {
         BOOST_CB_ASSERT(new_capacity >= min_capacity()); // check for too low new capacity
@@ -137,7 +137,7 @@ public:
         m_capacity = new_capacity;
     }
 
-    //! See the circular_buffer source documentation.
+    // See the circular_buffer source documentation.
     void resize(size_type new_size, param_value_type item = T(), bool remove_front = true) {
         if (new_size > size()) {
             if (new_size > capacity())
@@ -244,7 +244,7 @@ public:
 
 #if defined(BOOST_CB_NEVER_DEFINED)
 
-    // Assignment operator - defined just for documentation purpose.
+    // Assignment operator - declared only for documentation purpose.
     /*
        \note This section will be never compiled. The default assignment
              operator will be generated instead.
@@ -276,71 +276,71 @@ public:
         circular_buffer<T, Alloc>::swap(cb);
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     void push_back(param_value_type item) {
         check_low_capacity();
         circular_buffer<T, Alloc>::push_back(item);
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     void push_back() { push_back(value_type()); }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     void push_front(param_value_type item) {
         check_low_capacity();
         circular_buffer<T, Alloc>::push_front(item);
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     void push_front() { push_front(value_type()); }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     void pop_back() {
         circular_buffer<T, Alloc>::pop_back();
         check_high_capacity();
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     void pop_front() {
         circular_buffer<T, Alloc>::pop_front();
         check_high_capacity();
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     iterator insert(iterator pos, param_value_type item) {
         size_type index = pos - begin();
@@ -348,19 +348,19 @@ public:
         return circular_buffer<T, Alloc>::insert(begin() + index, item);
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     iterator insert(iterator pos) { return insert(pos, value_type()); }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     void insert(iterator pos, size_type n, param_value_type item) {
         size_type index = pos - begin();
@@ -368,22 +368,22 @@ public:
         circular_buffer<T, Alloc>::insert(begin() + index, n, item);
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
         insert(pos, first, last, cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     iterator rinsert(iterator pos, param_value_type item) {
         size_type index = pos - begin();
@@ -391,19 +391,19 @@ public:
         return circular_buffer<T, Alloc>::rinsert(begin() + index, item);
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     iterator rinsert(iterator pos) { return rinsert(pos, value_type()); }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     void rinsert(iterator pos, size_type n, param_value_type item) {
         size_type index = pos - begin();
@@ -411,22 +411,22 @@ public:
         circular_buffer<T, Alloc>::rinsert(begin() + index, n, item);
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
         rinsert(pos, first, last, cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     iterator erase(iterator pos) {
         iterator it = circular_buffer<T, Alloc>::erase(pos);
@@ -435,11 +435,11 @@ public:
         return begin() + index;
     }
 
-    //! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
-        \warning The rules for iterator invalidation differ from the original
-                 circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                 documentation</a>.
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
     */
     iterator erase(iterator first, iterator last) {
         iterator it = circular_buffer<T, Alloc>::erase(first, last);
