@@ -8,7 +8,7 @@ if [ -f $DOCFILE ]; then
   # doxygen
   
   echo Generating source XHTML documentation ...
-  xsltproc --stringparam container $1 --stringparam xmldir srcdoc -o srcdoc/srcdoc.xhtml doxygen2html.xslt srcdoc/index.xml
+  xsltproc --stringparam container $1 --stringparam xmldir srcdoc -o srcdoc/srcdoc.xhtml $1.xslt srcdoc/index.xml
   
   echo Converting original HTML documentation into XHTML ...
   xsltproc --html -o srcdoc/$1.xhtml html2xhtml.xslt $DOCFILE
