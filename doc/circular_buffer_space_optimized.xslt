@@ -25,16 +25,18 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
     <xsl:variable name="inherited" select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef"/>
     <xsl:for-each select="sectiondef[@kind='public-type']/memberdef | $inherited">
       <xsl:sort select="name"/>
-      <xsl:choose>
-        <xsl:when test="count($inherited[name=current()/name]) = 0">
-          <xsl:apply-templates select="." mode="synopsis"/>
-        </xsl:when>
-        <xsl:when test="../../compoundname != 'boost::circular_buffer_space_optimized'">
-          <xsl:apply-templates select="." mode="synopsis">
-            <xsl:with-param name="link-prefix" select="'circular_buffer.html'"/>
-          </xsl:apply-templates>
-        </xsl:when>
-      </xsl:choose>
+      <xsl:if test="string-length(normalize-space(briefdescription)) &gt; 0 and count(reimplements) = 0">
+        <xsl:choose> <!-- TODO maybe it is possible to rely on the link in the reimplements node -->
+          <xsl:when test="../../compoundname = 'boost::circular_buffer_space_optimized'">
+            <xsl:apply-templates select="." mode="synopsis"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="." mode="synopsis">
+              <xsl:with-param name="link-prefix" select="'circular_buffer.html'"/>
+            </xsl:apply-templates>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
     </xsl:for-each>
   </xsl:template>
   
@@ -43,22 +45,25 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
     <xsl:variable name="current" select="sectiondef[@kind='public-func']/memberdef[type != '']"/>
     <xsl:for-each select="$current | $inherited">
       <xsl:sort select="name"/>
-      <xsl:choose>
-        <xsl:when test="count($inherited[name=current()/name]) = 0 and string-length(briefdescription) &gt; 0">
-          <xsl:apply-templates select="." mode="synopsis"/>
-        </xsl:when>
-        <xsl:when test="../../compoundname != 'boost::circular_buffer_space_optimized'">
-          <xsl:apply-templates select="." mode="synopsis">
-            <xsl:with-param name="link-prefix" select="'circular_buffer.html'"/>
-          </xsl:apply-templates>
-        </xsl:when>
-      </xsl:choose>
+      <xsl:if test="string-length(normalize-space(briefdescription)) &gt; 0">
+        <xsl:choose>
+          <xsl:when test="count($current[name=current()/name]) &gt; 0 and count(param/type[ref='circular_buffer']) &gt; 0">
+            <xsl:apply-templates select="$current[name=current()/name]" mode="synopsis">
+              <xsl:with-param name="link-prefix" select="'circular_buffer.html'"/>
+              <xsl:with-param name="link" select="@id"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:when test="../../compoundname = 'boost::circular_buffer_space_optimized'">
+            <xsl:apply-templates select="." mode="synopsis"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="." mode="synopsis">
+              <xsl:with-param name="link-prefix" select="'circular_buffer.html'"/>
+            </xsl:apply-templates>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
     </xsl:for-each>
-  </xsl:template>
-
-  <xsl:template name="exclude-method">
-    <xsl:param name="name"/>
-    <xsl:if test="$name = 'internal_capacity'">true</xsl:if>
   </xsl:template>
 
   <xsl:template name="standalone-functions">

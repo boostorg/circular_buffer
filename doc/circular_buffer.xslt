@@ -30,10 +30,6 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template name="exclude-method">
-    <xsl:param name="name"/>
-  </xsl:template>
-  
   <xsl:template name="standalone-functions">
     <xsl:apply-templates select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']/memberdef[contains(argsstring, 'circular_buffer&lt;')]" mode="synopsis">
       <xsl:with-param name="indent" select="''"/>

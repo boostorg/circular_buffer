@@ -127,33 +127,27 @@ public:
   <xsl:template match="memberdef[@kind='function']" mode="synopsis">
     <xsl:param name="indent" select="'&nbsp;&nbsp;&nbsp;'"/>
     <xsl:param name="link-prefix" select="''"/>
-    <xsl:variable name="exclude-method">
-      <xsl:call-template name="exclude-method">
-        <xsl:with-param name="name" select="name"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:if test="not(boolean(string($exclude-method)))">
-      <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; 80"/>
-      <xsl:value-of select="$indent"/>
-      <xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
-      <xsl:if test="count(templateparamlist) &gt; 0">template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<xsl:text disable-output-escaping="yes">
+    <xsl:param name="link" select="''"/>
+    <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; 80"/>
+    <xsl:value-of select="$indent"/>
+    <xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
+    <xsl:if test="count(templateparamlist) &gt; 0">template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<xsl:text disable-output-escaping="yes">
 &nbsp;&nbsp;&nbsp;</xsl:text><xsl:value-of select="$indent"/>
-      </xsl:if>
-      <xsl:if test="type != ''"><xsl:apply-templates select="type" mode="synopsis"/>&nbsp;</xsl:if>
-      <a href="{$link-prefix}#{@id}">
-        <xsl:value-of select="name"/>
-      </a>(<xsl:for-each select="param">
-      <xsl:if test="$too-long-args and not((count(preceding-sibling::param) + 1) mod 2)">
-        <xsl:text disable-output-escaping="yes">
-</xsl:text><xsl:value-of select="$indent"/>&nbsp;&nbsp;&nbsp;<xsl:text/>
-        <xsl:if test="count(../templateparamlist) &gt; 0">&nbsp;&nbsp;&nbsp;</xsl:if>
-      </xsl:if>
-      <xsl:apply-templates select="type" mode="synopsis"/>&nbsp;<xsl:value-of select="declname"/>
-      <xsl:value-of select="substring(concat(' = ', defval), 1 div (normalize-space(defval) != ''))"/>
-      <xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>
-      </xsl:for-each>)<xsl:value-of select="substring(' const', 1 div (@const = 'yes'))"/>;<xsl:text disable-output-escaping="yes">
-</xsl:text>
     </xsl:if>
+    <xsl:if test="type != ''"><xsl:apply-templates select="type" mode="synopsis"/>&nbsp;</xsl:if>
+    <a href="{$link-prefix}#{concat(substring(@id, 1 div (string-length($link) = 0)), substring($link, 1 div (string-length($link) &gt; 0)))}">
+      <xsl:value-of select="name"/>
+    </a>(<xsl:for-each select="param">
+    <xsl:if test="$too-long-args and not((count(preceding-sibling::param) + 1) mod 2)">
+      <xsl:text disable-output-escaping="yes">
+</xsl:text><xsl:value-of select="$indent"/>&nbsp;&nbsp;&nbsp;<xsl:text/>
+      <xsl:if test="count(../templateparamlist) &gt; 0">&nbsp;&nbsp;&nbsp;</xsl:if>
+    </xsl:if>
+    <xsl:apply-templates select="type" mode="synopsis"/>&nbsp;<xsl:value-of select="declname"/>
+    <xsl:value-of select="substring(concat(' = ', defval), 1 div (normalize-space(defval) != ''))"/>
+    <xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>
+    </xsl:for-each>)<xsl:value-of select="substring(' const', 1 div (@const = 'yes'))"/>;<xsl:text disable-output-escaping="yes">
+</xsl:text>
   </xsl:template>
 
   <xsl:template match="type" mode="synopsis">
