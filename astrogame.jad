@@ -1,8 +1,0 @@
-MIDlet-1: MyGame,, AstroGame
-MIDlet-Jar-Size: 17740
-MIDlet-Jar-URL: http://cvs.sourceforge.net/viewcvs.py/boost-sandbox/boost-sandbox/libs/circular_buffer/astrogame.jar?rev=1.1
-MIDlet-Name: Astrogame
-MIDlet-Vendor: DafiTech
-MIDlet-Version: 1.0
-MicroEdition-Configuration: CLDC-1.0
-MicroEdition-Profile: MIDP-1.0
