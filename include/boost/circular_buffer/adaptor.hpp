@@ -20,6 +20,7 @@ namespace boost {
     \brief Space optimized circular buffer container adaptor.
     \param T The type of the elements stored in the space optimized circular buffer.
     \param Alloc The allocator type used for all internal memory management.
+           Default: std::allocator<T>
     \author <a href="mailto:jano_gaspar[at]yahoo.com">Jan Gaspar</a>
     \version 1.3
     \date 2004

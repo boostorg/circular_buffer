@@ -13,7 +13,15 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   <xsl:variable name="circular_buffer-ref" select="//compound[name='boost::circular_buffer' and @kind='class']/@refid"/>
   <xsl:variable name="circular_buffer-file" select="concat($xmldir, '/', $circular_buffer-ref, '.xml')"/>
 
-  <xsl:template name="member-types">
+  <xsl:template name="template-parameters">
+    <xsl:for-each select="templateparamlist/param">
+      <xsl:apply-templates select="." mode="synopsis">
+        <xsl:with-param name="link-prefix" select="'circular_buffer.html'"/>
+      </xsl:apply-templates>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="public-types">
     <xsl:variable name="inherited" select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef"/>
     <xsl:for-each select="sectiondef[@kind='public-type']/memberdef | $inherited">
       <xsl:sort select="name"/>
@@ -32,10 +40,11 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   
   <xsl:template name="member-functions">
     <xsl:variable name="inherited" select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']"/>
-    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != ''] | $inherited">
+    <xsl:variable name="current" select="sectiondef[@kind='public-func']/memberdef[type != '']"/>
+    <xsl:for-each select="$current | $inherited">
       <xsl:sort select="name"/>
       <xsl:choose>
-        <xsl:when test="count($inherited[name=current()/name and argsstring=current()/argsstring]) = 0">
+        <xsl:when test="count($inherited[name=current()/name]) = 0 and string-length(briefdescription) &gt; 0">
           <xsl:apply-templates select="." mode="synopsis"/>
         </xsl:when>
         <xsl:when test="../../compoundname != 'boost::circular_buffer_space_optimized'">

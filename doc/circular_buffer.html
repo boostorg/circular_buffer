@@ -111,7 +111,7 @@
             <pre>
 namespace boost {
 
-template &lt;class T, class Alloc&gt;
+template &lt;class <a href="#templateparam_T">T</a>, class <a href="#templateparam_Alloc">Alloc</a>&gt;
 class circular_buffer
 {
 public:
@@ -301,53 +301,46 @@ template &lt;class T, class Alloc&gt;
       <a name="parameters">Template Parameters</a>
     </h3>
     <div id="srcdoc_params">
-      <table border="1">
+      <table id="template_params" border="1">
+        <tr>
+          <th>Parameter</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
         <tr>
           <td>
-            <a name="param_T">
+            <a name="templateparam_T">
               <code>T</code>
             </a>
           </td>
           <td>
 The type of the elements stored in the circular buffer. </td>
+          <td> </td>
         </tr>
         <tr>
           <td>
-            <a name="param_Alloc">
+            <a name="templateparam_Alloc">
               <code>Alloc</code>
             </a>
           </td>
           <td>
 The allocator type used for all internal memory management. </td>
+          <td>
+            <code>std::allocator&lt;T&gt; </code>
+          </td>
         </tr>
       </table>
     </div>
-    <table id="template_params" border="1">
-      <tr>
-<th>
-					Parameter</th>
-				<th>
-					Description</th>
-				<th>
-					Default</th>
-</tr>
-      <tr>
-<td><code>T</code></td>
-				<td>The type of the elements stored in the circular buffer.</td>
-				<td> </td>
-			</tr>
-      <tr>
-<td><code>Alloc</code></td>
-				<td>The allocator type used for all internal memory management.</td>
-				<td><code>std::allocator&lt;T&gt;</code></td>
-			</tr>
-    </table>
     <br>
     <h3>
       <a name="types">Public Types</a>
     </h3>
     <div id="srcdoc_types">
-      <table border="1">
+      <table id="public_types" border="1">
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
         <tr>
           <td>
             <a name="classboost_1_1circular__buffer_1w0">

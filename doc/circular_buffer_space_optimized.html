@@ -66,7 +66,7 @@
             <pre>
 namespace boost {
 
-template &lt;class T, class Alloc&gt;
+template &lt;class <a href="circular_buffer.html#templateparam_T">T</a>, class <a href="circular_buffer.html#templateparam_Alloc">Alloc</a>&gt;
 class circular_buffer_space_optimized
 {
 public:
@@ -123,8 +123,6 @@ public:
    size_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a29">max_size</a>() const;
    size_type <a href="#classboost_1_1circular__buffer__space__optimized_1a15">min_capacity</a>() const;
    circular_buffer&lt;T,Alloc&gt;&amp; <a href="circular_buffer.html#classboost_1_1circular__buffer_1a30">operator=</a>(const circular_buffer&lt;T,Alloc&gt;&amp; cb);
-   value_type <a href="#classboost_1_1circular__buffer__space__optimized_1a16">operator[]</a>(size_type n) const;
-   reference <a href="#classboost_1_1circular__buffer__space__optimized_1a17">operator[]</a>(size_type n);
    value_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a31">operator[]</a>(size_type index) const;
    reference <a href="circular_buffer.html#classboost_1_1circular__buffer_1a32">operator[]</a>(size_type index);
    void <a href="circular_buffer.html#classboost_1_1circular__buffer_1a33">pop_back</a>();
@@ -146,7 +144,6 @@ public:
    void <a href="circular_buffer.html#classboost_1_1circular__buffer_1a48">set_capacity</a>(size_type new_capacity, bool remove_front = true);
    void <a href="#classboost_1_1circular__buffer__space__optimized_1a30">set_min_capacity</a>(size_type new_min_capacity);
    size_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1a49">size</a>() const;
-   void <a href="#classboost_1_1circular__buffer__space__optimized_1a31">swap</a>(circular_buffer_space_optimized&amp; cb);
    void <a href="circular_buffer.html#classboost_1_1circular__buffer_1a50">swap</a>(circular_buffer&amp; cb);
 };
 

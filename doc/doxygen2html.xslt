@@ -9,6 +9,7 @@
   
   <xsl:param name="container"/>
   <xsl:param name="xmldir"/>
+  <xsl:variable name="default-keyword">Default: </xsl:variable>
   <xsl:variable name="doxygen-version">1.4.1</xsl:variable>
   
   <xsl:template match="/">
@@ -85,11 +86,11 @@
 <pre>
 namespace boost {
 
-template &lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;
+template &lt;<xsl:call-template name="template-parameters"/>&gt;
 class <xsl:value-of select="$container"/>
 {
 public:
-<xsl:call-template name="member-types"/><xsl:text disable-output-escaping="yes">
+<xsl:call-template name="public-types"/><xsl:text disable-output-escaping="yes">
 </xsl:text>
 <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="synopsis">
   <xsl:sort select="name"/>
@@ -104,6 +105,11 @@ public:
         </td></tr>
       </table>
     </div>
+  </xsl:template>
+  
+  <xsl:template match="param" mode="synopsis">
+    <xsl:param name="link-prefix" select="''"/>
+    <xsl:value-of select="type"/>&nbsp;<a href="{$link-prefix}#templateparam_{declname}"><xsl:value-of select="declname"/></a><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>
   </xsl:template>
   
   <xsl:template match="memberdef[@kind='typedef']" mode="synopsis">
@@ -165,12 +171,14 @@ public:
   
   <xsl:template match="compounddef[@kind = 'class']" mode="description">
     <div id="srcdoc_params">
-      <table border="1">
+      <table id="template_params" border="1">
+        <tr><th>Parameter</th><th>Description</th><th>Default</th></tr>
         <xsl:apply-templates select="detaileddescription//parameterlist[@kind='param']/parameteritem" mode="description"/>
       </table>
     </div>
     <div id="srcdoc_types">
-      <table border="1">
+      <table id="public_types" border="1">
+        <tr><th>Type</th><th>Description</th></tr>
         <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description">
           <xsl:sort select="name"/>
         </xsl:apply-templates>
@@ -191,14 +199,23 @@ public:
   </xsl:template>
   
   <xsl:template match="parameteritem" mode="description">
-    <tr><td><a name="param_{parameternamelist/parametername}"><code><xsl:value-of select="parameternamelist/parametername"/></code></a></td><td>
-    <xsl:value-of select="parameterdescription"/></td></tr>
+    <tr><td><a name="templateparam_{parameternamelist/parametername}"><code><xsl:value-of select="parameternamelist/parametername"/></code></a></td>
+    <xsl:choose>
+      <xsl:when test="contains(parameterdescription, $default-keyword)">
+        <td><xsl:value-of select="substring-before(parameterdescription, $default-keyword)"/></td>
+        <td><code><xsl:value-of select="substring-after(parameterdescription, $default-keyword)"/></code></td>
+      </xsl:when>
+      <xsl:otherwise>
+        <td><xsl:value-of select="parameterdescription"/></td>
+        <td>&nbsp;</td>
+      </xsl:otherwise>
+    </xsl:choose></tr>
   </xsl:template>
   
   <xsl:template match="memberdef[@kind='typedef']" mode="description">
-    <xsl:if test="normalize-space(briefdescription) != ''"><tr><td>
-      <a name="{@id}"><code><xsl:value-of select="name"/></code></a></td><td>
-      <xsl:value-of select="briefdescription"/></td></tr>
+    <xsl:if test="normalize-space(briefdescription) != ''">
+      <tr><td><a name="{@id}"><code><xsl:value-of select="name"/></code></a></td>
+      <td><xsl:value-of select="briefdescription"/></td></tr>
     </xsl:if>
   </xsl:template>
   

@@ -32,6 +32,7 @@ namespace boost {
     \brief Circular buffer - a STL compliant container.
     \param T The type of the elements stored in the circular buffer.
     \param Alloc The allocator type used for all internal memory management.
+           Default: std::allocator<T>
     \author <a href="mailto:jano_gaspar[at]yahoo.com">Jan Gaspar</a>
     \version 3.6
     \date 2004

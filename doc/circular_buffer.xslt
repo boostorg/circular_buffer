@@ -10,7 +10,13 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   
   <xsl:output method="xml" version="1.0" encoding="iso-8859-1" indent="yes" media-type="text/xml"/>
 
-  <xsl:template name="member-types">
+  <xsl:template name="template-parameters">
+    <xsl:for-each select="templateparamlist/param">
+      <xsl:apply-templates select="." mode="synopsis"/>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template name="public-types">
     <xsl:for-each select="sectiondef[@kind='public-type']/memberdef">
       <xsl:sort select="name"/>
       <xsl:apply-templates select="." mode="synopsis"/>
