@@ -1,0 +1,5813 @@
+-------------------------------------------------------------------------------
+FORMAL REVIEW HISTORY OF THE CIRCULAR BUFFER
+-------------------------------------------------------------------------------
+
+Date: Thu, 4 Mar 2004 04:37:22 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+To: boost@lists.boost.org 
+Subject: [boost] circular_buffer v3.6 
+
+    
+Hello all!
+
+New version of the circular_buffer is available. It
+can be found at
+http://groups.yahoo.com/group/boost/files/circular_buffer_v3.6.zip
+
+Release notes:
+- fixed bug regarding not destroyed elements
+- requirements for element types were changed to
+CopyConstructible concept
+- changed debug support classes - no dynamic memory
+allocation needed
+- changed debug support for invalidated iterators:
+assertion raised also when used iterator which points
+to the overwritten element
+- added allocator& get_allocator() /* NONCONST */
+{...} method
+- added functionality to set_capacity() and resize()
+methods
+- changed circular_buffer_space_optimized constructor
+signatures
+
+Regards
+
+Jan
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Fri, 5 Mar 2004 03:16:30 +0100 
+Subject: [boost] Formal Review: Circular Buffer 
+
+    
+
+The review of Jan Gaspar's Circular Buffer
+library starts today (March 5th) and runs for 10 days.
+
+
+Latest version of the library is available at:
+http://groups.yahoo.com/group/boost/files/circular_buffer_v3.6.zip
+
+
+What it is:
+  Circular buffer (also known as ring or
+  cyclic buffer) is container with fixed
+  upper limit on number of elements inside.
+
+  When capacity gets exhausted newly inserted
+  elements will cause oldest elements to get
+  dropped out.
+
+
+What makes the library Boost candidate:
+  - it provides often used functionality,
+  - it is STL compliant generic solution,
+  - it is designed for CPU/memory efficiency,
+  - it is fully documented and tested,
+  - it contains extensive debug support,
+  - it has been informally reviewed for long time.
+
+
+Discovered problems in code or in documentation,
+missing features, portability issues
+and finally opinion whether the library belongs
+to Boost is welcomed.
+
+/Pavel
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Fri, 5 Mar 2004 03:23:17 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+> The review of Jan Gaspar's Circular Buffer
+> library starts today (March 5th) and runs for 10 days.
+>
+
+Here's result of first look into 3.6.
+More details will follow later.
+
+/Pavel
+
+________________________________________________
+1. docs: the table "Friend Functions" should
+   be rather "Standalone Functions" and should mention
+   swap, <=, >= as well.
+________________________________________________
+2. base.hpp: standalone function
+   bool operator > (...) should be added.
+________________________________________________
+3. docs: why is the (SGI) in paragraph
+   "Model of" and why it is twice there?
+________________________________________________
+4. docs: "Type Requirements": doesn't the T need
+   to be DefaultConstructible as well, e.g.
+   to support push_back(void)?
+
+   Maybe the title should be "Element Type Requirements".
+________________________________________________
+5. compiling test on BCB 6.4, adaptor.hpp:
+
+in snippet:
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    reference operator [] (size_type n) { return circular_buffer<T,
+Alloc>::operator[](n); }
+    return_value_type operator [] (size_type n) const { return
+circular_buffer<T, Alloc>::operator[](n); } <<<=== here
+#else
+    using circular_buffer<T, Alloc>::operator[];
+#endif
+
+the line starting with "return_value_type" fails to compile
+with error:
+
+------------
+[C++ Error] adaptor.hpp(67): E2303 Type name expected
+  Full parser context
+    base_test.cpp(9): #include
+C:\Temp\temp\circular_buffer3.6\circular_buffer\libs\circular_buffer\test\te
+st.hpp
+    test.hpp(16): #include
+C:\Temp\temp\circular_buffer3.6\circular_buffer\libs\circular_buffer\test\..
+/../../boost/circular_buffer.hpp
+    circular_buffer.hpp(54): #include
+C:\Temp\temp\circular_buffer3.6\circular_buffer\libs\circular_buffer\test\..
+/../../boost/circular_buffer/adaptor.hpp
+    adaptor.hpp(16): namespace boost
+    adaptor.hpp(32): class circular_buffer_space_optimized<T,Alloc>
+[C++ Error] adaptor.hpp(67): E2139 Declaration missing ;
+  Full parser context
+    base_test.cpp(9): #include
+C:\Temp\temp\circular_buffer3.6\circular_buffer\libs\circular_buffer\test\te
+st.hpp
+    test.hpp(16): #include
+C:\Temp\temp\circular_buffer3.6\circular_buffer\libs\circular_buffer\test\..
+/../../boost/circular_buffer.hpp
+    circular_buffer.hpp(54): #include
+C:\Temp\temp\circular_buffer3.6\circular_buffer\libs\circular_buffer\test\..
+/../../boost/circular_buffer/adaptor.hpp
+    adaptor.hpp(16): namespace boost
+    adaptor.hpp(32): class circular_buffer_space_optimized<T,Alloc>
+------------
+
+When I change return type to "value_type" all
+compiles OK.
+
+This could be some BCB quirk.
+________________________________________________
+6. compiling test on Intel C++ 7.0: all is OK.
+________________________________________________
+7. compiling base_test.cpp on VC6.5: I am getting
+"user breakpoint" within Boost.Test. This may be
+regression of Test, though. I'll try to dig deeper.
+________________________________________________
+EOF
+
+
+
+
+-------------------------------------------------------------------------------
+
+
+To: boost@lists.boost.org 
+From: "Giovanni Bajo" <giovannibajo@libero.it>   
+Date: Fri, 5 Mar 2004 06:47:16 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Pavel Vozenilek wrote:
+
+> Discovered problems in code or in documentation,
+> missing features, portability issues and finally opinion whether the 
+library
+belongs
+> to Boost is welcomed.
+
+I'm trying to compile the library with GCC 3.4. I get the following 
+errors:
+
+../../../boost/circular_buffer/debug.hpp: In member function `void
+boost::cb_details::cb_iterator_registry::invalidate_iterators(const
+Condition&)':
+../../../boost/circular_buffer/debug.hpp:60: error: invalid use of 
+undefined
+type `const struct boost::cb_details::cb_iterator_base'
+../../../boost/circular_buffer/debug.hpp:22: error: forward declaration 
+of
+`const struct boost::cb_details::cb_iterator_base'
+The type appears to be undefined at the point of use. I know this is 
+within a
+template function, but the type is non-dependent, so it must be defined 
+before
+its use. An out-of-class definition at the end of the file seems to 
+suffice.
+
+
+../../../boost/circular_buffer/base.hpp:139: error: using typedef-name
+`boost::circular_buffer<T, Alloc>::iterator' after `struct'
+../../../boost/circular_buffer/base.hpp:140: error: using typedef-name
+`boost::circular_buffer<T, Alloc>::const_iterator' after `struct'
+Verified, and the code really does try to use a typedef-name while 
+declaring
+friendship, which is invalid.
+
+
+../../../boost/circular_buffer/adaptor.hpp:369: error: dependent-name
+`boost::cb_details::cb_iterator_category_traits<InputIterator>::tag' is 
+parsed
+as a non-type, but instantiation yields a type
+../../../boost/circular_buffer/adaptor.hpp:369: note: say `typename
+boost::cb_details::cb_iterator_category_traits<InputIterator>::tag' if 
+a type
+is meant
+Just as it says. The same happens at line 412. Then in base.hpp, lines 
+570,
+827, 953, 1105.
+
+After fixing the above, I was able to compile & run adaptor_test and 
+base_test
+with no errors detected.
+-- 
+Giovanni Bajo
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Fri, 5 Mar 2004 17:31:04 +1100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Hi Jan,
+
+This is not my final review, but just some comment and questions.
+It's based solely on my reading of the docs.
+
+1. your rationale mentions many characteristics that I would expect of
+std::deque. Do you have any idea
+   how big the performance difference is?
+
+2. You mention "Guarantee of basic exception safety" as a design 
+criteria. I
+would expect many operations
+    to have a stronger guarantee.
+
+3. you write "In fact the circular_buffer is defined in the file
+boost/circular_buffer/base.hpp, but it is necessary to ". I don't see
+   why the user should be bothered with this implementation detail.
+
+4. Type Requirements: don't T need to be Assignable too?
+
+5. you could remove one version of push_back and push_front by using 
+default
+arguments. Similar for insert()/rinsert()
+
+6. What's the use of "return_value_type" ?return_value_type  operator[]
+(size_type index) const
+        Return the element at the index position.
+  Should it not be const_reference?
+
+7. when you state contracts like
+Precondition:
+*(this).size() > index
+don't you mean (*this).size() ? I would prefer that you omitted this
+entirely.
+
+8. maybe you should add const_pointer data() const ?
+
+9 I assume you provide the basic exception safety for set_capacity().
+However, I think you could achieve the strong guarantee
+   by (1) allocating the new buffer and (2) start to copy elements 
+[might
+throw] (3) swap the two buffers upon completion. The same goes for
+   resize(). Why are they both provided? (If you made resizes 2nd 
+argument
+to be the bool, then how would they differ?]
+
+10.  Can't the exception guarantee for the copy-constructor be stronger 
+too?
+(and assign(), and push_back(), push_front(), insert() )
+
+11. Some operations must be nothrow: swap(), size(), capaciity(),
+pop_back(), pop_front().
+
+Besides that, I think you documentation is excellent.
+
+br
+
+Thorsten
+
+
+-------------------------------------------------------------------------------
+
+Date: Thu, 4 Mar 2004 22:42:48 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: Formal Review: Circular Buffer 
+To: boost@lists.boost.org 
+
+    
+Hi Pavel!
+ 
+> ________________________________________________
+> 1. docs: the table "Friend Functions" should
+>    be rather "Standalone Functions" and should
+> mention
+>    swap, <=, >= as well.
+Agree.
+
+> ________________________________________________
+> 2. base.hpp: standalone function
+>    bool operator > (...) should be added.
+It is there!
+
+template <class T, class Alloc>
+inline bool operator >(const circular_buffer<T,Alloc>&
+lhs, const circular_buffer<T, Alloc>& rhs) {
+    return rhs < lhs;
+}
+
+> ________________________________________________
+> 3. docs: why is the (SGI) in paragraph
+>    "Model of" and why it is twice there?
+The (SGI) is there because it is different from the
+standard. See
+http://boost.org/libs/concept_check/reference.htm for
+details.
+
+> ________________________________________________
+> 4. docs: "Type Requirements": doesn't the T need
+>    to be DefaultConstructible as well, e.g.
+>    to support push_back(void)?
+Yes, but DefaultConstructible is needed only if you
+use such a method. In general it is not needed. For
+example you can just create empty circular_buffer and
+use push_back(T&). In this case T doesn't have to be
+DefaultConstructible.
+ 
+>    Maybe the title should be "Element Type
+> Requirements".
+OK.
+
+Jan
+
+
+-------------------------------------------------------------------------------
+
+Date: Fri, 5 Mar 2004 01:27:03 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: Formal Review: Circular Buffer 
+To: boost@lists.boost.org 
+
+    
+Hi Thorsten!
+
+--- Thorsten Ottosen <nesotto@cs.auc.dk> wrote:
+> Hi Jan,
+> 
+> This is not my final review, but just some comment
+> and questions.
+> It's based solely on my reading of the docs.
+> 
+> 1. your rationale mentions many characteristics that
+> I would expect of
+> std::deque. Do you have any idea
+>    how big the performance difference is?
+The memory is allocated at once, that's the biggest
+difference.
+
+> 
+> 2. You mention "Guarantee of basic exception safety"
+> as a design criteria. I
+> would expect many operations
+>     to have a stronger guarantee.
+Of cource, some methods provide stronger guarantee,
+but in general the container povides just basic
+exception safety. For some methods (e.g. insert) it is
+impossible to provide stronger guarantees.
+
+> 
+> 3. you write "In fact the circular_buffer is defined
+> in the file
+> boost/circular_buffer/base.hpp, but it is necessary
+> to ". I don't see
+>    why the user should be bothered with this
+> implementation detail.
+You're right.
+
+> 
+> 4. Type Requirements: don't T need to be Assignable
+> too?
+Just no!
+
+> 
+> 5. you could remove one version of push_back and
+> push_front by using default
+> arguments. Similar for insert()/rinsert()
+I don't know if this is good idea or not, but all STL
+implementations I've seen have containers with both
+methods (one with default param and one without).
+
+> 
+> 6. What's the use of "return_value_type"
+> ?return_value_type  operator[]
+> (size_type index) const
+>         Return the element at the index position.
+>   Should it not be const_reference?
+return_value_type is just optimization. It is
+const_reference for objects and value_type for
+primitive types.
+
+> 
+> 7. when you state contracts like
+> Precondition:
+> *(this).size() > index
+> don't you mean (*this).size() ? I would prefer that
+> you omitted this
+> entirely.
+This is just typo. Anyway I would retain the
+precondition.
+
+> 
+> 8. maybe you should add const_pointer data() const ?
+It is not possible. data() is mutating operation. See
+the source code.
+
+> 
+> 9 I assume you provide the basic exception safety
+> for set_capacity().
+> However, I think you could achieve the strong
+> guarantee
+>    by (1) allocating the new buffer and (2) start to
+> copy elements [might
+> throw] (3) swap the two buffers upon completion. The
+> same goes for
+>    resize(). Why are they both provided? (If you
+> made resizes 2nd argument
+> to be the bool, then how would they differ?]
+Yes, it works exactly like this. But the statement
+about provided exception safety covers the whole
+container.
+
+> 
+> 10.  Can't the exception guarantee for the
+> copy-constructor be stronger too?
+> (and assign(), and push_back(), push_front(),
+> insert() )
+No for insert()/rinsert(), push_xxx(), data() and
+erase(). See the source code.
+
+> 
+> 11. Some operations must be nothrow: swap(), size(),
+> capaciity(),
+> pop_back(), pop_front().
+Yes, they are. It is not written explicitly in the
+documentation (there is just no "Exceptions" section
+for each method).
+
+Jan
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Fri, 5 Mar 2004 21:22:29 +1100 
+Subject: [boost] Re: Re: Formal Review: Circular Buffer 
+
+    
+"Jan Gaspar" <jano_gaspar@yahoo.com> wrote in message
+news:20040305092703.88723.qmail@web41506.mail.yahoo.com...
+
+> 1. your rationale mentions many characteristics that
+> I would expect of
+> std::deque. Do you have any idea
+>    how big the performance difference is?
+The memory is allocated at once, that's the biggest
+difference.
+------------
+What I'm looking for is some more evidence that the data structure is 
+really
+faster. I think that
+is relevant since that is your reason d'etre (or something, I never 
+took
+French in highschool :-) )
+for the container.
+
+>
+> 2. You mention "Guarantee of basic exception safety"
+> as a design criteria. I
+> would expect many operations
+>     to have a stronger guarantee.
+Of cource, some methods provide stronger guarantee,
+but in general the container povides just basic
+exception safety. For some methods (e.g. insert) it is
+impossible to provide stronger guarantees.
+-------------
+I guess I would like to know the exact guarantee of each function. It 
+will
+be important
+for eg. when I have to provide a pointer version of circular_buffer for 
+my
+smart containers.
+
+> 4. Type Requirements: don't T need to be Assignable
+> too?
+Just no!
+---------
+Then how is an element overwritten?
+
+> 5. you could remove one version of push_back and
+> push_front by using default
+> arguments. Similar for insert()/rinsert()
+I don't know if this is good idea or not, but all STL
+implementations I've seen have containers with both
+methods (one with default param and one without).
+----------
+ok. I must admit that I have never seen this before. For example, my
+dinkumware only has vector::push_back( T& );
+
+>
+> 7. when you state contracts like
+> Precondition:
+> *(this).size() > index
+> don't you mean (*this).size() ? I would prefer that
+> you omitted this
+> entirely.
+This is just typo. Anyway I would retain the
+precondition.
+----------
+yes, I'm not talking about removing the precondition. I just don't 
+think
+'this->' adds
+anything. size() > index would be fine to me.
+
+>
+> 8. maybe you should add const_pointer data() const ?
+It is not possible. data() is mutating operation. See
+the source code.
+---------------
+ok. then maybe one should get more hints about this mutation (I did not 
+have
+a clue), maybe like
+c.prepare_array();
+foo( &*c.begin() );
+And what complexity does it involves (linear, I assume)?
+
+> 9 I assume you provide the basic exception safety
+> for set_capacity().
+> However, I think you could achieve the strong
+> guarantee
+>    by (1) allocating the new buffer and (2) start to
+> copy elements [might
+> throw] (3) swap the two buffers upon completion. The
+> same goes for
+>    resize(). Why are they both provided? (If you
+> made resizes 2nd argument
+> to be the bool, then how would they differ?]
+Yes, it works exactly like this. But the statement
+about provided exception safety covers the whole
+container.
+--------------
+I think that saying that your container gives the basic exception 
+safety
+guarantee
+is too weak a statement. Afterall, it *must* provide that guarantee. 
+The
+standard
+specifies which operations that differs and under which cercumstances 
+for T.
+
+>
+> 10.  Can't the exception guarantee for the
+> copy-constructor be stronger too?
+> (and assign(), and push_back(), push_front(),
+> insert() )
+No for insert()/rinsert(), push_xxx(), data() and
+erase(). See the source code.
+-------------
+Ok, let's try push_back:
+
+  void push_back(param_value_type item) {
+        if (full()) {
+            if (empty())
+                return; (*)
+            replace_last(item); // can throw
+            increment(m_last); // nothrow
+            m_first = m_last;   // nothrow
+        } else {
+            m_alloc.construct(m_last, item); // can throw
+            increment(m_last);                     // nothrow
+            ++m_size;                                 // nothrow
+        }
+    }
+
+AFAICT, you have the strong property unless you cannot roll-back stuff 
+in
+replace_last/construct.
+(*) it might be good to document that push_back() can choose *not* to 
+insert
+something. For example,
+     it would be good for me to know when I write a pointer wrapper.
+
+
+>
+> 11. Some operations must be nothrow: swap(), size(),
+> capaciity(),
+> pop_back(), pop_front().
+Yes, they are. It is not written explicitly in the
+documentation (there is just no "Exceptions" section
+for each method).
+-----------
+Ok, I can live with that :-). You could consider one line that said 
+that.
+
+br
+
+Thorsten
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Fri, 5 Mar 2004 11:58:03 +0100 
+Subject: [boost] Re: Re: Formal Review: Circular Buffer 
+
+    
+
+"Jan Gaspar" <jano_gaspar@yahoo.com> wrote
+
+ ________________________________________________
+> 3. docs: why is the (SGI) in paragraph
+>    "Model of" and why it is twice there?
+The (SGI) is there because it is different from the
+standard. See
+http://boost.org/libs/concept_check/reference.htm for
+details.
+
+Maybe it could be (SGI specific).
+
+/Pavel
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Fri, 5 Mar 2004 12:04:09 +0100 
+Subject: [boost] Re: Re: Formal Review: Circular Buffer 
+
+    
+
+"Thorsten Ottosen" <nesotto@cs.auc.dk> wrote
+
+> > 1. your rationale mentions many characteristics that
+> > I would expect of  std::deque. Do you have any idea
+> >  how big the performance difference is?
+>
+> What I'm looking for is some more evidence that the data structure is
+really
+> faster. I think that
+> is relevant since that is your reason d'etre (or something, I never 
+took
+> French in highschool :-) )  for the container.
+>
+Higher speed is welcomed side-effect of implementation here
+(no allocations).
+
+Choosen data structure provides a lot of flexibility,
+e.g. to implement debug support. That would be hard/impossible
+with std::deque.
+
+/Pavel
+
+
+-------------------------------------------------------------------------------
+
+Date: Fri, 5 Mar 2004 05:37:10 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: Re: Formal Review: Circular Buffer 
+To: boost@lists.boost.org 
+
+    
+Hello!
+
+> 
+> > 1. your rationale mentions many characteristics
+> that
+> > I would expect of
+> > std::deque. Do you have any idea
+> >    how big the performance difference is?
+> The memory is allocated at once, that's the biggest
+> difference.
+> ------------
+> What I'm looking for is some more evidence that the
+> data structure is really
+> faster. I think that
+> is relevant since that is your reason d'etre (or
+> something, I never took
+> French in highschool :-) )
+> for the container.
+I agree with Pavel. Moreover you would have no control
+over iterator invalidation in std::deque.
+
+
+> 
+> >
+> > 2. You mention "Guarantee of basic exception
+> safety"
+> > as a design criteria. I
+> > would expect many operations
+> >     to have a stronger guarantee.
+> Of cource, some methods provide stronger guarantee,
+> but in general the container povides just basic
+> exception safety. For some methods (e.g. insert) it
+> is
+> impossible to provide stronger guarantees.
+> -------------
+> I guess I would like to know the exact guarantee of
+> each function. It will
+> be important
+> for eg. when I have to provide a pointer version of
+> circular_buffer for my
+> smart containers.
+Ok, agree. Every method will have statement about its
+exception safety guarantee in the documentation.
+
+> 
+> > 4. Type Requirements: don't T need to be
+> Assignable
+> > too?
+> Just no!
+> ---------
+> Then how is an element overwritten?
+Look at the replace() method in the source code.
+
+
+> >
+> > 7. when you state contracts like
+> > Precondition:
+> > *(this).size() > index
+> > don't you mean (*this).size() ? I would prefer
+> that
+> > you omitted this
+> > entirely.
+> This is just typo. Anyway I would retain the
+> precondition.
+> ----------
+> yes, I'm not talking about removing the
+> precondition. I just don't think
+> 'this->' adds
+> anything. size() > index would be fine to me.
+Agree.
+
+> 
+> >
+> > 8. maybe you should add const_pointer data() const
+> ?
+> It is not possible. data() is mutating operation.
+> See
+> the source code.
+> ---------------
+> ok. then maybe one should get more hints about this
+> mutation (I did not have
+> a clue), maybe like
+> c.prepare_array();
+> foo( &*c.begin() );
+There are some words regarding iterator invalidation
+in the method documentation.
+
+> And what complexity does it involves (linear, I
+> assume)?
+Yes, linear.
+
+Jan
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Sat, 6 Mar 2004 01:04:56 +1100 
+Subject: [boost] Re: Re: Re: Formal Review: Circular Buffer 
+
+    
+One last thing:
+
+> > 8. maybe you should add const_pointer data() const
+> ?
+> It is not possible. data() is mutating operation.
+> See
+> the source code.
+> ---------------
+> ok. then maybe one should get more hints about this
+> mutation (I did not have
+> a clue), maybe like
+> c.prepare_array();
+> foo( &*c.begin() );
+There are some words regarding iterator invalidation
+in the method documentation.
+---------
+ok, I'm not super religious about it, but my line of thought goes like 
+this:
+
+if a programmer sees this kind of code:
+
+circular_buffer<T> cb;
+...
+foo( cb.data() );
+
+he would have to look at documentation to know what's going on (he 
+could be
+a maintenance programmer who have no
+earlier knowlegde of circular buffer). data() is a very
+innocent word and I doubt that people in general would think all 
+iterator
+were invalidated. I also doubt that they would think
+it was a linear time operation. Now, that's why I think it might be 
+possible
+to give programmer just a little more hint about
+what might be going on by using a *verb* in the functions name, eg.
+
+compute_data();
+prepare_data();
+prepare_array();
+linearize_data();
+
+It's probably good to get other's oppinion about this too.
+
+br
+
+Thorsten
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+Subject: Re: [boost] Re: Re: Re: Formal Review: Circular Buffer 
+From: "Jeremy Maitin-Shepard" <jbms@attbi.com>   
+Date: Fri, 05 Mar 2004 13:54:05 -0500 
+
+    
+Perhaps in addition to a data() function, it would be useful if the
+container provided constant-time access to the data as two arrays.
+Perhaps something like std::pair<T *, T *> first_range() and 
+std::pair<T
+*, T *> second_range().  (Where these can also be made available in
+const-form, since no internal modification is necessary)  Then as
+Thorsten suggested, an operation such as linearize or reorder could be
+added which orders the elements such that first_range() contains all of
+the elements.
+
+-- 
+Jeremy Maitin-Shepard
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Fri, 5 Mar 2004 20:07:24 +0100 
+Subject: [boost] Re: Re: Re: Re: Formal Review: Circular Buffer 
+
+    
+
+"Jeremy Maitin-Shepard" <jbms@attbi.com> wrote
+
+> Perhaps in addition to a data() function, it would be useful if the
+> container provided constant-time access to the data as two arrays.
+> Perhaps something like std::pair<T *, T *> first_range() and 
+std::pair<T
+> *, T *> second_range().  (Where these can also be made available in
+> const-form, since no internal modification is necessary)  Then as
+> Thorsten suggested, an operation such as linearize or reorder could 
+be
+> added which orders the elements such that first_range() contains all 
+of
+> the elements.
+>
+data() does 'linearization' when needed (it was called flatten()
+when I proposed it ago).
+
+Do you have an example where returning two arrays is much better than
+optional reordering by data()?  What kind of algorithm would be better 
+to
+be called twice?
+
+/Pavel
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+Subject: Re: [boost] Re: Re: Re: Re: Formal Review: Circular Buffer 
+From: "Jeremy Maitin-Shepard" <jbms@attbi.com>   
+Date: Fri, 05 Mar 2004 15:21:03 -0500 
+
+    
+The advantage is that the two ranges can be returned without any
+reordering.  For instance, if the circular buffer is being used as a
+write buffer, it might prove more efficient to call the underlying
+write twice, once on each portion of the array, than to reorder the
+array (and call the underlying write only once).
+
+-- 
+Jeremy Maitin-Shepard
+
+
+-------------------------------------------------------------------------------
+
+Date: Sat, 06 Mar 2004 15:40:58 -0500 
+To: boost@lists.boost.org, boost@lists.boost.org 
+From: "Beman Dawes" <bdawes@acm.org>   
+Subject: Re: [boost] Re: Re: Re: Formal Review: Circular Buffer 
+
+    
+At 09:04 AM 3/5/2004, Thorsten Ottosen wrote:
+ >One last thing:
+ >
+ >> > 8. maybe you should add const_pointer data() const
+ >> ?
+ >> It is not possible. data() is mutating operation.
+ >> See
+ >> the source code.
+ >> ---------------
+ >> ok. then maybe one should get more hints about this
+ >> mutation (I did not have
+ >> a clue), maybe like
+ >> c.prepare_array();
+ >> foo( &*c.begin() );
+ >There are some words regarding iterator invalidation
+ >in the method documentation.
+ >---------
+ >ok, I'm not super religious about it, but my line of thought goes 
+like
+ >this:
+ >
+ >if a programmer sees this kind of code:
+ >
+ >circular_buffer<T> cb;
+ >...
+ >foo( cb.data() );
+ >
+ >he would have to look at documentation to know what's going on (he 
+could 
+be
+ >a maintenance programmer who have no
+ >earlier knowlegde of circular buffer). data() is a very
+ >innocent word and I doubt that people in general would think all 
+iterator
+ >were invalidated. I also doubt that they would think
+ >it was a linear time operation. Now, that's why I think it might be
+ >possible
+ >to give programmer just a little more hint about
+ >what might be going on by using a *verb* in the functions name, eg.
+ >
+ >compute_data();
+ >prepare_data();
+ >prepare_array();
+ >linearize_data();
+ >
+ >It's probably good to get other's oppinion about this too.
+
+FWIW, I agree. Particularly since data() in std::string is const. Verbs 
+do 
+a better job of indicating meaning.
+
+--Beman
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Sun, 07 Mar 2004 12:44:52 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Jan Gaspar wrote:
+>>>4. Type Requirements: don't T need to be
+>>>Assignabletoo?
+>>Just no!
+>>---------
+>>Then how is an element overwritten?
+> Look at the replace() method in the source code.
+
+This strikes me. All standard containers require T to be Assignable, so 
+I don't understand the rationale for dropping such requirement. Does it 
+give more freedom? Perhaps yes, but not so much IMHO. Users of 
+containers are probably going to provide assignment anyway.
+
+Suppose that T *is* assignable, is destroy+copy construction better 
+than 
+assignment? Probably no, for several reasons, including:
+
+1) assigment is probably more efficient. In particular it might avoid 
+destruction/reconstruction of sub-objects non related with the class 
+invariant (for example: buffers, mutexes, etc.).
+
+2) with the dtor/ctor idiom, if the ctor throws an exception, the old 
+element is lost and you can't do anything about it, so the container 
+cannot provide more than the basic guarantee for any method that might 
+overwrite elements. However, the user might implement assigment with 
+the 
+strong guarantee, the container might leverage on that and provide the 
+strong guarantee too at least for methods that might overwrite a single 
+element such as push_back/push_front. (Of course, the user might 
+implement assignment so badly that it doesn't provide even the basic 
+guarantee and the container could not recover from that, but a library 
+such not try to outsmart the user... too much ;).
+
+Just my opinion,
+
+Alberto
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "David Abrahams" <dave@boost-consulting.com>   
+Date: Sun, 07 Mar 2004 08:42:43 -0500 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Alberto Barbati <abarbati@iaanus.com> writes:
+
+> Suppose that T *is* assignable, is destroy+copy construction better
+> than assignment? Probably no, for several reasons, including:
+>
+> 1) assigment is probably more efficient. In particular it might avoid
+>    destruction/reconstruction of sub-objects non related with the
+>    class invariant (for example: buffers, mutexes, etc.).
+>
+> 2) with the dtor/ctor idiom, if the ctor throws an exception, the old
+>    element is lost and you can't do anything about it, so the
+>    container cannot provide more than the basic guarantee for any
+>    method that might overwrite elements. However, the user might
+>    implement assigment with the strong guarantee, the container might
+>    leverage on that and provide the strong guarantee too at least for
+>    methods that might overwrite a single element such as
+>    push_back/push_front. (Of course, the user might implement
+>    assignment so badly that it doesn't provide even the basic
+>    guarantee and the container could not recover from that, but a
+>    library such not try to outsmart the user... too much ;).
+>
+> Just my opinion,
+
+Well said.
+
+-- 
+Dave Abrahams
+Boost Consulting
+www.boost-consulting.com
+
+
+-------------------------------------------------------------------------------
+
+Date: Sun, 7 Mar 2004 13:31:40 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: Formal Review: Circular Buffer 
+To: boost@lists.boost.org 
+
+    
+
+--- David Abrahams <dave@boost-consulting.com> wrote:
+> Alberto Barbati <abarbati@iaanus.com> writes:
+> 
+> > Suppose that T *is* assignable, is destroy+copy
+> construction better
+> > than assignment? Probably no, for several reasons,
+> including:
+> >
+> > 1) assigment is probably more efficient. In
+> particular it might avoid
+> >    destruction/reconstruction of sub-objects non
+> related with the
+> >    class invariant (for example: buffers, mutexes,
+> etc.).
+I agree the assignment is more efficient. If you dig
+in the code little bit you will find that there is
+assignment operation provided for the primitive types.
+
+
+> >
+> > 2) with the dtor/ctor idiom, if the ctor throws an
+> exception, the old
+> >    element is lost and you can't do anything about
+> it, so the
+> >    container cannot provide more than the basic
+> guarantee for any
+> >    method that might overwrite elements. However,
+> the user might
+> >    implement assigment with the strong guarantee,
+> the container might
+> >    leverage on that and provide the strong
+> guarantee too at least for
+> >    methods that might overwrite a single element
+> such as
+> >    push_back/push_front. (Of course, the user
+> might implement
+> >    assignment so badly that it doesn't provide
+> even the basic
+> >    guarantee and the container could not recover
+> from that, but a
+> >    library such not try to outsmart the user...
+> too much ;).
+> >
+> > Just my opinion,
+> 
+The idea behind the dtor/ctor idiom is like this:
+suppose you have full circular_buffer and you want to
+push_back a new element (instance of some class). That
+means the fron-most element is about to be
+overwritten. Now if there will be the assignment idiom
+applied the front-most will be assigned to the new one
+- it will be not destroyed (no destructor will be
+called). IMHO this is not correct. The old element
+will not disappear - just its value/state will be
+different. I think that the overwrite operation means
+destruction of the old object, NOT assignment. What do
+you think?
+
+Jan
+
+
+> Well said.
+> 
+> -- 
+> Dave Abrahams
+> Boost Consulting
+> www.boost-consulting.com
+> 
+
+
+-------------------------------------------------------------------------------
+
+Date: Sun, 7 Mar 2004 20:13:28 -0500 
+Subject: Re: [boost] Re: Formal Review: Circular Buffer 
+From: "Jeremy Siek" <jsiek@osl.iu.edu>   
+To: boost@lists.boost.org 
+
+    
+
+On Friday, March 5, 2004, at 01:42 AM, Jan Gaspar wrote:
+>> ________________________________________________
+>> 4. docs: "Type Requirements": doesn't the T need
+>>    to be DefaultConstructible as well, e.g.
+>>    to support push_back(void)?
+> Yes, but DefaultConstructible is needed only if you
+> use such a method. In general it is not needed. For
+> example you can just create empty circular_buffer and
+> use push_back(T&). In this case T doesn't have to be
+> DefaultConstructible.
+
+That means you have to mention this type requirement
+in the documentation for the push_back() method.
+
+Cheers,
+Jeremy
+
+
+-------------------------------------------------------------------------------
+
+Date: Sun, 7 Mar 2004 20:23:29 -0500 
+Subject: Re: [boost] Formal Review: Circular Buffer 
+From: "Jeremy Siek" <jsiek@osl.iu.edu>   
+To: boost@lists.boost.org 
+
+    
+I have read the documentation for the library, and browsed through the 
+test code.
+Based on that I recommend acceptance of the circular buffer library. 
+Nice work Jan!
+
+Here are some suggestions.
+
+This sentences seems unnecessary:
+     In fact the circular_buffer is defined in the file
+     boost/circular_buffer/base.hpp, but it is necessary to include the
+    boost/circular_buffer.hpp in order to use this container
+
+Have you checked whether CopyConstructible is in fact the only
+requirements needed on the type parameter T? For example, I bet
+T must also be Assignable. But who knows what other requirements you 
+may have
+missed (it is easy to miss them). I recommend using concept archetypes 
+to check this.
+
+There are no requirements on the Alloc type parameter. Surely there
+should be some.
+
+I'm not a big fan of how the semantics section is separated from the
+function prototypes. I'd rather see all the information about a
+function in one place.
+
+Also I'm not fond of how the "source code documentation" is separate
+from the main documentation. I had to click around a lot to find
+information.
+
+
+Best wishes,
+Jeremy
+
+
+-------------------------------------------------------------------------------
+
+Date: Sun, 7 Mar 2004 20:41:18 -0500 
+Subject: Re: [boost] Re: Formal Review: Circular Buffer 
+From: "Jeremy Siek" <jsiek@osl.iu.edu>   
+To: boost@lists.boost.org 
+
+    
+Hi Jan,
+
+On Sunday, March 7, 2004, at 04:31 PM, Jan Gaspar wrote:
+> overwritten. Now if there will be the assignment idiom
+> applied the front-most will be assigned to the new one
+> - it will be not destroyed (no destructor will be
+> called). IMHO this is not correct. The old element
+> will not disappear - just its value/state will be
+> different. I think that the overwrite operation means
+> destruction of the old object, NOT assignment. What do
+> you think?
+
+I don't see how it makes any difference from the semantic point
+of view. Other than tracing calls to destructors, are there any
+other ways to tell the difference?
+
+Another note about the documentation... whichever way this
+issues end up, more needs to be said about it in the docs.
+Currently, the docs say "overwrite" which to me sounds like
+assignment, and the docs never mention destroying the
+objects. I think you either need to give a technical definition
+for what you mean by "overwrite", or better yet, use different words.
+
+Cheers,
+Jeremy
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Mon, 08 Mar 2004 03:01:32 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Jan Gaspar wrote:
+> I agree the assignment is more efficient. If you dig
+> in the code little bit you will find that there is
+> assignment operation provided for the primitive types.
+
+That is good. However, I think that such optimization is unnecessary. 
+For primitive types, the destructor is trivial and the copy constructor 
+is the assignment, so I bet a reasonably good compiler can optimize the 
+dtor/ctor idiom to a simple assigment even without any "help" in the 
+form of template machinery. Besides, bad compilers may introduce 
+pessimizations... ;)
+
+> The idea behind the dtor/ctor idiom is like this:
+> suppose you have full circular_buffer and you want to
+> push_back a new element (instance of some class). That
+> means the fron-most element is about to be
+> overwritten. Now if there will be the assignment idiom
+> applied the front-most will be assigned to the new one
+> - it will be not destroyed (no destructor will be
+> called). IMHO this is not correct. The old element
+> will not disappear - just its value/state will be
+> different. I think that the overwrite operation means
+> destruction of the old object, NOT assignment. What do
+> you think?
+
+That's interesting, indeed. I agree it is more "correct". However, I 
+don't see this improved correctness bringing a real benefit to the 
+user. 
+Do you have at least one use case where the ctor/dtor idiom can be 
+leveraged by the user in order to provide a feature not obtainable with 
+plain assignment?
+
+BTW, this discussion triggers some other ideas. Have you considered 
+adding to the circular_buffer the capability to optionally notify the 
+user about an impeding overwrite? I have at least one use case where it 
+might be useful. It might be as easy as invoking a boost::function0 
+callback, at the cost of few bytes in footprint and an extra test 
+before 
+any overwrite. Alternatively, we could put hooks (in form of a template 
+policy, for example) in the main container that are then implemented by 
+a container adaptor, so the user won't pay if it doesn't want such a 
+feature.
+
+Alberto
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+Subject: Re: [boost] Re: Formal Review: Circular Buffer 
+From: "Jeremy Maitin-Shepard" <jbms@attbi.com>   
+Date: Sun, 07 Mar 2004 21:07:54 -0500 
+
+    
+Alberto Barbati <abarbati@iaanus.com> writes:
+
+> [snip]
+
+> BTW, this discussion triggers some other ideas. Have you considered 
+adding to
+> the circular_buffer the capability to optionally notify the user 
+about an
+> impeding overwrite? I have at least one use case where it might be 
+useful. It
+> might be as easy as invoking a boost::function0 callback, at the cost 
+of few
+> bytes in footprint and an extra test before any overwrite. 
+Alternatively, we
+> could put hooks (in form of a template policy, for example) in the 
+main
+> container that are then implemented by a container adaptor, so the 
+user won't
+> pay if it doesn't want such a feature.
+
+I would think that sort of feature would be better implemented as a
+wrapper around the circular_buffer container.
+
+-- 
+Jeremy Maitin-Shepard
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Mon, 8 Mar 2004 13:39:27 +1100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+"Alberto Barbati" <abarbati@iaanus.com> wrote in message
+news:c2gk5o$6v4$1@sea.gmane.org...
+> Jan Gaspar wrote:
+> > I agree the assignment is more efficient. If you dig
+> > in the code little bit you will find that there is
+> > assignment operation provided for the primitive types.
+>
+> That is good. However, I think that such optimization is unnecessary.
+> For primitive types, the destructor is trivial and the copy 
+constructor
+> is the assignment, so I bet a reasonably good compiler can optimize 
+the
+> dtor/ctor idiom to a simple assigment even without any "help" in the
+> form of template machinery. Besides, bad compilers may introduce
+> pessimizations... ;)
+
+The cases where a call to a destructor is actually important beacuse it 
+does
+some
+non-trivial work, one really need
+to ensure not even temporary objects of the type exists. That's one of 
+the
+capabilities my smart containers will allow, ie, "overwriting" really 
+means
+destructing and replacing.
+
+br
+
+Thorsten
+
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "David Abrahams" <dave@boost-consulting.com>   
+Date: Mon, 08 Mar 2004 05:08:32 -0500 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Jan Gaspar <jano_gaspar@yahoo.com> writes:
+
+> Now if there will be the assignment idiom
+> applied the front-most will be assigned to the new one
+> - it will be not destroyed (no destructor will be
+> called). IMHO this is not correct. The old element
+> will not disappear - just its value/state will be
+> different. I think that the overwrite operation means
+> destruction of the old object, NOT assignment. What do
+> you think?
+
+I think it introduces inefficiencies that most people won't want to
+pay for, and I don't see any benefits other than lifting the
+requirement on assignability.  Types that are copiable but not
+assignable are rare, though, at least in my experience.
+
+-- 
+Dave Abrahams
+Boost Consulting
+www.boost-consulting.com
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Mon, 08 Mar 2004 11:22:48 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Thorsten Ottosen wrote:
+> "Alberto Barbati" <abarbati@iaanus.com> wrote in message
+> news:c2gk5o$6v4$1@sea.gmane.org...
+>>
+>>That is good. However, I think that such optimization is unnecessary.
+>>For primitive types, the destructor is trivial and the copy 
+constructor
+>>is the assignment, so I bet a reasonably good compiler can optimize 
+the
+>>dtor/ctor idiom to a simple assigment even without any "help" in the
+>>form of template machinery. Besides, bad compilers may introduce
+>>pessimizations... ;)
+> 
+> 
+> The cases where a call to a destructor is actually important beacuse 
+it does
+> some
+> non-trivial work, one really need
+> to ensure not even temporary objects of the type exists. That's one 
+of the
+> capabilities my smart containers will allow, ie, "overwriting" really 
+means
+> destructing and replacing.
+
+I'm sorry, I don't understand what you are trying to say here. I 
+started 
+my sentence with "For primitive types"...
+
+Alberto
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Mon, 08 Mar 2004 11:28:33 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Jeremy Maitin-Shepard wrote:
+
+> Alberto Barbati <abarbati@iaanus.com> writes:
+> 
+>>BTW, this discussion triggers some other ideas. Have you considered 
+adding to
+>>the circular_buffer the capability to optionally notify the user 
+about an
+>>impeding overwrite? I have at least one use case where it might be 
+useful. It
+>>might be as easy as invoking a boost::function0 callback, at the cost 
+of few
+>>bytes in footprint and an extra test before any overwrite. 
+Alternatively, we
+>>could put hooks (in form of a template policy, for example) in the 
+main
+>>container that are then implemented by a container adaptor, so the 
+user won't
+>>pay if it doesn't want such a feature.
+> 
+> 
+> I would think that sort of feature would be better implemented as a
+> wrapper around the circular_buffer container.
+> 
+
+I tend to agree, in fact I mentioned container adaptor (= wrapper) in 
+the list of alternatives. I guess such an adaptor could perform the 
+task 
+more efficiently if the underlying container provided the right hooks, 
+but until we agree on the semantic and have a reasonable test 
+implementation it's difficult to tell.
+
+Alberto
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Mon, 08 Mar 2004 11:42:29 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Jeremy Siek wrote:
+
+> 
+> On Friday, March 5, 2004, at 01:42 AM, Jan Gaspar wrote:
+> 
+>>> ________________________________________________
+>>> 4. docs: "Type Requirements": doesn't the T need
+>>>    to be DefaultConstructible as well, e.g.
+>>>    to support push_back(void)?
+>>
+>> Yes, but DefaultConstructible is needed only if you
+>> use such a method. In general it is not needed. For
+>> example you can just create empty circular_buffer and
+>> use push_back(T&). In this case T doesn't have to be
+>> DefaultConstructible.
+> 
+> 
+> That means you have to mention this type requirement
+> in the documentation for the push_back() method.
+
+Standard containers do not have push_back()/push_front() methods that 
+take no arguments, so I don't agree with the decision of having them. I 
+would remove them entirely.
+
+Moreover, I once had a discussion against having both a foobar() and a 
+foobar(T) or foobar(T&) signature. The argument was that explicit 
+instantiation of the entire class requires both methods to be 
+instantiated so it requires T to be DefaultConstructible even if 
+foobar() is never called. That's why the standard defines, for example, 
+std::vector::resize with a default argument, like this:
+
+   void resize(size_type sz, T c = T());
+
+this definition effectively works around this kind of problem as the 
+default argument expression is not evaluated unless the method is 
+invoked with less than a full set of arguments.
+
+Alberto
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Mon, 08 Mar 2004 13:03:04 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Pavel Vozenilek wrote:
+
+> Discovered problems in code or in documentation,
+> missing features, portability issues
+> and finally opinion whether the library belongs
+> to Boost is welcomed.
+
+I believe this library is very useful and generally well-written. I 
+found a few minor problems that I deem workable. My opinion is that the 
+library should be accepted. The only things I would like to be 
+discussed 
+thouroughly are the "ctor/dtor vs. assignment" dispute (see specific 
+thread) and the possibility to provide extension points that allows a 
+(possibly future) implementation of a "notifying" container (ibid.).
+
+About portability issues, these lines of code (file details.hpp, lines 
+274-277) invoke undefined behaviour, according to 5.7/5:
+
+     if (less(rhs, lhs) && lhs.m_it <= rhs.m_it)
+         return lhs.m_it + m_buff->capacity() - rhs.m_it;
+     if (less(lhs, rhs) && lhs.m_it >= rhs.m_it)
+         return lhs.m_it - m_buff->capacity() - rhs.m_it;
+
+that's because the expressions (lhs.m_it + m_buff->capacity()) and 
+(lhs.m_it - m_buff->capacity()) might produce a pointer outside the 
+allocated range. I suggest to replace those lines with:
+
+     if (less(rhs, lhs) && lhs.m_it <= rhs.m_it)
+         return lhs.m_it - rhs.m_it + m_buff->capacity();
+     if (less(lhs, rhs) && lhs.m_it >= rhs.m_it)
+         return lhs.m_it - rhs.m_it - m_buff->capacity();
+
+or, even better, to avoid complaints from nasty compilers about mixed 
+signed/unsigned usage:
+
+     if (less(rhs, lhs) && lhs.m_it <= rhs.m_it)
+         return (lhs.m_it - rhs.m_it) +
+             static_cast<difference_type>(m_buff->capacity());
+     if (less(lhs, rhs) && lhs.m_it >= rhs.m_it)
+         return (lhs.m_it - rhs.m_it) -
+             static_cast<difference_type>(m_buff->capacity());
+
+To be extra paranoid, we should ensure that the static_cast doesn't 
+overflow. This could be done by changing the defintion of max_size() in 
+base.hpp from:
+
+     size_type max_size() const { return m_alloc.max_size(); }
+
+to
+
+     size_type max_size() const {
+         return std::min<size_type>(m_alloc.max_size(),
+             (std::numeric_limits<difference_type>::max)()); }
+
+I've seen this issue overlooked even in commercial standard library 
+implementations. As c.end() - c.begin() == c.size() and c.end() - 
+c.begin() must be representable as a positive quantity of type 
+difference_type, this imply that c.size() <= c.max_size() <= 
+numeric_limits<difference_type>::max().
+
+On a side note, I think it should be good if the implementation of the 
+iterator classes used the new Boost Iterators Library. I have uploaded 
+in the Boost file area an implementation using boost::iterator_facade 
+(filename is circular_buffer_new_iterators.zip). The implementation 
+already include the fix above and also has a slightly more optimized 
+version of the less() method, with fewer tests and without switches.
+Problem is that there is something wrong with the implementation of 
+operator[] in iterator_facade and the regression test does not compile 
+anymore :-( However, if I hack iterator_facade::operator[] to avoid the 
+use of the operator_brackets_proxy class, all regression tests pass. 
+Maybe it would be good to discuss this problem of the iterator_facade 
+in 
+a different thread.
+
+Alberto Barbati
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "David Abrahams" <dave@boost-consulting.com>   
+Date: Mon, 08 Mar 2004 07:34:54 -0500 
+Subject: [boost] iterator_facade operator[] (was: Formal Review: Circular Buffer) 
+
+    
+Alberto Barbati <abarbati@iaanus.com> writes:
+
+> Problem is that there is something wrong with the implementation of
+> operator[] in iterator_facade and the regression test does not 
+compile
+> anymore :-( 
+
+What makes you say that there's something wrong with iterator_facade's
+operator[]?  Is it possible that the regression test makes invalid
+assumptions about the way an iterator's operator[] is supposed to work?
+
+> However, if I hack iterator_facade::operator[] to avoid
+> the use of the operator_brackets_proxy class
+
+That's unneccessary.  Any iterator_facade behavior you want to replace
+can simply be added to your derived iterator class.
+
+> all regression tests pass. Maybe it would be good to discuss this
+> problem of the iterator_facade in a different thread.
+
+Here we are!
+
+-- 
+Dave Abrahams
+Boost Consulting
+www.boost-consulting.com
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Tue, 9 Mar 2004 00:40:45 +1100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+"Alberto Barbati" <abarbati@iaanus.com> wrote in message
+news:c2hhhi$lgs$1@sea.gmane.org...
+> Thorsten Ottosen wrote:
+[snip]
+> > The cases where a call to a destructor is actually important 
+beacuse it
+does
+> > some
+> > non-trivial work, one really need
+> > to ensure not even temporary objects of the type exists. That's one 
+of
+the
+> > capabilities my smart containers will allow, ie, "overwriting" 
+really
+means
+> > destructing and replacing.
+>
+> I'm sorry, I don't understand what you are trying to say here. I 
+started
+> my sentence with "For primitive types"...
+
+yeah, I could have said it better :-) What I meant was that 
+copy-behavior is
+ususally
+incompatible with non-trivial destructors. What I mean by non-trivial
+destructors is that
+eg. a file is closed or a connection is closed. In those cases making
+temporaries and copies
+is not good: you want more explicit control over when the destructor is
+called. (hence you need a
+container of heap-allocated objects and not something like 
+vector<Socket> )
+ For most value-like objects we have the opposite situation and we 
+don't
+mind if an object is overwritten by
+assignment of if destructors are called.
+
+br
+
+Thorsten
+
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Mon, 08 Mar 2004 15:17:02 +0100 
+Subject: [boost] Re: iterator_facade operator[] 
+
+    
+David Abrahams wrote:
+
+> Alberto Barbati <abarbati@iaanus.com> writes:
+> 
+>>Problem is that there is something wrong with the implementation of
+>>operator[] in iterator_facade and the regression test does not 
+compile
+>>anymore :-( 
+> 
+> What makes you say that there's something wrong with 
+iterator_facade's
+> operator[]?  Is it possible that the regression test makes invalid
+> assumptions about the way an iterator's operator[] is supposed to 
+work?
+
+The problem is triggered by the expression
+
+     BOOST_CHECK(it[0] == 2);
+
+found in file base_test.cpp line 157. VC .NET 2003 gives the following 
+error message:
+
+error C2678: binary '==' : no operator found which takes a left-hand 
+operand of type 
+'boost::detail::operator_brackets_result<Iterator,Value,Reference>::type' 
+(or there is no acceptable conversion)
+with
+[
+Iterator=boost::cb_details::cb_iterator<boost::circular_buffer<Integer>,Integer>,
+Value=Integer,
+Reference=Integer &
+]
+
+"it" is defined as circular_buffer<Integer>::iterator. As the right 
+hand 
+side is not an "Integer" I also tried writing:
+
+     BOOST_CHECK(it[0] == Integer(2));
+
+but the error message stays the same.
+
+>>However, if I hack iterator_facade::operator[] to avoid
+>>the use of the operator_brackets_proxy class
+> 
+> That's unneccessary.  Any iterator_facade behavior you want to 
+replace
+> can simply be added to your derived iterator class.
+
+Yes. Sure you are right. I feel kind of stupid, I should have thought 
+about it in the first place.
+
+I am uploading a revised version of 
+circular_buffer_new_iterators_v2.zip 
+that overrides operator[]. All regression tests passes with VC7.1. I 
+also made the implementation members private and fixed the comments.
+
+Anyway you'll agree that the issue is quite general and it might be 
+interesting to investigate if we could find a solution at the 
+iterator_facade level.
+
+>>all regression tests pass. Maybe it would be good to discuss this
+>>problem of the iterator_facade in a different thread.
+> 
+> 
+> Here we are!
+
+:-)
+
+Alberto
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "David Abrahams" <dave@boost-consulting.com>   
+Date: Mon, 08 Mar 2004 09:48:00 -0500 
+Subject: [boost] Re: iterator_facade operator[] 
+
+    
+Alberto Barbati <abarbati@iaanus.com> writes:
+
+> David Abrahams wrote:
+>
+>> What makes you say that there's something wrong with
+>> iterator_facade's
+>> operator[]?  Is it possible that the regression test makes invalid
+>> assumptions about the way an iterator's operator[] is supposed to 
+work?
+>
+> The problem is triggered by the expression
+>
+>      BOOST_CHECK(it[0] == 2);
+>
+> found in file base_test.cpp line 157. VC .NET 2003 gives the 
+following
+> error message:
+>
+> error C2678: binary '==' : no operator found which takes a left-hand
+> operand of type
+> 
+boost::detail::operator_brackets_result<Iterator,Value,Reference>::type'
+> (or there is no acceptable conversion)
+> with
+> [
+> 
+Iterator=boost::cb_details::cb_iterator<boost::circular_buffer<Integer>,Integer>,
+> Value=Integer,
+> Reference=Integer &
+> ]
+>
+> "it" is defined as circular_buffer<Integer>::iterator. As the right
+> hand side is not an "Integer" I also tried writing:
+>
+>      BOOST_CHECK(it[0] == Integer(2));
+>
+> but the error message stays the same.
+
+The right check would be:
+
+    BOOST_CHECK(Integer(it[0]) == 2);
+
+The return type of a random access iterator's operator[] is only
+required to be *convertible* to its value_type.
+
+> I am uploading a revised version of
+> circular_buffer_new_iterators_v2.zip that overrides operator[]. All
+> regression tests passes with VC7.1. I also made the implementation
+> members private and fixed the comments.
+>
+> Anyway you'll agree that the issue is quite general and it might be
+> interesting to investigate if we could find a solution at the
+> iterator_facade level.
+
+We've given it a lot of thought already.  In general there's no way
+to detect that a given iterator implementation will return a
+reference to a persistent object from its dereference
+implementation.  See
+http://www.boost.org/libs/iterator/doc/iterator_facade.html#operator.
+
+If you can come up with a way to decide reliably that the proxy is
+unneded, that'd be great -- but I doubt it can be done.  Anyone who
+really cares about returning a reference from operator[] can do what
+you did.  In general, though, there's no reason for any algorithm to
+use an iterator's operator[] anyway, so fulfilling the random-access
+requirement for operator[] is really a formality and it doesn't need
+to be optimal.
+
+-- 
+Dave Abrahams
+Boost Consulting
+www.boost-consulting.com
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Mon, 8 Mar 2004 18:35:41 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"David Abrahams" <dave@boost-consulting.com> wrote
+
+> > Now if there will be the assignment idiom
+> > applied the front-most will be assigned to the new one
+> > - it will be not destroyed (no destructor will be
+> > called). IMHO this is not correct. The old element
+> > will not disappear - just its value/state will be
+> > different. I think that the overwrite operation means
+> > destruction of the old object, NOT assignment. What do
+> > you think?
+>
+> I think it introduces inefficiencies that most people won't want to
+> pay for, and I don't see any benefits other than lifting the
+> requirement on assignability.  Types that are copiable but not
+> assignable are rare, though, at least in my experience.
+>
+I think you are missing the point: object pushed out
+of circular_buffer because container got full must be destroyed.
+
+Therefore assignement is not used, therefore no CopyConstructible
+requirement on T.
+
+(I'll look whether there aren't other places requiring assignement.)
+
+/Pavel
+
+
+
+
+-------------------------------------------------------------------------------
+
+Date: Mon, 8 Mar 2004 09:58:40 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: Formal Review: Circular Buffer 
+To: boost@lists.boost.org 
+
+    
+Hi Jeremy!
+
+> That means you have to mention this type requirement
+> in the documentation for the push_back() method.
+> 
+Yes, I agree.
+
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "David Abrahams" <dave@boost-consulting.com>   
+Date: Mon, 08 Mar 2004 12:59:53 -0500 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+"Pavel Vozenilek" <pavel_vozenilek@hotmail.com> writes:
+
+> "David Abrahams" <dave@boost-consulting.com> wrote
+>
+>> > Now if there will be the assignment idiom
+>> > applied the front-most will be assigned to the new one
+>> > - it will be not destroyed (no destructor will be
+>> > called). IMHO this is not correct. The old element
+>> > will not disappear - just its value/state will be
+>> > different. I think that the overwrite operation means
+>> > destruction of the old object, NOT assignment. What do
+>> > you think?
+>>
+>> I think it introduces inefficiencies that most people won't want to
+>> pay for, and I don't see any benefits other than lifting the
+>> requirement on assignability.  Types that are copiable but not
+>> assignable are rare, though, at least in my experience.
+>>
+> I think you are missing the point: 
+
+Actually, no.  I realized you're making the argument below.
+
+> object pushed out of circular_buffer because container got full must
+> be destroyed.
+
+Why?  I mean, the only reason I can see for that requirement is an
+aesthetic one.  I don't see any logical foundation for the assertion.
+
+
+-- 
+Dave Abrahams
+Boost Consulting
+www.boost-consulting.com
+
+
+-------------------------------------------------------------------------------
+
+Date: Mon, 8 Mar 2004 10:03:25 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Formal Review: Circular Buffer 
+To: boost@lists.boost.org 
+
+    
+
+--- Jeremy Siek <jsiek@osl.iu.edu> wrote:
+> I have read the documentation for the library, and
+> browsed through the 
+> test code.
+> Based on that I recommend acceptance of the circular
+> buffer library. 
+> Nice work Jan!
+> 
+> Here are some suggestions.
+> 
+> This sentences seems unnecessary:
+>      In fact the circular_buffer is defined in the
+> file
+>      boost/circular_buffer/base.hpp, but it is
+> necessary to include the
+>     boost/circular_buffer.hpp in order to use this
+> container
+> 
+No it isn't, I'll change it.
+
+> Have you checked whether CopyConstructible is in
+> fact the only
+> requirements needed on the type parameter T? For
+> example, I bet
+> T must also be Assignable. But who knows what other
+> requirements you 
+> may have
+> missed (it is easy to miss them). I recommend using
+> concept archetypes 
+> to check this.
+> 
+Yes, it is the only requirement.
+
+> There are no requirements on the Alloc type
+> parameter. Surely there
+> should be some.
+> 
+I think the Alloc has to be just an allocator (with
+the neccessary methods). No special requirements
+needed.
+
+Jan
+
+
+
+-------------------------------------------------------------------------------
+
+Date: Mon, 8 Mar 2004 10:06:01 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: Formal Review: Circular Buffer 
+To: boost@lists.boost.org 
+
+    
+
+--- Jeremy Siek <jsiek@osl.iu.edu> wrote:
+> Another note about the documentation... whichever
+> way this
+> issues end up, more needs to be said about it in the
+> docs.
+> Currently, the docs say "overwrite" which to me
+> sounds like
+> assignment, and the docs never mention destroying
+> the
+> objects. I think you either need to give a technical
+> definition
+> for what you mean by "overwrite", or better yet, use
+> different words.
+> 
+I agree with you. I have to specify the exact meaning
+of the "overwrite" operation.
+
+Jan
+
+-------------------------------------------------------------------------------
+
+
+Date: Mon, 8 Mar 2004 10:10:50 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: Formal Review: Circular Buffer 
+To: boost@lists.boost.org 
+
+    
+--- Alberto Barbati <abarbati@iaanus.com> wrote:
+ 
+> BTW, this discussion triggers some other ideas. Have
+> you considered 
+> adding to the circular_buffer the capability to
+> optionally notify the 
+> user about an impeding overwrite? 
+
+I didn't think of it. Anyway it is interesting.
+
+Jan
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Mon, 8 Mar 2004 19:22:33 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"David Abrahams" <dave@boost-consulting.com> wrote
+
+> > object pushed out of circular_buffer because container got full 
+must
+> > be destroyed.
+>
+> Why?  I mean, the only reason I can see for that requirement is an
+> aesthetic one.  I don't see any logical foundation for the assertion.
+>
+I am not getting something. You are saying objects can go away
+without being destructed?
+
+/Pavel
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "David Abrahams" <dave@boost-consulting.com>   
+Date: Mon, 08 Mar 2004 13:50:07 -0500 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+"Pavel Vozenilek" <pavel_vozenilek@hotmail.com> writes:
+
+> "David Abrahams" <dave@boost-consulting.com> wrote
+>
+>> > object pushed out of circular_buffer because container got full 
+must
+>> > be destroyed.
+>>
+>> Why?  I mean, the only reason I can see for that requirement is an
+>> aesthetic one.  I don't see any logical foundation for the 
+assertion.
+>>
+> I am not getting something. You are saying objects can go away
+> without being destructed?
+
+No, I'm saying that their values can go away without destruction: you
+could replace their values in the buffer using assignment instead of
+destroy + construct.  There's no a priori reason they have to be
+destroyed.
+
+When I erase objects from a std::vector, the objects being erased
+don't neccessarily get destroyed.  They may be assigned.  For
+example, here's STLPort's vector<T>::erase(iterator) implementation:
+
+  iterator erase(iterator __position) {
+    if (__position + 1 != end())
+      __copy_ptrs(__position + 1, this->_M_finish, __position, 
+_TrivialAss());
+    --this->_M_finish;
+    _Destroy(this->_M_finish);
+    return __position;
+  }
+
+Notice that only the last element of the vector is destroyed.
+
+-- 
+Dave Abrahams
+Boost Consulting
+www.boost-consulting.com
+
+
+-------------------------------------------------------------------------------
+
+From: "Paul A Bristow" <boost@hetp.u-net.com>   
+To: boost@lists.boost.org 
+Subject: RE: [boost] Formal Review: Circular Buffer 
+Date: Mon, 8 Mar 2004 19:09:51 -0000 
+
+    
+I have very briefly (re-)reviewed Jan Gaspar's circular buffer.
+
+What is your evaluation of the design?  It provides a useful
+'should-be-standard' feature not provided elsewhere.  
+
+What is your evaluation of the implementation?  It works in my tests,
+and some usage.
+
+What is your evaluation of the documentation?  Seems OK.  Examples good
+and well commented.
+
+[Aside- although I am not a fan of Doxygen generated docs - somehow 
+they
+never seem to tell what you want to know.  Does the automatic-ness
+delude the author that he has done his job when he hasn't really barely
+started?]
+
+What is your evaluation of the potential usefulness of the library?
+When useful and appropriate, invaluable.  STL compatibility should
+greatly increase its applicability.
+
+Did you try to use the library? Earlier versions. With what compiler?
+MSVC 7.1 Did you have any problems? No.  Compiles cleanly even in 
+strict
+mode.
+
+How much effort did you put into your evaluation? Shallow-depth study?
+
+Are you knowledgeable about the problem domain? Only as a user.
+
+Other comments:
+
+It is quite mature having been through a number of iterations under
+Boost (fairly friendly) fire for some time. Test suite looks OK.
+
+Do you think the library should be accepted as a Boost library?
+
+I vote for acceptance.
+
+Paul
+
+Paul A Bristow
+Prizet Farmhouse, Kendal, Cumbria UK LA8 8AB
++44 1539 561830  +44 7714 330204
+mailto: pbristow@hetp.u-net.com
+
+
+
+
+-------------------------------------------------------------------------------
+
+Date: Mon, 8 Mar 2004 20:34:32 +0100 
+From: "Pavol Droba" <droba@topmail.sk>  View Contact Details  
+To: boost@lists.boost.org 
+Subject: Re: [boost] Formal Review: Circular Buffer 
+
+    
+Hi,
+
+I'd like to cast my vote on the circular_buffer review.
+I have read through all documentation, briefly skimmed through the 
+implementation and test code.
+
+
+a.. What is your evaluation of the design?
+------------------------------------------
+
+The library follows the standard STL container conventions very 
+closely. 
+Provided interface is sufficient and well defined. Debugging facility 
+seems very useful.
+
+One objection I have is following:
+Interaface models Sequence concept, but one of the concept's 
+requirements is missing.
+There is no constructor taking just two iterators as a parameter. 
+Initialization 
+from a pair of iterators is provided, but the signature does not match 
+the requirements 
+of Sequence concept. It is not possible to use this container in 
+generic algorithms,
+that require such a constructor (this is quite common case IMHO).
+
+I would like to see more adaptors in addtion to one provided. 
+Concretely, one that
+have been already mentioned, which provides means for notification when 
+a 
+buffer is empty/full. This might be extremly useful.
+Another adaptor I would like to see, is one, that disallows rewriting 
+of the
+old elements. Such an buffer can be used as a faster alternative to 
+std::deque,
+when a bounded buffer is sufficient. Checking for overflow can be 
+provided by an
+exception or an error code from insering operations.
+
+
+b.. What is your evaluation of the implementation?
+--------------------------------------------------
+
+Implementaion seem quite solid. I have no objections. 
+
+As for the assign-construct/destruct discussion, I think, that one of 
+options would be to 
+use a policy class to define the behaviour. Both approaches have their 
+own pros and cons. Assignment might bring some speedup and I would 
+prefer it as default.
+Construct/Destruct might be benefitial in some applications (f.e. an 
+object is notified, by
+a destructor, that it has been removed from buffer).
+
+c.. What is your evaluation of the documentation?
+-------------------------------------------------
+
+Documentation seem sound and well prepared. I was able easily 
+understand 
+how to use the library. Examples are illustrative enough for the common 
+usage.
+
+I have few suggestion, though. First of all, I don't like doxygen 
+generated documenation
+too much. This might be my personal preference, however it does not 
+integrage
+with other parts of documentation well. Source documentaion has 
+different layout and format
+than the rest and IMO it is little bit confusing to use two styles in 
+one doc.
+
+There is an obvious suggestion to solve this problem: convert docs to 
+boost-book. 
+
+d.. What is your evaluation of the potential usefulness of the library?
+-----------------------------------------------------------------------
+
+I find the library useful for many application. Either as a bounded 
+aging buffer
+or as a faster alternative for deque when memory limit is benefitial or 
+required.
+
+e.. Did you try to use the library?  With what compiler?  Did you have 
+any
+problems?
+--------------------------------------------------------------------------
+
+I have compiled test cases without any problem on vc7.1 and gcc3.3.1 
+under cygwin
+
+
+f.. How much effort did you put into your evaluation? A glance? A quick
+reading? In-depth study?
+-----------------------------------------------------------------------
+
+I have spend about 2 to 3 hours studying the code, the documentation 
+and reading 
+the discussions here on the list.
+
+
+g.. Are you knowledgeable about the problem domain?
+---------------------------------------------------
+
+I have good knowledge about STL containers and concepts related to 
+them.
+
+h.. Do you think the library should be accepted as a Boost library?
+--------------------------------------------------------------------
+
+I vote that the library should be ACCEPTED to boost. 
+
+It provides handy utility. Design and implementation is solid, 
+documentation is acceptable.
+
+
+Regards,
+
+Pavol
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Mon, 8 Mar 2004 21:16:18 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"David Abrahams" <dave@boost-consulting.com> wrote
+
+> No, I'm saying that their values can go away without destruction: you
+> could replace their values in the buffer using assignment instead of
+> destroy + construct.  There's no a priori reason they have to be
+> destroyed.
+>
+> When I erase objects from a std::vector, the objects being erased
+> don't neccessarily get destroyed.  They may be assigned.  For
+> example, here's STLPort's vector<T>::erase(iterator) implementation:
+>
+[snip code]
+>
+> Notice that only the last element of the vector is destroyed.
+>
+
+Quoting from similar discussion on c.l.c++.m: http://tinyurl.com/2c3na
+
+--- quote about vector::erase ---
+The standard says this:  "The destructor of T is called the number of
+times equal to the number of the elements erased, but the assignment
+operator of T is called the number of times equal to the number of
+elements in the vector after the erased elements."
+------------------------------------
+
+
+With circular buffer the destructor wouldn't be called at all,
+in similar circumstance.
+
+Eample:
+   Circular buffer of size 3.
+   You create 100 of objects and push them in.
+    You would get:
+      - 100 constructors called,
+      - 97 copy constructors called,
+      - 3 destructors called.
+
+/Pavel
+
+
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Jan Langer" <jan@langernetz.de>   
+Date: Mon, 08 Mar 2004 21:30:44 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Hi,
+I did a short review of this library.
+
+- regarding the data() issue I think it should be mentioned that this 
+function has linear complexity. A name reflecting this behavior would 
+be 
+even better.
+
+- the difference between resize() and set_capacity() should be 
+mentioned 
+more explicitly. It might be especially confusing since std::vector's 
+reserve is quite similar to set_capacity but has a different name.
+
+- I am missing the counterpart to erase which shifts the elements 
+before 
+the erased elements and not the ones after. Probably this is not 
+important but std::deque allows erasing at the front without 
+invalidating all iterators (according to sgi-stl docs).
+
+- The insert() function has its rinsert() counterpart. The same issue 
+for resize and set_capacity is solved with the boolean parameter 
+remove_front. If this has an important reason it should be mentioned. 
+If 
+not I would like to see a more consistent solution.
+
+- In section Caveats:
+"... According to the semantics of rinsert, insertion overwrites 
+front-most items as necessary ..." should probably read "back-most 
+items" if this is a valid english word.
+
+- I compiled the library with g++ 3.2.2 and everything worked fine. But 
+when I tried to compile the example from the documentation with a 
+command line call to g++ I got the following error:
+
+[jan@affe test]$ g++ -Wall -Wno-long-long -ansi -pedantic -I .. -I 
+$BOOST_ROOT cb_example.cpp
+../boost/circular_buffer/base.hpp: In member function `void
+    boost::circular_buffer<T, Alloc>::replace(Alloc::pointer,
+    boost::call_traits<Alloc::value_type>::param_type) [with T = int, 
+Alloc =
+    std::allocator<int>]':
+../boost/circular_buffer/base.hpp:1137:   instantiated from `void 
+boost::circular_buffer<T, 
+Alloc>::replace_last(boost::call_traits<Alloc::value_type>::param_type) 
+[with T = int, Alloc = std::allocator<int>]'
+../boost/circular_buffer/base.hpp:605:   instantiated from `void 
+boost::circular_buffer<T, 
+Alloc>::push_back(boost::call_traits<Alloc::value_type>::param_type) 
+[with T = int, Alloc = std::allocator<int>]'
+cb_example.cpp:10:   instantiated from here
+../boost/circular_buffer/base.hpp:1105: invalid use of member `
+    boost::cb_details::cb_replace_category_traits<int>::tag'
+
+Without -ansi -pedantic it works fine. I don't know if it should work 
+with -ansi -pedantic but I thought it worth mentioning
+
+- In general the documentation is quite good and well written.
+
+- I didn't look at the code in detail, but in order to understand some 
+things I had a look at certain member functions and found them clearly 
+implemented and easy to understand.
+
+- I cannot sufficiently evaluate the usefullness of this library since 
+I 
+haven't had the need for it in my previous work in C++. Actually I 
+cannot imagine it being usefull in normal programming tasks where 
+memory 
+is plenty. And  I haven't done embedded programming in C++ yet.
+
+- I spent approximatly 3 to 4 hours on studying the docs, clarifying 
+certain things with the help of the code and compiling and looking at 
+the examples and writing this email.
+
+- I'm no expert in the problem domain. Just a regular user of std:: and 
+other containers.
+
+If some points mentioned above will be clarified and if other people 
+(or 
+me in the future) can find applications for it, I think its a very 
+usefull library.
+Since I am quite sure that this will be the case I vote for acceptance.
+
+regards
+jan
+
+-- 
+jan langer ... jan@langernetz.de
+"pi ist genau drei"
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "David Abrahams" <dave@boost-consulting.com>   
+Date: Mon, 08 Mar 2004 16:33:35 -0500 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+"Pavel Vozenilek" <pavel_vozenilek@hotmail.com> writes:
+
+> "David Abrahams" <dave@boost-consulting.com> wrote
+>
+>> No, I'm saying that their values can go away without destruction: 
+you
+>> could replace their values in the buffer using assignment instead of
+>> destroy + construct.  There's no a priori reason they have to be
+>> destroyed.
+>>
+>> When I erase objects from a std::vector, the objects being erased
+>> don't neccessarily get destroyed.  They may be assigned.  For
+>> example, here's STLPort's vector<T>::erase(iterator) implementation:
+>>
+> [snip code]
+>>
+>> Notice that only the last element of the vector is destroyed.
+>>
+>
+> Quoting from similar discussion on c.l.c++.m: 
+http://tinyurl.com/2c3na
+>
+> --- quote about vector::erase ---
+> The standard says this:  "The destructor of T is called the number of
+> times equal to the number of the elements erased, but the assignment
+> operator of T is called the number of times equal to the number of
+> elements in the vector after the erased elements."
+> ------------------------------------
+>
+>
+> With circular buffer the destructor wouldn't be called at all,
+> in similar circumstance.
+>
+> Eample:
+>    Circular buffer of size 3.
+>    You create 100 of objects and push them in.
+>     You would get:
+>       - 100 constructors called,
+>       - 97 copy constructors called,
+>       - 3 destructors called.
+
+Yeah, but my point is: so what?
+
+I still see no a priori reason that circular_buffer must do element
+destruction before it is itself destroyed.  std::vector *has* to do
+some destruction in order to get the right semantics.  Arguably,
+circular_buffer does not.  If it doesn't matter *which* vector
+elements get destroyed upon erase, then I presume it doesn't matter
+which circular_buffer elements get destroyed.  In that case, why
+should it matter that any elements are destroyed?
+
+-- 
+Dave Abrahams
+Boost Consulting
+www.boost-consulting.com
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Mon, 8 Mar 2004 23:17:56 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"David Abrahams" <dave@boost-consulting.com> wrote
+
+> I still see no a priori reason that circular_buffer must do element
+> destruction before it is itself destroyed.  std::vector *has* to do
+> some destruction in order to get the right semantics.  Arguably,
+> circular_buffer does not.  If it doesn't matter *which* vector
+> elements get destroyed upon erase, then I presume it doesn't matter
+> which circular_buffer elements get destroyed.  In that case, why
+> should it matter that any elements are destroyed?
+>
+If you have class and the class has static member keeping
+number of object instances alive (incremented in constructor,
+decremented in destructor):
+
+ - putting these objects into vector keeps counter valid,
+ - circular_buffer with assignement won't.
+
+That was problem I did have with earlier version of
+circular_buffer and that' why I did ask for construct/destruct
+feature.
+
+It is maybe border case but IMHO valid one against assignement.
+
+/Pavel
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "David Abrahams" <dave@boost-consulting.com>   
+Date: Mon, 08 Mar 2004 18:42:55 -0500 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+"Pavel Vozenilek" <pavel_vozenilek@hotmail.com> writes:
+
+> "David Abrahams" <dave@boost-consulting.com> wrote
+>
+>> I still see no a priori reason that circular_buffer must do element
+>> destruction before it is itself destroyed.  std::vector *has* to do
+>> some destruction in order to get the right semantics.  Arguably,
+>> circular_buffer does not.  If it doesn't matter *which* vector
+>> elements get destroyed upon erase, then I presume it doesn't matter
+>> which circular_buffer elements get destroyed.  In that case, why
+>> should it matter that any elements are destroyed?
+>>
+> If you have class and the class has static member keeping
+> number of object instances alive (incremented in constructor,
+> decremented in destructor):
+>
+>  - putting these objects into vector keeps counter valid,
+>  - circular_buffer with assignement won't.
+
+I can't understand this claim.  If the counter works properly, then it
+will stay valid.  Assignment doesn't magically make instances appear
+or disappear.  In one case you assign and the counter doesn't
+change.  In the other you destroy one element and construct another
+in its place and the counter is incremented, then decremented.
+
+> That was problem I did have with earlier version of
+> circular_buffer and that' why I did ask for construct/destruct
+> feature.
+>
+> It is maybe border case but IMHO valid one against assignement.
+
+I don't get it.
+
+-- 
+Dave Abrahams
+Boost Consulting
+www.boost-consulting.com
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Tue, 9 Mar 2004 01:17:00 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"Alberto Barbati" <abarbati@iaanus.com> wrote
+
+[snip assignement prefereble over destruct/construct]
+
+> 2) with the dtor/ctor idiom, if the ctor throws an exception, the old
+> element is lost and you can't do anything about it, so the container
+> cannot provide more than the basic guarantee for any method that 
+might
+> overwrite elements. However, the user might implement assigment with 
+the
+> strong guarantee, the container might leverage on that and provide 
+the
+> strong guarantee too at least for methods that might overwrite a 
+single
+> element such as push_back/push_front. (Of course, the user might
+> implement assignment so badly that it doesn't provide even the basic
+> guarantee and the container could not recover from that, but a 
+library
+> such not try to outsmart the user... too much ;).
+>
+This argument isn't valid.
+
+push_back() will construct elements when there's space
+available in circular buffer.
+
+Therefore using assignement won't give the method
+strong guarantee (in all cases).
+
+/Pavel
+
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Tue, 9 Mar 2004 01:55:06 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"David Abrahams" <dave@boost-consulting.com> wrote
+
+> I can't understand this claim.  If the counter works properly, then 
+it
+> will stay valid.
+>
+This example was too simplified (and thus not to the point).
+
+More complex one:
+
+-----------------------
+struct  my_class
+{
+  void* database_handle;
+
+  my_class() { database_handle = allocate_handle(); }
+  ~my_class() { destroy_db_handle(database_handle); }
+  my_class& operator=(const my_class& other) {
+      // no copy of database handle, not needed,
+      // not useful here
+  }
+  my_class(const my_class& other) {
+     database_handle = allocate_handle(); // needs unique db connection
+  }
+};
+
+circular_buffer<my_class> buffer(1);
+
+{
+  my_class a;
+  buffer.push_back(a);  // 2 handles after function returns
+  ...
+}
+
+{
+   my_class b;
+   buffer.push_back(b);  // desctructor not called, handle lost
+   ...
+}
+-----------------
+
+To deal with lost resources you would need to modify
+operator=() to take ownership of  all rhs resources.
+But in this case following will fail:
+
+  my_class a;
+  my_class b;
+  a = b;
+  // b is stripped of its handle now, cannot be used
+
+
+/Pavel
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Robert Bell" <belvis@imageworks.com>   
+Date: Mon, 08 Mar 2004 19:32:53 -0800 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Pavel Vozenilek wrote:
+> "David Abrahams" <dave@boost-consulting.com> wrote
+> 
+> 
+>>I can't understand this claim.  If the counter works properly, then 
+it
+>>will stay valid.
+>>
+> 
+> This example was too simplified (and thus not to the point).
+> 
+> More complex one:
+> 
+> -----------------------
+> struct  my_class
+> {
+>   void* database_handle;
+> 
+>   my_class() { database_handle = allocate_handle(); }
+>   ~my_class() { destroy_db_handle(database_handle); }
+>   my_class& operator=(const my_class& other) {
+>       // no copy of database handle, not needed,
+>       // not useful here
+>   }
+>   my_class(const my_class& other) {
+>      database_handle = allocate_handle(); // needs unique db 
+connection
+>   }
+> };
+> 
+> circular_buffer<my_class> buffer(1);
+> 
+> {
+>   my_class a;
+>   buffer.push_back(a);  // 2 handles after function returns
+>   ...
+> }
+> 
+> {
+>    my_class b;
+>    buffer.push_back(b);  // desctructor not called, handle lost
+>    ...
+> }
+
+I don't see why a handle is lost.
+
+{
+// Only one handle in existence at this point, the one
+// previously added to buffer by "buffer.push_back(a);".
+
+    my_class b;
+
+// Now two handles exist, one in b, and one in buffer.
+
+    buffer.push_back(b);
+
+// Two handles still exist -- push_back uses assignment, which
+// doesn't affect handles at all. No new handles have been
+// created by push_back(b).
+
+}
+
+// Now only one handle exists, in buffer, since b has
+// gone out of scope and has been destroyed.
+
+What am I missing?
+
+Bob
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Tue, 09 Mar 2004 06:07:40 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Pavel Vozenilek wrote:
+
+> "Alberto Barbati" <abarbati@iaanus.com> wrote
+> 
+> [snip assignement prefereble over destruct/construct]
+> 
+> 
+>>2) with the dtor/ctor idiom, if the ctor throws an exception, the old
+>>element is lost and you can't do anything about it, so the container
+>>cannot provide more than the basic guarantee for any method that 
+might
+>>overwrite elements. However, the user might implement assigment with 
+the
+>>strong guarantee, the container might leverage on that and provide 
+the
+>>strong guarantee too at least for methods that might overwrite a 
+single
+>>element such as push_back/push_front. (Of course, the user might
+>>implement assignment so badly that it doesn't provide even the basic
+>>guarantee and the container could not recover from that, but a 
+library
+>>such not try to outsmart the user... too much ;).
+>>
+> 
+> This argument isn't valid.
+> 
+> push_back() will construct elements when there's space
+> available in circular buffer.
+> 
+> Therefore using assignement won't give the method
+> strong guarantee (in all cases).
+
+If there is space, the buffer tries to copy construct an element in an 
+empty (uninitialized) space, then the internal state of the buffer is 
+updated (this operation does not throw). If the copy ctor throws an 
+exception, no object is constructed and the buffer state is not 
+modified 
+=> the buffer is in the exact state it was before the call => strong 
+guarantee.
+
+If there is not enough space, the buffer tries to replace one value by 
+invoking operator=, then the internal state is updated (this operation 
+doesn't throw). *If operator= provides the strong guarantee* and 
+throws, 
+the element already in the buffer is not modified and the buffer state 
+is not modified either => the buffer is in the exact state it was 
+before 
+the call => strong guarantee.
+
+It seems to me that this cover all cases and you always get strong 
+guarantee. Am I missing something?
+
+Alberto
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Tue, 09 Mar 2004 06:10:11 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Robert Bell wrote:
+
+> I don't see why a handle is lost.
+
+I agree with Robert analysis, I don't see any lost handle in that 
+example.
+
+Alberto
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Tue, 9 Mar 2004 06:24:38 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"Alberto Barbati" <abarbati@iaanus.com> wrote
+
+> If there is space, the buffer tries to copy construct an element in 
+an
+> empty (uninitialized) space, then the internal state of the buffer is
+> updated (this operation does not throw). If the copy ctor throws an
+> exception, no object is constructed and the buffer state is not 
+modified
+> => the buffer is in the exact state it was before the call => strong
+> guarantee.
+>
+> If there is not enough space, the buffer tries to replace one value 
+by
+> invoking operator=, then the internal state is updated (this 
+operation
+> doesn't throw). *If operator= provides the strong guarantee* and 
+throws,
+> the element already in the buffer is not modified and the buffer 
+state
+> is not modified either => the buffer is in the exact state it was 
+before
+> the call => strong guarantee.
+>
+> It seems to me that this cover all cases and you always get strong
+> guarantee. Am I missing something?
+>
+No, you are right here.
+
+/Pavel
+
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Alberto Barbati" <abarbati@iaanus.com>   
+Date: Tue, 09 Mar 2004 06:41:23 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+Thorsten Ottosen wrote:
+
+> "Alberto Barbati" <abarbati@iaanus.com> wrote in message
+> news:c2hhhi$lgs$1@sea.gmane.org...
+> 
+>>Thorsten Ottosen wrote:
+> 
+> [snip]
+> 
+>>>The cases where a call to a destructor is actually important beacuse 
+it
+> 
+> does
+> 
+>>>some
+>>>non-trivial work, one really need
+>>>to ensure not even temporary objects of the type exists. That's one 
+of
+> 
+> the
+> 
+>>>capabilities my smart containers will allow, ie, "overwriting" 
+really
+> 
+> means
+> 
+>>>destructing and replacing.
+>>
+>>I'm sorry, I don't understand what you are trying to say here. I 
+started
+>>my sentence with "For primitive types"...
+> 
+> 
+> yeah, I could have said it better :-) What I meant was that 
+copy-behavior is
+> ususally
+> incompatible with non-trivial destructors. What I mean by non-trivial
+> destructors is that
+> eg. a file is closed or a connection is closed. In those cases making
+> temporaries and copies
+> is not good: you want more explicit control over when the destructor 
+is
+> called. (hence you need a
+> container of heap-allocated objects and not something like 
+vector<Socket> )
+>  For most value-like objects we have the opposite situation and we 
+don't
+> mind if an object is overwritten by
+> assignment of if destructors are called.
+
+I learned that good programming practice is that if a class requires a 
+non-trivial destructor it should either implement both the copy 
+constructor and the assignment operator or declare them private and 
+leave them unimplemented. Moreover, if either the copy constructor or 
+the assignment operator is defined, both of them should. I never found 
+a 
+case where it was worth violating this practice, maybe you have such an 
+example?
+
+Fact is that I still fail to understand why a class that has a 
+meaningful copy constructor cannot implement a meaningful assignment 
+operator with the same semantic as dtor+copy ctor, but more 
+efficiently.
+
+Alberto
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Tue, 9 Mar 2004 07:12:41 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"Robert Bell" <belvis@imageworks.com> wrote
+
+[snipped]
+> What am I missing?
+>
+Hmm, I thought it over and it seems I am wrong in this
+subthread and others are right.
+
+/Pavel
+
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Tue, 9 Mar 2004 17:35:16 +1100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+"Alberto Barbati" <abarbati@iaanus.com> wrote in message
+news:c2jldp$j19$1@sea.gmane.org...
+> Thorsten Ottosen wrote:
+[snip]
+> > yeah, I could have said it better :-) What I meant was that
+copy-behavior is
+> > ususally
+> > incompatible with non-trivial destructors. What I mean by 
+non-trivial
+> > destructors is that
+> > eg. a file is closed or a connection is closed. In those cases 
+making
+> > temporaries and copies
+> > is not good:
+[snip]
+> I learned that good programming practice is that if a class requires 
+a
+> non-trivial destructor it should either implement both the copy
+> constructor and the assignment operator or declare them private and
+> leave them unimplemented.
+
+true. Don't be confusd by my slight misuse of "non-trivial destructor".
+
+>Moreover, if either the copy constructor or
+> the assignment operator is defined, both of them should.
+
+also true.
+
+>I never found a
+> case where it was worth violating this practice, maybe you have such 
+an
+> example?
+
+no.
+
+> Fact is that I still fail to understand why a class that has a
+> meaningful copy constructor cannot implement a meaningful assignment
+> operator with the same semantic as dtor+copy ctor, but more 
+efficiently.
+
+I can't either.
+[remark: we agree that circular_buffer should use assignment]
+
+[note:I was trying to mention a specific type of RAII objects which 
+cannot
+be put in copying containers].Copy behavior is not always desireable.
+If assigment of a Socket class would require the connection to close(), 
+then
+I don't want assigment. And I don't want temporary objects. Hence the 
+object
+must be heap-allocated.
+
+br
+
+Thorsten
+
+
+
+
+-------------------------------------------------------------------------------
+
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+To: "Jan Gaspar" <jano_gaspar@yahoo.com> 
+Subject:  circular_buffer: problemy s VC6.5 
+Date: Tue, 9 Mar 2004 14:58:33 +0100 
+
+    
+Ahoj Jano,
+
+circular buffer ma problemy na VC6.5. Puvodne jsem si mysles ze to je 
+kvuli
+Boost.Test ale i samostatny program selhava (i potom co jsem aplikoval 
+fixy
+od Giovanni Bajo).
+
+Attachnul jsem ho. Kompilator si stezuje na dvou mistech.
+
+Jinak base_test.cpp kompilovane v debug modu zpusobi access violation
+exception, v release modu internal compiler error (testovano na dvo 
+ruznych
+strojich).
+
+Mas k dispozici VC6.5? Jinak bych zkusil nejak to obejit.
+
+/Pavel
+
+Plain Text Attachment: 
+
+
+#include <boost/circular_buffer.hpp>
+
+#include <cassert>
+
+
+#include <numeric>
+#include <iterator>
+#include <vector>
+#if !defined(BOOST_NO_EXCEPTIONS)
+#include <exception>
+#endif
+
+// Integer - substitute for int - more appropriate for testing
+class Integer {
+private:
+    int* m_pValue;
+    static int ms_exception_trigger;
+    void check_exception() {
+        if (ms_exception_trigger > 0) {
+            if (--ms_exception_trigger == 0) {
+                delete m_pValue;
+                m_pValue = 0;
+#if !defined(BOOST_NO_EXCEPTIONS)
+                throw std::exception();
+#endif
+            }
+        }
+    }
+public:
+    Integer() : m_pValue(new int(0)) { check_exception(); }
+    Integer(int i) : m_pValue(new int(i)) { check_exception(); }
+    Integer(const Integer& src) : m_pValue(new int(src)) { 
+check_exception(); }
+    ~Integer() { delete m_pValue; }
+    operator int () const { return *m_pValue; }
+    static void set_exception_trigger(int n) { ms_exception_trigger = 
+n; }
+private:
+    Integer& operator = (const Integer& src); // disabled
+};
+
+int Integer::ms_exception_trigger;
+
+struct A
+{
+    A() : m_n(1) {}
+    A(int n) : m_n(n) {}
+    int m_n;
+private:
+    A& operator = (const A& src); // disabled
+};
+
+class B {
+public:
+    B() { increment(); }
+    B(const B& y) { y.increment(); }
+    ~B() { decrement(); }
+    static int count() { return ms_count; }
+private:
+    void increment() const { ++ms_count; }
+    void decrement() const { --ms_count; }
+    static int ms_count;
+    B& operator = (const B& src); // disabled
+};
+
+class C {
+public:
+    C() : m_num(255) {}
+    virtual int test_reference1() const { return m_num; }
+    int test_reference2() const { return 255; }
+private:
+    int m_num;
+    C& operator = (const C& src); // disabled
+};
+
+template <class T> class Adaptor {
+private:
+    boost::circular_buffer<T> m_buff;
+public:
+    typedef typename boost::circular_buffer<T>::iterator iterator;
+    typedef typename boost::circular_buffer<T>::size_type size_type;
+    
+    Adaptor(size_type capacity) : m_buff(capacity) {}
+    template <class InputIterator>
+        Adaptor(size_type capacity, InputIterator first, InputIterator 
+last)
+        : m_buff(capacity, first, last) {}
+    
+    iterator begin() { return m_buff.begin(); }
+    iterator end() { return m_buff.end(); }
+    size_type size() const { return m_buff.size(); }
+    size_type capacity() const { return m_buff.capacity(); }
+    T& operator [] (size_type index) { return m_buff[index]; }
+    
+    template <class InputIterator>
+        void insert(iterator pos, InputIterator first, InputIterator 
+last) {
+        size_type new_size = size() + distance(first, last);
+        if (new_size > capacity()) {
+            boost::circular_buffer<T> buff(new_size, begin(), pos);
+            buff.insert(buff.end(), first, last);
+            buff.insert(buff.end(), pos, end());
+            m_buff.swap(buff);
+        } else {
+            m_buff.insert(pos, first, last);
+        }
+    }
+};
+
+
+using namespace boost;
+using namespace std;
+
+#define BOOST_CHECK(x) assert(x)
+#define BOOST_CHECK_THROW(x, y) try { x ; assert(false); } catch (const 
+y &) {} 
+
+void iterator_constructor_and_assign_test() {
+
+    circular_buffer<Integer> cb(4, 3);
+    circular_buffer<Integer>::iterator it = cb.begin();
+    circular_buffer<Integer>::iterator itCopy;
+    itCopy = it;
+    it = it;
+    circular_buffer<Integer>::const_iterator cit;
+    cit = it;
+    circular_buffer<Integer>::const_iterator end1 = cb.end();
+    circular_buffer<Integer>::const_iterator end2 = end1;
+
+    BOOST_CHECK(itCopy == it);
+    BOOST_CHECK(cit == it);
+    BOOST_CHECK(end1 == end2);
+    BOOST_CHECK(it != end1);
+    BOOST_CHECK(cit != end2);
+}
+
+void iterator_reference_test() {
+
+    circular_buffer<C> cb(3, C());
+    circular_buffer<C>::iterator it = cb.begin();
+    circular_buffer<C>::const_iterator cit = cb.begin() + 1;
+
+    BOOST_CHECK((*it).test_reference1() == it->test_reference2());
+    BOOST_CHECK((*cit).test_reference2() == cit->test_reference1());
+}
+
+void iterator_difference_test() {
+
+    circular_buffer<Integer> cb(5, 1);
+    cb.push_back(2);
+    circular_buffer<Integer>::iterator it1 = cb.begin() + 2;
+    circular_buffer<Integer>::iterator it2 = cb.begin() + 3;
+    circular_buffer<Integer>::const_iterator begin = cb.begin();
+    circular_buffer<Integer>::iterator end = cb.end();
+
+    BOOST_CHECK(begin - begin == 0);
+    BOOST_CHECK(end - cb.begin() == 5);
+    BOOST_CHECK(end - end == 0);
+    BOOST_CHECK(begin - cb.end() == -5);
+    BOOST_CHECK(it1 - cb.begin() == 2);
+    BOOST_CHECK(end - it1 == 3);
+    BOOST_CHECK(it2 - it1 == 1);
+    BOOST_CHECK(it1 - it2 == -1);
+    BOOST_CHECK(it2 - it2 == 0);
+}
+
+void iterator_increment_test() {
+
+    circular_buffer<Integer> cb(10, 1);
+    cb.push_back(2);
+    circular_buffer<Integer>::iterator it1 = cb.begin();
+    circular_buffer<Integer>::iterator it2 = cb.begin() + 5;
+    circular_buffer<Integer>::iterator it3 = cb.begin() + 9;
+    it1++;
+    it2++;
+    ++it3;
+
+    BOOST_CHECK(it1 == cb.begin() + 1);
+    BOOST_CHECK(it2 == cb.begin() + 6);
+    BOOST_CHECK(it3 == cb.end());
+}
+
+void iterator_decrement_test() {
+
+    circular_buffer<Integer> cb(10, 1);
+    cb.push_back(2);
+    circular_buffer<Integer>::iterator it1= cb.end();
+    circular_buffer<Integer>::iterator it2= cb.end() - 5;
+    circular_buffer<Integer>::iterator it3= cb.end() - 9;
+    --it1;
+    it2--;
+    --it3;
+
+    BOOST_CHECK(it1 == cb.end() - 1);
+    BOOST_CHECK(it2 == cb.end() - 6);
+    BOOST_CHECK(it3 == cb.begin());
+}
+
+void iterator_addition_test() {
+
+    circular_buffer<Integer> cb(10, 1);
+    cb.push_back(2);
+    cb.push_back(2);
+    circular_buffer<Integer>::iterator it1 = cb.begin() + 2;
+    circular_buffer<Integer>::iterator it2 = cb.end();
+    circular_buffer<Integer>::iterator it3 = cb.begin() + 5;
+    circular_buffer<Integer>::iterator it4 = cb.begin() + 9;
+    it1 += 3;
+    it2 += 0;
+    it3 += 5;
+    it4 += -2;
+
+    BOOST_CHECK(it1 == 5 + cb.begin());
+    BOOST_CHECK(it2 == cb.end());
+    BOOST_CHECK(it3 == cb.end());
+    BOOST_CHECK(it4 + 3 == cb.end());
+    BOOST_CHECK((-3) + it4 == cb.begin() + 4);
+    BOOST_CHECK(cb.begin() + 0 == cb.begin());
+}
+
+void iterator_subtraction_test() {
+
+    circular_buffer<Integer> cb(10, 1);
+    cb.push_back(2);
+    cb.push_back(2);
+    cb.push_back(2);
+    circular_buffer<Integer>::iterator it1 = cb.begin();
+    circular_buffer<Integer>::iterator it2 = cb.end();
+    circular_buffer<Integer>::iterator it3 = cb.end() - 5;
+    circular_buffer<Integer>::iterator it4 = cb.begin() + 7;
+    it1 -= -2;
+    it2 -= 0;
+    it3 -= 5;
+
+    BOOST_CHECK(it1 == cb.begin() + 2);
+    BOOST_CHECK(it2 == cb.end());
+    BOOST_CHECK(it3 == cb.begin());
+    BOOST_CHECK(it4 - 7 == cb.begin());
+    BOOST_CHECK(it4 - (-3) == cb.end());
+    BOOST_CHECK(cb.begin() - 0 == cb.begin());
+}
+
+void iterator_element_access_test() {
+
+    circular_buffer<Integer> cb(10);
+    cb.push_back(1);
+    cb.push_back(2);
+    cb.push_back(3);
+    cb.push_back(4);
+    cb.push_back(5);
+    cb.push_back(6);
+    circular_buffer<Integer>::iterator it = cb.begin() + 1;
+
+    BOOST_CHECK(it[0] == 2);
+    BOOST_CHECK(it[-1] == 1);
+    BOOST_CHECK(it[2] == 4);
+}
+
+void iterator_comparison_test() {
+
+    circular_buffer<Integer> cb(5, 1);
+    cb.push_back(2);
+    circular_buffer<Integer>::iterator it = cb.begin() + 2;
+    circular_buffer<Integer>::const_iterator begin = cb.begin();
+    circular_buffer<Integer>::iterator end = cb.end();
+
+    BOOST_CHECK(begin == begin);
+    BOOST_CHECK(end > cb.begin());
+    BOOST_CHECK(begin < end);
+    BOOST_CHECK(end > begin);
+    BOOST_CHECK(end == end);
+    BOOST_CHECK(begin < cb.end());
+    BOOST_CHECK(!(begin + 1 > cb.end()));
+    BOOST_CHECK(it > cb.begin());
+    BOOST_CHECK(end > it);
+    BOOST_CHECK(begin >= begin);
+    BOOST_CHECK(end >= cb.begin());
+    BOOST_CHECK(end <= end);
+    BOOST_CHECK(begin <= cb.end());
+    BOOST_CHECK(it >= cb.begin());
+    BOOST_CHECK(end >= it);
+    BOOST_CHECK(!(begin + 4 < begin + 4));
+    BOOST_CHECK(begin + 4 < begin + 5);
+    BOOST_CHECK(!(begin + 5 < begin + 4));
+    BOOST_CHECK(it < end - 1);
+    BOOST_CHECK(!(end - 1 < it));
+}
+
+void iterator_invalidation_test() {
+
+#if !defined(NDEBUG) && !defined(BOOST_DISABLE_CB_DEBUG)
+
+    circular_buffer<Integer>::iterator it1;
+    circular_buffer<Integer>::const_iterator it2;
+    circular_buffer<Integer>::iterator it3;
+    circular_buffer<Integer>::const_iterator it4;
+    circular_buffer<Integer>::const_iterator it5;
+
+    BOOST_CHECK(!it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(!it3.is_valid());
+    BOOST_CHECK(!it4.is_valid());
+    BOOST_CHECK(!it5.is_valid());
+
+    {
+        circular_buffer<Integer> cb(5, 0);
+        const circular_buffer<Integer> ccb(5, 0);
+
+        it1 = cb.begin();
+        it2 = ccb.end();
+        it3 = it1;
+        it4 = it1;
+        it5 = it2;
+
+        BOOST_CHECK(it1.is_valid());
+        BOOST_CHECK(it2.is_valid());
+        BOOST_CHECK(it3.is_valid());
+        BOOST_CHECK(it4.is_valid());
+        BOOST_CHECK(it5.is_valid());
+    }
+
+    BOOST_CHECK(!it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(!it3.is_valid());
+    BOOST_CHECK(!it4.is_valid());
+    BOOST_CHECK(!it5.is_valid());
+
+    circular_buffer<Integer> cb1(10, 0);
+    circular_buffer<Integer> cb2(20, 0);
+    it1 = cb1.end();
+    it2 = cb2.begin();
+    BOOST_CHECK(it1.is_valid());
+    BOOST_CHECK(it2.is_valid());
+
+    cb1.swap(cb2);
+    BOOST_CHECK(!it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+
+    it1 = cb1.begin() + 3;
+    it2 = cb1.begin();
+    cb1.push_back(1);
+    BOOST_CHECK(it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(*it2.m_it == 1);
+
+    circular_buffer<Integer> cb3(5);
+    cb3.push_back(1);
+    cb3.push_back(2);
+    cb3.push_back(3);
+    cb3.push_back(4);
+    cb3.push_back(5);
+    it1 = cb3.begin() + 2;
+    it2 = cb3.begin();
+    cb3.insert(cb3.begin() + 3, 6);
+    BOOST_CHECK(it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(*it2.m_it == 5);
+
+    it1 = cb3.begin() + 3;
+    it2 = cb3.end() - 1;
+    cb3.push_front(7);
+    BOOST_CHECK(it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(*it2.m_it == 7);
+
+    circular_buffer<Integer> cb4(5);
+    cb4.push_back(1);
+    cb4.push_back(2);
+    cb4.push_back(3);
+    cb4.push_back(4);
+    cb4.push_back(5);
+    it1 = cb4.begin() + 3;
+    it2 = cb4.begin();
+    cb4.rinsert(cb4.begin() + 2, 6);
+    BOOST_CHECK(it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(*it2.m_it == 2);
+
+    it1 = cb1.begin() + 5;
+    it2 = cb1.end() - 1;
+    cb1.pop_back();
+    BOOST_CHECK(it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+
+    it1 = cb1.begin() + 5;
+    it2 = cb1.begin();
+    cb1.pop_front();
+    BOOST_CHECK(it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+
+    circular_buffer<Integer> cb5(20, 0);
+    it1 = cb5.begin() + 5;
+    it2 = cb5.begin() + 15;
+    cb5.erase(cb5.begin() + 10);
+    BOOST_CHECK(it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+
+    it1 = cb5.begin() + 1;
+    it2 = cb5.begin() + 8;
+    cb5.erase(cb5.begin() + 3, cb5.begin() + 7);
+    BOOST_CHECK(it1.is_valid());
+    BOOST_CHECK(!it2.is_valid());
+
+#endif // #if !defined(NDEBUG) && !defined(BOOST_DISABLE_CB_DEBUG)
+}
+
+// basic exception safety test (it is useful to use any memory-leak 
+detection tool)
+void exception_safety_test() {
+
+#if !defined(BOOST_NO_EXCEPTIONS)
+
+    circular_buffer<Integer> cb1(3, 5);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb1.set_capacity(5), exception);
+
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(circular_buffer<Integer> cb2(5, 10), exception);
+
+    circular_buffer<Integer> cb3(5, 10);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(circular_buffer<Integer> cb4(cb3), exception);
+
+    vector<Integer> v(5, 10);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(circular_buffer<Integer> cb5(8, v.begin(), 
+v.end()), exception);
+
+    circular_buffer<Integer> cb6(5, 10);
+    circular_buffer<Integer> cb7(8, 3);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb7 = cb6, exception);
+
+    circular_buffer<Integer> cb8(5, 10);
+    Integer::set_exception_trigger(2);
+    BOOST_CHECK_THROW(cb8.push_front(1), exception);
+
+    circular_buffer<Integer> cb9(5);
+    cb9.push_back(1);
+    cb9.push_back(2);
+    cb9.push_back(3);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb9.insert(cb9.begin() + 1, 4), exception);
+
+    circular_buffer<Integer> cb10(5);
+    cb10.push_back(1);
+    cb10.push_back(2);
+    cb10.push_back(3);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb10.rinsert(cb10.begin() + 1, 4), exception);
+
+    circular_buffer<Integer> cb11(5);
+    cb11.push_back(1);
+    cb11.push_back(2);
+    Integer::set_exception_trigger(2);
+    BOOST_CHECK_THROW(cb11.rinsert(cb11.begin(), 1), exception);
+
+    circular_buffer<Integer> cb12(5, 1);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb12.assign(4, 2), exception);
+
+    circular_buffer<Integer> cb13(5, 1);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb13.assign(6, 2), exception);
+
+    circular_buffer<Integer> cb14(5);
+    cb14.push_back(1);
+    cb14.push_back(2);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb14.insert(cb14.begin(), 10, 3), exception);
+
+    circular_buffer<Integer> cb15(5);
+    cb15.push_back(1);
+    cb15.push_back(2);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb15.insert(cb15.end(), 10, 3), exception);
+
+    circular_buffer<Integer> cb16(5);
+    cb16.push_back(1);
+    cb16.push_back(2);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb16.rinsert(cb16.begin(), 10, 3), exception);
+
+    circular_buffer<Integer> cb17(5);
+    cb17.push_back(1);
+    cb17.push_back(2);
+    Integer::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb17.rinsert(cb17.end(), 10, 3), exception);
+
+    circular_buffer<Integer> cb18(5, 0);
+    cb18.push_back(1);
+    cb18.push_back(2);
+    cb18.pop_front();
+    Integer::set_exception_trigger(4);
+    BOOST_CHECK_THROW(cb18.data(), exception);
+
+    circular_buffer<Integer> cb19(5, 0);
+    cb19.push_back(1);
+    cb19.push_back(2);
+    Integer::set_exception_trigger(5);
+    BOOST_CHECK_THROW(cb19.data(), exception);
+
+    circular_buffer<Integer> cb20(5, 0);
+    cb20.push_back(1);
+    cb20.push_back(2);
+    Integer::set_exception_trigger(6);
+    BOOST_CHECK_THROW(cb20.data(), exception);
+
+    circular_buffer<Integer> cb21(5);
+    cb21.push_back(1);
+    cb21.push_back(2);
+    cb21.push_back(3);
+    Integer::set_exception_trigger(2);
+    BOOST_CHECK_THROW(cb21.insert(cb21.begin() + 1, 4), exception);
+
+    circular_buffer<Integer> cb22(5);
+    cb22.push_back(1);
+    cb22.push_back(2);
+    cb22.push_back(3);
+    Integer::set_exception_trigger(2);
+    BOOST_CHECK_THROW(cb22.insert(cb22.end(), 4), exception);
+
+    circular_buffer<Integer> cb23(5, 0);
+    Integer::set_exception_trigger(2);
+    BOOST_CHECK_THROW(cb23.insert(cb23.begin() + 1, 4), exception);
+
+    circular_buffer<Integer> cb24(5);
+    cb24.push_back(1);
+    cb24.push_back(2);
+    cb24.push_back(3);
+    Integer::set_exception_trigger(2);
+    BOOST_CHECK_THROW(cb24.rinsert(cb24.begin() + 1, 4), exception);
+
+    circular_buffer<Integer> cb25(5, 0);
+    Integer::set_exception_trigger(2);
+    BOOST_CHECK_THROW(cb25.rinsert(cb25.begin() + 3, 4), exception);
+
+    circular_buffer<Integer> cb26(5);
+    cb26.push_back(1);
+    cb26.push_back(2);
+    Integer::set_exception_trigger(5);
+    BOOST_CHECK_THROW(cb26.insert(cb26.begin(), 10, 3), exception);
+
+    circular_buffer<Integer> cb27(5);
+    cb27.push_back(1);
+    cb27.push_back(2);
+    Integer::set_exception_trigger(5);
+    BOOST_CHECK_THROW(cb27.insert(cb27.end(), 10, 3), exception);
+
+    circular_buffer<Integer> cb28(5);
+    cb28.push_back(1);
+    cb28.push_back(2);
+    Integer::set_exception_trigger(5);
+    BOOST_CHECK_THROW(cb28.rinsert(cb28.begin(), 10, 3), exception);
+
+    circular_buffer<Integer> cb29(5);
+    cb29.push_back(1);
+    cb29.push_back(2);
+    Integer::set_exception_trigger(5);
+    BOOST_CHECK_THROW(cb29.rinsert(cb29.end(), 10, 3), exception);
+
+    circular_buffer<Integer> cb30(10);
+    cb30.push_back(1);
+    cb30.push_back(2);
+    cb30.push_back(3);
+    Integer::set_exception_trigger(2);
+    BOOST_CHECK_THROW(cb30.rinsert(cb30.begin(), 10, 3), exception);
+
+#endif // #if !defined(BOOST_NO_EXCEPTIONS)
+}
+
+// test main
+void main()
+{
+    iterator_constructor_and_assign_test();
+    iterator_reference_test();
+    iterator_difference_test();
+    iterator_increment_test();
+    iterator_decrement_test();
+    iterator_addition_test();
+    iterator_subtraction_test();
+    iterator_element_access_test();
+    iterator_comparison_test();
+    iterator_invalidation_test();
+    exception_safety_test();
+
+}
+
+
+-------------------------------------------------------------------------------
+
+From: "Jeremy Siek" <jsiek@osl.iu.edu>   
+Subject: Re: [boost] Formal Review: Circular Buffer 
+Date: Tue, 9 Mar 2004 09:24:36 -0500 
+To: boost@lists.boost.org 
+
+    
+Hi Jan,
+
+On Mar 8, 2004, at 1:03 PM, Jan Gaspar wrote:
+> I think the Alloc has to be just an allocator (with
+> the neccessary methods). No special requirements
+> needed.
+>
+
+That's what I mean, the documentation should say that
+Alloc is required to meet the standard allocator requirements.
+
+Cheers,
+Jeremy
+
+_______________________________________________
+Jeremy Siek <jsiek@osl.iu.edu>
+http://www.osl.iu.edu/~jsiek
+Ph.D. Student, Indiana University Bloomington
+C++ Booster (http://www.boost.org)
+Office phone: (812) 856-1820
+
+
+-------------------------------------------------------------------------------
+
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+To: "Jan Gaspar" <jano_gaspar@yahoo.com> 
+Subject: Re: circular_buffer: problemy s VC6.5 
+Date: Tue, 9 Mar 2004 16:46:38 +0100 
+
+    
+Ahoj Jano,
+
+> Mam pristup len ku VC6.0. Vyskusam to s tym, mozno
+> budem mat tie iste problemy.
+> 
+Nemel bych pouzivat slang. VC6.5 je VC6.0 + service pack 5.
+Ten se da stahnout free z MSDN:
+http://msdn.microsoft.com/vstudio/downloads/updates/sp/vs6/sp5/default.aspx
+
+Cislo service packu se ukaze v splash screen.
+
+/Pavel
+       
+-------------------------------------------------------------------------------
+       
+Subject: RE: [boost] Formal Review: Circular Buffer 
+Date: Tue, 9 Mar 2004 09:44:34 -0800 
+From: "Powell, Gary" <powellg@amazon.com>   
+To: boost@lists.boost.org 
+
+    
+Shouldn't the comparison functions allow the types to differ? I mean 
+don't they still lexigraphically compare as long as there is a comparison 
+function F that a F b for each element exists
+
+circular_buffer<T, MyAlloc> x;
+circular_buffer<S, YourAlloc> y;
+
+bool b = x == y; for where the operator T == S is valid? And what does 
+the allocator have to do with it?
+
+Therefore IMO, all of the comparison functions should change from
+
+template< typename T, typename Alloc>
+bool operator F ( circular_buffer<T, Alloc> &lhs, 
+                  circular_buffer<T, Alloc> &rhs);
+
+to
+
+template< typename T1, typename Alloc1,
+          typename T2, typename Alloc2>
+bool operator F ( circular_buffer<T1, Alloc1> &lhs, 
+                  circular_buffer<T2, Alloc2> &rhs);
+
+  Yours,
+  -Gary-
+
+powellg@amazon.com
+
+
+-------------------------------------------------------------------------------
+
+Subject: RE: [boost] Formal Review: Circular Buffer 
+Date: Tue, 9 Mar 2004 09:45:07 -0800 
+From: "Powell, Gary" <powellg@amazon.com>   
+To: boost@lists.boost.org 
+
+    
+documentation bug:
+Definition of data() Shouldn't that be only in the doc for the circular 
+buffer space optimized? It isn't part of the adaptor interface.
+
+Also this may be old ground, but any particular reason you are not 
+using a std::vector as the underlying container, coupled with the iterator 
+adaptors?
+
+On the positive side, I like the functionality. I use this sort of 
+container all the time. I often have things for which I can only hold N and 
+when I have N+1, I need to purge the oldest.
+
+  Yours,
+  -Gary-
+
+  
+
+
+-------------------------------------------------------------------------------
+
+Subject: RE: [boost] Formal Review: Circular Buffer 
+Date: Tue, 9 Mar 2004 10:19:38 -0800 
+From: "Powell, Gary" <powellg@amazon.com>   
+To: boost@lists.boost.org 
+
+    
+I have reviewed Jan Gaspar's circular buffer.
+
+What is your evaluation of the design?  
+
+It's a useful container. I've hacked up a couple in my coding
+career and this one is very nice.
+
+Although I've usually implemented them as an adaptor to a container.
+This separates the container that I've optimized for the problem from
+the circular nature of it.  
+
+What is your evaluation of the implementation?  
+
+I was able to run the sample code with gcc 3.2 no problem.
+
+What is your evaluation of the documentation?  
+
+Doc's are fine.
+
+What is your evaluation of the potential usefulness of the library?
+Useful for both embedded systems and those with a stack that needs 
+to be limited. With a smart destructor you can push objects into the
+circular buffer holding them until you are either "full", or have
+time to deal with them.
+
+How much effort did you put into your evaluation? Shallow-depth study?
+Shallow study. One evening.
+
+Are you knowledgeable about the problem domain?
+Somewhat. I used to program for embedded systems, games, where
+memory is limited. We used this sort of buffer to constrain the
+the art resources from taking over the available memory.
+
+Other comments:
+
+Do you think the library should be accepted as a Boost library?
+
+I vote for acceptance with or without the suggested change about
+adapting a container. The comparison operators do need to be
+fixed though to compare two types.
+
+i.e.
+circular_buffer<int> x = { 1, 2, 3 }; // pseudo code.
+circular_buffer<short> y = { 1, 2,3 };
+x == y  -> true
+
+  However I would prefer that the underlying container be part of the
+interface. But that's not a fixed in stone opinion.
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Tue, 9 Mar 2004 20:49:24 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"Powell, Gary" <powellg@amazon.com> wrote
+
+> Definition of data() Shouldn't that be only in the doc for the
+> circular buffer space optimized? It isn't part of the adaptor 
+interface.
+>
+No, it is part of 'core'.
+
+> Also this may be old ground, but any particular reason
+> you are not using a std::vector as the underlying container,
+> coupled with the iterator adaptors?
+>
+Complete control over data, debug support.
+
+/Pavel
+
+
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Tue, 9 Mar 2004 20:52:29 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer 
+
+    
+
+"Powell, Gary" <powellg@amazon.com> wrote
+
+
+> Shouldn't the comparison functions allow the types to differ?
+>
+> circular_buffer<T, MyAlloc> x;
+> circular_buffer<S, YourAlloc> y;
+>
+> bool b = x == y; for where the operator T == S is valid?
+> And what does the allocator have to do with it?
+>
+Hmm, do you know a STL implementation/some container
+with this feature? It may be often bug to compare containers with
+different types.
+
+/Pavel
+
+
+
+
+
+-------------------------------------------------------------------------------
+
+Subject: RE: [boost] Re: Formal Review: Circular Buffer 
+Date: Tue, 9 Mar 2004 13:55:15 -0800 
+From: "Powell, Gary" <powellg@amazon.com>   
+To: boost@lists.boost.org 
+
+    
+No, but just because the standard libraries scr*wed up is no reason to 
+perpetuate the mistake.
+
+It's the rule of unexpected consequences.
+
+Is 
+circular_buffer<int> x  = { 1, 2, 3};
+circular_buffer<short> y = { 1, 2 ,3};
+
+x == y ?? or not?
+
+Sure looks like it should work.
+
+The VTL library does it IMO correctly, allowing that if there is an 
+operation
+T1 F T2, then
+
+V1 F V2  compiles. Otherwise you just force the user to write what 
+should be library
+code.
+
+(Obviously swap can't do this unless the Allocators are the same.)
+
+template<class T1, class T2, class Alloc>
+void swap( circular_buffer<T1, Alloc> &lhs, circular_buffer<T2, Alloc> 
+&rhs)
+{
+   // do an element by element swap.
+   // and insert for the leftover elements.
+}
+
+template<class T1, class Alloc>
+void swap<T1, T1, Alloc> ( circular_buffer<T1, Alloc> &lhs, 
+circular_buffer<T1, Alloc> &rhs)
+{
+   // swap the whole container.
+   lhs.swap(rhs);
+}
+
+  Yours,
+  -Gary-
+
+
+-----Original Message-----
+From: boost-bounces@lists.boost.org 
+[mailto:boost-bounces@lists.boost.org] On Behalf Of Pavel Vozenilek
+Sent: Tuesday, March 09, 2004 11:52 AM
+To: boost@lists.boost.org
+Subject: [boost] Re: Formal Review: Circular Buffer
+
+
+
+"Powell, Gary" <powellg@amazon.com> wrote
+
+
+> Shouldn't the comparison functions allow the types to differ?
+>
+> circular_buffer<T, MyAlloc> x;
+> circular_buffer<S, YourAlloc> y;
+>
+> bool b = x == y; for where the operator T == S is valid?
+> And what does the allocator have to do with it?
+>
+Hmm, do you know a STL implementation/some container
+with this feature? It may be often bug to compare containers with
+different types.
+
+/Pavel
+
+
+-------------------------------------------------------------------------------
+
+Date: Tue, 09 Mar 2004 23:56:28 +0100 
+From: "JOAQUIN LOPEZ MU?Z" <joaquin@tid.es>   
+Subject: Re: RE: [boost] Re: Formal Review: Circular Buffer 
+To: boost@lists.boost.org 
+CC:  
+
+    
+----- Mensaje original -----
+De: "Powell, Gary" <powellg@amazon.com>
+Fecha: Martes, Marzo 9, 2004 10:55 pm
+Asunto: RE: [boost] Re: Formal Review: Circular Buffer
+
+> 
+> The VTL library does it IMO correctly, allowing that if there is 
+> an operation
+> T1 F T2, then
+> 
+> V1 F V2  compiles. Otherwise you just force the user to write what 
+> should be library
+> code.
+> 
+> (Obviously swap can't do this unless the Allocators are the same.)
+> 
+
+I don't quite get you here. I think the two allocator
+types cannot be equal: the first allocator allocates T1's,
+the second T2's. I might be totally misinterpreting you, of
+course.
+
+
+> template<class T1, class T2, class Alloc>
+> void swap( circular_buffer<T1, Alloc> &lhs, circular_buffer<T2, 
+> Alloc> &rhs)
+> {
+>   // do an element by element swap.
+>   // and insert for the leftover elements.
+> }
+> 
+
+IMHO doing an elementwise swapping is very ill-behaved.
+It would reduce to repeatedly calling something like:
+
+template <typename T1,typename T2>
+void swap_different(T1& x,T1& y)
+{
+  T1 tmp(y);
+  x=y;
+  y=x;
+}
+
+So, for swap to have *some* exception safety the
+assignment operators must not throw, which seems too
+restrictive (think types with dynamic allocation).
+Maybe things can be improved a bit with something along
+this line:
+
+template<class T1, class T2, class Alloc1, class Alloc2>
+void swap(
+  circular_buffer<T1, Alloc1> &lhs,
+  circular_buffer<T2, Alloc2> &rhs)
+{
+  circular_buffer<T1, Alloc1> new_lhs;
+  // copy rhs into new_lhs
+  circular_buffer<T2, Alloc2> new_rhs;
+  // copy lhs into new_rhs
+
+  lhs.swap(new_lhs); // nothrow
+  rhs.swap(new_rhs); // nothrow
+}
+
+There is a final annoyance, though: in many cases
+the code can emit a narrowing cast warning (if assigning
+an int to a short, for instance.)
+
+Joaquín M López Munoz
+Telefónica, Investigación y Desarrollo
+
+
+
+
+-------------------------------------------------------------------------------
+
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+To: jano_gaspar@yahoo.com 
+Subject:  [circular_buffer] compile problems 
+Date: Fri, 12 Mar 2004 17:47:16 +1100 
+
+    
+Hi Jan,
+
+My Comeau compiler has these complaints when trying a simple test 
+program:
+
+"boost/circular_buffer/debug.hpp", line 60: error #393: pointer to
+incomplete
+          class type is not allowed
+          for (const cb_iterator_base* p = m_iterators; p != 0; p =
+p->next()) {
+                                                                    ^
+
+"boost/circular_buffer/debug.hpp", line 62: error #393: pointer to
+incomplete
+          class type is not allowed
+                  p->invalidate();
+                  ^
+
+
+"boost/circular_buffer/base.hpp", line 139: error #1201: typedef 
+"iterator"
+          may not be used in an elaborated type specifier
+      friend struct iterator;
+                    ^
+
+"boost/circular_buffer/base.hpp", line 140: error #1201: typedef
+          "const_iterator" may not be used in an elaborated type 
+specifier
+      friend struct const_iterator;
+
+There might be more. The first two can be fixed by the attached patch.
+Would you say comeau is right or wrong?
+
+best regards
+
+Thorsten
+
+PS: Here's the test program:
+
+#include "boost/circular_buffer.hpp"
+#include <boost/progress.hpp>
+#include <deque>
+#include <string>
+
+using namespace boost;
+using namespace std;
+
+int main()
+{
+    enum { size = 1000 };
+    deque<string> ds( size );
+    deque<int>    di( size );
+    circular_buffer<string> cbs( size );
+    circular_buffer<int>     cbi( size );
+
+}
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Fri, 12 Mar 2004 21:06:16 +1100 
+Subject:  [boost] [circular buffer review] 
+
+    
+Hi All,
+
+here is my review of the circular buffer class.
+
+What is your evaluation of the design?
+---------------------------------------
+
+The design is good. People can easily learn to use it.
+There are some miner things that I would like see changed, like double
+versions of push_back and push_front. I don't
+understand why both set_capacit and resize are provided and I would 
+like to
+see them merged if possible.
+
+I also think push_back should throw an exception if no element is 
+inserted.
+This behavior is somewhat different push_back() from a
+normal std container. If there are similar cases then I think they 
+should be
+looked at again too.
+
+What is your evaluation of the implementation?
+-----------------------------------------------
+I haven't looked closely at the source code.
+
+
+What is your evaluation of the documentation?
+----------------------------------------------
+very good once the exception-safety issues are solved
+
+
+What is your evaluation of the potential usefulness of the library?
+----------------------------------------------------------------
+I'm in doubt. The library has efficiency as its hallmark. The  
+rationale
+says that it
+gives efficient FIFO queue. So I tried to compare it with std::deque, 
+and
+here is my results
+of an /O2 build with vc71:
+
+$ ./cbuffer_vs_deque.exe
+
+ circular_buffer<int>: 2.15 s
+
+
+ deque<int>: 2.84 s
+
+
+ circular_buffer<string>: 20.59 s
+
+
+ deque<string>: 18.64 s
+
+The test program is attached; I might have made an error, but if I have 
+not,
+then
+I don't see the claim as true. In that case I need to see some more 
+evidence
+about why
+the speed advantages should be so good. It also make me wonder if there 
+is
+any need for
+circular_buffer_space_optimized.
+
+Did you try to use the library?  With what compiler?  Did you have any
+problems?
+----------------------------------------------------------------------------
+------
+yes, with vc7.1; Comeau 4.3.0 could not compile it. It worked fine on 
+vc7.1
+
+
+How much effort did you put into your evaluation? A glance? A quick 
+reading?
+In-depth study?
+----------------------------------------------------------------------------
+-------------------
+A couple of hours with both documentation and code use.
+
+
+Are you knowledgeable about the problem domain?
+-----------------------------------------------------
+I don't have experience with embedded applications; I have written 
+stuff in
+which performace
+was critical and in which specially designed datastructures was 
+necessary.
+
+
+Do you think the library should be accepted as a Boost library?
+---------------------------------------------------------------
+
+Yes if the author can convince me that we really get more performance.
+No otherwise.
+
+best regards
+
+Thorsten
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Tom Widmer" <tom_usenet@hotmail.com>   
+Date: Fri, 12 Mar 2004 16:15:48 +0000 
+Subject: [boost] Re: [circular buffer review] 
+
+    
+On Fri, 12 Mar 2004 21:06:16 +1100, "Thorsten Ottosen"
+<nesotto@cs.auc.dk> wrote:
+
+>What is your evaluation of the potential usefulness of the library?
+>----------------------------------------------------------------
+>I'm in doubt. The library has efficiency as its hallmark. The  
+rationale
+>says that it
+>gives efficient FIFO queue. So I tried to compare it with std::deque, 
+and
+>here is my results
+>of an /O2 build with vc71:
+>
+>$ ./cbuffer_vs_deque.exe
+>
+> circular_buffer<int>: 2.15 s
+>
+>
+> deque<int>: 2.84 s
+>
+>
+> circular_buffer<string>: 20.59 s
+>
+>
+> deque<string>: 18.64 s
+>
+>The test program is attached; I might have made an error, but if I 
+have not,
+>then
+>I don't see the claim as true. In that case I need to see some more 
+evidence
+>about why
+>the speed advantages should be so good. It also make me wonder if 
+there is
+>any need for
+>circular_buffer_space_optimized.
+
+Your code does have at least two major errors:
+
+mutex::scoped_lock lock( mutex );
+is a function declaration (demonstrating the danger of C++ and "using
+namespace boost"). You meant:
+mutex::scoped_lock lock(queue_mutex);
+
+Also, you have implemented a stack rather than a queue; the reader
+should use front() and pop_front(). This didn't make much difference
+to the benchmark.
+
+You should also probably using condition variables rather than
+thread::yield - thread::yield is rarely needed in properly written
+multithreaded code (although I've been lucky enough to write most of
+my threading code in a realtime operating system with deterministic
+scheduling).
+
+But in any case, your benchmark does prove a point - circular_buffer
+seems a bit unnecessary if you have a properly implemented std::deque,
+as found in Dinkumware's library for one. No ongoing memory allocation
+has to happen in std::deque either! This is because it can use a
+circular buffer for the map of blocks, and not throw away empty
+blocks.
+
+Tom
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Fri, 12 Mar 2004 23:36:28 +0100 
+Subject: [boost] Re: Formal Review: Circular Buffer (some notes) 
+
+    
+Bellow are few notes to circular_buffer library.
+Over weekend I'll reread the code and post remaining notes.
+/Pavel
+
+____________________________________
+1. docs: there should be warning for
+   data() documentation that the returned
+   pointer gets very easily invalidated.
+____________________________________
+2. docs: Synopsis in circular_buffer.html
+   could be splitted by <p> into two paragraphs.
+   It would look less "heavy".
+____________________________________
+3. the macros as BOOST_CB_TRY should be at some time
+replaced by common Boost macros.
+
+These macros are proposed but not yet added there AFAIK.
+
+#if !(defined BOOST_NO_EXCEPTIONS)
+#    define BOOST_TRY { try
+#    define BOOST_CATCH(x) catch(x)
+#    define BOOST_RETHROW throw
+#    define BOOST_CATCH_END  }
+#else
+#    if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#        define BOOST_TRY { if ("")
+#        define BOOST_CATCH(x) else if (!"")
+#    else
+#        define BOOST_TRY { if (true)
+#        define BOOST_CATCH else if (false)
+#    endif
+#    define BOOST_RETHROW
+#    define BOOST_CATCH_END }
+#endif
+_________________________________________
+4. circular_buffer.hpp:
+
+#include <boost/type_traits.hpp>
+should be replaced by finer granularity includes.
+This line big huge impact on compilation time.
+__________________________________________
+5. base.hpp:
+
+#if BOOST_CB_ENABLE_DEBUG
+    #include <string.h>
+#endif
+
+maybe this can change to <cstring>.
+__________________________________________
+6. base.hpp, Intel C++ 7.0, warning on line:
+
+    void replace(pointer pos, param_value_type item) {
+        replace(pos, item, cb_details::template
+cb_replace_category_traits<value_type>::tag()); <<< here
+
+C:\Temp\temp\circular_buffer3.6\circular_buffer\boost/circular_buffer/base.h
+pp(1105): warning #1017: name following "template"
+must be a member template
+
+Dtto assign(), insert(), rinsert(). insert()/rinsert() in adaptor.hpp.
+__________________________________________
+7. base.hpp: few places contain text "circular_buffer<T, Alloc>".
+
+Helper type, e.g. self_t can be created and used
+there. Its slightly easier to read.
+__________________________________________
+EOF
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Sat, 13 Mar 2004 12:29:03 +1100 
+Subject: [boost] Re: [circular buffer review] 
+
+    
+
+"Tom Widmer" <tom_usenet@hotmail.com> wrote in message
+news:tcl350tm80fqpbma96j3jcsa6i6o3t9dm6@4ax.com...
+[snip]
+> Your code does have at least two major errors:
+>
+> mutex::scoped_lock lock( mutex );
+> is a function declaration (demonstrating the danger of C++ and "using
+> namespace boost"). You meant:
+> mutex::scoped_lock lock(queue_mutex);
+
+Doh! I dont get why this cold compile at all!
+
+> Also, you have implemented a stack rather than a queue; the reader
+> should use front() and pop_front(). This didn't make much difference
+> to the benchmark.
+
+yeah it doesn't.
+
+> You should also probably using condition variables rather than
+> thread::yield - thread::yield is rarely needed in properly written
+> multithreaded code (although I've been lucky enough to write most of
+> my threading code in a realtime operating system with deterministic
+> scheduling).
+
+Ok, I'm no MT expert, but I haven't seen any examples of how to do 
+this.
+It would explain why you have to hack so much to call yield :-)
+
+> But in any case, your benchmark does prove a point - circular_buffer
+> seems a bit unnecessary if you have a properly implemented 
+std::deque,
+> as found in Dinkumware's library for one. No ongoing memory 
+allocation
+> has to happen in std::deque either! This is because it can use a
+> circular buffer for the map of blocks, and not throw away empty
+> blocks.
+
+ok.
+
+br
+
+Thorsten
+
+
+
+-------------------------------------------------------------------------------
+
+Date: Sat, 13 Mar 2004 07:23:56 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] [circular buffer review] 
+To: boost@lists.boost.org 
+
+    
+Hi Thorsten!
+
+--- Thorsten Ottosen <nesotto@cs.auc.dk> wrote:
+
+> I'm in doubt. The library has efficiency as its
+> hallmark. The  rationale
+> says that it
+> gives efficient FIFO queue. So I tried to compare it
+> with std::deque, and
+> here is my results
+> of an /O2 build with vc71:
+> 
+> $ ./cbuffer_vs_deque.exe
+> 
+>  circular_buffer<int>: 2.15 s
+> 
+> 
+>  deque<int>: 2.84 s
+> 
+> 
+>  circular_buffer<string>: 20.59 s
+> 
+> 
+>  deque<string>: 18.64 s
+> 
+I compiled your test and made some experiments with
+it. My results are:
+
+circular_buffer<int>: 2.84 s
+deque<int>: 3.84 s
+
+circular_buffer<string>: 27.65 s
+deque<string>: 25.65 s
+
+
+struct test_struct {
+	double d;
+};
+
+circular_buffer<test_struct>: 3.15 s
+deque<test_struct>: 4.22 s
+
+struct test_struct2 {
+	double d1;
+	double d2;
+	double d3;
+	double d4;
+	double d5;
+};
+
+circular_buffer<test_struct2>: 7.67 s
+deque<test_struct2>: 6.47 s
+
+It seems to me that if you use circular_buffer for
+storing "small" elements the circular_buffer is about
+30% faster than deque. If you use larger elements the
+deque is faster about 10%. (I did also experiments
+with buffer size, but the results were about the
+same.) I don't have an explanation for such behavour.
+(Does anyone have?)
+
+So, the result is: the circular_buffer is more
+effective for storing primitive types.
+
+
+Btw, at the early stages of library developmet I
+implemented the circular_buffer as std::deque adaptor.
+The problem was that there was no control over
+iterator invalidation.
+
+Best regards,
+
+Jan
+
+
+
+-------------------------------------------------------------------------------
+
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+To: "Jan Gaspar" <jano_gaspar@yahoo.com> 
+Subject: Re: circular_buffer: problemy s VC6.5 
+Date: Sat, 13 Mar 2004 16:54:30 +0100 
+
+    
+> Skompiloval som to v debug mode. Po spusteni v
+> debugeri base_test spadol (user exception) v
+> <streambuf> headeri este pred tym, ako sa zavolal prvy
+> test! Netusim, kde by mohol byt problem.
+> 
+> Co sa tyka release modu - zeby chybny kompilator?
+> 
+> Este je zaujimave, ze adaptor_test som skompiloval a
+> spustil bez problemov.
+> 
+
+Ja jsem zase zkusil Thorstenuv example (with fixes) 
+s Intel C++ 7.0 a zatimco v debug mode vsechno
+funguje v Release mode to spadne na access violation :-O
+
+
+Ja nejdriv musim znovu procist cely kod, pak zkusim lokalizovat
+ten problem.
+
+
+Jinak za par dni ohlasim ze circular_buffer je prijaty do Boostu.
+Myslim ze je to po dlouhe dobe neco co za to stoji. Ten mail ti 
+predtim poslu aby jsi to mohl okomentovat.
+
+
+Budes chtit pridavat neco jako adapter ktery vola functor pri
+vymazani elementu?
+
+/Pavel
+
+-------------------------------------------------------------------------------
+
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+To: "Jan Gaspar" <jano_gaspar@yahoo.com> 
+Subject: Re: [circular buffer review] 
+Date: Sat, 13 Mar 2004 17:03:47 +0100 
+
+    
+
+----- Original Message ----- 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>
+Newsgroups: gmane.comp.lib.boost.devel
+Sent: Saturday, March 13, 2004 4:23 PM
+Subject: Re: [circular buffer review]
+
+
+> Hi Thorsten!
+> 
+[snip]
+>
+> It seems to me that if you use circular_buffer for
+> storing "small" elements the circular_buffer is about
+> 30% faster than deque. If you use larger elements the
+> deque is faster about 10%. (I did also experiments
+> with buffer size, but the results were about the
+> same.) I don't have an explanation for such behavour.
+> (Does anyone have?)
+> 
+> So, the result is: the circular_buffer is more
+> effective for storing primitive types.
+> 
+I was mailing with Thorsten about this bechmark.
+
+My point is that this test is rather simplistic:
+ - the data and code fit into CPU cache
+ - heap is not defragmented
+
+In real applications the cost of allocations will grow
+and cache misses will be more frequent.
+
+std::deque does more allocations and has worse
+cache friendliness.
+
+This type of benchmark is rather hard to write, though.
+
+-------------
+
+I guess replacing the construct/destruct feature with copy 
+assignement should help a bit here (my request for it was 
+mistake).
+
+/Pavel
+       
+
+-------------------------------------------------------------------------------
+
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+To: "Jan Gaspar" <jano_gaspar@yahoo.com> 
+Subject: Re: circular_buffer: problemy s VC6.5 
+Date: Sat, 13 Mar 2004 18:05:16 +0100 
+
+    
+> > Budes chtit pridavat neco jako adapter ktery vola
+> > functor pri
+> > vymazani elementu?
+>
+> Myslim, ze ano, aj ked este nemam uplne presnu
+> predstavu.
+>
+Trochu jsem o tom premyslel:
+
+1. mohlo by to byt neco jako:
+
+notify_on_element_dropped<circular_buffer<int> >;
+notify_on_element_dropped<circular_buffer_space_optimized<int> >;
+
+----
+
+
+notify_on_element_dropped<circular_buffer<int> > a;
+
+int handler_id = a.add_handler(... functor ...)
+a.add_notification_handler(... functor2 ...)
+a.remove_notification_handler(handler_id);
+a.remove_all_notification_handlers();
+
+Asi proto musi byt dve specializace: constructory
+circular_buffer a circular_buffer_space_optimized nejsou
+kompatibilni.
+
+2. mozna lze udelat adapter tak aby akceptoval vice druhu functoru a 
+vice
+nez jeden:
+
+boost::function(void (void)) functor1;
+boost::function(void (const T&)) functor2;
+boost::function(void (const circular_buffer<int>&, const T&)) functor3;
+
+a.add_notification_handler(functor1);
+a.add_notification_handler(functor2);
+a.add_notification_handler(functor3);
+
+a.push_back(999); // all three functors will get called.
+
+To by asi vyzadovalo Boost.Signal (hadam, nepouzival jsem to).
+
+/Pavel
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Sun, 14 Mar 2004 08:49:06 +1100 
+Subject:  [boost] Re: [circular buffer review] 
+
+    
+Hi Jan,
+
+The attached file corrects the mutex and fifo error in the first.
+
+> It seems to me that if you use circular_buffer for
+> storing "small" elements the circular_buffer is about
+> 30% faster than deque. If you use larger elements the
+> deque is faster about 10%.
+
+> So, the result is: the circular_buffer is more
+> effective for storing primitive types.
+
+Could it be that your special treatment of small types makes this
+difference?
+
+I guess a deque cannot guarantee sequential data. Or could it with a 
+special
+allocator?
+
+br
+
+Thorsten
+
+
+-------------------------------------------------------------------------------
+
+Date: Sun, 14 Mar 2004 01:03:43 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: [circular buffer review] 
+To: boost@lists.boost.org 
+
+    
+Hi Thorsten!
+
+> Could it be that your special treatment of small
+> types makes this
+> difference?
+The test_struct is not a primitive type and for this
+type the optimization does not apply.
+
+> 
+> I guess a deque cannot guarantee sequential data. Or
+> could it with a special
+> allocator?
+I don't understand this question.
+
+Jan
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Sun, 14 Mar 2004 21:02:32 +1100 
+Subject: [boost] Re: Re: [circular buffer review] 
+
+    
+Hi Jan,
+
+> >
+> > I guess a deque cannot guarantee sequential data. Or
+> > could it with a special
+> > allocator?
+> I don't understand this question.
+
+I mean a vector and a circular_buffer can pass a pointer to their data 
+to
+C-style functions.
+A deque cannot because it's data is not guaranteed to be sequential. 
+The
+question is if
+a deque could provide this guarantee somehow using eg. a special 
+allocator.
+
+br
+
+Thorsten
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Joe Gottman" <jgottman@carolina.rr.com>   
+Date: Sun, 14 Mar 2004 09:15:12 -0500 
+Subject: [boost] Re: Re: [circular buffer review] 
+
+    
+
+"Thorsten Ottosen" <nesotto@cs.auc.dk> wrote in message
+news:c31al8$bk8$1@sea.gmane.org...
+> Hi Jan,
+>
+> > >
+> > > I guess a deque cannot guarantee sequential data. Or
+> > > could it with a special
+> > > allocator?
+> > I don't understand this question.
+>
+> I mean a vector and a circular_buffer can pass a pointer to their 
+data to
+> C-style functions.
+> A deque cannot because it's data is not guaranteed to be sequential. 
+The
+> question is if
+> a deque could provide this guarantee somehow using eg. a special
+allocator.
+
+   A deque can't.  From the way it is specified, it more-or-less has to 
+be
+implemented as several fixed-size buffers, plus a control structure to 
+tell
+which buffer is being used when. A circular_buffer really can't be 
+passed to
+a C-style function either.  What if the data starts in the middle and 
+wraps
+around the end?
+
+Joe Gottman
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Thorsten Ottosen" <nesotto@cs.auc.dk>   
+Date: Mon, 15 Mar 2004 02:38:42 +1100 
+Subject: [boost] Re: Re: [circular buffer review] 
+
+    
+> > > > I guess a deque cannot guarantee sequential data. Or
+> > > > could it with a special
+> > > > allocator?
+> > > I don't understand this question.
+> >
+> > I mean a vector and a circular_buffer can pass a pointer to their 
+data
+to
+> > C-style functions.
+> > A deque cannot because it's data is not guaranteed to be 
+sequential. The
+> > question is if
+> > a deque could provide this guarantee somehow using eg. a special
+> allocator.
+>
+>    A deque can't.  From the way it is specified, it more-or-less has 
+to be
+> implemented as several fixed-size buffers, plus a control structure 
+to
+tell
+> which buffer is being used when.
+
+then what about one big fixed-sized buffer? Can't the allocator 
+determine
+the buffer size?
+
+>A circular_buffer really can't be passed to
+> a C-style function either.  What if the data starts in the middle and
+wraps
+> around the end?
+
+You would have to call data(), right?
+
+br
+
+Thorsten
+
+
+-------------------------------------------------------------------------------
+
+Date: Sun, 14 Mar 2004 13:26:51 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: Re: [circular buffer review] 
+To: boost@lists.boost.org 
+
+    
+
+--- Thorsten Ottosen <nesotto@cs.auc.dk> wrote:
+> > > > > I guess a deque cannot guarantee sequential
+> data. Or
+> > > > > could it with a special
+> > > > > allocator?
+> > > > I don't understand this question.
+> > >
+> > > I mean a vector and a circular_buffer can pass a
+> pointer to their data
+> to
+> > > C-style functions.
+> > > A deque cannot because it's data is not
+> guaranteed to be sequential. The
+> > > question is if
+> > > a deque could provide this guarantee somehow
+> using eg. a special
+> > allocator.
+> >
+> >    A deque can't.  From the way it is specified,
+> it more-or-less has to be
+> > implemented as several fixed-size buffers, plus a
+> control structure to
+> tell
+> > which buffer is being used when.
+> 
+> then what about one big fixed-sized buffer? Can't
+> the allocator determine
+> the buffer size?
+> 
+> >A circular_buffer really can't be passed to
+> > a C-style function either.  What if the data
+> starts in the middle and
+> wraps
+> > around the end?
+> 
+> You would have to call data(), right?
+> 
+Yes you're right.
+
+I just want to mention one more problem with deque.
+With deque as underlying container of the
+circular_buffer, you have no or very limited control
+over iterator invalidation.
+
+
+Best regards,
+
+Jan
+
+
+-------------------------------------------------------------------------------
+
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+To: "Jan Gaspar" <jano_gaspar@yahoo.com> 
+Subject: review result 
+Date: Fri, 19 Mar 2004 23:46:17 +0100 
+
+    
+Ahoj Jano,
+Napsal jsem koncept review result. Napis mi prosim 
+pripominky/zmeny/jiny
+text.
+
+-------------------------------
+The circular_buffer library by Jan Gaspar has
+been accepted into Boost.
+
+
+The reviews were helpful in finding at least one
+issue with the library and few ones with its
+documentation. Thanks to all reviewers for the time
+and effort!
+
+
+Main points to be addressed:
+ - issue of copy construction versus construct/destruct
+   has been cleared (the problem was created by me)
+ - documentation should list exception safety for every
+   function
+ - documentation may add some rationale on its internal
+   data structures and their advantage over std::deque
+ - portability problems should be solved
+ - adaptor with notification when oldest element gets
+   pushed out of bufer may be added
+
+
+Other points that may be considered:
+ - name of data() function
+ - existence of push_back(void) like functions
+ - using new iterator adaptors
+ - difference between resize/set_capacity may be
+   more emphasized in docs,
+ - other fixes/improvements suggested during review.
+
+
+Thanks for professional quality library, Jano.
+
+/Pavel
+----------------------------------------
+
+Mozna by bylo nejlepsi postnout jeste verzi 3.7, ja bych ji vyzkousel
+na tom co mam k dispozici
+
+
+S CVS nemam zkusenosti - myslim ze je potreba account na SourceForge
+a pak asi mail Bemanovi Dawesovi. Nekdy ted ma byt C++ standard comitee
+konference takze veci asi pujdou pomaleji.
+
+
+----------------------------------------
+K predchozimu emailu:
+
+[notification handler]
+> Ja som rozmyslal troch inak:
+>
+> // An example of the overwrite functor.
+> // There can be also construct/destruct functor
+> // and one with some notify code.
+>
+> template <class T> class AssignFnc :
+> std::binary_function<T*, T, void> {
+> void operator () (T* dest, const T& item) const {
+>  *dest = item;
+>  // notifying code can be added here
+>  }
+> };
+>
+> // then the buffer will look like this:
+> template <class T, class Alloc = Alloc(), class
+> OverwriteFnc = AssignFnc<T>>
+> class circular_buffer {
+> // ...
+> OverwriteFnc m_overwrite;
+>
+> // called whenever an item is about to be overwritten
+> void overwrite(T* dest, T& item) const {
+> m_overwrite(dest, item);
+> }
+>
+Mozna ze nova hodnota T neni ani tak zajimava,
+tu koneckoncu uzivatel zna.
+
+Ja bych preferroval tyto signatures:
+1. void operator()(void);
+2. void operator()(T& being_pushed_out);
+3. void operator()(const circular_buffer<T>&);
+4 void operator()(const circular_buffer<T>&, T& being_pushed_out);
+
+a to v jakkemkoliv mnoztvi a kombinacich (ale nevim jestli to je
+mozne - mozna pomoci Boost.Function).
+
+
+> Now, the question is what the overwrite operation
+> means and when it is called. IMHO the overwrite
+> operation is either construction/destruction or
+> assignment depending on the functor. I think the
+> operation should be called whenever a new item
+> replaces the old one (e.g. pushing back an item into a
+> full circular_buffer). In contrast when you insert an
+> item in the middle of a non-full circular_buffer, the
+> items behind the insertion point have to be shifted in
+> order to make space for the new inserted item. I think
+> the "shift" operation is not an overwrite operation
+> and it has to be always an assignment.
+>
+Ja abych rekl pokazde kdyz je element 'zrusen' kvuli dosazeni kapacity,
+at uz je to na kterekoliv strane. A to i vcetne:
+
+circular_buffer<int> buff(1);
+int array[] = { 1, 2, 3 };
+buff.insert(array, array + 3);
+
+notification by mel byt volan 2x.
+
+Dtto pro set_capacity() ktera zmensi buffer.
+
+Pro resize - nevim.
+
+/Pavel
+
+
+-------------------------------------------------------------------------------
+
+Date: Sat, 20 Mar 2004 22:58:47 -0800 (PST) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: review result 
+To: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com> 
+
+    
+Nazdar Pavel!
+
+--- Pavel Vozenilek <pavel_vozenilek@hotmail.com>
+wrote:
+> 
+> Other points that may be considered:
+>  - name of data() function
+>  - existence of push_back(void) like functions
+>  - using new iterator adaptors
+Nespominam si na iterator adaptory, pamatam si len na
+container adaptory. Nemozem to ani najst v mailing
+list-e.
+> 
+> 
+> Thanks for professional quality library, Jano.
+> 
+Myslim, ze mas na tom zasluhu aj ty.
+> 
+> Mozna by bylo nejlepsi postnout jeste verzi 3.7, ja
+> bych ji vyzkousel
+> na tom co mam k dispozici
+> 
+Urcite tak urobim. Budem sa snazit doplnit/zmenit
+veci, ktore boli spomennute v review.
+> 
+> 
+> ----------------------------------------
+> K predchozimu emailu:
+> 
+> >
+> Mozna ze nova hodnota T neni ani tak zajimava,
+> tu koneckoncu uzivatel zna.
+> 
+> Ja bych preferroval tyto signatures:
+> 1. void operator()(void);
+> 2. void operator()(T& being_pushed_out);
+> 3. void operator()(const circular_buffer<T>&);
+> 4 void operator()(const circular_buffer<T>&, T&
+> being_pushed_out);
+> 
+> a to v jakkemkoliv mnoztvi a kombinacich (ale nevim
+> jestli to je
+> mozne - mozna pomoci Boost.Function).
+>
+Nerozumiem tomu. Podla mna je operator:
+void operator () (T* dest, const T& item) const
+postacujuci. Bude robit bud construc/destruct alebo
+assign operaciu (podla toho, aky functor sa pouzije).
+ 
+
+> >
+> Ja abych rekl pokazde kdyz je element 'zrusen' kvuli
+> dosazeni kapacity,
+> at uz je to na kterekoliv strane. A to i vcetne:
+> 
+> circular_buffer<int> buff(1);
+> int array[] = { 1, 2, 3 };
+> buff.insert(array, array + 3);
+> 
+> notification by mel byt volan 2x.
+Myslim, ze mas pravdu. Trocha sa to vsak tym
+komplikuje, pretoze to znizi efektivnbost buffera.
+Myslim, ze pre notifikaciu budem musiet zvolit
+container adaptor pristup (a odelit to od overwrite
+functora).
+
+> 
+> Dtto pro set_capacity() ktera zmensi buffer.
+> 
+> Pro resize - nevim.
+Ano, aj pre resize, ak nova size bude mensia.
+
+Vdaka za skvelu spolupracu, Pavel!
+
+Jano
+
+
+-------------------------------------------------------------------------------
+
+Ahoj Jano,
+
+> >  - using new iterator adaptors
+> Nespominam si na iterator adaptory, pamatam si len na
+> container adaptory. Nemozem to ani najst v mailing
+> list-e.
+> > 
+Alberto Barbati postnul na boost-files 
+circular_buffer_new_iterators.zip (attached).
+
+Jeho mail je taky attached.
+
+
+> > ----------------------------------------
+> > K predchozimu emailu:
+> > 
+> > >
+> > Mozna ze nova hodnota T neni ani tak zajimava,
+> > tu koneckoncu uzivatel zna.
+> > 
+> > Ja bych preferroval tyto signatures:
+> > 1. void operator()(void);
+> > 2. void operator()(T& being_pushed_out);
+> > 3. void operator()(const circular_buffer<T>&);
+> > 4 void operator()(const circular_buffer<T>&, T&
+> > being_pushed_out);
+> > 
+> > a to v jakkemkoliv mnoztvi a kombinacich (ale nevim
+> > jestli to je
+> > mozne - mozna pomoci Boost.Function).
+> >
+> Nerozumiem tomu. Podla mna je operator:
+> void operator () (T* dest, const T& item) const
+> postacujuci. Bude robit bud construc/destruct alebo
+> assign operaciu (podla toho, aky functor sa pouzije).
+> 
+>
+Myslim ze tady je nejake nedorozumeni - podle mne 
+operator() nema delat assign nebo destruct/construct
+ale jenom informovat  ze hodnota je 'vytlacena' ven z bufferu.
+
+Tzn. ten operator by se volal jen nekdy, ne pri kazdem push_back().
+
+A uzivatel muze chit bude starou, prave rusenou hodnotu,
+nebo mu staci instance circular_buffer nebo ani nemusi
+chtit zadne detaily.
+
+
+/Pavel
+
+
+
+  Attachment     
+ 
+ 
+ 
+ 
+circular_buffer_new_iterators.zip
+.zip file
+
+ 
+From: "Alberto Barbati" <abarbati@iaanus.com>
+Subject: Re: Formal Review: Circular Buffer
+Date: Monday, March 08, 2004 1:03 PM
+
+Pavel Vozenilek wrote:
+
+> Discovered problems in code or in documentation,
+> missing features, portability issues
+> and finally opinion whether the library belongs
+> to Boost is welcomed.
+
+I believe this library is very useful and generally well-written. I 
+found a few minor problems that I deem workable. My opinion is that the 
+library should be accepted. The only things I would like to be 
+discussed 
+thouroughly are the "ctor/dtor vs. assignment" dispute (see specific 
+thread) and the possibility to provide extension points that allows a 
+(possibly future) implementation of a "notifying" container (ibid.).
+
+About portability issues, these lines of code (file details.hpp, lines 
+274-277) invoke undefined behaviour, according to 5.7/5:
+
+     if (less(rhs, lhs) && lhs.m_it <= rhs.m_it)
+         return lhs.m_it + m_buff->capacity() - rhs.m_it;
+     if (less(lhs, rhs) && lhs.m_it >= rhs.m_it)
+         return lhs.m_it - m_buff->capacity() - rhs.m_it;
+
+that's because the expressions (lhs.m_it + m_buff->capacity()) and 
+(lhs.m_it - m_buff->capacity()) might produce a pointer outside the 
+allocated range. I suggest to replace those lines with:
+
+     if (less(rhs, lhs) && lhs.m_it <= rhs.m_it)
+         return lhs.m_it - rhs.m_it + m_buff->capacity();
+     if (less(lhs, rhs) && lhs.m_it >= rhs.m_it)
+         return lhs.m_it - rhs.m_it - m_buff->capacity();
+
+or, even better, to avoid complaints from nasty compilers about mixed 
+signed/unsigned usage:
+
+     if (less(rhs, lhs) && lhs.m_it <= rhs.m_it)
+         return (lhs.m_it - rhs.m_it) +
+             static_cast<difference_type>(m_buff->capacity());
+     if (less(lhs, rhs) && lhs.m_it >= rhs.m_it)
+         return (lhs.m_it - rhs.m_it) -
+             static_cast<difference_type>(m_buff->capacity());
+
+To be extra paranoid, we should ensure that the static_cast doesn't 
+overflow. This could be done by changing the defintion of max_size() in 
+base.hpp from:
+
+     size_type max_size() const { return m_alloc.max_size(); }
+
+to
+
+     size_type max_size() const {
+         return std::min<size_type>(m_alloc.max_size(),
+             (std::numeric_limits<difference_type>::max)()); }
+
+I've seen this issue overlooked even in commercial standard library 
+implementations. As c.end() - c.begin() == c.size() and c.end() - 
+c.begin() must be representable as a positive quantity of type 
+difference_type, this imply that c.size() <= c.max_size() <= 
+numeric_limits<difference_type>::max().
+
+On a side note, I think it should be good if the implementation of the 
+iterator classes used the new Boost Iterators Library. I have uploaded 
+in the Boost file area an implementation using boost::iterator_facade 
+(filename is circular_buffer_new_iterators.zip). The implementation 
+already include the fix above and also has a slightly more optimized 
+version of the less() method, with fewer tests and without switches.
+Problem is that there is something wrong with the implementation of 
+operator[] in iterator_facade and the regression test does not compile 
+anymore :-( However, if I hack iterator_facade::operator[] to avoid the 
+use of the operator_brackets_proxy class, all regression tests pass. 
+Maybe it would be good to discuss this problem of the iterator_facade 
+in 
+a different thread.
+
+Alberto Barbati
+
+
+-------------------------------------------------------------------------------
+
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+To: "Jan Gaspar" <jano_gaspar@yahoo.com> 
+Subject: Re: review result 
+Date: Sun, 21 Mar 2004 22:36:56 +0100 
+
+    
+Ahoj Jano,
+
+> Mojou myslienkou bolo skombinovat assignment a
+> notifikaciu do jedneho functora. Teraz si vsak myslim,
+> ze functor by mal robit iba assignment. Bude to
+> vlastne nieco ako policy, ktora urci, ci sa vykonat
+> assignment alebo construct/destruct.
+> 
+Mozna by se mel pouzit jen assignement a nic jineho.
+
+Ja jsem kdysi zil v presvedceni ze se v circular_bufferu
+ztrati efekty ktere se deji v destruktoru a ono to tak neni.
+
+/Pavel
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Tue, 23 Mar 2004 18:18:10 +0100 
+Subject: [boost] Review Result: Circular Buffer 
+
+    
+The circular_buffer library by Jan Gaspar has
+been accepted into Boost.
+
+
+The reviews were helpful in finding at least one
+issue with the library and few ones with its
+documentation. Thanks to all reviewers for the time
+and effort!
+
+Post-review version 3.7 will be released before code
+gets into main CVS.
+
+
+Main points to be addressed:
+ - issue of copy construction versus construct/destruct
+   has been cleared (the problem was created by me)
+ - documentation should list exception safety for every
+   function
+ - documentation may add some rationale on its internal
+   data structures and their advantage over std::deque
+ - portability problems should be solved
+ - adaptor with notification when oldest element gets
+   pushed out of bufer may be added
+
+
+Other points that may be considered:
+ - name of data() function
+ - existence of push_back(void) like functions
+ - using new iterator adaptors
+ - difference between resize/set_capacity may be
+   more emphasized in docs,
+ - other fixes/improvements suggested during review.
+
+
+Thanks for professional quality work, Jano.
+
+/Pavel
+
+
+
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Neal D. Becker" <ndbecker2@verizon.net>   
+Date: Mon, 12 Apr 2004 11:22:36 -0400 
+Subject: [boost] circular_buffer question 
+
+    
+I'm looking at circular_buffer.  It appears to me that operator[] uses
+"add", and that "add" only allows a positive value of offset?  It is 
+not
+difficult to allow arbitrary values, and this is very useful.  
+
+if "position" is the current "m_first" and "allocated" is the allocated
+buffer size, the index could be calculated:
+
+  int index (int offset) const {
+    int x = (offset + position) % int(allocated);
+    if (x >= 0)
+      return x;
+    else
+      return x + allocated;
+  }
+ 
+
+
+-------------------------------------------------------------------------------
+
+Date: Mon, 12 Apr 2004 23:40:03 -0700 (PDT) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] circular_buffer question 
+To: boost@lists.boost.org 
+
+    
+Hi Neal!
+
+I didn't considered this feature important. Moreover
+it would complicate the iterator. Currently these
+expressions are invalid:
+circular_buffer<int> cb(10);
+cb.push_back(1);
+// ...
+circular_buffer<int>::iterator it1 = cb.end() + 1; //
+invalid
+circular_buffer<int>::iterator it2 = cb.begin() - 1;
+// invalid (see Caveats section in docs)
+
+I think if I allowed negative indexes or indexes "out
+of range" I had to change the iterator, too.
+
+On the other hand it is not difficult to create an
+adaptor and someone can make one if he needs such
+feature.
+
+Best regards,
+
+Jan
+
+--- "Neal D. Becker" <ndbecker2@verizon.net> wrote:
+> I'm looking at circular_buffer.  It appears to me
+> that operator[] uses
+> "add", and that "add" only allows a positive value
+> of offset?  It is not
+> difficult to allow arbitrary values, and this is
+> very useful.  
+> 
+> if "position" is the current "m_first" and
+> "allocated" is the allocated
+> buffer size, the index could be calculated:
+> 
+>   int index (int offset) const {
+>     int x = (offset + position) % int(allocated);
+>     if (x >= 0)
+>       return x;
+>     else
+>       return x + allocated;
+>   }
+>  
+> 
+
+
+-------------------------------------------------------------------------------
+
+To: boost@lists.boost.org 
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+Date: Tue, 13 Apr 2004 12:23:14 +0200 
+Subject: [boost] Re: circular_buffer question 
+
+    
+
+"Jan Gaspar" <jano_gaspar@yahoo.com> wrote
+
+(snip using negative values for index in operator[] )
+
+There are few different cases:
+
+1. operator[] for circular_buffer iterator:
+
+   circular_buffer<int> b(10);
+   ... fill buffer
+   circular_buffer<int>::iterator it = b.begin() + 5;
+   int x = it[-1]; // should return value b[4]
+
+I think here negative values should be allowed here
+(provided they result in valid offset).
+
+
+2. operator[] for circular_buffer itself:
+
+   circular_buffer<int> b(10);
+   b.push_back(10);
+   b.push_back(20);
+   b.push_back(33);
+   int x = b[-1];  // this would return value 30, the last one
+   x = b[-2]; // would return 20
+
+This would be new feature, not available in current
+standard ontainers. I remember some language
+(forgot name) provides it.
+
+I personally would like to have this feature
+and have it in std::vector/deque too.
+
+
+Alternatively one can think about syntax as:
+int x = b[boost::end - 1];
+to indicate intent and catch possible bugs.
+
+(boost::end would be tag type and operator[]
+would be overloaded.)
+
+
+3. incrementing/decrementing circular_buffer
+    iterator with automatic wrap-around:
+
+    I think this (wrap-around) should not be
+    allowed:
+    - it could hide errors
+    - it suggests circular-linked-list semantics
+      (and one can then ask for rotate())
+
+/Pavel
+
+
+-------------------------------------------------------------------------------
+
+
+Date: Tue, 13 Apr 2004 05:18:28 -0700 (PDT) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] Re: circular_buffer question 
+To: boost@lists.boost.org 
+
+    
+Hi Pavel!
+
+> 
+> 2. operator[] for circular_buffer itself:
+> 
+>    circular_buffer<int> b(10);
+>    b.push_back(10);
+>    b.push_back(20);
+>    b.push_back(33);
+>    int x = b[-1];  // this would return value 30,
+> the last one
+>    x = b[-2]; // would return 20
+> 
+> This would be new feature, not available in current
+> standard ontainers. I remember some language
+> (forgot name) provides it.
+> 
+> I personally would like to have this feature
+> and have it in std::vector/deque too.
+> 
+I think this can be solved (for any container) by some
+kind of adaptor:
+
+template <class Container> ring {
+public:
+
+ // constructor
+ ring(const Container& c);
+
+ // element access
+ Container::value_type& operator[] (int index) const;
+};
+
+ 
+> 
+> 3. incrementing/decrementing circular_buffer
+>     iterator with automatic wrap-around:
+> 
+>     I think this (wrap-around) should not be
+>     allowed:
+>     - it could hide errors
+>     - it suggests circular-linked-list semantics
+>       (and one can then ask for rotate())
+> 
+
+There is a cycle_iterator (yet another
+iterator_adaptor application) in the yahoo files
+section which can solve this problem.
+
+Jan
+
+
+
+-------------------------------------------------------------------------------
+
+From: "Jeff Garland" <jeff@crystalclearsoftware.com>   
+To: "boost" <boost@lists.boost.org> 
+Date: Fri, 23 Apr 2004 19:50:39 -0700 
+Subject: [boost] [circular buffer] Status of Circular Buffer lib 
+
+    
+I'm looking at using circular buffer on a project.  With only minor 
+adaptation
+it does exactly what I need.  I know it has been accepted, but isn't 
+yet in
+CVS. So I have a few questions:
+
+1) Is 3.6 from the files section the latest version?
+2) Any showstopper bugs I should be aware of?
+3) I'm assuming it works with VC7.1 and gcc 3.x?
+4) Looks like my interface needs will be pretty basic: push_back, 
+erase,
+clear.  I assuming review changes won't impact these, correct?
+5) Any reason it is NOT ready for prime time?
+
+Thx for the great submission!
+
+Jeff
+
+
+-------------------------------------------------------------------------------
+
+Date: Fri, 23 Apr 2004 23:07:58 -0700 (PDT) 
+From: "Jan Gaspar" <jano_gaspar@yahoo.com>   
+Subject: Re: [boost] [circular buffer] Status of Circular Buffer lib 
+To: boost@lists.boost.org 
+
+    
+Hi Jeff!
+
+--- Jeff Garland <jeff@crystalclearsoftware.com>
+wrote:
+> I'm looking at using circular buffer on a project. 
+> With only minor adaptation
+> it does exactly what I need.  I know it has been
+> accepted, but isn't yet in
+> CVS. So I have a few questions:
+> 
+> 1) Is 3.6 from the files section the latest version?
+Yes, it is the latest version. I'm working on the
+postreview one, but I have just little time for it
+now. I hope I won't miss the next 1.32 release of the
+boost libs.
+> 2) Any showstopper bugs I should be aware of?
+No, go ahead.
+> 3) I'm assuming it works with VC7.1 and gcc 3.x?
+Yes, but there were some minor problems I think with
+gcc 3.4. If it will not work with your version of gcc
+look at the discussion regarding formal review of
+circular_buffer where you will find how to fix it.
+> 4) Looks like my interface needs will be pretty
+> basic: push_back, erase,
+> clear.  I assuming review changes won't impact
+> these, correct?
+Your assumptions are right, no changes.
+> 5) Any reason it is NOT ready for prime time?
+See answer for 1).
+> 
+> Thx for the great submission!
+> 
+> Jeff
+>
+Best regards
+
+Jan
+
+
+-------------------------------------------------------------------------------
+
+From: "Jeff Garland" <jeff@crystalclearsoftware.com>   
+To: boost@lists.boost.org 
+Subject: Re: [boost] [circular buffer] Status of Circular Buffer lib 
+Date: Sat, 24 Apr 2004 05:54:49 -0700 
+
+    
+On Fri, 23 Apr 2004 23:07:58 -0700 (PDT), Jan Gaspar wrote
+> > 3) I'm assuming it works with VC7.1 and gcc 3.x?
+> Yes, but there were some minor problems I think with
+> gcc 3.4. If it will not work with your version of gcc
+> look at the discussion regarding formal review of
+> circular_buffer where you will find how to fix it.
+
+Ok, thanks. No gcc 3.4, just a couple different 3.3 versions and maybe 
+a 3.2.
+
+Thanks again!
+
+Jeff
+
+-------------------------------------------------------------------------------
+
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+To: "Jan Gaspar" <jano_gaspar@yahoo.com> 
+Subject:  BOOST_TRY macros 
+Date: Thu, 6 May 2004 20:22:40 +0200 
+
+    
+Ahoj Jano,
+
+V Boostu budou ted k dispozici makra 
+BOOST_TRY/BOOST_CATCH/BOOST_RETHROW.
+
+Joaquín MS López Munoz je jako soucast multi_index container library da 
+do
+boost/detail adresare.
+
+Serialization library je take nejspis bude pouzivat. Bylo by pekne 
+kdyby
+mohly byt pouzit i v circular_buffer library.
+
+
+/Pavel
+
+
+
+  Attachment     
+ 
+ 
+ 
+ 
+no_exceptions_support.hpp
+.hpp file
+
+
+
+-------------------------------------------------------------------------------
+
+From: "Pavel Vozenilek" <pavel_vozenilek@hotmail.com>   
+To: "Jan Gaspar" <jano_gaspar@yahoo.com> 
+Subject: [circular_buffer] fix for BCB 6.4 
+Date: Sun, 8 Aug 2004 20:51:08 +0200 
+
+    
+Ahoj Jano,
+
+Jeden maly fix pro 3.6.
+/Pavel
+
+___________________________________________________________________
+1. adaptor.hpp:
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    reference operator [] (size_type n) { return circular_buffer<T,
+Alloc>::operator[](n); }
+    returned_value_type operator [] (size_type n) const { return
+circular_buffer<T, Alloc>::operator[](n); }
+#else
+    using circular_buffer<T, Alloc>::operator[];
+#endif
+
+
+==>>
+
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    reference operator [] (size_type n) { return circular_buffer<T,
+Alloc>::operator[](n); }
+    value_type operator [] (size_type n) const { return 
+circular_buffer<T,
+Alloc>::operator[](n); }
+#else
+    using circular_buffer<T, Alloc>::operator[];
+#endif
+
+
+
+(returned_value_type ==>> value_type)
+___________________________________________________________________
+EOF
+
+
+
+-------------------------------------------------------------------------------
+
+From: "Hyrum Mortensen" <hymort@hotmail.com>   
+To: jano_gaspar@yahoo.com 
+Subject: circular_buffer 
+Date: Sat, 30 Oct 2004 16:58:33 +0000 
+
+    
+Jan,
+
+I just downloaded your boost circular_buffer container code.  Could you 
+provide some examples to use this container in a threaded environment 
+(producer-consumer)?
+
+Thanks
+
+-------------------------------------------------------------------------------
