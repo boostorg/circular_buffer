@@ -52,7 +52,8 @@ t18  Perhaps in addition to a data() function, it would be useful if the
      Perhaps something like std::pair<T *, T *> first_range() and 
      std::pair<T *, T *> second_range(). REFINE!!!
 
-t19  docs: merge the source documentation with the main documentation
+t19  IN PROGRESS
+     docs: merge the source documentation with the main documentation
 
 t20  docs: define requirements on the Alloc type parameter
 
@@ -113,8 +114,8 @@ t40  base.hpp: remove warning Intel C++ 7.0 on line: void replace(...)
 
 t41  typedef for circular_buffer<T, Alloc> (line 4450)
 
-t42  documentation may add some rationale on its internal data structures
-     and their advantage over std::deque
+t42  docs: some rationale on its internal data structures and their advantage
+     over std::deque
 
 t43  adaptor.hpp: apply workaround for borland (line 5764)
 
