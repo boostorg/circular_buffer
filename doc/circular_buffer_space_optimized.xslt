@@ -14,8 +14,14 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   <xsl:variable name="link-prefix" select="'circular_buffer.html'"/>
   <xsl:variable name="circular_buffer-ref" select="//compound[name='boost::circular_buffer' and @kind='class']/@refid"/>
   <xsl:variable name="circular_buffer-file" select="concat($xmldir, '/', $circular_buffer-ref, '.xml')"/>
+  <xsl:variable name="circular_buffer-reimplemented" select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']//reimplementedby"/>
   <xsl:variable name="standalone-functions" select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']"/>
-
+  
+  <xsl:template name="reference">
+    <xsl:variable name="refid" select="$circular_buffer-reimplemented[@refid=current()/@refid]/../@id"/>
+    <xsl:value-of select="concat(substring(concat($link-prefix, '#', $refid), 1 div (string-length($refid) &gt; 0)), substring(concat('#', @refid), 1 div (string-length($refid) = 0)))"/>
+  </xsl:template>
+  
   <xsl:template name="template-parameters">
     <xsl:apply-templates select="templateparamlist/param" mode="synopsis">
       <xsl:with-param name="link-prefix" select="$link-prefix"/>
@@ -78,6 +84,29 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="template-parameters-details"/>
+
+  <xsl:template name="public-types-details"/>
+
+  <xsl:template name="constructors-details">
+    <xsl:call-template name="members-details">
+      <xsl:with-param name="member" select="sectiondef[@kind='public-func']/memberdef[type = '']"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="member-functions-details">
+    <xsl:call-template name="members-details">
+      <xsl:with-param name="member" select="sectiondef[@kind='public-func']/memberdef[type != '']"/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template name="standalone-functions-details"/>
+
+  <xsl:template name="members-details">
+    <xsl:param name="member"/>
+    <xsl:apply-templates select="$member" mode="description">
+      <xsl:sort select="name"/>
+    </xsl:apply-templates>
+  </xsl:template>
 
 </xsl:stylesheet>

@@ -39,9 +39,12 @@
   <xsl:template match="para">
     <xsl:apply-templates/>
   </xsl:template>
-  
+
   <xsl:template match="ref">
-    <a href="#{@refid}"><xsl:apply-templates/></a>
+    <xsl:element name="a">
+      <xsl:attribute name="href"><xsl:call-template name="reference"/></xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:element>
   </xsl:template>
   
   <xsl:template match="ulink">
@@ -209,29 +212,23 @@ public:
     <div id="srcdoc_params">
       <table id="table_template_params" border="1">
         <tr><th>Parameter</th><th>Description</th><th>Default</th></tr>
-        <xsl:apply-templates select="detaileddescription//parameterlist[@kind='param']/parameteritem" mode="description"/>
+        <xsl:call-template name="template-parameters-details"/>
       </table>
     </div>
     <div id="srcdoc_types">
       <table id="table_public_types" border="1">
         <tr><th>Type</th><th>Description</th></tr>
-        <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description">
-          <xsl:sort select="name"/>
-        </xsl:apply-templates>
+        <xsl:call-template name="public-types-details"/>
       </table>
     </div>
     <div id="srcdoc_constructors">
       <table id="table_constructors" border="1">
-        <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
-            <xsl:sort select="name"/>
-        </xsl:apply-templates>
+        <xsl:call-template name="constructors-details"/>
       </table>
     </div>
     <div id="srcdoc_methods">
       <table id="table_methods" border="1">
-        <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="description">
-          <xsl:sort select="name"/>
-        </xsl:apply-templates>
+        <xsl:call-template name="member-functions-details"/>
       </table>
     </div>
     <div id="srcdoc_functions">
@@ -263,6 +260,7 @@ public:
   </xsl:template>
   
   <xsl:template match="memberdef[@kind='function']" mode="description">
+    <xsl:param name="link-prefix" select="''"/>
     <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; 80"/>
     <tr><td><a name="{@id}" /><code><b><xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
     <xsl:if test="count(templateparamlist) &gt; 0">
@@ -291,9 +289,14 @@ public:
     <xsl:for-each select="text() | ref">
       <xsl:variable name="item" select="translate(., '&space;', '')"/>
       <xsl:choose>
-        <xsl:when test="$item = 'return_value_type' or $item = 'param_value_type'"><a href="#{$class[@kind = 'class']/sectiondef[@kind='public-type']/memberdef[@kind='typedef' and name='value_type']/@id}">value_type</a></xsl:when>
+        <xsl:when test="$item = 'return_value_type' or $item = 'param_value_type'"><a href="{$link-prefix}#{$class[@kind = 'class']/sectiondef[@kind='public-type']/memberdef[@kind='typedef' and name='value_type']/@id}">value_type</a></xsl:when>
         <xsl:when test="contains($item, 'circular_buffer')"><xsl:value-of select="$item"/></xsl:when>
-        <xsl:when test="@refid"><a href="#{@refid}"><xsl:value-of select="$item"/></a></xsl:when>
+        <xsl:when test="@refid">
+          <xsl:element name="a">
+            <xsl:attribute name="href"><xsl:call-template name="reference"/></xsl:attribute>
+            <xsl:value-of select="$item"/>
+          </xsl:element>
+        </xsl:when>
         <xsl:otherwise><xsl:value-of select="$item"/></xsl:otherwise>
       </xsl:choose>
       <xsl:if test="name(.) != 'ref' and position() != last()">&nbsp;</xsl:if>
