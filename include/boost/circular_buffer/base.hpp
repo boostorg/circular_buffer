@@ -137,8 +137,9 @@ private:
     friend iterator;
     friend const_iterator;
 #else
-    friend struct iterator;
-    friend struct const_iterator;
+    //friend struct iterator;
+    //friend struct const_iterator;
+    template<class Buff, class Traits> friend struct cb_details::cb_iterator;
 #endif
 
 public:
@@ -568,7 +569,7 @@ public:
     */
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
-        assign(first, last, cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        assign(first, last, typename cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
     //! Swap the contents of two circular buffers.
@@ -825,7 +826,7 @@ public:
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        insert(pos, first, last, cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        insert(pos, first, last, typename cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
     //! Insert an <code>item</code> before the given position.
@@ -951,7 +952,7 @@ public:
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        rinsert(pos, first, last, cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        rinsert(pos, first, last, typename cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
 // Erase
@@ -1103,7 +1104,7 @@ private:
 
     //! Replace an element.
     void replace(pointer pos, param_value_type item) {
-        replace(pos, item, cb_details::cb_replace_category_traits<value_type>::tag()); // invoke optimized operation for given type
+        replace(pos, item, typename cb_details::cb_replace_category_traits<value_type>::tag()); // invoke optimized operation for given type
 #if BOOST_CB_ENABLE_DEBUG
         invalidate_iterators(is_invalid_condition(pos));
 #endif

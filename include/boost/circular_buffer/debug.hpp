@@ -54,18 +54,7 @@ public:
     void invalidate_all_iterators(); // the implementation is below
 
     //! Invalidate every iterator conforming to the condition.
-    template<class Condition>
-    void invalidate_iterators(const Condition& condition) {
-        const cb_iterator_base* previous = 0;
-        for (const cb_iterator_base* p = m_iterators; p != 0; p = p->next()) {
-            if (condition(p)) {
-                p->invalidate();
-                remove(p, previous);
-                continue;
-            }
-            previous = p;
-        }
-    }
+    template<class Condition> void invalidate_iterators(const Condition& condition); // the implementation is below
 
 private:
 // Helpers
@@ -174,6 +163,19 @@ inline void cb_iterator_registry::invalidate_all_iterators() {
     for (const cb_iterator_base* p = m_iterators; p != 0; p = p->next())
         p->invalidate();
     m_iterators = 0;
+}
+
+template<class Condition>
+inline void cb_iterator_registry::invalidate_iterators(const Condition& condition) {
+    const cb_iterator_base* previous = 0;
+    for (const cb_iterator_base* p = m_iterators; p != 0; p = p->next()) {
+        if (condition(p)) {
+            p->invalidate();
+            remove(p, previous);
+            continue;
+        }
+        previous = p;
+    }
 }
 
 inline void cb_iterator_registry::remove(const cb_iterator_base* current,
