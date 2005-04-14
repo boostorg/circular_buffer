@@ -230,25 +230,25 @@ template &lt;class T, class Alloc&gt;
          InputIterator last, const <a href="circular_buffer.html#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</b>
             </code>
             <br>
-            <table id="table_function_desc_id4507730">
+            <table id="table_function_desc_id4507775">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4507871"><tr><td>
+<table id="table_detailed_desc_id4507916"><tr><td>
 Create a space optimized circular buffer with a copy of a range.         </td></tr></table>
-<table id="table_pre_desc_id4507967"><tr>
+<table id="table_pre_desc_id4508013"><tr>
 <td valign="top"><b>Precondition:</b></td>
 <td>
 <code>capacity &gt;= min_capacity</code> and valid range <code>[first, last)</code>. </td>
 </tr></table>
-<table id="table_post_desc_id4507981"><tr>
+<table id="table_post_desc_id4508026"><tr>
 <td valign="top"><b>Postcondition:</b></td>
 <td>
 <code>(*this).<a href="circular_buffer.html#classboost_1_1circular__buffer_1a8">capacity()</a> == capacity</code><br>
  Allocates at least as much memory as specified by the <code>min_capacity</code> parameter.<br>
  If the number of items to copy from the range <code>[first, last)</code> is greater than the specified <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code> will be copied. </td>
 </tr></table>
-<table id="table_note_desc_id4508064"><tr>
+<table id="table_note_desc_id4508109"><tr>
 <td valign="top"><b>Note:</b></td>
 <td>It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt; min_capacity</code>) and an assertion will be invoked in the debug mode. </td>
 </tr></table>        </td>
@@ -265,23 +265,23 @@ Create a space optimized circular buffer with a copy of a range.         </td></
       const <a href="circular_buffer.html#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</b>
             </code>
             <br>
-            <table id="table_function_desc_id4508132">
+            <table id="table_function_desc_id4508178">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4508252"><tr><td>
+<table id="table_detailed_desc_id4508297"><tr><td>
 Create a full space optimized circular buffer filled with copies of <code>item</code>.         </td></tr></table>
-<table id="table_pre_desc_id4508335"><tr>
+<table id="table_pre_desc_id4508380"><tr>
 <td valign="top"><b>Precondition:</b></td>
 <td>
 <code>capacity &gt;= min_capacity</code> </td>
 </tr></table>
-<table id="table_post_desc_id4508345"><tr>
+<table id="table_post_desc_id4508390"><tr>
 <td valign="top"><b>Postcondition:</b></td>
 <td>
 <code>(*this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> == capacity &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this).<a href="#classboost_1_1circular__buffer_1a5">back()</a> == item</code> </td>
 </tr></table>
-<table id="table_note_desc_id4508414"><tr>
+<table id="table_note_desc_id4508459"><tr>
 <td valign="top"><b>Note:</b></td>
 <td>It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt; min_capacity</code>) and an assertion will be invoked in the debug mode. </td>
 </tr></table>        </td>
@@ -297,24 +297,24 @@ Create a full space optimized circular buffer filled with copies of <code>item</
       <a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> min_capacity = 0, const <a href="circular_buffer.html#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</b>
             </code>
             <br>
-            <table id="table_function_desc_id4508470">
+            <table id="table_function_desc_id4508514">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4508575"><tr><td>
+<table id="table_detailed_desc_id4508620"><tr><td>
 Create an empty space optimized circular buffer with a given capacity.         </td></tr></table>
-<table id="table_pre_desc_id4508639"><tr>
+<table id="table_pre_desc_id4508684"><tr>
 <td valign="top"><b>Precondition:</b></td>
 <td>
 <code>capacity &gt;= min_capacity</code> </td>
 </tr></table>
-<table id="table_post_desc_id4508649"><tr>
+<table id="table_post_desc_id4508694"><tr>
 <td valign="top"><b>Postcondition:</b></td>
 <td>
 <code>(*this).<a href="circular_buffer.html#classboost_1_1circular__buffer_1a8">capacity()</a> == capacity &amp;&amp; (*this).size == 0</code><br>
  Allocates memory specified by the <code>min_capacity</code> parameter. </td>
 </tr></table>
-<table id="table_note_desc_id4508698"><tr>
+<table id="table_note_desc_id4508744"><tr>
 <td valign="top"><b>Note:</b></td>
 <td>It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt; min_capacity</code>) and an assertion will be invoked in the debug mode. </td>
 </tr></table>        </td>
@@ -331,90 +331,16 @@ Create an empty space optimized circular buffer with a given capacity.         <
       <table id="table_methods" border="1">
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a0"></a>
-            <code>
-              <b>
-      template &lt;class InputIterator&gt;<br>   
-    void assign(InputIterator first, InputIterator last);</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4507315">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4507394"><tr><td>
-See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
-        </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a1"></a>
-            <code>
-              <b>void assign(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> n, <a href="circular_buffer.html#classboost_1_1circular__buffer__space__optimized_1w12">value_type</a> item);</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4507442">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4507517"><tr><td>
-See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
-        </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a2"></a>
-            <code>
-              <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> capacity() const;</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4507564">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4507612"><tr><td>
-See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
-        </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a6"></a>
-            <code>
-              <b>void clear();</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4508769">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4508810"><tr><td>
-See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
-        </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <a name="classboost_1_1circular__buffer__space__optimized_1a7"></a>
             <code>
               <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> erase(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> first, <a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> last);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4508884">
+            <table id="table_function_desc_id4508929">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4508966"><tr><td>
+<table id="table_detailed_desc_id4509011"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -428,31 +354,13 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> erase(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> pos);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4509053">
+            <table id="table_function_desc_id4509098">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4509118"><tr><td>
+<table id="table_detailed_desc_id4509163"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a9"></a>
-            <code>
-              <b>bool full() const;</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4509233">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4509274"><tr><td>
-See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
-        </td>
               </tr>
             </table>
           </td>
@@ -466,11 +374,11 @@ See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source doc
     void insert(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> pos, InputIterator first, InputIterator last);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4509336">
+            <table id="table_function_desc_id4509381">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4509432"><tr><td>
+<table id="table_detailed_desc_id4509477"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -484,11 +392,11 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b>void insert(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> pos, <a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> n, <a href="circular_buffer.html#classboost_1_1circular__buffer__space__optimized_1w12">value_type</a> item);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4509506">
+            <table id="table_function_desc_id4509551">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4509597"><tr><td>
+<table id="table_detailed_desc_id4509642"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -502,11 +410,11 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> insert(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> pos);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4509685">
+            <table id="table_function_desc_id4509730">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4509749"><tr><td>
+<table id="table_detailed_desc_id4509794"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -520,31 +428,13 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> insert(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> pos, <a href="circular_buffer.html#classboost_1_1circular__buffer__space__optimized_1w12">value_type</a> item);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4509823">
+            <table id="table_function_desc_id4509868">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4509904"><tr><td>
+<table id="table_detailed_desc_id4509950"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a14"></a>
-            <code>
-              <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> internal_capacity() const;</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4510020">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4510062"><tr><td>
-        </td></tr></table>
-        </td>
               </tr>
             </table>
           </td>
@@ -556,75 +446,13 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> min_capacity() const;</b>
             </code>
             <br>
-            <table id="table_function_desc_id4510084">
+            <table id="table_function_desc_id4510129">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4510126"><tr><td>
+<table id="table_detailed_desc_id4510171"><tr><td>
 Return the minimal guaranteed amount of allocated memory.         </td></tr></table>
         </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a16"></a>
-            <code>
-              <b>circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; operator=(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; cb);</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4510209">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4510275"><tr><td>
-        </td></tr></table>
-        </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a17"></a>
-            <code>
-              <b><a href="circular_buffer.html#classboost_1_1circular__buffer__space__optimized_1w12">value_type</a> operator[](<a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> n) const;</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4510293">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4510358"><tr><td>
-Return the element at the <code>index</code> position.         </td></tr></table>
-<table id="table_pre_desc_id4510371"><tr>
-<td valign="top"><b>Precondition:</b></td>
-<td>
-<code>*(this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> &gt; index</code> </td>
-</tr></table>        </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a18"></a>
-            <code>
-              <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w9">reference</a> operator[](<a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> n);</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4510407">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4510471"><tr><td>
-Return the element at the <code>index</code> position.         </td></tr></table>
-<table id="table_pre_desc_id4510485"><tr>
-<td valign="top"><b>Precondition:</b></td>
-<td>
-<code>*(this).<a href="#classboost_1_1circular__buffer_1a49">size()</a> &gt; index</code> </td>
-</tr></table>        </td>
               </tr>
             </table>
           </td>
@@ -636,11 +464,11 @@ Return the element at the <code>index</code> position.         </td></tr></table
               <b>void pop_back();</b>
             </code>
             <br>
-            <table id="table_function_desc_id4510521">
+            <table id="table_function_desc_id4510566">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4510562"><tr><td>
+<table id="table_detailed_desc_id4510607"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -654,11 +482,11 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b>void pop_front();</b>
             </code>
             <br>
-            <table id="table_function_desc_id4510636">
+            <table id="table_function_desc_id4510681">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4510677"><tr><td>
+<table id="table_detailed_desc_id4510722"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -672,11 +500,11 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b>void push_back();</b>
             </code>
             <br>
-            <table id="table_function_desc_id4510752">
+            <table id="table_function_desc_id4510797">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4510793"><tr><td>
+<table id="table_detailed_desc_id4510838"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -690,11 +518,11 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b>void push_back(<a href="circular_buffer.html#classboost_1_1circular__buffer__space__optimized_1w12">value_type</a> item);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4510852">
+            <table id="table_function_desc_id4510898">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4510911"><tr><td>
+<table id="table_detailed_desc_id4510957"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -708,11 +536,11 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b>void push_front();</b>
             </code>
             <br>
-            <table id="table_function_desc_id4510985">
+            <table id="table_function_desc_id4511030">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4511026"><tr><td>
+<table id="table_detailed_desc_id4511071"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -726,31 +554,13 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b>void push_front(<a href="circular_buffer.html#classboost_1_1circular__buffer__space__optimized_1w12">value_type</a> item);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4511086">
+            <table id="table_function_desc_id4511131">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4511144"><tr><td>
+<table id="table_detailed_desc_id4511190"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a name="classboost_1_1circular__buffer__space__optimized_1a25"></a>
-            <code>
-              <b>void resize(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> new_size, <a href="circular_buffer.html#classboost_1_1circular__buffer__space__optimized_1w12">value_type</a> item = T(), bool remove_front = true);</b>
-            </code>
-            <br>
-            <table id="table_function_desc_id4511219">
-              <tr>
-                <td>   </td>
-                <td>
-<table id="table_detailed_desc_id4511311"><tr><td>
-See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
-        </td>
               </tr>
             </table>
           </td>
@@ -764,11 +574,11 @@ See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source doc
     void rinsert(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> pos, InputIterator first, InputIterator last);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4511440">
+            <table id="table_function_desc_id4511485">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4511536"><tr><td>
+<table id="table_detailed_desc_id4511581"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -782,11 +592,11 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b>void rinsert(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> pos, <a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> n, <a href="circular_buffer.html#classboost_1_1circular__buffer__space__optimized_1w12">value_type</a> item);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4511610">
+            <table id="table_function_desc_id4511655">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4511701"><tr><td>
+<table id="table_detailed_desc_id4511746"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -800,11 +610,11 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> rinsert(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> pos);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4511788">
+            <table id="table_function_desc_id4511833">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4511853"><tr><td>
+<table id="table_detailed_desc_id4511898"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -818,11 +628,11 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b><a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> rinsert(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w6">iterator</a> pos, <a href="circular_buffer.html#classboost_1_1circular__buffer__space__optimized_1w12">value_type</a> item);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4511927">
+            <table id="table_function_desc_id4511972">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4512008"><tr><td>
+<table id="table_detailed_desc_id4512053"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
 The rules for iterator invalidation differ from the original <a href="#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.         </td>
               </tr>
@@ -836,18 +646,18 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b>void set_capacity(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> new_capacity, bool remove_front = true);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4512109">
+            <table id="table_function_desc_id4512154">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4512182"><tr><td>
+<table id="table_detailed_desc_id4512227"><tr><td>
 ! See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
-<table id="table_pre_desc_id4512201"><tr>
+<table id="table_pre_desc_id4512246"><tr>
 <td valign="top"><b>Precondition:</b></td>
 <td>
 <code>(*this).<a href="#classboost_1_1circular__buffer__space__optimized_1a15">min_capacity()</a> &lt;= new_capacity</code> </td>
 </tr></table>
-<table id="table_note_desc_id4512219"><tr>
+<table id="table_note_desc_id4512264"><tr>
 <td valign="top"><b>Note:</b></td>
 <td>It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt; (*this).<a href="#classboost_1_1circular__buffer__space__optimized_1a15">min_capacity()</a></code>) and an assertion will be invoked in the debug mode. </td>
 </tr></table>        </td>
@@ -862,23 +672,23 @@ The rules for iterator invalidation differ from the original <a href="#classboos
               <b>void set_min_capacity(<a href="circular_buffer.html#classboost_1_1circular__buffer_1w12">size_type</a> new_min_capacity);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4512298">
+            <table id="table_function_desc_id4512343">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4512350"><tr><td>
+<table id="table_detailed_desc_id4512395"><tr><td>
 Change the minimal guaranteed amount of allocated memory.         </td></tr></table>
-<table id="table_pre_desc_id4512361"><tr>
+<table id="table_pre_desc_id4512406"><tr>
 <td valign="top"><b>Precondition:</b></td>
 <td>
 <code>(*this).<a href="circular_buffer.html#classboost_1_1circular__buffer_1a8">capacity()</a> &gt;= new_min_capacity</code> </td>
 </tr></table>
-<table id="table_post_desc_id4512379"><tr>
+<table id="table_post_desc_id4512424"><tr>
 <td valign="top"><b>Postcondition:</b></td>
 <td>
 <code>(*this).<a href="#classboost_1_1circular__buffer__space__optimized_1a15">min_capacity()</a> == new_min_capacity</code> Allocates memory specified by the <code>new_min_capacity</code> parameter. </td>
 </tr></table>
-<table id="table_note_desc_id4512402"><tr>
+<table id="table_note_desc_id4512448"><tr>
 <td valign="top"><b>Note:</b></td>
 <td>It is considered as a bug if the precondition is not met (i.e. if <code>new_min_capacity &gt; (*this).<a href="circular_buffer.html#classboost_1_1circular__buffer_1a8">capacity()</a></code>) and an assertion will be invoked in the debug mode. </td>
 </tr></table>        </td>
@@ -893,11 +703,11 @@ Change the minimal guaranteed amount of allocated memory.         </td></tr></ta
               <b>void swap(circular_buffer_space_optimized&amp; cb);</b>
             </code>
             <br>
-            <table id="table_function_desc_id4512481">
+            <table id="table_function_desc_id4512526">
               <tr>
                 <td>   </td>
                 <td>
-<table id="table_detailed_desc_id4512535"><tr><td>
+<table id="table_detailed_desc_id4512580"><tr><td>
 See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source documentation.         </td></tr></table>
         </td>
               </tr>

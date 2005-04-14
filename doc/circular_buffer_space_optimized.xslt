@@ -89,24 +89,21 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   <xsl:template name="public-types-details"/>
 
   <xsl:template name="constructors-details">
-    <xsl:call-template name="members-details">
-      <xsl:with-param name="member" select="sectiondef[@kind='public-func']/memberdef[type = '']"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="member-functions-details">
-    <xsl:call-template name="members-details">
-      <xsl:with-param name="member" select="sectiondef[@kind='public-func']/memberdef[type != '']"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="standalone-functions-details"/>
-
-  <xsl:template name="members-details">
-    <xsl:param name="member"/>
-    <xsl:apply-templates select="$member" mode="description">
+    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
       <xsl:sort select="name"/>
     </xsl:apply-templates>
   </xsl:template>
+
+  <xsl:template name="member-functions-details">
+    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != '']">
+      <xsl:sort select="name"/>
+      <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
+      <xsl:if test="string-length($briefdescription) &gt; 0 and (starts-with($briefdescription, $override-mark) or count(reimplements) = 0)">
+        <xsl:apply-templates select="." mode="description"/>
+      </xsl:if>      
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="standalone-functions-details"/>
 
 </xsl:stylesheet>
