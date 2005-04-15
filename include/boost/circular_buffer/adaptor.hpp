@@ -376,7 +376,7 @@ public:
     */
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
-        insert(pos, first, last, cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        insert(pos, first, last, typename cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
     //!! See the circular_buffer source documentation.
@@ -419,7 +419,7 @@ public:
     */
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
-        rinsert(pos, first, last, cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        rinsert(pos, first, last, typename cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
     //!! See the circular_buffer source documentation.
