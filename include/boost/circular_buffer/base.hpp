@@ -1010,6 +1010,60 @@ public:
         return empty() ? end() : iterator(this, tmp);
     }
 
+	//! Erase the element at the given position.
+    /*!
+        \pre Valid <code>pos</code> iterator.
+        \pre <code>size_type old_size = (*this).size()</code>
+        \post <code>(*this).size() == old_size - 1</code><br>
+              Removes an element at the position <code>pos</code>.
+        \return iterator to the first element remaining prior the removed
+                element or <code>(*this).begin()</code> if no such element exists.
+        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+    */
+    iterator rerase(iterator pos) {
+        BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(pos.m_it != 0);  // check for iterator pointing to end()
+        pointer prev = pos.m_it;
+        decrement(prev);
+        for (pointer p = pos.m_it; prev != m_first; p = prev, decrement(prev))
+            replace(p, *prev);
+        decrement(m_first);
+        destroy_item(m_first);
+        --m_size;
+#if BOOST_CB_ENABLE_DEBUG
+        return empty() ? end() : iterator(this, pos.m_it);
+#else
+        return empty() ? end() : pos;
+#endif
+    }
+
+    //! Erase the range <code>[first, last)</code>.
+    /*!
+        \pre Valid range <code>[first, last)</code>.
+        \pre <code>size_type old_size = (*this).size()</code>
+        \post <code>(*this).size() == old_size - std::distance(first, last)</code><br>
+              Removes the elements from the range <code>[first, last)</code>.
+        \return iterator to the first element remaining prior the removed
+                element or <code>(*this).begin()</code> if no such element exists.
+        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+    */
+    iterator rerase(iterator first, iterator last) {
+        BOOST_CB_ASSERT(first.is_valid());            // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(last.is_valid());             // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(first.m_buff == last.m_buff); // check for iterators of different containers
+        BOOST_CB_ASSERT(first <= last);               // check for wrong range
+        if (first == last)
+            return first;
+        pointer tmp = first.m_it;
+		difference_type diff = last - first;
+        while (first.m_it != m_first)
+            replace((--last).m_it, *--first);
+        for (;m_first != tmp; increment(m_first))
+            destroy_item(m_first);
+        m_size -= diff;
+        return empty() ? end() : iterator(this, tmp);
+    }
+
     //! Erase all the stored elements.
     /*!
         \post (*this).size() == 0

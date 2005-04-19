@@ -448,6 +448,32 @@ public:
         return begin() + index;
     }
 
+	//!! See the circular_buffer source documentation.
+    /*!
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
+    */
+    iterator rerase(iterator pos) {
+        iterator it = circular_buffer<T, Alloc>::rerase(pos);
+        size_type index = it - begin();
+        check_high_capacity();
+        return begin() + index;
+    }
+
+    //!! See the circular_buffer source documentation.
+    /*!
+         \warning The rules for iterator invalidation differ from the original
+                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
+                  documentation</a>.
+    */
+    iterator rerase(iterator first, iterator last) {
+        iterator it = circular_buffer<T, Alloc>::rerase(first, last);
+        size_type index = it - begin();
+        check_high_capacity();
+        return begin() + index;
+    }
+
     //! See the circular_buffer source documentation.
     void clear() { erase(begin(), end()); }
 

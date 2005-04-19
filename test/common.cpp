@@ -779,6 +779,49 @@ void erase_range_test() {
     BOOST_CHECK(*it2 == 1);
 }
 
+void rerase_test() {
+
+    CB_CONTAINER<Integer> cb1(4);
+    cb1.push_back(1);
+    cb1.push_back(2);
+    cb1.push_back(3);
+    CB_CONTAINER<Integer>::iterator it1 = cb1.rerase(cb1.begin() + 1);
+    
+    CB_CONTAINER<Integer> cb2(1 CB_MIN_CAPACITY, 1);
+    CB_CONTAINER<Integer>::iterator it2 = cb2.rerase(cb2.begin());
+
+    BOOST_CHECK(cb1.size() == 2);
+    BOOST_CHECK(cb1.capacity() == 4);
+    BOOST_CHECK(*it1 == 3);
+    BOOST_CHECK(cb2.size() == 0);
+    BOOST_CHECK(cb2.capacity() == 1);
+    BOOST_CHECK(it2 == cb2.end());
+}
+
+void rerase_range_test() {
+
+    CB_CONTAINER<Integer> cb1(4);
+    cb1.push_back(1);
+    cb1.push_back(2);
+    cb1.push_back(3);
+    cb1.push_back(4);
+    CB_CONTAINER<Integer>::iterator it1 = cb1.rerase(cb1.begin() + 1, cb1.begin() + 3);
+    CB_CONTAINER<Integer> cb2(4);
+    cb2.push_back(1);
+    cb2.push_back(2);
+    cb2.push_back(3);
+    cb2.push_back(4);
+    CB_CONTAINER<Integer>::iterator it2 = cb2.rerase(cb2.begin(), cb2.begin());
+
+    BOOST_CHECK(cb1.size() == 2);
+    BOOST_CHECK(cb1.capacity() == 4);
+    BOOST_CHECK(*it1 == 4);
+    BOOST_CHECK(cb2.size() == 4);
+    BOOST_CHECK(cb2[0] == 1);
+    BOOST_CHECK(cb2[3] == 4);
+    BOOST_CHECK(*it2 == 1);
+}
+
 void clear_test() {
 
     CB_CONTAINER<Integer> cb(4);
@@ -999,6 +1042,8 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&rinsert_range_test));
     tests->add(BOOST_TEST_CASE(&erase_test));
     tests->add(BOOST_TEST_CASE(&erase_range_test));
+	tests->add(BOOST_TEST_CASE(&rerase_test));
+    tests->add(BOOST_TEST_CASE(&rerase_range_test));
     tests->add(BOOST_TEST_CASE(&clear_test));
     tests->add(BOOST_TEST_CASE(&equality_test));
     tests->add(BOOST_TEST_CASE(&lexicographical_comparison_test));
