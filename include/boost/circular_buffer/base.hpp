@@ -100,10 +100,10 @@ public:
 // Iterators
 
     //! Const (random access) iterator used to iterate through a circular buffer.
-    typedef cb_details::cb_iterator< circular_buffer<T, Alloc>, typename boost::add_const<T>::type > const_iterator;
+    typedef cb_details::cb_iterator< circular_buffer<T, Alloc>, cb_details::cb_const_traits<Alloc> > const_iterator;
 
     //! Iterator (random access) used to iterate through a circular buffer.
-    typedef cb_details::cb_iterator< circular_buffer<T, Alloc>, T > iterator;
+    typedef cb_details::cb_iterator< circular_buffer<T, Alloc>, cb_details::cb_nonconst_traits<Alloc> > iterator;
 
     //! Const iterator used to iterate backwards through a circular buffer.
     typedef reverse_iterator<const_iterator> const_reverse_iterator;
@@ -133,14 +133,10 @@ private:
     allocator_type m_alloc;
 
 // Friends
-// !!! TODO
 #if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-    //friend iterator;
-    //friend const_iterator;
-    friend cb_details::cb_iterator;
+    friend iterator;
+    friend const_iterator;
 #else
-    //friend struct iterator;
-    //friend struct const_iterator;
     template<class Buff, class Traits> friend struct cb_details::cb_iterator;
 #endif
 
@@ -571,7 +567,7 @@ public:
     */
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
-        assign(first, last, typename cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        assign(first, last, BOOST_DEDUCED_TYPENAME cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
     //! Swap the contents of two circular buffers.
@@ -828,7 +824,7 @@ public:
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        insert(pos, first, last, typename cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        insert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
     //! Insert an <code>item</code> before the given position.
@@ -954,7 +950,7 @@ public:
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        rinsert(pos, first, last, typename cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::cb_iterator_category_traits<InputIterator>::tag());
     }
 
 // Erase
@@ -1106,7 +1102,7 @@ private:
 
     //! Replace an element.
     void replace(pointer pos, param_value_type item) {
-        replace(pos, item, typename cb_details::cb_replace_category_traits<value_type>::tag()); // invoke optimized operation for given type
+        replace(pos, item, BOOST_DEDUCED_TYPENAME cb_details::cb_replace_category_traits<value_type>::tag()); // invoke optimized operation for given type
 #if BOOST_CB_ENABLE_DEBUG
         invalidate_iterators(is_invalid_condition(pos));
 #endif
