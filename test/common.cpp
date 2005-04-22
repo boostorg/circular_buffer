@@ -747,12 +747,25 @@ void erase_test() {
     CB_CONTAINER<Integer> cb2(1 CB_MIN_CAPACITY, 1);
     CB_CONTAINER<Integer>::iterator it2 = cb2.erase(cb2.begin());
 
+	CB_CONTAINER<Integer> cb3(4);
+    cb3.push_back(1);
+    cb3.push_back(2);
+    cb3.push_back(3);
+    CB_CONTAINER<Integer>::iterator it3 = cb3.erase(cb3.begin() + 2);
+
     BOOST_CHECK(cb1.size() == 2);
     BOOST_CHECK(cb1.capacity() == 4);
     BOOST_CHECK(*it1 == 3);
+	BOOST_CHECK(cb1[0] == 1);
+	BOOST_CHECK(cb1[1] == 3);
     BOOST_CHECK(cb2.size() == 0);
     BOOST_CHECK(cb2.capacity() == 1);
     BOOST_CHECK(it2 == cb2.end());
+	BOOST_CHECK(cb3.size() == 2);
+    BOOST_CHECK(cb3.capacity() == 4);
+    BOOST_CHECK(it3 == cb3.end());
+	BOOST_CHECK(cb3[0] == 1);
+	BOOST_CHECK(cb3[1] == 2);
 }
 
 void erase_range_test() {
@@ -763,20 +776,41 @@ void erase_range_test() {
     cb1.push_back(3);
     cb1.push_back(4);
     CB_CONTAINER<Integer>::iterator it1 = cb1.erase(cb1.begin() + 1, cb1.begin() + 3);
-    CB_CONTAINER<Integer> cb2(4);
+    
+	CB_CONTAINER<Integer> cb2(4);
     cb2.push_back(1);
     cb2.push_back(2);
     cb2.push_back(3);
     cb2.push_back(4);
     CB_CONTAINER<Integer>::iterator it2 = cb2.erase(cb2.begin(), cb2.begin());
 
+	CB_CONTAINER<Integer> cb3(4);
+    cb3.push_back(1);
+    cb3.push_back(2);
+    cb3.push_back(3);
+    cb3.push_back(4);
+    CB_CONTAINER<Integer>::iterator it3 = cb3.erase(cb3.begin() + 2, cb3.end());
+
+	CB_CONTAINER<Integer> cb4(10 CB_MIN_CAPACITY, 1);
+    CB_CONTAINER<Integer>::iterator it4 = cb4.erase(cb4.begin(), cb4.end());
+
     BOOST_CHECK(cb1.size() == 2);
     BOOST_CHECK(cb1.capacity() == 4);
-    BOOST_CHECK(*it1 == 4);
+    BOOST_CHECK(cb1[0] == 1);
+    BOOST_CHECK(cb1[1] == 4);
+	BOOST_CHECK(*it1 == 4);
     BOOST_CHECK(cb2.size() == 4);
     BOOST_CHECK(cb2[0] == 1);
     BOOST_CHECK(cb2[3] == 4);
     BOOST_CHECK(*it2 == 1);
+	BOOST_CHECK(cb3.size() == 2);
+    BOOST_CHECK(cb3.capacity() == 4);
+	BOOST_CHECK(cb3[0] == 1);
+    BOOST_CHECK(cb3[1] == 2);
+    BOOST_CHECK(it3 == cb3.end());
+	BOOST_CHECK(cb4.size() == 0);
+    BOOST_CHECK(cb4.capacity() == 10);
+    BOOST_CHECK(it4 == cb4.end());
 }
 
 void rerase_test() {
@@ -790,17 +824,31 @@ void rerase_test() {
     CB_CONTAINER<Integer> cb2(1 CB_MIN_CAPACITY, 1);
     CB_CONTAINER<Integer>::iterator it2 = cb2.rerase(cb2.begin());
 
+	CB_CONTAINER<Integer> cb3(4);
+    cb3.push_back(1);
+    cb3.push_back(2);
+    cb3.push_back(3);
+    CB_CONTAINER<Integer>::iterator it3 = cb3.rerase(cb3.begin());
+
     BOOST_CHECK(cb1.size() == 2);
     BOOST_CHECK(cb1.capacity() == 4);
-    BOOST_CHECK(*it1 == 3);
+    BOOST_CHECK(*it1 == 1);
+	BOOST_CHECK(cb1[0] == 1);
+	BOOST_CHECK(cb1[1] == 3);
     BOOST_CHECK(cb2.size() == 0);
     BOOST_CHECK(cb2.capacity() == 1);
-    BOOST_CHECK(it2 == cb2.end());
+    BOOST_CHECK(it2 == cb2.begin());
+	BOOST_CHECK(cb3.size() == 2);
+    BOOST_CHECK(cb3.capacity() == 4);
+    BOOST_CHECK(it3 == cb3.begin());
+	BOOST_CHECK(*it3 == 2);
+	BOOST_CHECK(cb3[0] == 2);
+	BOOST_CHECK(cb3[1] == 3);
 }
 
 void rerase_range_test() {
 
-    CB_CONTAINER<Integer> cb1(4);
+    /*CB_CONTAINER<Integer> cb1(4);
     cb1.push_back(1);
     cb1.push_back(2);
     cb1.push_back(3);
@@ -819,7 +867,7 @@ void rerase_range_test() {
     BOOST_CHECK(cb2.size() == 4);
     BOOST_CHECK(cb2[0] == 1);
     BOOST_CHECK(cb2[3] == 4);
-    BOOST_CHECK(*it2 == 1);
+    BOOST_CHECK(*it2 == 1);*/
 }
 
 void clear_test() {

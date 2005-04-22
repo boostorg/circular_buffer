@@ -976,9 +976,9 @@ public:
         destroy_item(m_last);
         --m_size;
 #if BOOST_CB_ENABLE_DEBUG
-        return empty() ? end() : iterator(this, pos.m_it);
+        return m_last == pos.m_it ? end() : iterator(this, pos.m_it);
 #else
-        return empty() ? end() : pos;
+        return m_last == pos.m_it ? end() : pos;
 #endif
     }
 
@@ -999,15 +999,14 @@ public:
         BOOST_CB_ASSERT(first <= last);               // check for wrong range
         if (first == last)
             return first;
-        pointer tmp = first.m_it;
-        difference_type diff = last - first;
+		pointer p = first.m_it;
         while (last.m_it != 0)
             replace((first++).m_it, *last++);
-        while (first.m_it != 0)
-            destroy_item((first++).m_it);
-        m_last = sub(m_last, diff);
-        m_size -= diff;
-        return empty() ? end() : iterator(this, tmp);
+		for (;m_last != first.m_it; --m_size) {
+			decrement(m_last);
+			destroy_item(m_last);
+		}
+        return m_last == p ? end() : iterator(this, p);
     }
 
 	//! Erase the element at the given position.
@@ -1016,7 +1015,7 @@ public:
         \pre <code>size_type old_size = (*this).size()</code>
         \post <code>(*this).size() == old_size - 1</code><br>
               Removes an element at the position <code>pos</code>.
-        \return iterator to the first element remaining prior the removed
+        \return iterator to the first element remaining in front of the removed
                 element or <code>(*this).begin()</code> if no such element exists.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
@@ -1024,17 +1023,18 @@ public:
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
         BOOST_CB_ASSERT(pos.m_it != 0);  // check for iterator pointing to end()
         pointer prev = pos.m_it;
-        decrement(prev);
-        for (pointer p = pos.m_it; prev != m_first; p = prev, decrement(prev))
+		pointer p = prev;
+        for (decrement(prev); p != m_first; p = prev, decrement(prev))
             replace(p, *prev);
-        decrement(m_first);
         destroy_item(m_first);
+		increment(m_first);
         --m_size;
 #if BOOST_CB_ENABLE_DEBUG
-        return empty() ? end() : iterator(this, pos.m_it);
+        return p == pos.m_it ? begin() : iterator(this, pos.m_it);
 #else
-        return empty() ? end() : pos;
+        return p == pos.m_it ? begin() : pos;
 #endif
+
     }
 
     //! Erase the range <code>[first, last)</code>.
@@ -1043,7 +1043,7 @@ public:
         \pre <code>size_type old_size = (*this).size()</code>
         \post <code>(*this).size() == old_size - std::distance(first, last)</code><br>
               Removes the elements from the range <code>[first, last)</code>.
-        \return iterator to the first element remaining prior the removed
+        \return iterator to the first element remaining in front of the removed
                 element or <code>(*this).begin()</code> if no such element exists.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
@@ -1054,14 +1054,16 @@ public:
         BOOST_CB_ASSERT(first <= last);               // check for wrong range
         if (first == last)
             return first;
-        pointer tmp = first.m_it;
 		difference_type diff = last - first;
+		pointer p = last.m_it == 0 ? m_last : last.m_it;
         while (first.m_it != m_first)
             replace((--last).m_it, *--first);
-        for (;m_first != tmp; increment(m_first))
+        for (;m_first != last.m_it; increment(m_first); --m_size)
             destroy_item(m_first);
-        m_size -= diff;
-        return empty() ? end() : iterator(this, tmp);
+        if (m_first == p)
+			return begin();
+		decrement(p);
+		return iterator(this, p);
     }
 
     //! Erase all the stored elements.
@@ -1413,8 +1415,7 @@ private:
                 increment(src);
                 increment(dest);
             }
-            dest = sub(p, n);
-            for (; ii < n; ++ii, increment(dest))
+            for (dest = sub(p, n); ii < n; ++ii, increment(dest))
                 create_or_replace(dest, *wrapper.get_reference());
             BOOST_CB_UNWIND(
                 for (pointer p1 = m_first, p2 = sub(m_first, n); p1 != src; increment(p1), increment(p2))
