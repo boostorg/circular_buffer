@@ -1002,10 +1002,11 @@ public:
 		pointer p = first.m_it;
         while (last.m_it != 0)
             replace((first++).m_it, *last++);
-		for (;m_last != first.m_it; --m_size) {
+        do {
 			decrement(m_last);
 			destroy_item(m_last);
-		}
+			--m_size;
+		} while(m_last != first.m_it);
         return m_last == p ? end() : iterator(this, p);
     }
 
@@ -1034,7 +1035,6 @@ public:
 #else
         return p == pos.m_it ? begin() : pos;
 #endif
-
     }
 
     //! Erase the range <code>[first, last)</code>.
@@ -1054,19 +1054,25 @@ public:
         BOOST_CB_ASSERT(first <= last);               // check for wrong range
         if (first == last)
             return first;
-		difference_type diff = last - first;
-		pointer p = last.m_it == 0 ? m_last : last.m_it;
-        while (first.m_it != m_first)
-            replace((--last).m_it, *--first);
-        for (;m_first != last.m_it; increment(m_first); --m_size)
+        pointer p = map_pointer(last.m_it);
+        last.m_it = p;
+        while (first.m_it != m_first) {
+            decrement(first.m_it);
+            decrement(p);
+            replace(p, *first.m_it);
+        }
+        do {
             destroy_item(m_first);
-        if (m_first == p)
+            increment(m_first);
+            --m_size;
+        } while(m_first != p);
+        if (m_first == last.m_it)
 			return begin();
-		decrement(p);
-		return iterator(this, p);
+		decrement(last.m_it);
+		return iterator(this, last.m_it);
     }
 
-    //! Erase all the stored elements.
+    //! Erase all stored elements.
     /*!
         \post (*this).size() == 0
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
