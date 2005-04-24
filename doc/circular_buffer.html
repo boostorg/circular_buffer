@@ -2121,24 +2121,25 @@ Swap the contents of two circular buffers.         </td></tr></table>
 		</p>
     <h2><A name="ideas">Ideas for Future Improvements</A>
     </h2>
-<P>The formal review revealed that the library is lack of adaptors which would provide additional functionality. 
-Yes, there is the <code>circular_buffer_space_optimized</code> adaptor, but it is 
-the only one. It 
-would be good to have an adaptor (of the base containter and also it's space optimized 
-version) which would provide "hooks" when an element is about to be 
-overwritten optionally when the&nbsp;buffer is about to&nbsp;uderflow....</P>
-<H2>
-      <a name="ack">Acknowledgments</a> </H2>
+    <p>The formal review revealed that the library is lack of adaptors which would provide additional
+functionality. Yes, there is the <code>circular_buffer_space_optimized</code> adaptor, but it is
+the only one. Particularly it would be nice to have an adaptor (of the base container and also it's space optimized
+version) that would provide "hooks" - callback methods - which would be invoked when an element is
+about to be overwritten optionally when the buffer is about to underflow. The callbacks can be then used
+e.g. for invoking some method on the element being overwritten or for throwing an underflow/overflow
+exception.
+</p>
+<h2><a name="ack">Acknowledgments</a></h2>
     <p>The <code>circular_buffer</code> has a short history. Its first version was a <code>std::deque</code> adaptor. This container was not very 
 effective because of many reallocations when inserting/removing an element. 
 Thomas Wenish did a review of this version and motivated me to create a circular 
 buffer which allocates memory at once when created.</p>
     <p>The second version adapted <code>std::vector</code> but it has been abandoned 
 			soon because of limited control over iterator invalidation.</p>
-    <p>       The current version is 
+    <p>The current version is 
 			a full-fledged STL compliant container. Pavel Vozenilek did a thorough review of this version 
 			and came with many good ideas and improvements. Also, I would like to 
-			thank Howard Hinnant, Nigel Stewart and&nbsp;everyone who participated at the formal review for valuable 
+			thank Howard Hinnant, Nigel Stewart and everyone who participated at the formal review for valuable 
 			comments and ideas.
 		</p>
     <hr align="left" size="1">
