@@ -42,19 +42,20 @@ public:
     /*!
         \note The method is const in order to register iterators into const containers, too.
     */
-    void register_iterator(const cb_iterator_base* it) const; // the implementation is below
+    void register_iterator(const cb_iterator_base* it) const;
 
     //! Unregister an iterator from the list of valid iterators.
     /*!
         \note The method is const in order to unregister iterators from const containers, too.
     */
-    void unregister_iterator(const cb_iterator_base* it) const; // the implementation is below
+    void unregister_iterator(const cb_iterator_base* it) const;
 
     //! Invalidate all iterators.
-    void invalidate_all_iterators(); // the implementation is below
+    void invalidate_all_iterators();
 
     //! Invalidate every iterator conforming to the condition.
-    template<class Condition> void invalidate_iterators(const Condition& condition); // the implementation is below
+    template <class Iterator0>
+	void invalidate_iterators(const Iterator0& it);
 
 private:
 // Helpers
@@ -165,11 +166,11 @@ inline void cb_iterator_registry::invalidate_all_iterators() {
     m_iterators = 0;
 }
 
-template<class Condition>
-inline void cb_iterator_registry::invalidate_iterators(const Condition& condition) {
+template <class Iterator0>
+inline void cb_iterator_registry::invalidate_iterators(const Iterator0& it) {
     const cb_iterator_base* previous = 0;
     for (const cb_iterator_base* p = m_iterators; p != 0; p = p->next()) {
-        if (condition(p)) {
+        if (((Iterator0*)p)->m_it == it.m_it) {
             p->invalidate();
             remove(p, previous);
             continue;

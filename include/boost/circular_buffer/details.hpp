@@ -67,58 +67,6 @@ struct cb_iterator_category_traits {
         is_integral<Iterator>::value>::iterator_category tag;
 };
 
-/*!
-    \struct cb_destroy_tag
-    \brief Identifying tag for types which have to be destroyed when replaced.
-*/
-struct cb_destroy_tag {
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x6000)
-    char dummy_; // BCB: by default empty structure has 8 bytes
-#endif
-};
-
-/*!
-    \struct cb_assign_tag
-    \brief Identifying tag for types which do not have to be destroyed when replaced.
-*/
-struct cb_assign_tag {
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x6000)
-    char dummy_; // BCB: by default empty structure has 8 bytes
-#endif
-};
-
-/*!
-    \struct cb_replace_category
-    \brief Defines replace category for the given type.
-*/
-template <bool>
-struct cb_replace_category {
-    //! Represents types which have to be destroyed.
-    typedef cb_destroy_tag replace_category;
-};
-
-template <>
-struct cb_replace_category<true> {
-    //! Represents types which do not have to be destroyed.
-    typedef cb_assign_tag replace_category;
-};
-
-/*!
-    \struct cb_replace_category_traits
-    \brief Defines the replace category tag for the given type.
-*/
-template <class Type>
-struct cb_replace_category_traits {
-    //! Replace category tag type.
-    /*!
-        Depending on the template parameter the <code>tag</code> distinguishes
-        between types which have to be destroyed (e.g. class) and types which
-        do not have to be (e.g. integral type) when replaced.
-    */
-    typedef typename cb_details::cb_replace_category<
-        is_scalar<Type>::value>::replace_category tag;
-};
-
 template <class Traits> struct cb_nonconst_traits;
 
 /*!
@@ -186,7 +134,7 @@ class cb_iterator :
     public cb_iterator_base
 {
 private:
-    // Helper types
+// Helper types
 
     //! Base iterator.
     typedef boost::iterator<
@@ -239,7 +187,7 @@ public:
     /*!
         \note This constructor is not intended to be used directly by the user.
     */
-    cb_iterator(const Buff* cb, const pointer it) : cb_iterator_base(cb), m_buff(cb), m_it(it) {}
+    cb_iterator(const Buff* cb, const pointer p) : cb_iterator_base(cb), m_buff(cb), m_it(p) {}
 
     // Assign operator.
     cb_iterator& operator = (const cb_iterator& it) {

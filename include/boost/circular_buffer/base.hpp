@@ -44,7 +44,7 @@ template <class T, class Alloc>
 class circular_buffer : cb_details::cb_iterator_registry {
 
 // Requirements
-    BOOST_CLASS_REQUIRE(T, boost, CopyConstructibleConcept);
+    BOOST_CLASS_REQUIRE(T, boost, SGIAssignableConcept);
 
 public:
 // Basic types
@@ -1084,21 +1084,6 @@ public:
     }
 
 private:
-// Debug support
-
-#if BOOST_CB_ENABLE_DEBUG
-    
-    // Predicate determining if the condition for iterator invalidation has been met.
-    struct is_invalid_condition {
-        pointer m_p;
-        explicit is_invalid_condition(pointer p) : m_p(p) {}
-        bool operator () (const cb_details::cb_iterator_base* p) const {
-            return ((iterator*)p)->m_it == m_p;
-        }
-    };
-
-#endif // #if BOOST_CB_ENABLE_DEBUG
-
 // Helper methods
 
     //! Check if the <code>index</code> is valid.
@@ -1164,21 +1149,10 @@ private:
 
     //! Replace an element.
     void replace(pointer pos, param_value_type item) {
-        replace(pos, item, BOOST_DEDUCED_TYPENAME cb_details::cb_replace_category_traits<value_type>::tag()); // invoke optimized operation for given type
+		*pos = item;
 #if BOOST_CB_ENABLE_DEBUG
-        invalidate_iterators(is_invalid_condition(pos));
+        invalidate_iterators(iterator(this, pos));
 #endif
-    }
-
-    //! Specialized replace method.
-    void replace(pointer pos, param_value_type item, cb_details::cb_destroy_tag) {
-        m_alloc.destroy(pos);
-        m_alloc.construct(pos, item);
-    }
-
-    //! Specialized replace method.
-    void replace(pointer pos, param_value_type item, cb_details::cb_assign_tag) {
-        *pos = item;
     }
 
     //! Replace the first element in the full buffer.
@@ -1234,7 +1208,7 @@ private:
     void destroy_item(pointer p) {
         m_alloc.destroy(p);
 #if BOOST_CB_ENABLE_DEBUG
-        invalidate_iterators(is_invalid_condition(p));
+        invalidate_iterators(iterator(this, p));
         ::memset(p, cb_details::CB_Unitialized, sizeof(value_type));
 #endif
     }
