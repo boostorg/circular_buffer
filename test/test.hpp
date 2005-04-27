@@ -42,10 +42,16 @@ public:
     Integer(int i) : m_pValue(new int(i)) { check_exception(); }
     Integer(const Integer& src) : m_pValue(new int(src)) { check_exception(); }
     ~Integer() { delete m_pValue; }
+	Integer& operator = (const Integer& src) {
+        if (this == &src)
+            return *this;
+        check_exception();
+        delete m_pValue;
+        m_pValue = new int(src);
+        return *this;
+    }
     operator int () const { return *m_pValue; }
     static void set_exception_trigger(int n) { ms_exception_trigger = n; }
-private:
-    Integer& operator = (const Integer& src); // disabled
 };
 
 struct A
@@ -53,8 +59,6 @@ struct A
     A() : m_n(1) {}
     A(int n) : m_n(n) {}
     int m_n;
-private:
-    A& operator = (const A& src); // disabled
 };
 
 class B {
@@ -67,7 +71,6 @@ private:
     void increment() const { ++ms_count; }
     void decrement() const { --ms_count; }
     static int ms_count;
-    B& operator = (const B& src); // disabled
 };
 
 class C {
@@ -77,7 +80,6 @@ public:
     int test_reference2() const { return 255; }
 private:
     int m_num;
-    C& operator = (const C& src); // disabled
 };
 
 template <class T> class Adaptor {
