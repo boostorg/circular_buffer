@@ -136,8 +136,7 @@ t43  adaptor.hpp: apply workaround for borland (line 5764)
 t44  add some "post tests" after testing non-const methods (such as inserting
      an element into container which is tested for erase)
 
-t55  ammend the file header text (remove the reference to the accompanying file
-     LICENSE_1_0.txt)
+t55  check the iterator's operator []; add assertion if needed
 
 -------------------------------------------------------------------------------
 
