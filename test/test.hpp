@@ -42,7 +42,7 @@ public:
     Integer(int i) : m_pValue(new int(i)) { check_exception(); }
     Integer(const Integer& src) : m_pValue(new int(src)) { check_exception(); }
     ~Integer() { delete m_pValue; }
-	Integer& operator = (const Integer& src) {
+    Integer& operator = (const Integer& src) {
         if (this == &src)
             return *this;
         check_exception();
@@ -88,7 +88,7 @@ private:
 public:
     typedef typename boost::circular_buffer<T>::iterator iterator;
     typedef typename boost::circular_buffer<T>::size_type size_type;
-    
+
     Adaptor(size_type capacity) : m_buff(capacity) {}
     template <class InputIterator>
     Adaptor(size_type capacity, InputIterator first, InputIterator last)
@@ -99,7 +99,7 @@ public:
     size_type size() const { return m_buff.size(); }
     size_type capacity() const { return m_buff.capacity(); }
     T& operator [] (size_type index) { return m_buff[index]; }
-    
+
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
         size_type new_size = size() + distance(first, last);

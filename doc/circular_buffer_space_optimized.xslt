@@ -9,19 +9,19 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   <xsl:import href="doxygen2html.xslt"/>
 
   <xsl:output method="xml" version="1.0" encoding="iso-8859-1" indent="yes" media-type="text/xml"/>
-  
+
   <xsl:variable name="override-mark" select="'!'"/>
   <xsl:variable name="link-prefix" select="'circular_buffer.html'"/>
   <xsl:variable name="circular_buffer-ref" select="//compound[name='boost::circular_buffer' and @kind='class']/@refid"/>
   <xsl:variable name="circular_buffer-file" select="concat($xmldir, '/', $circular_buffer-ref, '.xml')"/>
   <xsl:variable name="circular_buffer-reimplemented" select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']//reimplementedby"/>
   <xsl:variable name="standalone-functions" select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']"/>
-  
+
   <xsl:template name="reference">
     <xsl:variable name="refid" select="$circular_buffer-reimplemented[@refid=current()/@refid]/../@id"/>
     <xsl:value-of select="concat(substring(concat($link-prefix, '#', $refid), 1 div (string-length($refid) &gt; 0)), substring(concat('#', @refid), 1 div (string-length($refid) = 0)))"/>
   </xsl:template>
-  
+
   <xsl:template name="template-parameters">
     <xsl:apply-templates select="templateparamlist/param" mode="synopsis">
       <xsl:with-param name="link-prefix" select="$link-prefix"/>
@@ -45,7 +45,7 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:template name="member-functions">
     <xsl:variable name="current" select="sectiondef[@kind='public-func']/memberdef[type != '']"/>
     <xsl:for-each select="$current | document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']">
@@ -100,7 +100,7 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
       <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
       <xsl:if test="string-length($briefdescription) &gt; 0 and (starts-with($briefdescription, $override-mark) or count(reimplements) = 0)">
         <xsl:apply-templates select="." mode="description"/>
-      </xsl:if>      
+      </xsl:if>
     </xsl:for-each>
   </xsl:template>
 

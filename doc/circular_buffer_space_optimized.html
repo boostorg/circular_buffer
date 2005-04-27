@@ -2,7 +2,7 @@
 <html>
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    
+
     <title>Space Optimized Circular Buffer Container Adaptor</title>
   </head>
   <body bgcolor="#ffffff">
@@ -10,47 +10,47 @@
     <table id="title" border="0">
       <tr>
 <td>
-					<h1>circular_buffer_space_optimized&lt;T, Alloc&gt;</h1>
-				</td>
-				<td><a href="http://boost.org"><img height="86" src="../../../c++boost.gif" width="277" border="0" alt="Boost"></a></td>
-			</tr>
+                    <h1>circular_buffer_space_optimized&lt;T, Alloc&gt;</h1>
+                </td>
+                <td><a href="http://boost.org"><img height="86" src="../../../c++boost.gif" width="277" border="0" alt="Boost"></a></td>
+            </tr>
     </table>
     <h2>Contents</h2>
 <a href="#description">Description</a><br>
-			<a href="#synopsis">Synopsis</a><br>
-			<a href="#rationale">Rationale</a><br>
-			<a href="#header">Header files</a><br>
-			<a href="#model">Modeled concepts</a><br>
-			<a href="#members">Template Parameters, Members and Standalone 
-				Functions</a><br>
-			<a href="#semantics">Semantics</a><br>
-			<a href="#see">See also</a><br>
-			<a href="#ack">Acknowledgments</a>
+            <a href="#synopsis">Synopsis</a><br>
+            <a href="#rationale">Rationale</a><br>
+            <a href="#header">Header files</a><br>
+            <a href="#model">Modeled concepts</a><br>
+            <a href="#members">Template Parameters, Members and Standalone
+                Functions</a><br>
+            <a href="#semantics">Semantics</a><br>
+            <a href="#see">See also</a><br>
+            <a href="#ack">Acknowledgments</a>
     <h2>
       <a name="description">Description</a>
     </h2>
     <p>The <code>circular_buffer_space_optimized</code> container is an adaptor of the <code>
-				<a href="circular_buffer.html">circular_buffer</a></code>. The 
-			functionality of the <code>circular_buffer_space_optimized</code> is similar to 
-			the base <code>circular_buffer</code> except it does not allocate memory at 
-			once when created rather it allocates memory as needed. (The predictive memory 
-			allocation is similar to typical <code>std::vector</code> implementation.) 
-			Moreover the memory is automatically freed as the size of the container 
-			decreases.
-		</p>
+                <a href="circular_buffer.html">circular_buffer</a></code>. The
+            functionality of the <code>circular_buffer_space_optimized</code> is similar to
+            the base <code>circular_buffer</code> except it does not allocate memory at
+            once when created rather it allocates memory as needed. (The predictive memory
+            allocation is similar to typical <code>std::vector</code> implementation.)
+            Moreover the memory is automatically freed as the size of the container
+            decreases.
+        </p>
     <table id="figure" border="0">
       <tr>
 <td></td>
-				<td><img height="350" src="circular_buffer_space_optimized.png" width="700" alt="Space Optimized Circular Buffer"></td>
-			</tr>
+                <td><img height="350" src="circular_buffer_space_optimized.png" width="700" alt="Space Optimized Circular Buffer"></td>
+            </tr>
       <tr>
 <td valign="top"><b>Figure:</b></td>
-				<td valign="top">The memory allocation process of the space optimized circular 
-					buffer. The <code>min_capacity</code> represents the minimal guaranteed amount 
-					of allocated memory. The allocated memory will never drop under this value. By 
-					default the <code>min_capacity</code> is set to 0.
-				</td>
-			</tr>
+                <td valign="top">The memory allocation process of the space optimized circular
+                    buffer. The <code>min_capacity</code> represents the minimal guaranteed amount
+                    of allocated memory. The allocated memory will never drop under this value. By
+                    default the <code>min_capacity</code> is set to 0.
+                </td>
+            </tr>
     </table>
     <br>
     <h2>
@@ -81,13 +81,13 @@ public:
    typedef typename Alloc::value_type <a href="circular_buffer.html#classboost_1_1circular__buffer_1w13">value_type</a>;
 
    template &lt;class InputIterator&gt;
-      <a href="#classboost_1_1circular__buffer__space__optimized_1a3">circular_buffer_space_optimized</a>(size_type capacity, 
-         size_type min_capacity, InputIterator first, 
+      <a href="#classboost_1_1circular__buffer__space__optimized_1a3">circular_buffer_space_optimized</a>(size_type capacity,
+         size_type min_capacity, InputIterator first,
          InputIterator last, const allocator_type&amp; alloc = allocator_type());
-   <a href="#classboost_1_1circular__buffer__space__optimized_1a4">circular_buffer_space_optimized</a>(size_type capacity, 
-      size_type min_capacity, value_type item, 
+   <a href="#classboost_1_1circular__buffer__space__optimized_1a4">circular_buffer_space_optimized</a>(size_type capacity,
+      size_type min_capacity, value_type item,
       const allocator_type&amp; alloc = allocator_type());
-   explicit <a href="#classboost_1_1circular__buffer__space__optimized_1a5">circular_buffer_space_optimized</a>(size_type capacity, 
+   explicit <a href="#classboost_1_1circular__buffer__space__optimized_1a5">circular_buffer_space_optimized</a>(size_type capacity,
       size_type min_capacity = 0, const allocator_type&amp; alloc = allocator_type());
 
    template &lt;class InputIterator&gt;
@@ -145,25 +145,25 @@ public:
 };
 
 template &lt;class T, class Alloc&gt;
-   bool <a href="circular_buffer.html#namespaceboost_1a9">operator!=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a9">operator!=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs,
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="circular_buffer.html#namespaceboost_1a8">operator&lt;</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a8">operator&lt;</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs,
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="circular_buffer.html#namespaceboost_1a11">operator&lt;=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a11">operator&lt;=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs,
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="circular_buffer.html#namespaceboost_1a7">operator==</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a7">operator==</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs,
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="circular_buffer.html#namespaceboost_1a10">operator&gt;</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a10">operator&gt;</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs,
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   bool <a href="circular_buffer.html#namespaceboost_1a12">operator&gt;=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   bool <a href="circular_buffer.html#namespaceboost_1a12">operator&gt;=</a>(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs,
       const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 template &lt;class T, class Alloc&gt;
-   void <a href="circular_buffer.html#namespaceboost_1a13">swap</a>(circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs, 
+   void <a href="circular_buffer.html#namespaceboost_1a13">swap</a>(circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; lhs,
       circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; rhs);
 
 } // namespace boost
@@ -175,43 +175,43 @@ template &lt;class T, class Alloc&gt;
     <h2>
       <a name="rationale">Rationale</a>
     </h2>
-    <p>The auto-resizing mode of the space optimized circular buffer can be useful in 
-			situations when the container can possibly store large number of elements but 
-			most of its lifetime the container stores just few of them. The usage of the <code>circular_buffer_space_optimized</code>
-			will result in decreased memory consumption and can improve the CPU cache 
-			effectiveness.
-		</p>
+    <p>The auto-resizing mode of the space optimized circular buffer can be useful in
+            situations when the container can possibly store large number of elements but
+            most of its lifetime the container stores just few of them. The usage of the <code>circular_buffer_space_optimized</code>
+            will result in decreased memory consumption and can improve the CPU cache
+            effectiveness.
+        </p>
     <h2>
       <a name="header">Header files</a>
     </h2>
     <p>
-			The <code>circular_buffer_space_optimized</code> is defined in the file
+            The <code>circular_buffer_space_optimized</code> is defined in the file
       <code><a href="../../../boost/circular_buffer.hpp">boost/circular_buffer.hpp</a></code>.
       There is also a forward declaration for the <code>circular_buffer_space_optimized</code> in the header file
       <code><a href="../../../boost/circular_buffer_fwd.hpp">boost/circular_buffer_fwd.hpp</a></code>.
-		</p>
+        </p>
     <h2>
       <a name="model">Modeled concepts</a>
     </h2>
-    <p><a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">Random Access 
-				Container</a>, <a href="http://www.sgi.com/tech/stl/FrontInsertionSequence.html">
-				Front Insertion Sequence</a>, <a href="http://www.sgi.com/tech/stl/BackInsertionSequence.html">
-				Back Insertion Sequence</a>, <a href="http://www.sgi.com/tech/stl/Assignable.html">
-				Assignable</a> (SGI specific), <a href="http://www.sgi.com/tech/stl/EqualityComparable.html">
-				Equality Comparable</a>, <a href="http://www.sgi.com/tech/stl/LessThanComparable.html">
-				LessThan Comparable</a> (SGI specific)
-		</p>
+    <p><a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">Random Access
+                Container</a>, <a href="http://www.sgi.com/tech/stl/FrontInsertionSequence.html">
+                Front Insertion Sequence</a>, <a href="http://www.sgi.com/tech/stl/BackInsertionSequence.html">
+                Back Insertion Sequence</a>, <a href="http://www.sgi.com/tech/stl/Assignable.html">
+                Assignable</a> (SGI specific), <a href="http://www.sgi.com/tech/stl/EqualityComparable.html">
+                Equality Comparable</a>, <a href="http://www.sgi.com/tech/stl/LessThanComparable.html">
+                LessThan Comparable</a> (SGI specific)
+        </p>
     <h2>
       <a name="members">Template Parameters, Members and Friend Functions</a>
     </h2>
     <p>Template parameters, members and friend functions of the <code>circular_buffer_space_optimized</code>
-			are almost the same as for the base <code>circular_buffer</code>. Refer the <code>circular_buffer</code>
-			<a href="circular_buffer.html#parameters">documentation</a> and also its <a href="srcdoc/index.html">
-				source code documentation</a> for a detailed description.
-		</p>
-    <p>The specific methods of the <code>circular_buffer_space_optimized</code> are 
-			listed below.
-		</p>
+            are almost the same as for the base <code>circular_buffer</code>. Refer the <code>circular_buffer</code>
+            <a href="circular_buffer.html#parameters">documentation</a> and also its <a href="srcdoc/index.html">
+                source code documentation</a> for a detailed description.
+        </p>
+    <p>The specific methods of the <code>circular_buffer_space_optimized</code> are
+            listed below.
+        </p>
     <h2>
       <a name="constructors">Constructors</a>
     </h2>
@@ -718,60 +718,60 @@ See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source doc
       <a name="semantics">Semantics</a>
     </h2>
     <p>The behaviour of memory auto-resizing is as follows:
-		</p>
+        </p>
     <ul>
 <li>
-				Minimal capacity is allocated when an empty <code>circular_buffer_space_optimized</code>
-			is created.
-			</li>
+                Minimal capacity is allocated when an empty <code>circular_buffer_space_optimized</code>
+            is created.
+            </li>
 <li>
-				When a non-empty <code>circular_buffer_space_optimized</code>
-			container is created the allocated memory reflects the size of the container.
-			</li>
+                When a non-empty <code>circular_buffer_space_optimized</code>
+            container is created the allocated memory reflects the size of the container.
+            </li>
 <li>
-				<code>push_back</code>, <code>push_front</code>, <code>insert</code> and <code>rinsert</code>
-				will predictively increase the allocated memory if necessary. (The predictive 
-				memory allocation is similar to <code>std::vector</code>.)
-			</li>
+                <code>push_back</code>, <code>push_front</code>, <code>insert</code> and <code>rinsert</code>
+                will predictively increase the allocated memory if necessary. (The predictive
+                memory allocation is similar to <code>std::vector</code>.)
+            </li>
 <li>
-				<code>set_capacity</code>, <code>resize</code>, <code>assign</code>, <code>insert</code>
-				(range or n items), <code>rinsert</code> (range or n items), <code>erase</code> 
-				(range) and <code>clear</code>
-			will accommodate the allocated memory as necessary.
-			</li>
+                <code>set_capacity</code>, <code>resize</code>, <code>assign</code>, <code>insert</code>
+                (range or n items), <code>rinsert</code> (range or n items), <code>erase</code>
+                (range) and <code>clear</code>
+            will accommodate the allocated memory as necessary.
+            </li>
 <li>
-				<code>pop_back</code>, <code>pop_front</code>, <code>erase</code> and <code>clear</code>
-				will predictively decrease the allocated memory.
-			</li>
-		</ul>
-    <p>The semantics of the <code>circular_buffer_space_optimized</code> then follows 
-			the <a href="circular_buffer.html#semantics">semantics</a> of the base <code>circular_buffer</code>
-			except the invalidation rules.
-		</p>
+                <code>pop_back</code>, <code>pop_front</code>, <code>erase</code> and <code>clear</code>
+                will predictively decrease the allocated memory.
+            </li>
+        </ul>
+    <p>The semantics of the <code>circular_buffer_space_optimized</code> then follows
+            the <a href="circular_buffer.html#semantics">semantics</a> of the base <code>circular_buffer</code>
+            except the invalidation rules.
+        </p>
     <p><a name="invalidation"></a>The rule for iterator invalidation for <code>circular_buffer_space_optimized</code>
-			is as follows:
-		</p>
+            is as follows:
+        </p>
     <ul>
 <li>
-				<code>data</code>, <code>set_capacity</code>, <code>resize</code>, <code>operator=</code>,
-				<code>assign</code>, <code>swap</code>, <code>push_back</code>, <code>push_front</code>,
-				<code>pop_back</code>, <code>pop_front</code>, <code>insert</code>, <code>rinsert</code>,
-				<code>erase</code> and <code>clear</code> invalidate all iterators pointing to 
-				the <code>circular_buffer_space_optimized</code>.
-			</li>
-		</ul>
+                <code>data</code>, <code>set_capacity</code>, <code>resize</code>, <code>operator=</code>,
+                <code>assign</code>, <code>swap</code>, <code>push_back</code>, <code>push_front</code>,
+                <code>pop_back</code>, <code>pop_front</code>, <code>insert</code>, <code>rinsert</code>,
+                <code>erase</code> and <code>clear</code> invalidate all iterators pointing to
+                the <code>circular_buffer_space_optimized</code>.
+            </li>
+        </ul>
     <h2>
       <a name="see">See also</a>
     </h2>
     <p><code><a href="circular_buffer.html">boost::circular_buffer</a>, <a href="http://www.sgi.com/tech/stl/Vector.html">
-					std::vector</a></code>
-		</p>
+                    std::vector</a></code>
+        </p>
     <h2>
       <a name="ack">Acknowledgments</a>
     </h2>
-    <p>The idea of the space optimized circular buffer has been introduced by Pavel 
-			Vozenilek.
-		</p>
+    <p>The idea of the space optimized circular buffer has been introduced by Pavel
+            Vozenilek.
+        </p>
     <hr align="left" size="1">
     <table id="footer" border="0" width="100%">
       <tr>

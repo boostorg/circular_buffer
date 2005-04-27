@@ -123,8 +123,8 @@ struct cb_helper_pointer {
     \note This iterator is not circular. It was designed
           for iterating from begin() to end() of the circular buffer.
 */
-template <class Buff, class Traits> 
-class cb_iterator : 
+template <class Buff, class Traits>
+class cb_iterator :
     public boost::iterator<
     std::random_access_iterator_tag,
     typename Traits::value_type,

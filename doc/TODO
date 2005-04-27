@@ -6,7 +6,8 @@ t02  DONE
      docs: paragraph "Rationale": remove the "producer-consumer" usage (it is
      confusing)
 
-t03  docs: "Friend Functions" should be rather "Standalone Functions"
+t03  DONE
+     docs: "Friend Functions" should be rather "Standalone Functions"
      and should mention swap, <=, >= as well
 
 t04  DONE
@@ -21,9 +22,11 @@ t06  docs: define the element type requirements (as a precondition) for every
 
 t07  adaptor.hpp: fix needed to compile the test with BCB 6.4
 
-t08  base_test.cpp: fix needed to compile with VC 6.5
+t08  DONE
+     base_test.cpp: fix needed to compile with VC 6.5
 
-t09  fix needed to compile the tests with GCC 3.4
+t09  DONE
+     fix needed to compile the tests with GCC 3.4
 
 t10  docs: define exception safety for every method
      "Guarantee of basic exception safety" as a design criteria for the whole
@@ -44,7 +47,7 @@ t14  docs: explicitly document methods which do not throw any exception,
      e.g. "Exceptions: none"
 
 t15  rename the data() method to something meaningful concerning its mutation
-     status; mention its linear complexity in the docs REFINE!!!
+     status (e.g to_array); mention its linear complexity in the docs
 
 t16  docs: document that push_back() or other methods that they can choose NOT
      to insert something -> in general document the boundary conditions
@@ -55,16 +58,20 @@ t17  docs: delete the "Semantics" paragraph and move its content directly
 
 t18  Perhaps in addition to a data() function, it would be useful if the
      container provided constant-time access to the data as two arrays.
-     Perhaps something like std::pair<T *, T *> first_range() and 
-     std::pair<T *, T *> second_range(). REFINE!!!
+     Perhaps something like std::pair<T *, T *> array_1() and 
+     std::pair<T *, T *> array_2(). (Consider also returning of
+     std::pair<T *, size_t>.)
 
-t19  docs: merge the source documentation with the main documentation
+t19  DONE
+     docs: merge the source documentation with the main documentation
 
 t20  docs: define requirements on the Alloc type parameter
 
-t21  docs: consider better documentation for the "overwrite" term
+t21  docs: consider better documentation for the "overwrite" term; add glossary
+     section
 
-t22  implement a "hook" for the overwrite operation (maybe as an adaptor)
+t22  DEPRIVED
+     implement a "hook" for the overwrite operation (maybe as an adaptor)
 
 t23  amend the source code according to the formal review (line 1578); use
      the new iterator if possible
@@ -75,29 +82,31 @@ t24  ammend the test in order to compile with the new iterator if really
 t25  add constructor taking just two iterators as a parameter
 
 t26  change the current implementation of "overwrite" operation -> overwrite
-     will be equivalent to assign; adaptor can change the meaning of overwrite
-     operation (to destruct/construct) REFINE!!!
+     will be equivalent to assign
 
 t27  docs: apply the DefaultConstructible and Assignable type requirements
 
 t28  docs: the difference between resize() and set_capacity() should be 
      mentioned more explicitly
 
-t29  add rerase method REFINE!!!
+t29  DONE
+     add rerase methods
 
 t30  The insert() function has its rinsert() counterpart. The same issue
      for resize and set_capacity is solved with the boolean parameter
-     remove_front, which is not consistent. CONSIDER!!!
+     remove_front, which is not consistent.
 
 t31  docs: "... According to the semantics of rinsert, insertion overwrites
      front-most items as necessary ..." should probably read "back-most items"
      if this is a valid english word
 
-t32  CONSIDER!!! reimplementing the comparison functions (line 3801) 
+t32  DEPRIVED
+     reimplementing the comparison functions (line 3801) 
 
 t33  fix needed to compile the tests with Comeau 4.3.0 compiler
 
-t34  CONSIDER!!! throwing exception when push_back() to empty container
+t34  DEPRIVED
+     consider throwing exception when pop_back() an empty container
 
 t35  docs: there should be warning for data() documentation that the returned
      pointer gets very easily invalidated
@@ -124,6 +133,11 @@ t42  documentation may add some rationale on its internal data structures
 
 t43  adaptor.hpp: apply workaround for borland (line 5764)
 
+t44  add some "post tests" after testing non-const methods (such as inserting
+     an element into container which is tested for erase)
+
+t55  ammend the file header text (remove the reference to the accompanying file
+     LICENSE_1_0.txt)
 
 -------------------------------------------------------------------------------
 

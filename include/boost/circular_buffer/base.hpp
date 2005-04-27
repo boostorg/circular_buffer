@@ -160,7 +160,7 @@ public:
 
     //! Return a reverse iterator pointing to the end of the reversed circular buffer.
     reverse_iterator rend() { return reverse_iterator(begin()); }
-    
+
     //! Return a const reverse iterator pointing to the beginning of the reversed circular buffer.
     const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
 
@@ -306,7 +306,7 @@ public:
 
     //! Return the largest possible size (or capacity) of the circular buffer.
     size_type max_size() const { return m_alloc.max_size(); }
-    
+
     //! Is the circular buffer empty?
     /*!
         \return <code>true</code> if there are no elements stored in the circular buffer.
@@ -553,7 +553,7 @@ public:
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     void assign(size_type n, param_value_type item) { do_assign(n, assign_n(n, item, m_alloc)); }
-    
+
     //! Assign a copy of range.
     /*!
         \pre Valid range <code>[first, last)</code>.
@@ -999,18 +999,18 @@ public:
         BOOST_CB_ASSERT(first <= last);               // check for wrong range
         if (first == last)
             return first;
-		pointer p = first.m_it;
+        pointer p = first.m_it;
         while (last.m_it != 0)
             replace((first++).m_it, *last++);
         do {
-			decrement(m_last);
-			destroy_item(m_last);
-			--m_size;
-		} while(m_last != first.m_it);
+            decrement(m_last);
+            destroy_item(m_last);
+            --m_size;
+        } while(m_last != first.m_it);
         return m_last == p ? end() : iterator(this, p);
     }
 
-	//! Erase the element at the given position.
+    //! Erase the element at the given position.
     /*!
         \pre Valid <code>pos</code> iterator.
         \pre <code>size_type old_size = (*this).size()</code>
@@ -1024,11 +1024,11 @@ public:
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
         BOOST_CB_ASSERT(pos.m_it != 0);  // check for iterator pointing to end()
         pointer prev = pos.m_it;
-		pointer p = prev;
+        pointer p = prev;
         for (decrement(prev); p != m_first; p = prev, decrement(prev))
             replace(p, *prev);
         destroy_item(m_first);
-		increment(m_first);
+        increment(m_first);
         --m_size;
 #if BOOST_CB_ENABLE_DEBUG
         return p == pos.m_it ? begin() : iterator(this, pos.m_it);
@@ -1067,9 +1067,9 @@ public:
             --m_size;
         } while(m_first != p);
         if (m_first == last.m_it)
-			return begin();
-		decrement(last.m_it);
-		return iterator(this, last.m_it);
+            return begin();
+        decrement(last.m_it);
+        return iterator(this, last.m_it);
     }
 
     //! Erase all stored elements.
@@ -1149,7 +1149,7 @@ private:
 
     //! Replace an element.
     void replace(pointer pos, param_value_type item) {
-		*pos = item;
+        *pos = item;
 #if BOOST_CB_ENABLE_DEBUG
         invalidate_iterators(iterator(this, pos));
 #endif

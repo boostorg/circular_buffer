@@ -448,7 +448,7 @@ public:
         return begin() + index;
     }
 
-	//!! See the circular_buffer source documentation.
+    //!! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
