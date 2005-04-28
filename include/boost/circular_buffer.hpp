@@ -1,6 +1,6 @@
 // Circular buffer library header file.
 
-// Copyright (c) 2003-2004 Jan Gaspar
+// Copyright (c) 2003-2005 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -13,8 +13,8 @@
     #pragma once
 #endif
 
-#include <boost/type_traits.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 // Debug support control.
 #if defined(NDEBUG) || defined(BOOST_DISABLE_CB_DEBUG)

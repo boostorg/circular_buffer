@@ -1,6 +1,6 @@
 // Implementation of the base circular buffer.
 
-// Copyright (c) 2003-2004 Jan Gaspar
+// Copyright (c) 2003-2005 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -22,7 +22,7 @@
     #include <stdexcept>
 #endif
 #if BOOST_CB_ENABLE_DEBUG
-    #include <string.h>
+    #include <cstring>
 #endif
 
 namespace boost {
@@ -34,8 +34,8 @@ namespace boost {
     \param Alloc The allocator type used for all internal memory management.
            Default: std::allocator<T>
     \author <a href="mailto:jano_gaspar[at]yahoo.com">Jan Gaspar</a>
-    \version 3.6
-    \date 2004
+    \version 3.7
+    \date 2005
 
     For more information how to use the circular buffer see the
     <a href="../circular_buffer.html">documentation</a>.
@@ -137,7 +137,7 @@ private:
     friend iterator;
     friend const_iterator;
 #else
-    template<class Buff, class Traits> friend struct cb_details::cb_iterator;
+    template <class Buff, class Traits> friend struct cb_details::cb_iterator;
 #endif
 
 public:
@@ -598,7 +598,7 @@ public:
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    void push_back(param_value_type item) {
+    void push_back(param_value_type item = value_type()) {
         if (full()) {
             if (empty())
                 return;
@@ -612,15 +612,6 @@ public:
         }
     }
 
-    //! Insert a new element with the default value at the end.
-    /*!
-        \post <code>(*this).back() == value_type()</code><br>
-              If the circular buffer is full, the first (leftmost) element will be removed.
-        \throws Whatever T::T(const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
-    */
-    void push_back() { push_back(value_type()); }
-
     //! Insert a new element at the start.
     /*!
         \post <code>(*this).front() == item</code><br>
@@ -628,7 +619,7 @@ public:
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    void push_front(param_value_type item) {
+    void push_front(param_value_type item = value_type()) {
         if (full()) {
             if (empty())
                 return;
@@ -642,15 +633,6 @@ public:
             ++m_size;
         }
     }
-
-    //! Insert a new element with the default value at the start.
-    /*!
-        \post <code>(*this).front() == value_type()</code><br>
-              If the circular buffer is full, the last (rightmost) element will be removed.
-        \throws Whatever T::T(const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
-    */
-    void push_front() { push_front(value_type()); }
 
     //! Remove the last (rightmost) element.
     /*!
@@ -711,7 +693,7 @@ public:
         \throws Whatever T::operator = (const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    iterator insert(iterator pos, param_value_type item) {
+    iterator insert(iterator pos, param_value_type item = value_type()) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
         if (full() && pos == begin())
             return begin();
@@ -756,17 +738,6 @@ public:
             ++m_size;
         return iterator(this, pos.m_it);
     }
-
-    //! Insert a new element with the default value before the given position.
-    /*!
-        \post <code>value_type()</code> will be inserted at the position <code>pos</code>.<br>
-              If the circular buffer is full, the first (leftmost) element will be removed.
-        \return iterator to the inserted element.
-        \throws Whatever T::T(const T&) throws.
-        \throws Whatever T::operator = (const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
-    */
-    iterator insert(iterator pos) { return insert(pos, value_type()); }
 
     //! Insert <code>n</code> copies of the item before the given position.
     /*!
@@ -837,7 +808,7 @@ public:
         \throws Whatever T::operator = (const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    iterator rinsert(iterator pos, param_value_type item) {
+    iterator rinsert(iterator pos, param_value_type item = value_type()) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
         if (full() && pos == end())
             return end();
@@ -889,17 +860,6 @@ public:
             ++m_size;
         return iterator(this, pos.m_it);
     }
-
-    //! Insert a new element with the default value before the given position.
-    /*!
-        \post <code>value_type()</code> will be inserted at the position <code>pos</code>.<br>
-              If the circular buffer is full, the last (rightmost) element will be removed.
-        \return iterator to the inserted element.
-        \throws Whatever T::T(const T&) throws.
-        \throws Whatever T::operator = (const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
-    */
-    iterator rinsert(iterator pos) { return rinsert(pos, value_type()); }
 
     //! Insert <code>n</code> copies of the item before the given position.
     /*!

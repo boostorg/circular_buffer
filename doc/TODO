@@ -1,6 +1,7 @@
 Tasks based mainly on the formal review (see formal_review.txt for details):
 
-t01  docs: change boost.org links to local
+t01  DONE
+     docs: change boost.org links to local
 
 t02  DONE
      docs: paragraph "Rationale": remove the "producer-consumer" usage (it is
@@ -20,7 +21,8 @@ t05  docs: "Type Requirements" will be part of "Template Parameters"
 t06  docs: define the element type requirements (as a precondition) for every
      method
 
-t07  adaptor.hpp: fix needed to compile the test with BCB 6.4
+t07  DONE - verify
+     adaptor.hpp: fix needed to compile the test with BCB 6.4
 
 t08  DONE
      base_test.cpp: fix needed to compile with VC 6.5
@@ -37,7 +39,8 @@ t11  DONE
      boost/circular_buffer/base.hpp, but it is necessary to " (user should'n
      be bothered with the implementation details)
 
-t12  provide default arguments for push_back()/push_front() and
+t12  DONE
+     provide default arguments for push_back()/push_front() and
      insert()/rinsert() methods and remove the non-argument versions
 
 t13  docs: fix precondition "*(this).size() > index" to "(*this).size()"
@@ -70,7 +73,7 @@ t20  docs: define requirements on the Alloc type parameter
 t21  docs: consider better documentation for the "overwrite" term; add glossary
      section
 
-t22  DEPRIVED
+t22  REJECTED - postponed to later version
      implement a "hook" for the overwrite operation (maybe as an adaptor)
 
 t23  amend the source code according to the formal review (line 1578); use
@@ -100,12 +103,14 @@ t31  docs: "... According to the semantics of rinsert, insertion overwrites
      front-most items as necessary ..." should probably read "back-most items"
      if this is a valid english word
 
-t32  DEPRIVED
+t32  REJECTED - makes confusion; std::equal and lexicografical_compare target
+                this issue
      reimplementing the comparison functions (line 3801) 
 
-t33  fix needed to compile the tests with Comeau 4.3.0 compiler
+t33  DONE - verify
+     fix needed to compile the tests with Comeau 4.3.0 compiler
 
-t34  DEPRIVED
+t34  REJECTED - postponed to later version
      consider throwing exception when pop_back() an empty container
 
 t35  docs: there should be warning for data() documentation that the returned
@@ -117,26 +122,33 @@ t36  docs: Synopsis in circular_buffer.html could be splitted by <p> into
 t37  the macros as BOOST_CB_TRY should be at some time replaced by common
      Boost macros (BOOST_TRY/BOOST_CATCH/BOOST_RETHROW)
 
-t38  circular_buffer.hpp: #include <boost/type_traits.hpp> should be replaced
+t38  DONE
+     circular_buffer.hpp: #include <boost/type_traits.hpp> should be replaced
      by finer granularity includes - this line big huge impact on compilation
      time
 
-t39  #include <cstring> instedad of <string.h>
+t39  DONE
+     #include <cstring> instedad of <string.h>
 
-t40  base.hpp: remove warning Intel C++ 7.0 on line: void replace(...)
+t40  DONE - verify
+     base.hpp: remove warning Intel C++ 7.0 on line: void replace(...)
      (line 4438)
 
-t41  typedef for circular_buffer<T, Alloc> (line 4450)
+t41  REJECTED - not important; causing problems with generated documentation
+     typedef for circular_buffer<T, Alloc> (line 4450)
 
 t42  documentation may add some rationale on its internal data structures
      and their advantage over std::deque
 
-t43  adaptor.hpp: apply workaround for borland (line 5764)
+t43  REJECTED - fixed another way
+     adaptor.hpp: apply workaround for borland (line 5764)
 
 t44  add some "post tests" after testing non-const methods (such as inserting
      an element into container which is tested for erase)
 
 t55  check the iterator's operator []; add assertion if needed
+
+t56  rename files e.g. from adaptor to space_optimized_adaptor
 
 -------------------------------------------------------------------------------
 
