@@ -293,28 +293,32 @@ void iterator_invalidation_test() {
 
     circular_buffer<Integer> cb5(20, 0);
     it1 = cb5.begin() + 5;
-    it2 = cb5.begin() + 15;
+    it2 = it3 = cb5.begin() + 15;
     cb5.erase(cb5.begin() + 10);
     BOOST_CHECK(it1.is_valid());
     BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(!it3.is_valid());
 
     it1 = cb5.begin() + 1;
-    it2 = cb5.begin() + 8;
+    it2 = it3 = cb5.begin() + 8;
     cb5.erase(cb5.begin() + 3, cb5.begin() + 7);
     BOOST_CHECK(it1.is_valid());
     BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(!it3.is_valid());
 
     circular_buffer<Integer> cb6(20, 0);
-    it1 = cb6.begin() + 5;
+    it4 = it1 = cb6.begin() + 5;
     it2 = cb6.begin() + 15;
     cb6.rerase(cb6.begin() + 10);
     BOOST_CHECK(!it1.is_valid());
+    BOOST_CHECK(!it4.is_valid());
     BOOST_CHECK(it2.is_valid());
 
-    it1 = cb6.begin() + 1;
+    it4 = it1 = cb6.begin() + 1;
     it2 = cb6.begin() + 8;
     cb6.rerase(cb6.begin() + 3, cb6.begin() + 7);
     BOOST_CHECK(!it1.is_valid());
+    BOOST_CHECK(!it4.is_valid());
     BOOST_CHECK(it2.is_valid());
 
 #endif // #if !defined(NDEBUG) && !defined(BOOST_DISABLE_CB_DEBUG)

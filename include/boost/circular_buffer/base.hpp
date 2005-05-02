@@ -575,7 +575,7 @@ public:
         \post <code>this</code> contains elements of <code>cb</code> and vice versa.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    void swap(circular_buffer& cb) {
+    void swap(circular_buffer<T, Alloc>& cb) {
         std::swap(m_alloc, cb.m_alloc); // in general this is not necessary,
                                         // because allocators should not have state
         std::swap(m_buff, cb.m_buff);

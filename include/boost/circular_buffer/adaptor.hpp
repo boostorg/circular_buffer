@@ -42,8 +42,8 @@ public:
     typedef typename circular_buffer<T, Alloc>::size_type size_type;
     typedef typename circular_buffer<T, Alloc>::difference_type difference_type;
     typedef typename circular_buffer<T, Alloc>::allocator_type allocator_type;
-    typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
     typedef typename circular_buffer<T, Alloc>::param_value_type param_value_type;
+    typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
     typedef typename circular_buffer<T, Alloc>::const_iterator const_iterator;
     typedef typename circular_buffer<T, Alloc>::iterator iterator;
     typedef typename circular_buffer<T, Alloc>::const_reverse_iterator const_reverse_iterator;
@@ -271,7 +271,7 @@ public:
     }
 
     //! See the circular_buffer source documentation.
-    void swap(circular_buffer_space_optimized& cb) {
+    void swap(circular_buffer_space_optimized<T, Alloc>& cb) {
         std::swap(m_capacity, cb.m_capacity);
         std::swap(m_min_capacity, cb.m_min_capacity);
         circular_buffer<T, Alloc>::swap(cb);
