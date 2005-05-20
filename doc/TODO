@@ -146,9 +146,16 @@ t43  REJECTED - fixed another way
 t44  add some "post tests" after testing non-const methods (such as inserting
      an element into container which is tested for erase)
 
-t55  check the iterator's operator []; add assertion if needed
+t55  DONE - no action needed
+     check the iterator's operator []; add assertion if needed
 
 t56  rename files e.g. from adaptor to space_optimized_adaptor
+
+t57  constructor and insert methods taking input iterator does not work with
+     istream_iterator - std::distance() function does't work as expected - fix
+     needed
+
+t58  verify the correctness of the SGIAssignableConcept
 
 -------------------------------------------------------------------------------
 

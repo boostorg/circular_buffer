@@ -256,9 +256,7 @@ public:
         size_type constructed = 0;
         pointer src = m_first;
         pointer dest = m_buff;
-        pointer tmp = 0;
         BOOST_CB_TRY
-        tmp = allocate(1);
         for (pointer first = m_first; dest < src; src = first) {
             for (size_type ii = 0; src < m_end; ++src, ++dest, ++ii) {
                 if (dest == first) {
@@ -269,26 +267,13 @@ public:
                     m_alloc.construct(dest, *src);
                     ++constructed;
                 } else {
-                    m_alloc.construct(tmp, *src);
-                    BOOST_CB_TRY
+					value_type tmp = *src;
                     replace(src, *dest);
-                    BOOST_CB_UNWIND(
-                        destroy_item(tmp);
-                        tidy(src);
-                    )
-                    BOOST_CB_TRY
-                    replace(dest, *tmp);
-                    BOOST_CB_UNWIND(
-                        destroy_item(tmp);
-                        tidy(dest);
-                    )
-                    destroy_item(tmp);
+                    replace(dest, tmp);
                 }
             }
         }
-        deallocate(tmp, 1);
         BOOST_CB_UNWIND(
-            deallocate(tmp, 1);
             m_last += constructed;
             m_size += constructed;
         )
