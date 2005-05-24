@@ -253,12 +253,17 @@ public:
             return 0;
         if (m_first < m_last || m_last == m_buff)
             return m_first;
-        size_type constructed = 0;
-        pointer src = m_first;
+		pointer src = m_first;
         pointer dest = m_buff;
+        size_type moved = 0;
+        size_type constructed = 0;
         BOOST_CB_TRY
         for (pointer first = m_first; dest < src; src = first) {
-            for (size_type ii = 0; src < m_end; ++src, ++dest, ++ii) {
+            for (size_type ii = 0; src < m_end; ++src, ++dest, ++moved, ++ii) {
+                if (moved == size()) {
+                    first = dest;
+                    break;
+                }
                 if (dest == first) {
                     first += ii;
                     break;
@@ -277,8 +282,8 @@ public:
             m_last += constructed;
             m_size += constructed;
         )
-        for (dest = m_buff + size(); dest < m_end; ++dest)
-            destroy_item(dest);
+		for (src = m_end - constructed; src < m_end; ++src)
+			destroy_item(src);
         m_first = m_buff;
         m_last = add(m_buff, size());
         return m_buff;

@@ -145,55 +145,134 @@ void front_and_back_test() {
 
 void data_test() {
 
-    CB_CONTAINER<Integer> cb1(10 CB_MIN_CAPACITY, 0);
-    cb1.push_back(1);
-    cb1.push_back(2);
-    cb1.push_back(3);
-    CB_CONTAINER<Integer> cb2(10 CB_MIN_CAPACITY, 0);
-    cb2.push_back(1);
-    cb2.push_back(2);
-    cb2.push_back(3);
-    cb2.push_back(4);
-    cb2.push_back(5);
-    cb2.push_back(6);
-    cb2.push_back(7);
-    CB_CONTAINER<Integer> cb3(10 CB_MIN_CAPACITY, 0);
-    cb3.push_back(1);
-    cb3.push_back(2);
-    cb3.push_back(3);
+	vector<int> v;
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
+    v.push_back(6);
+    v.push_back(7);
+	v.push_back(8);
+	v.push_back(9);
+	v.push_back(10);
+	v.push_back(11);
+	v.push_back(12);
+    CB_CONTAINER<Integer> cb1(10 CB_MIN_CAPACITY, v.begin(), v.begin() + 10);
+    cb1.push_back(11);
+    cb1.push_back(12);
+    cb1.push_back(13);
+    CB_CONTAINER<Integer> cb2(10 CB_MIN_CAPACITY, v.begin(), v.begin() + 10);
+    cb2.push_back(11);
+    cb2.push_back(12);
+    cb2.push_back(13);
+    cb2.push_back(14);
+    cb2.push_back(15);
+    cb2.push_back(16);
+    cb2.push_back(17);
+    CB_CONTAINER<Integer> cb3(10 CB_MIN_CAPACITY, v.begin(), v.begin() + 10);
+    cb3.push_back(11);
+    cb3.push_back(12);
+    cb3.push_back(13);
     cb3.pop_front();
     cb3.pop_front();
-    CB_CONTAINER<Integer> cb4(5 CB_MIN_CAPACITY, 0);
-    cb4.push_back(1);
-    cb4.push_back(2);
-    cb4.data();
-    CB_CONTAINER<Integer> cb5(5);
+    CB_CONTAINER<Integer> cb4(5);
+	CB_CONTAINER<Integer> cb5(12 CB_MIN_CAPACITY, v.begin(), v.end());
+    cb5.push_back(13);
+    cb5.push_back(14);
+    cb5.push_back(15);
+    cb5.pop_front();
+    cb5.pop_front();
+	cb5.pop_front();
+	cb5.pop_front();
+	cb5.pop_front();
+	cb5.pop_front();
+	CB_CONTAINER<Integer> cb6(6);
+	cb6.push_back(-2);
+	cb6.push_back(-1);
+	cb6.push_back(0);
+	cb6.push_back(1);
+	cb6.push_back(2);
+	cb6.push_back(3);
+    cb6.push_back(4);
+    cb6.push_back(5);
+	cb6.push_back(6);
+	cb6.pop_back();
 
-    BOOST_CHECK(*cb1.data() == 0);
-    BOOST_CHECK(*(cb1.data() + 1) == 0);
-    BOOST_CHECK(*(cb1.data() + 7) == 1);
-    BOOST_CHECK(*(cb1.data() + 8) == 2);
-    BOOST_CHECK(*(cb1.data() + 9) == 3);
-    BOOST_CHECK(*cb2.data() == 0);
-    BOOST_CHECK(*(cb2.data() + 1) == 0);
-    BOOST_CHECK(*(cb2.data() + 2) == 0);
-    BOOST_CHECK(*(cb2.data() + 3) == 1);
-    BOOST_CHECK(*(cb2.data() + 4) == 2);
-    BOOST_CHECK(*(cb2.data() + 5) == 3);
-    BOOST_CHECK(*(cb2.data() + 6) == 4);
-    BOOST_CHECK(*(cb2.data() + 7) == 5);
-    BOOST_CHECK(*(cb2.data() + 8) == 6);
-    BOOST_CHECK(*(cb2.data() + 9) == 7);
-    BOOST_CHECK(*cb3.data() == 0);
-    BOOST_CHECK(*(cb3.data() + 1) == 0);
-    BOOST_CHECK(*(cb3.data() + 2) == 0);
-    BOOST_CHECK(*(cb3.data() + 3) == 0);
-    BOOST_CHECK(*(cb3.data() + 4) == 0);
-    BOOST_CHECK(*(cb3.data() + 5) == 1);
-    BOOST_CHECK(*(cb3.data() + 6) == 2);
-    BOOST_CHECK(*(cb3.data() + 7) == 3);
-    BOOST_CHECK(&cb4[0] < &cb4[1] && &cb4[1] < &cb4[2] && &cb4[2] < &cb4[3] && &cb4[3] < &cb4[4]);
-    BOOST_CHECK(cb5.data() == 0);
+    BOOST_CHECK(*cb1.data() == 4);
+	BOOST_CHECK(&cb1[0] < &cb1[1]
+		&& &cb1[1] < &cb1[2]
+		&& &cb1[2] < &cb1[3]
+		&& &cb1[3] < &cb1[4]
+		&& &cb1[4] < &cb1[5]
+		&& &cb1[5] < &cb1[6]
+		&& &cb1[6] < &cb1[7]
+		&& &cb1[7] < &cb1[8]
+		&& &cb1[8] < &cb1[9]);
+    BOOST_CHECK(*(cb1.data() + 1) == 5);
+	BOOST_CHECK(*(cb1.data() + 2) == 6);
+	BOOST_CHECK(*(cb1.data() + 3) == 7);
+	BOOST_CHECK(*(cb1.data() + 4) == 8);
+	BOOST_CHECK(*(cb1.data() + 5) == 9);
+	BOOST_CHECK(*(cb1.data() + 6) == 10);
+    BOOST_CHECK(*(cb1.data() + 7) == 11);
+    BOOST_CHECK(*(cb1.data() + 8) == 12);
+    BOOST_CHECK(*(cb1.data() + 9) == 13);
+    BOOST_CHECK(*cb2.data() == 8);
+	BOOST_CHECK(&cb2[0] < &cb2[1]
+		&& &cb2[1] < &cb2[2]
+		&& &cb2[2] < &cb2[3]
+		&& &cb2[3] < &cb2[4]
+		&& &cb2[4] < &cb2[5]
+		&& &cb2[5] < &cb2[6]
+		&& &cb2[6] < &cb2[7]
+		&& &cb2[7] < &cb2[8]
+		&& &cb2[8] < &cb2[9]);
+    BOOST_CHECK(*(cb2.data() + 1) == 9);
+    BOOST_CHECK(*(cb2.data() + 2) == 10);
+    BOOST_CHECK(*(cb2.data() + 3) == 11);
+    BOOST_CHECK(*(cb2.data() + 4) == 12);
+    BOOST_CHECK(*(cb2.data() + 5) == 13);
+    BOOST_CHECK(*(cb2.data() + 6) == 14);
+    BOOST_CHECK(*(cb2.data() + 7) == 15);
+    BOOST_CHECK(*(cb2.data() + 8) == 16);
+    BOOST_CHECK(*(cb2.data() + 9) == 17);
+    BOOST_CHECK(*cb3.data() == 6);
+	BOOST_CHECK(&cb3[0] < &cb3[1]
+		&& &cb3[1] < &cb3[2]
+		&& &cb3[2] < &cb3[3]
+		&& &cb3[3] < &cb3[4]
+		&& &cb3[4] < &cb3[5]
+		&& &cb3[5] < &cb3[6]
+		&& &cb3[6] < &cb3[7]);
+    BOOST_CHECK(*(cb3.data() + 1) == 7);
+    BOOST_CHECK(*(cb3.data() + 2) == 8);
+    BOOST_CHECK(*(cb3.data() + 3) == 9);
+    BOOST_CHECK(*(cb3.data() + 4) == 10);
+    BOOST_CHECK(*(cb3.data() + 5) == 11);
+    BOOST_CHECK(*(cb3.data() + 6) == 12);
+    BOOST_CHECK(*(cb3.data() + 7) == 13);
+    BOOST_CHECK(cb4.data() == 0);
+	BOOST_CHECK(*cb5.data() == 10);
+	BOOST_CHECK(&cb5[0] < &cb5[1]
+		&& &cb5[1] < &cb5[2]
+		&& &cb5[2] < &cb5[3]
+		&& &cb5[3] < &cb5[4]
+		&& &cb5[4] < &cb5[5]);
+    BOOST_CHECK(*(cb5.data() + 1) == 11);
+    BOOST_CHECK(*(cb5.data() + 2) == 12);
+    BOOST_CHECK(*(cb5.data() + 3) == 13);
+    BOOST_CHECK(*(cb5.data() + 4) == 14);
+    BOOST_CHECK(*(cb5.data() + 5) == 15);
+	BOOST_CHECK(*cb6.data() == 1);
+	BOOST_CHECK(&cb6[0] < &cb6[1]
+		&& &cb6[1] < &cb6[2]
+		&& &cb6[2] < &cb6[3]
+		&& &cb6[3] < &cb6[4]);
+    BOOST_CHECK(*(cb6.data() + 1) == 2);
+    BOOST_CHECK(*(cb6.data() + 2) == 3);
+    BOOST_CHECK(*(cb6.data() + 3) == 4);
+    BOOST_CHECK(*(cb6.data() + 4) == 5);
 }
 
 void capacity_test() {
