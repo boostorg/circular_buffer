@@ -41,7 +41,7 @@ namespace boost {
     <a href="../circular_buffer.html">documentation</a>.
 */
 template <class T, class Alloc>
-class circular_buffer : cb_details::cb_iterator_registry {
+class circular_buffer : cb_details::iterator_registry {
 
 // Requirements
     BOOST_CLASS_REQUIRE(T, boost, SGIAssignableConcept);
@@ -100,10 +100,10 @@ public:
 // Iterators
 
     //! Const (random access) iterator used to iterate through a circular buffer.
-    typedef cb_details::cb_iterator< circular_buffer<T, Alloc>, cb_details::cb_const_traits<Alloc> > const_iterator;
+    typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::const_traits<Alloc> > const_iterator;
 
     //! Iterator (random access) used to iterate through a circular buffer.
-    typedef cb_details::cb_iterator< circular_buffer<T, Alloc>, cb_details::cb_nonconst_traits<Alloc> > iterator;
+    typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::nonconst_traits<Alloc> > iterator;
 
     //! Const iterator used to iterate backwards through a circular buffer.
     typedef reverse_iterator<const_iterator> const_reverse_iterator;
@@ -137,7 +137,7 @@ private:
     friend iterator;
     friend const_iterator;
 #else
-    template <class Buff, class Traits> friend struct cb_details::cb_iterator;
+    template <class Buff, class Traits> friend struct cb_details::iterator;
 #endif
 
 public:
@@ -526,7 +526,7 @@ public:
         m_size = cb.size();
         m_first = m_buff = buff;
         m_end = m_buff + cb.capacity();
-        m_last = full() ? m_buff : last;
+        m_last = last == m_end ? m_buff : last;
         BOOST_CB_UNWIND(deallocate(buff, cb.capacity()))
         return *this;
     }
@@ -557,7 +557,7 @@ public:
     */
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
-        assign(first, last, BOOST_DEDUCED_TYPENAME cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        assign(first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_category_traits<InputIterator>::tag());
     }
 
     //! Swap the contents of two circular buffers.
@@ -785,7 +785,7 @@ public:
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        insert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        insert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_category_traits<InputIterator>::tag());
     }
 
     //! Insert an <code>item</code> before the given position.
@@ -900,7 +900,7 @@ public:
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_category_traits<InputIterator>::tag());
     }
 
 // Erase
@@ -1141,7 +1141,7 @@ private:
             throw_exception(std::length_error("circular_buffer"));
 #if BOOST_CB_ENABLE_DEBUG
         pointer p = (n == 0) ? 0 : m_alloc.allocate(n, 0);
-        ::memset(p, cb_details::CB_Unitialized, sizeof(value_type) * n);
+        ::memset(p, cb_details::UNITIALIZED, sizeof(value_type) * n);
         return p;
 #else
         return (n == 0) ? 0 : m_alloc.allocate(n, 0);
@@ -1159,7 +1159,7 @@ private:
         m_alloc.destroy(p);
 #if BOOST_CB_ENABLE_DEBUG
         invalidate_iterators(iterator(this, p));
-        ::memset(p, cb_details::CB_Unitialized, sizeof(value_type));
+        ::memset(p, cb_details::UNITIALIZED, sizeof(value_type));
 #endif
     }
 
@@ -1184,7 +1184,7 @@ private:
 
     //! Specialized assign method.
     template <class InputIterator>
-    void assign(InputIterator n, InputIterator item, cb_details::cb_int_iterator_tag) {
+    void assign(InputIterator n, InputIterator item, cb_details::int_iterator_tag) {
         assign((size_type)n, item);
     }
 
@@ -1220,7 +1220,7 @@ private:
 
     //! Specialized insert method.
     template <class InputIterator>
-    void insert(iterator pos, InputIterator n, InputIterator item, cb_details::cb_int_iterator_tag) {
+    void insert(iterator pos, InputIterator n, InputIterator item, cb_details::int_iterator_tag) {
         insert(pos, (size_type)n, item);
     }
 
@@ -1293,7 +1293,7 @@ private:
 
     //! Specialized rinsert method.
     template <class InputIterator>
-    void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::cb_int_iterator_tag) {
+    void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::int_iterator_tag) {
         rinsert(pos, (size_type)n, item);
     }
 

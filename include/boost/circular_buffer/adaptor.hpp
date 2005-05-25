@@ -353,7 +353,7 @@ public:
     */
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
-        insert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        insert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_category_traits<InputIterator>::tag());
     }
 
     //!! See the circular_buffer source documentation.
@@ -388,7 +388,7 @@ public:
     */
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
-        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::cb_iterator_category_traits<InputIterator>::tag());
+        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_category_traits<InputIterator>::tag());
     }
 
     //!! See the circular_buffer source documentation.
@@ -501,7 +501,7 @@ private:
 
     //! Helper insert method.
     template <class InputIterator>
-    void insert(iterator pos, InputIterator n, InputIterator item, cb_details::cb_int_iterator_tag) {
+    void insert(iterator pos, InputIterator n, InputIterator item, cb_details::int_iterator_tag) {
         insert(pos, (size_type)n, item);
     }
 
@@ -515,7 +515,7 @@ private:
 
     //! Helper rinsert method.
     template <class InputIterator>
-    void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::cb_int_iterator_tag) {
+    void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::int_iterator_tag) {
         rinsert(pos, (size_type)n, item);
     }
 
