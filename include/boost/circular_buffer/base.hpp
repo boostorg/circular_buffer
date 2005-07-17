@@ -592,7 +592,7 @@ public:
         if (full()) {
             if (empty())
                 return;
-            replace_last(item);
+            replace(m_last, item);
             increment(m_last);
             m_first = m_last;
         } else {
@@ -610,18 +610,19 @@ public:
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     void push_front(param_value_type item = value_type()) {
+        BOOST_CB_TRY
         if (full()) {
             if (empty())
                 return;
-            replace_first(item);
+            decrement(m_first);
+            replace(m_first, item);
             m_last = m_first;
         } else {
             decrement(m_first);
-            BOOST_CB_TRY
             m_alloc.construct(m_first, item);
-            BOOST_CB_UNWIND(increment(m_first))
             ++m_size;
         }
+        BOOST_CB_UNWIND(increment(m_first))
     }
 
     //! Remove the last (rightmost) element.
@@ -689,7 +690,7 @@ public:
             return begin();
         if (pos.m_it == 0) {
             if (full())
-                replace_last(item);
+                replace(m_last, item);
             else
                 m_alloc.construct(m_last, item);
             pos.m_it = m_last;
@@ -699,10 +700,7 @@ public:
             BOOST_CB_TRY
             while (src != pos.m_it) {
                 decrement(src);
-                if (dest == m_last && !full())
-                    m_alloc.construct(dest, *src);
-                else
-                    replace(dest, *src);
+                create_or_replace(is_uninitialized(dest)/*dest == m_last && !full()*/, dest, *src);
                 decrement(dest);
             }
             replace(pos.m_it, item);
@@ -803,14 +801,13 @@ public:
         if (full() && pos == end())
             return end();
         if (pos == begin()) {
-            if (full()) {
-                replace_first(item);
-            } else {
-                decrement(m_first);
-                BOOST_CB_TRY
+            BOOST_CB_TRY
+            decrement(m_first);
+            if (full())
+                replace(m_first, item);
+            else
                 m_alloc.construct(m_first, item);
-                BOOST_CB_UNWIND(increment(m_first))
-            }
+            BOOST_CB_UNWIND(increment(m_first))
         } else {
             pointer src = m_first;
             pointer dest = m_first;
@@ -1077,22 +1074,8 @@ private:
         return p >= m_last && (m_first < m_last || p < m_first);
     }
 
-    //! Create a copy of the <code>item</code> at the given position.
-    /*!
-        The copy is created either at uninitialized memory or replaces the old item.
-    */
-    void create_or_replace(pointer pos, param_value_type item) {
-        if (is_uninitialized(pos))
-            m_alloc.construct(pos, item);
-        else
-            replace(pos, item);
-    }
-
-    //! Destroy an item in case it has been created.
-    /*!
-        Called when create_or_replace fails.
-    */
-    void destroy_created(pointer pos) {
+    //! Destroy an item only if it has been created.
+    void destroy_if_created(pointer pos) {
         if (is_uninitialized(pos))
             destroy_item(pos);
     }
@@ -1105,26 +1088,16 @@ private:
 #endif
     }
 
-    //! Replace the first element in the full buffer.
-    void replace_first(param_value_type item) {
-        decrement(m_first);
-        BOOST_CB_TRY
-        replace(m_first, item);
-        BOOST_CB_UNWIND(
-            increment(m_first);
-            decrement(m_last);
-            --m_size;
-        )
-    }
-
-    //! Replace the last element in the full buffer.
-    void replace_last(param_value_type item) {
-        BOOST_CB_TRY
-        replace(m_last, item);
-        BOOST_CB_UNWIND(
-            decrement(m_last);
-            --m_size;
-        )
+    //! Create or replace an element.
+    /*!
+        <code>create</code> has to be set to <code>true</code> if and only if
+        <code>pos</code> points to an uninitialized memory.
+    */
+    void create_or_replace(bool create, pointer pos, param_value_type item) {
+        if (create)
+            m_alloc.construct(pos, item);
+        else
+            replace(pos, item);
     }
 
     //! Tidy up after an exception is thrown.
@@ -1270,18 +1243,18 @@ private:
             BOOST_CB_TRY
             while (src != pos.m_it) {
                 decrement(src);
-                create_or_replace(dest, *src);
+                create_or_replace(is_uninitialized(dest), dest, *src);
                 decrement(dest);
             }
             for (dest = pos.m_it; ii < n; ++ii, increment(dest))
-                create_or_replace(dest, *wrapper.get_reference());
+                create_or_replace(is_uninitialized(dest), dest, *wrapper.get_reference());
             BOOST_CB_UNWIND(
                 for (pointer p1 = m_last, p2 = add(m_last, n - 1); p1 != src; decrement(p2)) {
                     decrement(p1);
-                    destroy_created(p2);
+                    destroy_if_created(p2);
                 }
                 for (n = 0, src = pos.m_it; n < ii; ++n, increment(src))
-                    destroy_created(src);
+                    destroy_if_created(src);
                 if (!is_uninitialized(dest))
                     tidy(dest);
             )
@@ -1341,18 +1314,18 @@ private:
             size_type ii = 0;
             BOOST_CB_TRY
             while (src != p) {
-                create_or_replace(dest, *src);
+                create_or_replace(is_uninitialized(dest), dest, *src);
                 increment(src);
                 increment(dest);
             }
             for (dest = sub(p, n); ii < n; ++ii, increment(dest))
-                create_or_replace(dest, *wrapper.get_reference());
+                create_or_replace(is_uninitialized(dest), dest, *wrapper.get_reference());
             BOOST_CB_UNWIND(
                 for (pointer p1 = m_first, p2 = sub(m_first, n); p1 != src; increment(p1), increment(p2))
-                    destroy_created(p2);
+                    destroy_if_created(p2);
                 p = sub(p, n);
                 for (n = 0; n < ii; ++n, increment(p))
-                    destroy_created(p);
+                    destroy_if_created(p);
                 if (!is_uninitialized(dest))
                     tidy(dest);
             )
