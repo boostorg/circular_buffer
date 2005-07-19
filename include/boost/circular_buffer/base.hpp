@@ -1003,7 +1003,6 @@ public:
     */
     void clear() {
         destroy_content();
-        m_first = m_last = m_buff;
         m_size = 0;
     }
 
@@ -1124,14 +1123,6 @@ private:
 #endif
     }
 
-    //! Tidy up after an exception is thrown.
-    void tidy(pointer p) {
-        for (; m_first != p; increment(m_first), --m_size)
-            destroy_item(m_first);
-        increment(m_first);
-        --m_size;
-    }
-
     //! Specialized assign method.
     template <class InputIterator>
     void assign(InputIterator n, InputIterator item, cb_details::int_iterator_tag) {
@@ -1210,12 +1201,11 @@ private:
                 size_type constructed = std::min(ii, construct);
                 m_last = add(m_last, constructed);
                 m_size += constructed;
-                if (ii >= construct)
-                    tidy(p);
             )
         } else {
             pointer src = m_last;
             pointer dest = add(m_last, n - 1);
+            pointer p = pos.m_it;
             size_type ii = 0;
             BOOST_CB_TRY
             while (src != pos.m_it) {
@@ -1223,17 +1213,13 @@ private:
                 create_or_replace(is_uninitialized(dest), dest, *src);
                 decrement(dest);
             }
-            for (dest = pos.m_it; ii < n; ++ii, increment(dest))
-                create_or_replace(is_uninitialized(dest), dest, *wrapper.get_reference());
+            for (; ii < n; ++ii, increment(p))
+                create_or_replace(is_uninitialized(p), p, *wrapper.get_reference());
             BOOST_CB_UNWIND(
-                for (pointer p1 = m_last, p2 = add(m_last, n - 1); p1 != src; decrement(p2)) {
-                    decrement(p1);
-                    destroy_if_created(p2);
-                }
+                for (p = add(m_last, n - 1); p != dest; decrement(p))
+                    destroy_if_created(p);
                 for (n = 0, src = pos.m_it; n < ii; ++n, increment(src))
                     destroy_if_created(src);
-                if (!is_uninitialized(dest))
-                    tidy(dest);
             )
         }
         m_last = add(m_last, n);
@@ -1281,8 +1267,6 @@ private:
                 pointer tmp = sub(map_pointer(pos.m_it), construct);
                 for (n = 0; n < unwind; ++n, increment(tmp))
                     destroy_item(tmp);
-                if (ii > construct)
-                    tidy(p);
             )
         } else {
             pointer src = m_first;
@@ -1303,8 +1287,6 @@ private:
                 p = sub(p, n);
                 for (n = 0; n < ii; ++n, increment(p))
                     destroy_if_created(p);
-                if (!is_uninitialized(dest))
-                    tidy(dest);
             )
         }
         m_first = sub(m_first, n);
