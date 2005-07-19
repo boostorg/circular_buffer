@@ -2,7 +2,8 @@
 
 function rb {
     sed -r 's/\t/    /g;s/\s*$//' $1 > $1.temp
-    mv $1.temp $1
+    tr -d '\r' < $1.temp > $1
+    rm $1.temp
 }
 
 rb ../../../boost/circular_buffer.hpp
