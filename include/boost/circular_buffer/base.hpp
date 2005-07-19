@@ -253,7 +253,7 @@ public:
             return 0;
         if (m_first < m_last || m_last == m_buff)
             return m_first;
-		pointer src = m_first;
+        pointer src = m_first;
         pointer dest = m_buff;
         size_type moved = 0;
         size_type constructed = 0;
@@ -272,7 +272,7 @@ public:
                     m_alloc.construct(dest, *src);
                     ++constructed;
                 } else {
-					value_type tmp = *src;
+                    value_type tmp = *src;
                     replace(src, *dest);
                     replace(dest, tmp);
                 }
@@ -282,8 +282,8 @@ public:
             m_last += constructed;
             m_size += constructed;
         )
-		for (src = m_end - constructed; src < m_end; ++src)
-			destroy_item(src);
+        for (src = m_end - constructed; src < m_end; ++src)
+            destroy_item(src);
         m_first = m_buff;
         m_last = add(m_buff, size());
         return m_buff;
@@ -689,33 +689,24 @@ public:
         if (full() && pos == begin())
             return begin();
         if (pos.m_it == 0) {
-            if (full())
-                replace(m_last, item);
-            else
-                m_alloc.construct(m_last, item);
+            create_or_replace(!full(), m_last, item);
             pos.m_it = m_last;
         } else {
             pointer src = m_last;
             pointer dest = m_last;
+            bool create = !full();
             BOOST_CB_TRY
             while (src != pos.m_it) {
                 decrement(src);
-                create_or_replace(is_uninitialized(dest)/*dest == m_last && !full()*/, dest, *src);
+                create_or_replace(create, dest, *src);
                 decrement(dest);
+                create = false;
             }
             replace(pos.m_it, item);
             BOOST_CB_UNWIND(
-                if (dest == m_last) {
-                    if (full()) {
-                        increment(m_first);
-                        --m_size;
-                    }
-                } else {
-                    if (!full()) {
-                        increment(m_last);
-                        ++m_size;
-                    }
-                    tidy(dest);
+                if (!create && !full()) {
+                    increment(m_last);
+                    ++m_size;
                 }
             )
         }
@@ -789,7 +780,7 @@ public:
     //! Insert an <code>item</code> before the given position.
     /*!
         \pre Valid <code>pos</code> iterator.
-        \post The <code>item</code> will be inserted at the position <code>pos</code>.<br>
+        \post The <code>item</code> will be inserted before the position <code>pos</code>.<br>
               If the circular buffer is full, the last element (rightmost) will be removed.
         \return iterator to the inserted element.
         \throws Whatever T::T(const T&) throws.
@@ -803,40 +794,26 @@ public:
         if (pos == begin()) {
             BOOST_CB_TRY
             decrement(m_first);
-            if (full())
-                replace(m_first, item);
-            else
-                m_alloc.construct(m_first, item);
+            create_or_replace(!full(), m_first, item);
             BOOST_CB_UNWIND(increment(m_first))
         } else {
             pointer src = m_first;
             pointer dest = m_first;
             decrement(dest);
             pointer it = map_pointer(pos.m_it);
-            pointer first = m_first;
-            decrement(first);
+            bool create = !full();
             BOOST_CB_TRY
             while (src != it) {
-                if (dest == first && !full())
-                    m_alloc.construct(dest, *src);
-                else
-                    replace(dest, *src);
+                create_or_replace(create, dest, *src);
                 increment(src);
                 increment(dest);
+                create = false;
             }
             replace((--pos).m_it, item);
             BOOST_CB_UNWIND(
-                if (dest == first) {
-                    if (full()) {
-                        decrement(m_last);
-                        --m_size;
-                    }
-                } else {
-                    if (!full()) {
-                        m_first = first;
-                        ++m_size;
-                    }
-                    tidy(dest);
+                if (!create && !full()) {
+                    decrement(m_first);
+                    ++m_size;
                 }
             )
             decrement(m_first);
@@ -1069,15 +1046,28 @@ private:
     //! Map the null pointer to virtual end of circular buffer.
     pointer map_pointer(pointer p) const { return p == 0 ? m_last : p; }
 
+    //! Allocate memory.
+    pointer allocate(size_type n) {
+        if (n > max_size())
+            throw_exception(std::length_error("circular_buffer"));
+#if BOOST_CB_ENABLE_DEBUG
+        pointer p = (n == 0) ? 0 : m_alloc.allocate(n, 0);
+        ::memset(p, cb_details::UNITIALIZED, sizeof(value_type) * n);
+        return p;
+#else
+        return (n == 0) ? 0 : m_alloc.allocate(n, 0);
+#endif
+    }
+
+    //! Deallocate memory.
+    void deallocate(pointer p, size_type n) {
+        if (p != 0)
+            m_alloc.deallocate(p, n);
+    }
+
     //! Does the pointer point to the uninitialized memory?
     bool is_uninitialized(const_pointer p) const {
         return p >= m_last && (m_first < m_last || p < m_first);
-    }
-
-    //! Destroy an item only if it has been created.
-    void destroy_if_created(pointer pos) {
-        if (is_uninitialized(pos))
-            destroy_item(pos);
     }
 
     //! Replace an element.
@@ -1100,33 +1090,6 @@ private:
             replace(pos, item);
     }
 
-    //! Tidy up after an exception is thrown.
-    void tidy(pointer p) {
-        for (; m_first != p; increment(m_first), --m_size)
-            destroy_item(m_first);
-        increment(m_first);
-        --m_size;
-    }
-
-    //! Allocate memory.
-    pointer allocate(size_type n) {
-        if (n > max_size())
-            throw_exception(std::length_error("circular_buffer"));
-#if BOOST_CB_ENABLE_DEBUG
-        pointer p = (n == 0) ? 0 : m_alloc.allocate(n, 0);
-        ::memset(p, cb_details::UNITIALIZED, sizeof(value_type) * n);
-        return p;
-#else
-        return (n == 0) ? 0 : m_alloc.allocate(n, 0);
-#endif
-    }
-
-    //! Deallocate memory.
-    void deallocate(pointer p, size_type n) {
-        if (p != 0)
-            m_alloc.deallocate(p, n);
-    }
-
     //! Destroy an item.
     void destroy_item(pointer p) {
         m_alloc.destroy(p);
@@ -1134,6 +1097,12 @@ private:
         invalidate_iterators(iterator(this, p));
         ::memset(p, cb_details::UNITIALIZED, sizeof(value_type));
 #endif
+    }
+
+    //! Destroy an item only if it has been created.
+    void destroy_if_created(pointer pos) {
+        if (is_uninitialized(pos))
+            destroy_item(pos);
     }
 
     //! Destroy the whole content of the circular buffer.
@@ -1153,6 +1122,14 @@ private:
         m_last = 0;
         m_end = 0;
 #endif
+    }
+
+    //! Tidy up after an exception is thrown.
+    void tidy(pointer p) {
+        for (; m_first != p; increment(m_first), --m_size)
+            destroy_item(m_first);
+        increment(m_first);
+        --m_size;
     }
 
     //! Specialized assign method.
