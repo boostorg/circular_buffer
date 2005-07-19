@@ -157,6 +157,9 @@ t57  constructor and insert methods taking input iterator does not work with
 
 t58  verify the correctness of the SGIAssignableConcept
 
+t59  test insert and rinsert methods if the original and returned iterators
+     meet the postconditions
+
 -------------------------------------------------------------------------------
 
 Some routine tasks:
