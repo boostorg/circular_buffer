@@ -689,22 +689,22 @@ public:
         if (full() && pos == begin())
             return begin();
         if (pos.m_it == 0) {
-            create_or_replace(!full(), m_last, item);
+            construct_or_replace(!full(), m_last, item);
             pos.m_it = m_last;
         } else {
             pointer src = m_last;
             pointer dest = m_last;
-            bool create = !full();
+            bool construct = !full();
             BOOST_CB_TRY
             while (src != pos.m_it) {
                 decrement(src);
-                create_or_replace(create, dest, *src);
+                construct_or_replace(construct, dest, *src);
                 decrement(dest);
-                create = false;
+                construct = false;
             }
             replace(pos.m_it, item);
             BOOST_CB_UNWIND(
-                if (!create && !full()) {
+                if (!construct && !full()) {
                     increment(m_last);
                     ++m_size;
                 }
@@ -794,24 +794,24 @@ public:
         if (pos == begin()) {
             BOOST_CB_TRY
             decrement(m_first);
-            create_or_replace(!full(), m_first, item);
+            construct_or_replace(!full(), m_first, item);
             BOOST_CB_UNWIND(increment(m_first))
         } else {
             pointer src = m_first;
             pointer dest = m_first;
             decrement(dest);
             pointer it = map_pointer(pos.m_it);
-            bool create = !full();
+            bool construct = !full();
             BOOST_CB_TRY
             while (src != it) {
-                create_or_replace(create, dest, *src);
+                construct_or_replace(construct, dest, *src);
                 increment(src);
                 increment(dest);
-                create = false;
+                construct = false;
             }
             replace((--pos).m_it, item);
             BOOST_CB_UNWIND(
-                if (!create && !full()) {
+                if (!construct && !full()) {
                     decrement(m_first);
                     ++m_size;
                 }
@@ -1077,13 +1077,13 @@ private:
 #endif
     }
 
-    //! Create or replace an element.
+    //! Construct or replace an element.
     /*!
-        <code>create</code> has to be set to <code>true</code> if and only if
+        <code>construct</code> has to be set to <code>true</code> if and only if
         <code>pos</code> points to an uninitialized memory.
     */
-    void create_or_replace(bool create, pointer pos, param_value_type item) {
-        if (create)
+    void construct_or_replace(bool construct, pointer pos, param_value_type item) {
+        if (construct)
             m_alloc.construct(pos, item);
         else
             replace(pos, item);
@@ -1098,8 +1098,8 @@ private:
 #endif
     }
 
-    //! Destroy an item only if it has been created.
-    void destroy_if_created(pointer pos) {
+    //! Destroy an item only if it has been constructed.
+    void destroy_if_constructed(pointer pos) {
         if (is_uninitialized(pos))
             destroy_item(pos);
     }
@@ -1210,16 +1210,16 @@ private:
             BOOST_CB_TRY
             while (src != pos.m_it) {
                 decrement(src);
-                create_or_replace(is_uninitialized(dest), dest, *src);
+                construct_or_replace(is_uninitialized(dest), dest, *src);
                 decrement(dest);
             }
             for (; ii < n; ++ii, increment(p))
-                create_or_replace(is_uninitialized(p), p, *wrapper.get_reference());
+                construct_or_replace(is_uninitialized(p), p, *wrapper.get_reference());
             BOOST_CB_UNWIND(
                 for (p = add(m_last, n - 1); p != dest; decrement(p))
-                    destroy_if_created(p);
-                for (n = 0, src = pos.m_it; n < ii; ++n, increment(src))
-                    destroy_if_created(src);
+                    destroy_if_constructed(p);
+                for (n = 0, p = pos.m_it; n < ii; ++n, increment(p))
+                    destroy_if_constructed(p);
             )
         }
         m_last = add(m_last, n);
@@ -1255,7 +1255,7 @@ private:
         if (construct > n)
             construct = n;
         if (pos == begin()) {
-            pointer p = sub(map_pointer(pos.m_it), n);
+            pointer p = sub(m_first, n);
             size_type ii = n;
             BOOST_CB_TRY
             for (;ii > construct; --ii, increment(p))
@@ -1263,30 +1263,25 @@ private:
             for (; ii > 0; --ii, increment(p))
                 m_alloc.construct(p, *wrapper.get_reference());
             BOOST_CB_UNWIND(
-                size_type unwind = ii < construct ? construct - ii : 0;
-                pointer tmp = sub(map_pointer(pos.m_it), construct);
-                for (n = 0; n < unwind; ++n, increment(tmp))
-                    destroy_item(tmp);
+                size_type constructed = ii < construct ? construct - ii : 0;
+                m_last = add(m_last, constructed);
+                m_size += constructed;
             )
         } else {
             pointer src = m_first;
             pointer dest = sub(m_first, n);
             pointer p = map_pointer(pos.m_it);
-            size_type ii = 0;
             BOOST_CB_TRY
             while (src != p) {
-                create_or_replace(is_uninitialized(dest), dest, *src);
+                construct_or_replace(is_uninitialized(dest), dest, *src);
                 increment(src);
                 increment(dest);
             }
-            for (dest = sub(p, n); ii < n; ++ii, increment(dest))
-                create_or_replace(is_uninitialized(dest), dest, *wrapper.get_reference());
+            for (size_type ii = 0; ii < n; ++ii, increment(dest))
+                construct_or_replace(is_uninitialized(dest), dest, *wrapper.get_reference());
             BOOST_CB_UNWIND(
-                for (pointer p1 = m_first, p2 = sub(m_first, n); p1 != src; increment(p1), increment(p2))
-                    destroy_if_created(p2);
-                p = sub(p, n);
-                for (n = 0; n < ii; ++n, increment(p))
-                    destroy_if_created(p);
+                for (p = sub(m_first, n); p != dest; increment(p))
+                    destroy_if_constructed(p);
             )
         }
         m_first = sub(m_first, n);
