@@ -1051,7 +1051,7 @@ private:
             throw_exception(std::length_error("circular_buffer"));
 #if BOOST_CB_ENABLE_DEBUG
         pointer p = (n == 0) ? 0 : m_alloc.allocate(n, 0);
-        ::memset(p, cb_details::UNITIALIZED, sizeof(value_type) * n);
+        ::memset(p, cb_details::UNINITIALIZED, sizeof(value_type) * n);
         return p;
 #else
         return (n == 0) ? 0 : m_alloc.allocate(n, 0);
@@ -1094,7 +1094,7 @@ private:
         m_alloc.destroy(p);
 #if BOOST_CB_ENABLE_DEBUG
         invalidate_iterators(iterator(this, p));
-        ::memset(p, cb_details::UNITIALIZED, sizeof(value_type));
+        ::memset(p, cb_details::UNINITIALIZED, sizeof(value_type));
 #endif
     }
 

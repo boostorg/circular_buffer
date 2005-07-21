@@ -22,7 +22,7 @@ namespace boost {
 namespace cb_details {
 
 // The value the uninitialized memory is filled with.
-const int UNITIALIZED = 0xcc;
+const int UNINITIALIZED = 0xcc;
 
 /*!
     \struct int_iterator_tag
