@@ -557,7 +557,7 @@ public:
     */
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
-        assign(first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_category_traits<InputIterator>::tag());
+        assign(first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
     }
 
     //! Swap the contents of two circular buffers.
@@ -774,7 +774,7 @@ public:
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        insert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_category_traits<InputIterator>::tag());
+        insert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
     }
 
     //! Insert an <code>item</code> before the given position.
@@ -874,7 +874,7 @@ public:
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_category_traits<InputIterator>::tag());
+        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
     }
 
 // Erase
@@ -1016,29 +1016,29 @@ private:
     }
 
     //! Increment the pointer.
-    template <class Pointer0>
-    void increment(Pointer0& p) const {
+    template <class Pointer>
+    void increment(Pointer& p) const {
         if (++p == m_end)
             p = m_buff;
     }
 
     //! Decrement the pointer.
-    template <class Pointer0>
-    void decrement(Pointer0& p) const {
+    template <class Pointer>
+    void decrement(Pointer& p) const {
         if (p == m_buff)
             p = m_end;
         --p;
     }
 
     //! Add <code>n</code> to the pointer.
-    template <class Pointer0>
-    Pointer0 add(Pointer0 p, difference_type n) const {
+    template <class Pointer>
+    Pointer add(Pointer p, difference_type n) const {
         return p + (n < (m_end - p) ? n : n - capacity());
     }
 
     //! Subtract <code>n</code> from the pointer.
-    template <class Pointer0>
-    Pointer0 sub(Pointer0 p, difference_type n) const {
+    template <class Pointer>
+    Pointer sub(Pointer p, difference_type n) const {
         return p - (n > (p - m_buff) ? n - capacity() : n);
     }
 
@@ -1124,17 +1124,29 @@ private:
     }
 
     //! Specialized assign method.
-    template <class InputIterator>
-    void assign(InputIterator n, InputIterator item, cb_details::int_iterator_tag) {
+    template <class IntegralType>
+    void assign(IntegralType n, IntegralType item, cb_details::int_tag) {
         assign((size_type)n, item);
     }
 
     //! Specialized assign method.
+    template <class Iterator>
+    void assign(Iterator first, Iterator last, cb_details::iterator_tag) {
+        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type);
+        assign(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+    }
+    
+    //! Specialized assign method.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last, std::input_iterator_tag) {
-        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type);
+
+    }
+    
+    //! Specialized assign method.
+    template <class ForwardIterator>
+    void assign(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
-        do_assign(std::distance(first, last), assign_range<InputIterator>(first, last, m_alloc));
+        do_assign(std::distance(first, last), assign_range<ForwardIterator>(first, last, m_alloc));
     }
 
     //! Helper assign method.
@@ -1161,13 +1173,13 @@ private:
 
     //! Specialized insert method.
     template <class InputIterator>
-    void insert(iterator pos, InputIterator n, InputIterator item, cb_details::int_iterator_tag) {
+    void insert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
         insert(pos, (size_type)n, item);
     }
 
     //! Specialized insert method.
     template <class InputIterator>
-    void insert(iterator pos, InputIterator first, InputIterator last, std::input_iterator_tag) {
+    void insert(iterator pos, InputIterator first, InputIterator last, cb_details::iterator_tag) {
         BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type);
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         difference_type n = std::distance(first, last);
@@ -1229,13 +1241,13 @@ private:
 
     //! Specialized rinsert method.
     template <class InputIterator>
-    void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::int_iterator_tag) {
+    void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
         rinsert(pos, (size_type)n, item);
     }
 
     //! Specialized rinsert method.
     template <class InputIterator>
-    void rinsert(iterator pos, InputIterator first, InputIterator last, std::input_iterator_tag) {
+    void rinsert(iterator pos, InputIterator first, InputIterator last, cb_details::iterator_tag) {
         BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type);
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         rinsert_n_item(pos, std::distance(first, last), iterator_wrapper<InputIterator>(first));

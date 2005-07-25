@@ -130,11 +130,11 @@ public:
     }
 
     //! Invalidate every iterator conforming to the condition.
-    template <class Iterator0>
-    void invalidate_iterators(const Iterator0& it) {
+    template <class Iterator>
+    void invalidate_iterators(const Iterator& it) {
         const iterator_base* previous = 0;
         for (const iterator_base* p = m_iterators; p != 0; p = p->next()) {
-            if (((Iterator0*)p)->m_it == it.m_it) {
+            if (((Iterator*)p)->m_it == it.m_it) {
                 p->invalidate();
                 remove(p, previous);
                 continue;

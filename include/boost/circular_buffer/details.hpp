@@ -25,47 +25,57 @@ namespace cb_details {
 const int UNINITIALIZED = 0xcc;
 
 /*!
-    \struct int_iterator_tag
-    \brief Identifying tag for integer types (not for iterators).
+    \struct iterator_tag
+    \brief Identifying tag for iterator types.
 */
-struct int_iterator_tag {
+struct iterator_tag {
 #if BOOST_WORKAROUND(__BORLANDC__, < 0x6000)
     char dummy_; // BCB: by default empty structure has 8 bytes
 #endif
 };
 
 /*!
-    \struct iterator_category
-    \brief Defines iterator category.
+    \struct int_tag
+    \brief Identifying tag for integer types.
 */
-template <bool>
-struct iterator_category {
-    //! Represents iterators.
-    typedef std::input_iterator_tag iterator_category_tag;
-};
-
-template <>
-struct iterator_category<true> {
-    //! Represents integral types (not iterators).
-    typedef int_iterator_tag iterator_category_tag;
+struct int_tag {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x6000)
+    char dummy_; // BCB: by default empty structure has 8 bytes
+#endif
 };
 
 /*!
-    \struct iterator_category_traits
+    \struct iterator_cat
+    \brief Defines iterator category.
+*/
+template <bool>
+struct iterator_cat {
+    //! Represents iterators.
+    typedef iterator_tag iterator_cat_tag;
+};
+
+template <>
+struct iterator_cat<true> {
+    //! Represents integral types (not iterators).
+    typedef int_tag iterator_cat_tag;
+};
+
+/*!
+    \struct iterator_cat_traits
     \brief Defines the iterator category tag for the given iterator.
 */
 template <class Iterator>
-struct iterator_category_traits {
+struct iterator_cat_traits {
     //! Iterator category tag type.
     /*!
         Depending on the template parameter the <code>tag</code> distinguishes
         between iterators and non-iterators. If the template parameter
-        is an iterator, the <code>tag</code> is typedef for <code>std::input_iterator_tag</code>.
+        is an iterator, the <code>tag</code> is typedef for <code>iterator_tag</code>.
         If the parameter is not an iterator, the <code>tag</code> is typedef for
-        <code>int_iterator_tag</code>.
+        <code>int_tag</code>.
     */
-    typedef typename iterator_category<
-        is_integral<Iterator>::value>::iterator_category_tag tag;
+    typedef typename iterator_cat<
+        is_integral<Iterator>::value>::iterator_cat_tag tag;
 };
 
 template <class Traits> struct nonconst_traits;
@@ -110,10 +120,10 @@ struct nonconst_traits {
     \struct helper_pointer
     \brief Helper pointer used in the iterator.
 */
-template <class Traits0>
+template <class Traits>
 struct helper_pointer {
     bool m_end;
-    typename Traits0::pointer m_it;
+    typename Traits::pointer m_it;
 };
 
 /*!
