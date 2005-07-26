@@ -494,7 +494,7 @@ private:
     //! Determine the initial capacity.
     template <class InputIterator>
     static size_type init_capacity(size_type capacity, size_type min_capacity, InputIterator first, InputIterator last) {
-        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type);
+        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for valid iterator type
         return std::min(capacity, std::max(min_capacity,
             static_cast<size_type>(std::distance(first, last))));
     }

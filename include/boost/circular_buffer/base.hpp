@@ -452,7 +452,7 @@ public:
         InputIterator last,
         const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
-        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type);
+        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for valid iterator type
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         m_first = m_buff = allocate(capacity);
         m_end = m_buff + capacity;
@@ -1132,7 +1132,7 @@ private:
     //! Specialized assign method.
     template <class Iterator>
     void assign(Iterator first, Iterator last, cb_details::iterator_tag) {
-        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type);
+        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for valid iterator type
         assign(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
     
@@ -1172,15 +1172,27 @@ private:
     }
 
     //! Specialized insert method.
-    template <class InputIterator>
-    void insert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
+    template <class IntegralType>
+    void insert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
         insert(pos, (size_type)n, item);
     }
 
     //! Specialized insert method.
+    template <class Iterator>
+    void insert(iterator pos, Iterator first, Iterator last, cb_details::iterator_tag) {
+        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for valid iterator type
+        insert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+    }
+    
+    //! Specialized insert method.
     template <class InputIterator>
-    void insert(iterator pos, InputIterator first, InputIterator last, cb_details::iterator_tag) {
-        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type);
+    void insert(iterator pos, InputIterator first, InputIterator last, std::input_iterator_tag) {
+
+    }
+    
+    //! Specialized insert method.
+    template <class ForwardIterator>
+    void insert(iterator pos, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         difference_type n = std::distance(first, last);
         if (n == 0)
@@ -1192,9 +1204,9 @@ private:
             std::advance(first, n - copy);
             n = copy;
         }
-        insert_n_item(pos, n, iterator_wrapper<InputIterator>(first));
+        insert_n_item(pos, n, iterator_wrapper<ForwardIterator>(first));
     }
-
+    
     //! Helper insert method.
     template <class Wrapper>
     void insert_n_item(iterator pos, size_type n, const Wrapper& wrapper) {
@@ -1246,11 +1258,23 @@ private:
     }
 
     //! Specialized rinsert method.
+    template <class Iterator>
+    void rinsert(iterator pos, Iterator first, Iterator last, cb_details::iterator_tag) {
+        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for valid iterator type
+        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+    }
+    
+    //! Specialized insert method.
     template <class InputIterator>
-    void rinsert(iterator pos, InputIterator first, InputIterator last, cb_details::iterator_tag) {
-        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type);
+    void rinsert(iterator pos, InputIterator first, InputIterator last, std::input_iterator_tag) {
+
+    }
+    
+    //! Specialized rinsert method.
+    template <class ForwardIterator>
+    void rinsert(iterator pos, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
-        rinsert_n_item(pos, std::distance(first, last), iterator_wrapper<InputIterator>(first));
+        rinsert_n_item(pos, std::distance(first, last), iterator_wrapper<ForwardIterator>(first));
     }
 
     //! Helper rinsert method.
