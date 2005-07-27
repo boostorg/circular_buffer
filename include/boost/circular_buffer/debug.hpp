@@ -19,6 +19,9 @@ namespace cb_details {
 
 #if BOOST_CB_ENABLE_DEBUG
 
+// The value the uninitialized memory is filled with.
+const int UNINITIALIZED = 0xcc;
+
 class iterator_registry;
 
 /*!

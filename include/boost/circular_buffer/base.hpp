@@ -17,6 +17,7 @@
 #include <boost/concept_check.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
+#include <boost/iterator/iterator_traits.hpp>
 #include <algorithm>
 #if !defined(BOOST_NO_EXCEPTIONS)
     #include <stdexcept>
@@ -453,7 +454,7 @@ public:
         const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
         BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for valid iterator type
-        BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
+        BOOST_CB_ASSERT(std::distance(first, last) >= 0);   // check for wrong range
         m_first = m_buff = allocate(capacity);
         m_end = m_buff + capacity;
         size_type diff = std::distance(first, last);
