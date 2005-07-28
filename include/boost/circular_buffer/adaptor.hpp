@@ -237,8 +237,7 @@ public:
         init_capacity(capacity, min_capacity, first, last), first, last, alloc)
     , m_capacity(capacity)
     , m_min_capacity(min_capacity) {
-        BOOST_CB_ASSERT(capacity >= min_capacity);        // check for capacity lower than min_capacity
-        BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
+        BOOST_CB_ASSERT(capacity >= min_capacity); // check for capacity lower than min_capacity
     }
 
     // Default destructor
@@ -495,17 +494,18 @@ private:
     template <class InputIterator>
     static size_type init_capacity(size_type capacity, size_type min_capacity, InputIterator first, InputIterator last) {
         BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for valid iterator type
+        BOOST_CB_ASSERT(std::distance(first, last) >= 0);   // check for wrong range
         return std::min(capacity, std::max(min_capacity,
             static_cast<size_type>(std::distance(first, last))));
     }
 
-    //! Helper insert method.
+    //! Specialized insert method.
     template <class InputIterator>
     void insert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
         insert(pos, (size_type)n, item);
     }
 
-    //! Helper insert method.
+    //! Specialized insert method.
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last, cb_details::iterator_tag) {
         size_type index = pos - begin();
@@ -513,13 +513,13 @@ private:
         circular_buffer<T, Alloc>::insert(begin() + index, first, last);
     }
 
-    //! Helper rinsert method.
+    //! Specialized rinsert method.
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
         rinsert(pos, (size_type)n, item);
     }
 
-    //! Helper rinsert method.
+    //! Specialized rinsert method.
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last, cb_details::iterator_tag) {
         size_type index = pos - begin();

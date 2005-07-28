@@ -19,6 +19,7 @@
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <algorithm>
+#include <deque>
 #if !defined(BOOST_NO_EXCEPTIONS)
     #include <stdexcept>
 #endif
@@ -454,24 +455,7 @@ public:
         const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
         BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for valid iterator type
-        BOOST_CB_ASSERT(std::distance(first, last) >= 0);   // check for wrong range
-        m_first = m_buff = allocate(capacity);
-        m_end = m_buff + capacity;
-        size_type diff = std::distance(first, last);
-        if (diff > capacity) {
-            std::advance(first, diff - capacity);
-            m_size = capacity;
-            m_last = m_buff;
-        } else {
-            m_size = diff;
-            if (diff == capacity)
-                m_last = m_buff;
-            else
-                m_last = m_buff + size();
-        }
-        BOOST_CB_TRY
-        cb_details::uninitialized_copy(first, last, m_buff, m_alloc);
-        BOOST_CB_UNWIND(deallocate(m_buff, capacity))
+        initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<InputIterator>::type());
     }
 
     //! Destructor.
@@ -1124,6 +1108,50 @@ private:
 #endif
     }
 
+    //! Initialize the circular buffer (specialized method).
+    template <class InputIterator>
+    void initialize(size_type capacity,
+        InputIterator first,
+        InputIterator last,
+        std::input_iterator_tag) {
+        std::deque<value_type> tmp(first, last);
+        initialize(capacity, tmp.begin(), tmp.end(), tmp.size());
+    }
+    
+    //! Initialize the circular buffer (specialized method).
+    template <class ForwardIterator>
+    void initialize(size_type capacity,
+        ForwardIterator first,
+        ForwardIterator last,
+        std::forward_iterator_tag) {
+        BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
+        initialize(capacity, first, last, std::distance(first, last));
+    }
+
+    //! Helper initialize method.
+    template <class ForwardIterator>
+    void initialize(size_type capacity,
+        ForwardIterator first,
+        ForwardIterator last,
+        size_type diff) {
+        m_first = m_buff = allocate(capacity);
+        m_end = m_buff + capacity;
+        if (diff > capacity) {
+            std::advance(first, diff - capacity);
+            m_size = capacity;
+            m_last = m_buff;
+        } else {
+            m_size = diff;
+            if (diff == capacity)
+                m_last = m_buff;
+            else
+                m_last = m_buff + size();
+        }
+        BOOST_CB_TRY
+        cb_details::uninitialized_copy(first, last, m_buff, m_alloc);
+        BOOST_CB_UNWIND(deallocate(m_buff, capacity))
+    }
+    
     //! Specialized assign method.
     template <class IntegralType>
     void assign(IntegralType n, IntegralType item, cb_details::int_tag) {
