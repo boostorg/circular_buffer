@@ -410,19 +410,19 @@ void exception_safety_test() {
     cb18.push_back(2);
     cb18.pop_front();
     Integer::set_exception_trigger(4);
-    BOOST_CHECK_THROW(cb18.data(), exception);
+    BOOST_CHECK_THROW(cb18.linearize(), exception);
 
     circular_buffer<Integer> cb19(5, 0);
     cb19.push_back(1);
     cb19.push_back(2);
     Integer::set_exception_trigger(5);
-    BOOST_CHECK_THROW(cb19.data(), exception);
+    BOOST_CHECK_THROW(cb19.linearize(), exception);
 
     circular_buffer<Integer> cb20(5, 0);
     cb20.push_back(1);
     cb20.push_back(2);
     Integer::set_exception_trigger(6);
-    BOOST_CHECK_THROW(cb20.data(), exception);
+    BOOST_CHECK_THROW(cb20.linearize(), exception);
 
     circular_buffer<Integer> cb21(5);
     cb21.push_back(1);

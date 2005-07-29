@@ -160,6 +160,8 @@ t58  verify the correctness of the SGIAssignableConcept
 t59  test insert and rinsert methods if the original and returned iterators
      meet the postconditions
 
+t60  add assign methods with capacity parameter
+
 -------------------------------------------------------------------------------
 
 Some routine tasks:

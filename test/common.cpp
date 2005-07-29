@@ -143,7 +143,17 @@ void front_and_back_test() {
     BOOST_CHECK(cb.back() == 3);
 }
 
-void data_test() {
+void array_test() {
+    // TODO
+    CB_CONTAINER<Integer> cb(1);
+    CB_CONTAINER<Integer>::range a1 = cb.array_one();
+    CB_CONTAINER<Integer>::range a2 = cb.array_two();
+
+    BOOST_CHECK(a1.second == 0);
+    BOOST_CHECK(a2.second == 0);
+}
+
+void linearize_test() {
 
 	vector<int> v;
     v.push_back(1);
@@ -199,7 +209,7 @@ void data_test() {
 	cb6.push_back(6);
 	cb6.pop_back();
 
-    BOOST_CHECK(*cb1.data() == 4);
+    BOOST_CHECK(*cb1.linearize() == 4);
 	BOOST_CHECK(&cb1[0] < &cb1[1]
 		&& &cb1[1] < &cb1[2]
 		&& &cb1[2] < &cb1[3]
@@ -209,16 +219,16 @@ void data_test() {
 		&& &cb1[6] < &cb1[7]
 		&& &cb1[7] < &cb1[8]
 		&& &cb1[8] < &cb1[9]);
-    BOOST_CHECK(*(cb1.data() + 1) == 5);
-	BOOST_CHECK(*(cb1.data() + 2) == 6);
-	BOOST_CHECK(*(cb1.data() + 3) == 7);
-	BOOST_CHECK(*(cb1.data() + 4) == 8);
-	BOOST_CHECK(*(cb1.data() + 5) == 9);
-	BOOST_CHECK(*(cb1.data() + 6) == 10);
-    BOOST_CHECK(*(cb1.data() + 7) == 11);
-    BOOST_CHECK(*(cb1.data() + 8) == 12);
-    BOOST_CHECK(*(cb1.data() + 9) == 13);
-    BOOST_CHECK(*cb2.data() == 8);
+    BOOST_CHECK(*(cb1.linearize() + 1) == 5);
+	BOOST_CHECK(*(cb1.linearize() + 2) == 6);
+	BOOST_CHECK(*(cb1.linearize() + 3) == 7);
+	BOOST_CHECK(*(cb1.linearize() + 4) == 8);
+	BOOST_CHECK(*(cb1.linearize() + 5) == 9);
+	BOOST_CHECK(*(cb1.linearize() + 6) == 10);
+    BOOST_CHECK(*(cb1.linearize() + 7) == 11);
+    BOOST_CHECK(*(cb1.linearize() + 8) == 12);
+    BOOST_CHECK(*(cb1.linearize() + 9) == 13);
+    BOOST_CHECK(*cb2.linearize() == 8);
 	BOOST_CHECK(&cb2[0] < &cb2[1]
 		&& &cb2[1] < &cb2[2]
 		&& &cb2[2] < &cb2[3]
@@ -228,16 +238,16 @@ void data_test() {
 		&& &cb2[6] < &cb2[7]
 		&& &cb2[7] < &cb2[8]
 		&& &cb2[8] < &cb2[9]);
-    BOOST_CHECK(*(cb2.data() + 1) == 9);
-    BOOST_CHECK(*(cb2.data() + 2) == 10);
-    BOOST_CHECK(*(cb2.data() + 3) == 11);
-    BOOST_CHECK(*(cb2.data() + 4) == 12);
-    BOOST_CHECK(*(cb2.data() + 5) == 13);
-    BOOST_CHECK(*(cb2.data() + 6) == 14);
-    BOOST_CHECK(*(cb2.data() + 7) == 15);
-    BOOST_CHECK(*(cb2.data() + 8) == 16);
-    BOOST_CHECK(*(cb2.data() + 9) == 17);
-    BOOST_CHECK(*cb3.data() == 6);
+    BOOST_CHECK(*(cb2.linearize() + 1) == 9);
+    BOOST_CHECK(*(cb2.linearize() + 2) == 10);
+    BOOST_CHECK(*(cb2.linearize() + 3) == 11);
+    BOOST_CHECK(*(cb2.linearize() + 4) == 12);
+    BOOST_CHECK(*(cb2.linearize() + 5) == 13);
+    BOOST_CHECK(*(cb2.linearize() + 6) == 14);
+    BOOST_CHECK(*(cb2.linearize() + 7) == 15);
+    BOOST_CHECK(*(cb2.linearize() + 8) == 16);
+    BOOST_CHECK(*(cb2.linearize() + 9) == 17);
+    BOOST_CHECK(*cb3.linearize() == 6);
 	BOOST_CHECK(&cb3[0] < &cb3[1]
 		&& &cb3[1] < &cb3[2]
 		&& &cb3[2] < &cb3[3]
@@ -245,34 +255,34 @@ void data_test() {
 		&& &cb3[4] < &cb3[5]
 		&& &cb3[5] < &cb3[6]
 		&& &cb3[6] < &cb3[7]);
-    BOOST_CHECK(*(cb3.data() + 1) == 7);
-    BOOST_CHECK(*(cb3.data() + 2) == 8);
-    BOOST_CHECK(*(cb3.data() + 3) == 9);
-    BOOST_CHECK(*(cb3.data() + 4) == 10);
-    BOOST_CHECK(*(cb3.data() + 5) == 11);
-    BOOST_CHECK(*(cb3.data() + 6) == 12);
-    BOOST_CHECK(*(cb3.data() + 7) == 13);
-    BOOST_CHECK(cb4.data() == 0);
-	BOOST_CHECK(*cb5.data() == 10);
+    BOOST_CHECK(*(cb3.linearize() + 1) == 7);
+    BOOST_CHECK(*(cb3.linearize() + 2) == 8);
+    BOOST_CHECK(*(cb3.linearize() + 3) == 9);
+    BOOST_CHECK(*(cb3.linearize() + 4) == 10);
+    BOOST_CHECK(*(cb3.linearize() + 5) == 11);
+    BOOST_CHECK(*(cb3.linearize() + 6) == 12);
+    BOOST_CHECK(*(cb3.linearize() + 7) == 13);
+    BOOST_CHECK(cb4.linearize() == 0);
+	BOOST_CHECK(*cb5.linearize() == 10);
 	BOOST_CHECK(&cb5[0] < &cb5[1]
 		&& &cb5[1] < &cb5[2]
 		&& &cb5[2] < &cb5[3]
 		&& &cb5[3] < &cb5[4]
 		&& &cb5[4] < &cb5[5]);
-    BOOST_CHECK(*(cb5.data() + 1) == 11);
-    BOOST_CHECK(*(cb5.data() + 2) == 12);
-    BOOST_CHECK(*(cb5.data() + 3) == 13);
-    BOOST_CHECK(*(cb5.data() + 4) == 14);
-    BOOST_CHECK(*(cb5.data() + 5) == 15);
-	BOOST_CHECK(*cb6.data() == 1);
+    BOOST_CHECK(*(cb5.linearize() + 1) == 11);
+    BOOST_CHECK(*(cb5.linearize() + 2) == 12);
+    BOOST_CHECK(*(cb5.linearize() + 3) == 13);
+    BOOST_CHECK(*(cb5.linearize() + 4) == 14);
+    BOOST_CHECK(*(cb5.linearize() + 5) == 15);
+	BOOST_CHECK(*cb6.linearize() == 1);
 	BOOST_CHECK(&cb6[0] < &cb6[1]
 		&& &cb6[1] < &cb6[2]
 		&& &cb6[2] < &cb6[3]
 		&& &cb6[3] < &cb6[4]);
-    BOOST_CHECK(*(cb6.data() + 1) == 2);
-    BOOST_CHECK(*(cb6.data() + 2) == 3);
-    BOOST_CHECK(*(cb6.data() + 3) == 4);
-    BOOST_CHECK(*(cb6.data() + 4) == 5);
+    BOOST_CHECK(*(cb6.linearize() + 1) == 2);
+    BOOST_CHECK(*(cb6.linearize() + 2) == 3);
+    BOOST_CHECK(*(cb6.linearize() + 3) == 4);
+    BOOST_CHECK(*(cb6.linearize() + 4) == 5);
 }
 
 void capacity_test() {
@@ -1169,7 +1179,8 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&element_access_and_insert_test));
     tests->add(BOOST_TEST_CASE(&at_test));
     tests->add(BOOST_TEST_CASE(&front_and_back_test));
-    tests->add(BOOST_TEST_CASE(&data_test));
+    tests->add(BOOST_TEST_CASE(&array_test));
+    tests->add(BOOST_TEST_CASE(&linearize_test));
     tests->add(BOOST_TEST_CASE(&capacity_test));
     tests->add(BOOST_TEST_CASE(&full_and_empty_test));
     tests->add(BOOST_TEST_CASE(&set_capacity_test));

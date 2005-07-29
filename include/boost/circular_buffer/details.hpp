@@ -419,12 +419,12 @@ inline typename Traits::difference_type* distance_type(const iterator<Buff, Trai
 #endif // #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
 
 /*!
-    \fn FwdIterator uninitialized_copy(InputIterator first, InputIterator last, FwdIterator dest, Alloc& alloc)
+    \fn ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& alloc)
     \brief Equivalent of <code>std::uninitialized_copy</code> with allocator.
 */
-template<class InputIterator, class FwdIterator, class Alloc>
-inline FwdIterator uninitialized_copy(InputIterator first, InputIterator last, FwdIterator dest, Alloc& alloc) {
-    FwdIterator next = dest;
+template<class InputIterator, class ForwardIterator, class Alloc>
+inline ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& alloc) {
+    ForwardIterator next = dest;
     BOOST_CB_TRY
     for (; first != last; ++first, ++dest)
         alloc.construct(dest, *first);
@@ -436,12 +436,12 @@ inline FwdIterator uninitialized_copy(InputIterator first, InputIterator last, F
 }
 
 /*!
-    \fn void uninitialized_fill_n(FwdIterator first, Diff n, const T& item, Alloc& alloc)
+    \fn void uninitialized_fill_n(ForwardIterator first, Diff n, const T& item, Alloc& alloc)
     \brief Equivalent of <code>std::uninitialized_fill_n</code> with allocator.
 */
-template<class FwdIterator, class Diff, class T, class Alloc>
-inline void uninitialized_fill_n(FwdIterator first, Diff n, const T& item, Alloc& alloc) {
-    FwdIterator next = first;
+template<class ForwardIterator, class Diff, class T, class Alloc>
+inline void uninitialized_fill_n(ForwardIterator first, Diff n, const T& item, Alloc& alloc) {
+    ForwardIterator next = first;
     BOOST_CB_TRY
         for (; n > 0; ++first, --n)
             alloc.construct(first, item);

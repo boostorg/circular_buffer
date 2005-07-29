@@ -19,6 +19,7 @@
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <algorithm>
+#include <utility>
 #include <deque>
 #if !defined(BOOST_NO_EXCEPTIONS)
     #include <stdexcept>
@@ -81,24 +82,6 @@ public:
     //! The type of the allocator used in the circular buffer.
     typedef Alloc allocator_type;
 
-    //! Return the allocator.
-    allocator_type get_allocator() const { return m_alloc; }
-
-    //! Return the allocator.
-    /*!
-        \note This method was added in order to optimize obtaining of the allocator with a state,
-              although use of stateful allocators in STL is discouraged.
-    */
-    allocator_type& get_allocator() { return m_alloc; }
-
-// Helper types
-
-    // Define a type that represents the "best" way to pass the value_type to a method.
-    typedef typename call_traits<value_type>::param_type param_value_type;
-
-    // Define a type that represents the "best" way to return the value_type from a const method.
-    typedef typename call_traits<value_type>::param_type return_value_type;
-
 // Iterators
 
     //! Const (random access) iterator used to iterate through a circular buffer.
@@ -112,6 +95,22 @@ public:
 
     //! Iterator used to iterate backwards through a circular buffer.
     typedef reverse_iterator<iterator> reverse_iterator;
+
+// Container specific types
+
+    // TODO
+    typedef std::pair<pointer, size_type> range;
+
+	// TODO
+    typedef std::pair<const_pointer, size_type> const_range;
+    
+// Helper types
+
+    // Define a type that represents the "best" way to pass the value_type to a method.
+    typedef typename call_traits<value_type>::param_type param_value_type;
+
+    // Define a type that represents the "best" way to return the value_type from a const method.
+    typedef typename call_traits<value_type>::param_type return_value_type;
 
 private:
 // Member variables
@@ -143,6 +142,18 @@ private:
 #endif
 
 public:
+// Allocator
+    
+    //! Return the allocator.
+    allocator_type get_allocator() const { return m_alloc; }
+
+    //! Return the allocator.
+    /*!
+        \note This method was added in order to optimize obtaining of the allocator with a state,
+              although use of stateful allocators in STL is discouraged.
+    */
+    allocator_type& get_allocator() { return m_alloc; }
+    
 // Element access
 
     //! Return an iterator pointing to the beginning of the circular buffer.
@@ -241,7 +252,27 @@ public:
         return *((m_last == m_buff ? m_end : m_last) - 1);
     }
 
-    //! Return pointer to data stored in the circular buffer as a continuous array of values.
+    // TODO
+    range array_one() {
+        return range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
+    }
+    
+    // TODO
+    range array_two() {
+        return range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
+    }
+    
+    // TODO
+    const_range array_one() const {
+        return const_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
+    }
+    
+    // TODO
+    const_range array_two() const {
+        return const_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
+    }
+    
+    //! TODO Return pointer to data stored in the circular buffer as a continuous array of values.
     /*!
         This method can be useful e.g. when passing the stored data into the legacy C API.
         \post <code>\&(*this)[0] \< \&(*this)[1] \< ... \< \&(*this).back()</code>
@@ -250,7 +281,7 @@ public:
         \throws Whatever T::operator = (const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    pointer data() {
+    pointer linearize() {
         if (empty())
             return 0;
         if (m_first < m_last || m_last == m_buff)
@@ -1114,8 +1145,21 @@ private:
         InputIterator first,
         InputIterator last,
         std::input_iterator_tag) {
-        std::deque<value_type> tmp(first, last);
-        initialize(capacity, tmp.begin(), tmp.end(), tmp.size());
+        m_first = m_last = m_buff = allocate(capacity);
+        m_end = m_buff + capacity;
+        m_size = 0;
+        if (capacity == 0)
+            return;
+        while (first != last && !full()) {
+            m_alloc.construct(m_last, *first++);
+            increment(m_last);
+            ++m_size;
+        }
+        while (first != last) {
+            replace(m_last, *first++);
+            increment(m_last);
+            m_first = m_last;
+        }    
     }
     
     //! Initialize the circular buffer (specialized method).
@@ -1168,7 +1212,9 @@ private:
     //! Specialized assign method.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last, std::input_iterator_tag) {
-
+        BOOST_CB_ASSERT(BOOST_CB_TEMPLATED_ITERATOR_CONSTRUCTORS_PROVIDED);
+        std::deque<value_type> tmp(first, last);
+        do_assign(tmp.size(), assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator>(tmp.begin(), tmp.end(), m_alloc));
     }
     
     //! Specialized assign method.
