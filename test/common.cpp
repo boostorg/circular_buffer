@@ -6,6 +6,82 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+void generic_test(CB_CONTAINER<Integer>& cb) {
+    
+    vector<int> v;
+    v.push_back(11);
+    v.push_back(12);
+    v.push_back(13);
+    v.push_back(14);
+    v.push_back(15);
+    v.push_back(16);
+    v.push_back(17);
+        
+    if (cb.capacity() == 0) {
+    
+        cb.insert(cb.begin(), 1);
+        cb.insert(cb.begin(), v.begin(), v.end());
+        cb.rinsert(cb.end(), 2);
+        cb.rinsert(cb.end(), v.begin(), v.end());
+        cb.push_back(3);
+        cb.push_front(4);
+        cb.linearize();
+        
+        BOOST_CHECK(cb.empty());
+        BOOST_CHECK(cb.full());
+      
+    } else {
+    
+    // TODO
+        cb.insert(cb.end(), 1);
+        BOOST_CHECK(!cb.empty());
+        BOOST_CHECK(cb[cb.size() - 1] == 1);
+        
+        cb.insert(cb.end(), v.begin(), v.end());
+        BOOST_CHECK(!cb.empty());
+        BOOST_CHECK(cb[cb.size() - 1] == 17);
+        
+        cb.erase(cb.end() - 1, cb.end());
+        BOOST_CHECK(cb.capacity() > 1 ? !cb.empty(): cb.empty());
+
+        cb.rinsert(cb.begin(), 2);
+        BOOST_CHECK(!cb.empty());
+        BOOST_CHECK(cb[0] == 2);
+        
+        cb.erase(cb.begin());
+        BOOST_CHECK(cb.capacity() > 1 ? !cb.empty(): cb.empty());
+        
+        size_t size = cb.size();
+        cb.rinsert(cb.begin(), v.begin(), v.end());
+        BOOST_CHECK(!cb.empty());
+        BOOST_CHECK(cb.capacity() > 14 ? !cb.full() : cb.full());
+        //BOOST_CHECK(cb[cb.size() - 1] == cb.size() + 10);
+        
+        cb.pop_front();
+        BOOST_CHECK(cb.capacity() > 1 ? !cb.empty(): cb.empty());
+        BOOST_CHECK(!cb.full());
+        
+        cb.push_back(3);
+        BOOST_CHECK(!cb.empty());
+        BOOST_CHECK(cb.capacity() > 14 ? !cb.full() : cb.full());
+        BOOST_CHECK(cb[cb.size() - 1] == 3);
+        
+        cb.pop_back();
+        BOOST_CHECK(cb.capacity() > 1 ? !cb.empty(): cb.empty());
+        BOOST_CHECK(!cb.full());
+        
+        cb.push_front(4);
+        BOOST_CHECK(!cb.empty());
+        BOOST_CHECK(cb.capacity() > 14 ? !cb.full() : cb.full());
+        BOOST_CHECK(cb[0] == 4);
+        
+        cb.linearize();
+        BOOST_CHECK(!cb.empty());
+        BOOST_CHECK(cb.capacity() > 14 ? !cb.full() : cb.full());
+        BOOST_CHECK(cb[0] == 4);
+    }
+}
+
 void basic_test() {
 
     vector<int> v;
@@ -30,6 +106,10 @@ void basic_test() {
     BOOST_CHECK(cb3.full());
     BOOST_CHECK(cb3[0] == 1);
     BOOST_CHECK(cb3[6] == 7);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
 }
 
 void constructor_and_element_access_test() {
@@ -52,6 +132,8 @@ void size_test() {
 
     BOOST_CHECK(cb.size() == 3);
     BOOST_CHECK(cb.max_size() == cb.get_allocator().max_size());
+    
+    generic_test(cb);
 }
 
 void boundary_capacity_test() {
@@ -62,6 +144,8 @@ void boundary_capacity_test() {
     BOOST_CHECK(cb.size() == 0);
     BOOST_CHECK(cb.full());
     BOOST_CHECK(cb.empty());
+    
+    generic_test(cb);
 }
 
 void begin_and_end_test() {
@@ -79,6 +163,9 @@ void begin_and_end_test() {
 
     BOOST_CHECK(i == 6);
     BOOST_CHECK(cb2.begin() == cb2.end());
+    
+    generic_test(cb1);
+    generic_test(cb2);
 }
 
 void rbegin_and_rend_test() {
@@ -97,6 +184,9 @@ void rbegin_and_rend_test() {
 
     BOOST_CHECK(i == 4);
     BOOST_CHECK(cb2.rbegin() == cb2.rend());
+    
+    generic_test(cb1);
+    generic_test(cb2);
 }
 
 void element_access_and_insert_test() {
@@ -112,6 +202,8 @@ void element_access_and_insert_test() {
     BOOST_CHECK(cb[1] == 2);
     BOOST_CHECK(cb[2] == 4);
     BOOST_CHECK(ccb[2] == 2);
+    
+    generic_test(cb);
 }
 
 void at_test() {
@@ -141,6 +233,8 @@ void front_and_back_test() {
 
     BOOST_CHECK(cb.front() == cb.back());
     BOOST_CHECK(cb.back() == 3);
+    
+    generic_test(cb);
 }
 
 void array_test() {
@@ -151,6 +245,8 @@ void array_test() {
 
     BOOST_CHECK(a1.second == 0);
     BOOST_CHECK(a2.second == 0);
+    
+    generic_test(cb);
 }
 
 void linearize_test() {
@@ -283,6 +379,13 @@ void linearize_test() {
     BOOST_CHECK(*(cb6.linearize() + 2) == 3);
     BOOST_CHECK(*(cb6.linearize() + 3) == 4);
     BOOST_CHECK(*(cb6.linearize() + 4) == 5);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
+    generic_test(cb5);
+    generic_test(cb6);
 }
 
 void capacity_test() {
@@ -292,6 +395,9 @@ void capacity_test() {
 
     BOOST_CHECK(cb1.capacity() == 0);
     BOOST_CHECK(cb2.capacity() == 1);
+    
+    generic_test(cb1);
+    generic_test(cb2);
 }
 
 void full_and_empty_test() {
@@ -314,6 +420,11 @@ void full_and_empty_test() {
     BOOST_CHECK(cb3.full());
     BOOST_CHECK(!cb4.empty());
     BOOST_CHECK(!cb4.full());
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void set_capacity_test() {
@@ -352,6 +463,11 @@ void set_capacity_test() {
     BOOST_CHECK(cb4.size() == 2);
     BOOST_CHECK(cb4[0] == 2);
     BOOST_CHECK(cb4.capacity() == 2);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void resize_test() {
@@ -399,6 +515,12 @@ void resize_test() {
     BOOST_CHECK(cb5.capacity() == 10);
     BOOST_CHECK(cb5[0] == 1);
     BOOST_CHECK(cb5[9] == 1);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
+    generic_test(cb5);
 }
 
 void constructor_test() {
@@ -413,6 +535,9 @@ void constructor_test() {
     BOOST_CHECK(cb2[0] == 2);
     BOOST_CHECK(cb2[1] == 2);
     BOOST_CHECK(cb2[2] == 2);
+    
+    generic_test(cb1);
+    generic_test(cb2);
 }
 
 void assign_test() {
@@ -448,6 +573,9 @@ void assign_test() {
     BOOST_CHECK(cb3[9] == 1);
     BOOST_CHECK(cb3.size() == 10);
     BOOST_CHECK(cb3.capacity() == 10);
+    
+    generic_test(cb1);
+    generic_test(cb3);
 }
 
 void copy_constructor_and_assign_test() {
@@ -478,6 +606,11 @@ void copy_constructor_and_assign_test() {
     BOOST_CHECK(cb4.capacity() == 4);
     BOOST_CHECK(!cb4.full());
     BOOST_CHECK(*(cb4.end() - 1) == 4);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void swap_test() {
@@ -497,6 +630,9 @@ void swap_test() {
     BOOST_CHECK(cb1.capacity() == 5);
     BOOST_CHECK(cb1[0] == 8);
     BOOST_CHECK(cb1.size() == 1);
+    
+    generic_test(cb1);
+    generic_test(cb2);
 }
 
 void push_back_test() {
@@ -513,6 +649,8 @@ void push_back_test() {
 
     cb2.push_back(1);
     BOOST_CHECK(cb2.back() == 1);
+    
+    generic_test(cb2);
 }
 
 void pop_back_test() {
@@ -528,6 +666,8 @@ void pop_back_test() {
     BOOST_CHECK(cb.size() == 3);
     BOOST_CHECK(!cb.full());
     BOOST_CHECK(cb[0] == 2);
+    
+    generic_test(cb);
 }
 
 void insert_test() {
@@ -558,6 +698,10 @@ void insert_test() {
     BOOST_CHECK(cb2.full());
     BOOST_CHECK(cb3[0] == 20);
     BOOST_CHECK(cb3[1] == 40);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
 }
 
 void insert_n_test() {
@@ -595,6 +739,11 @@ void insert_n_test() {
     BOOST_CHECK(cb4[3] == 6);
     BOOST_CHECK(cb4[4] == 3);
     BOOST_CHECK(cb4[5] == 4);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void insert_range_test() {
@@ -640,6 +789,12 @@ void insert_range_test() {
     BOOST_CHECK(cb5[3] == 9);
     BOOST_CHECK(cb5[4] == 3);
     BOOST_CHECK(cb5[5] == 4);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
+    generic_test(cb5);
 }
 
 void push_front_test() {
@@ -660,6 +815,9 @@ void push_front_test() {
     CB_CONTAINER<Integer> cb3(0);
     cb3.push_front(10);
     BOOST_CHECK(cb3.empty());
+    
+    generic_test(cb2);
+    generic_test(cb3);
 }
 
 void pop_front_test() {
@@ -675,6 +833,8 @@ void pop_front_test() {
     BOOST_CHECK(cb.size() == 3);
     BOOST_CHECK(!cb.full());
     BOOST_CHECK(cb[0] == 4);
+    
+    generic_test(cb);
 }
 
 void rinsert_test() {
@@ -744,6 +904,14 @@ void rinsert_test() {
     BOOST_CHECK(cb7[3] == 6);
     BOOST_CHECK(cb7[4] == 6);
     BOOST_CHECK(cb7[5] == 6);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
+    generic_test(cb5);
+    generic_test(cb6);
+    generic_test(cb7);
 }
 
 void rinsert_n_test() {
@@ -792,6 +960,12 @@ void rinsert_n_test() {
     BOOST_CHECK(cb5[3] == 6);
     BOOST_CHECK(cb5[4] == 7);
     BOOST_CHECK(cb5[5] == 8);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
+    generic_test(cb5);
 }
 
 void rinsert_range_test() {
@@ -823,6 +997,11 @@ void rinsert_range_test() {
     BOOST_CHECK(cb3.empty());
     BOOST_CHECK(cb4[0] == 11);
     BOOST_CHECK(cb4.size() == 1);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void erase_test() {
@@ -855,6 +1034,10 @@ void erase_test() {
     BOOST_CHECK(it3 == cb3.end());
     BOOST_CHECK(cb3[0] == 1);
     BOOST_CHECK(cb3[1] == 2);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
 }
 
 void erase_range_test() {
@@ -900,6 +1083,11 @@ void erase_range_test() {
     BOOST_CHECK(cb4.size() == 0);
     BOOST_CHECK(cb4.capacity() == 10);
     BOOST_CHECK(it4 == cb4.end());
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void rerase_test() {
@@ -933,6 +1121,10 @@ void rerase_test() {
     BOOST_CHECK(*it3 == 2);
     BOOST_CHECK(cb3[0] == 2);
     BOOST_CHECK(cb3[1] == 3);
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
 }
 
 void rerase_range_test() {
@@ -978,6 +1170,11 @@ void rerase_range_test() {
     BOOST_CHECK(cb4.size() == 0);
     BOOST_CHECK(cb4.capacity() == 10);
     BOOST_CHECK(it4 == cb4.begin());
+    
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void clear_test() {
@@ -990,6 +1187,8 @@ void clear_test() {
     cb.clear();
 
     BOOST_CHECK(cb.empty());
+    
+    generic_test(cb);
 }
 
 void equality_test() {
@@ -1007,6 +1206,9 @@ void equality_test() {
 
     BOOST_CHECK(cb1 == cb2);
     BOOST_CHECK(!(cb2 != cb1));
+    
+    generic_test(cb1);
+    generic_test(cb2);
 }
 
 void lexicographical_comparison_test() {
@@ -1051,6 +1253,9 @@ void assign_range_test() {
     BOOST_CHECK(cb2[1] == 12);
     BOOST_CHECK(cb2[2] == 13);
     BOOST_CHECK(cb2.size() == (size_t)distance(v.begin(), v.end()));
+    
+    generic_test(cb1);
+    generic_test(cb2);
 }
 
 // test of the example (introduced in the documentation)

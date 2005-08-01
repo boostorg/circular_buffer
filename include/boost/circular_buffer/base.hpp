@@ -1212,8 +1212,7 @@ private:
     //! Specialized assign method.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last, std::input_iterator_tag) {
-        BOOST_CB_ASSERT(cb_details::TEMPLATED_ITERATOR_CONSTRUCTORS_PROVIDED);
-        std::deque<value_type> tmp(first, last);
+        std::deque<value_type> tmp(first, last); // won't compile if the STL implementation doesn't provide templated iterator constructor
         do_assign(tmp.size(), assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator>(tmp.begin(), tmp.end(), m_alloc));
     }
     
