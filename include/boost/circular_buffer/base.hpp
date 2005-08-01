@@ -1212,7 +1212,7 @@ private:
     //! Specialized assign method.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last, std::input_iterator_tag) {
-        BOOST_CB_ASSERT(BOOST_CB_TEMPLATED_ITERATOR_CONSTRUCTORS_PROVIDED);
+        BOOST_CB_ASSERT(cb_details::TEMPLATED_ITERATOR_CONSTRUCTORS_PROVIDED);
         std::deque<value_type> tmp(first, last);
         do_assign(tmp.size(), assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator>(tmp.begin(), tmp.end(), m_alloc));
     }
@@ -1262,7 +1262,10 @@ private:
     //! Specialized insert method.
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last, std::input_iterator_tag) {
-
+        if (!full() || pos != begin()) {
+            for (;first != last; ++pos)
+                pos = insert(pos, *first++);
+        }
     }
     
     //! Specialized insert method.
@@ -1342,7 +1345,10 @@ private:
     //! Specialized insert method.
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last, std::input_iterator_tag) {
-
+        if (!full() || pos != end()) {
+            while (first != last)
+                rinsert(pos, *first++);
+        }
     }
     
     //! Specialized rinsert method.
