@@ -32,53 +32,58 @@ void generic_test(CB_CONTAINER<Integer>& cb) {
       
     } else {
     
-    // TODO
         cb.insert(cb.end(), 1);
         BOOST_CHECK(!cb.empty());
         BOOST_CHECK(cb[cb.size() - 1] == 1);
+        
+        size_t size = cb.size();
+        cb.rerase(cb.end() - 1, cb.end());
+        BOOST_CHECK(size == cb.size() + 1);
         
         cb.insert(cb.end(), v.begin(), v.end());
         BOOST_CHECK(!cb.empty());
         BOOST_CHECK(cb[cb.size() - 1] == 17);
         
+        size = cb.size();
         cb.erase(cb.end() - 1, cb.end());
-        BOOST_CHECK(cb.capacity() > 1 ? !cb.empty(): cb.empty());
+        BOOST_CHECK(size == cb.size() + 1);
 
+        size = cb.size();
         cb.rinsert(cb.begin(), 2);
-        BOOST_CHECK(!cb.empty());
+        BOOST_CHECK(size + 1 == cb.size());
         BOOST_CHECK(cb[0] == 2);
         
+        size = cb.size();
         cb.erase(cb.begin());
-        BOOST_CHECK(cb.capacity() > 1 ? !cb.empty(): cb.empty());
+        BOOST_CHECK(size == cb.size() + 1);
         
-        size_t size = cb.size();
         cb.rinsert(cb.begin(), v.begin(), v.end());
         BOOST_CHECK(!cb.empty());
-        BOOST_CHECK(cb.capacity() > 14 ? !cb.full() : cb.full());
-        //BOOST_CHECK(cb[cb.size() - 1] == cb.size() + 10);
+        BOOST_CHECK(cb[0] == 11);
         
+        size = cb.size();
         cb.pop_front();
-        BOOST_CHECK(cb.capacity() > 1 ? !cb.empty(): cb.empty());
-        BOOST_CHECK(!cb.full());
+        BOOST_CHECK(size == cb.size() + 1);
         
         cb.push_back(3);
         BOOST_CHECK(!cb.empty());
-        BOOST_CHECK(cb.capacity() > 14 ? !cb.full() : cb.full());
         BOOST_CHECK(cb[cb.size() - 1] == 3);
         
+        size = cb.size();
         cb.pop_back();
-        BOOST_CHECK(cb.capacity() > 1 ? !cb.empty(): cb.empty());
-        BOOST_CHECK(!cb.full());
+        BOOST_CHECK(size == cb.size() + 1);
         
         cb.push_front(4);
         BOOST_CHECK(!cb.empty());
-        BOOST_CHECK(cb.capacity() > 14 ? !cb.full() : cb.full());
         BOOST_CHECK(cb[0] == 4);
         
         cb.linearize();
         BOOST_CHECK(!cb.empty());
-        BOOST_CHECK(cb.capacity() > 14 ? !cb.full() : cb.full());
         BOOST_CHECK(cb[0] == 4);
+        
+        size = cb.size();
+        cb.rerase(cb.begin());
+        BOOST_CHECK(size == cb.size() + 1);
     }
 }
 
@@ -221,6 +226,8 @@ void at_test() {
     }
 
     BOOST_CHECK_THROW(cb.at(2), out_of_range);
+    
+    generic_test(cb);
 
 #endif // #if !defined(BOOST_NO_EXCEPTIONS)
 }

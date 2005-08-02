@@ -143,7 +143,8 @@ t42  documentation may add some rationale on its internal data structures
 t43  REJECTED - fixed another way
      adaptor.hpp: apply workaround for borland (line 5764)
 
-t44  add some "post tests" after testing non-const methods (such as inserting
+t44  DONE
+     add some "post tests" after testing non-const methods (such as inserting
      an element into container which is tested for erase)
 
 t55  DONE - no action needed
