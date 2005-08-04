@@ -46,8 +46,8 @@ public:
     typedef typename circular_buffer<T, Alloc>::iterator iterator;
     typedef typename circular_buffer<T, Alloc>::const_reverse_iterator const_reverse_iterator;
     typedef typename circular_buffer<T, Alloc>::reverse_iterator reverse_iterator;
-    typedef typename circular_buffer<T, Alloc>::range range;
-    typedef typename circular_buffer<T, Alloc>::const_range const_range;
+    typedef typename circular_buffer<T, Alloc>::array_range array_range;
+    typedef typename circular_buffer<T, Alloc>::const_array_range const_array_range;
     typedef typename circular_buffer<T, Alloc>::param_value_type param_value_type;
     typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
 

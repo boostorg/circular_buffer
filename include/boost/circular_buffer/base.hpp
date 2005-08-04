@@ -98,11 +98,11 @@ public:
 
 // Container specific types
 
-    // TODO
-    typedef std::pair<pointer, size_type> range;
+    //! An array range.
+    typedef std::pair<pointer, size_type> array_range;
 
-	// TODO
-    typedef std::pair<const_pointer, size_type> const_range;
+	//! A range of a const array.
+    typedef std::pair<const_pointer, size_type> const_array_range;
     
 // Helper types
 
@@ -253,23 +253,23 @@ public:
     }
 
     // TODO
-    range array_one() {
-        return range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
+    array_range array_one() {
+        return array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
     
     // TODO
-    range array_two() {
-        return range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
+    array_range array_two() {
+        return array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
     
     // TODO
-    const_range array_one() const {
-        return const_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
+    const_array_range array_one() const {
+        return const_array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
     
     // TODO
-    const_range array_two() const {
-        return const_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
+    const_array_range array_two() const {
+        return const_array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
     
     //! TODO Return pointer to data stored in the circular buffer as a continuous array of values.

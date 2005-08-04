@@ -247,8 +247,8 @@ void front_and_back_test() {
 void array_test() {
     // TODO
     CB_CONTAINER<Integer> cb(1);
-    CB_CONTAINER<Integer>::range a1 = cb.array_one();
-    CB_CONTAINER<Integer>::range a2 = cb.array_two();
+    CB_CONTAINER<Integer>::array_range a1 = cb.array_one();
+    CB_CONTAINER<Integer>::const_array_range a2 = cb.array_two();
 
     BOOST_CHECK(a1.second == 0);
     BOOST_CHECK(a2.second == 0);

@@ -33,6 +33,8 @@ t09  DONE
 t10  docs: define exception safety for every method
      "Guarantee of basic exception safety" as a design criteria for the whole
      container should be removed or amended.
+     Plus add some 'generic_test's if the method does't guarantee only a basic
+     exception safety.
 
 t11  DONE
      docs: remove/amend "In fact the circular_buffer is defined in the file
@@ -147,21 +149,22 @@ t44  DONE
      add some "post tests" after testing non-const methods (such as inserting
      an element into container which is tested for erase)
 
-t55  DONE - no action needed
+t45  DONE - no action needed
      check the iterator's operator []; add assertion if needed
 
-t56  rename files e.g. from adaptor to space_optimized_adaptor
+t46  rename files e.g. from adaptor to space_optimized_adaptor
 
-t57  constructor and insert methods taking input iterator does not work with
+t47  constructor and insert methods taking input iterator does not work with
      istream_iterator - std::distance() function does't work as expected - fix
      needed
 
-t58  verify the correctness of the SGIAssignableConcept
+t48  DONE
+     verify the correctness of the SGIAssignableConcept
 
-t59  test insert and rinsert methods if the original and returned iterators
-     meet the postconditions
+t49  test non-invalidation of the iterators after call to methods such as insert
+     or rinsert
 
-t60  add assign methods with capacity parameter
+t50  add assign methods with capacity parameter
 
 -------------------------------------------------------------------------------
 
