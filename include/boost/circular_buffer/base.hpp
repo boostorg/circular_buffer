@@ -19,6 +19,7 @@
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <algorithm>
+#include <limits>
 #include <utility>
 #include <deque>
 #if !defined(BOOST_NO_EXCEPTIONS)
@@ -328,7 +329,9 @@ public:
     size_type size() const { return m_size; }
 
     //! Return the largest possible size (or capacity) of the circular buffer.
-    size_type max_size() const { return m_alloc.max_size(); }
+    size_type max_size() const {
+        return std::min(m_alloc.max_size(), static_cast<size_type>(std::numeric_limits<difference_type>::max()));
+    }
 
     //! Is the circular buffer empty?
     /*!
@@ -1199,7 +1202,7 @@ private:
     //! Specialized assign method.
     template <class IntegralType>
     void assign(IntegralType n, IntegralType item, cb_details::int_tag) {
-        assign((size_type)n, item);
+        assign(static_cast<size_type>(n), item);
     }
 
     //! Specialized assign method.
@@ -1248,7 +1251,7 @@ private:
     //! Specialized insert method.
     template <class IntegralType>
     void insert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
-        insert(pos, (size_type)n, item);
+        insert(pos, static_cast<size_type>(n), item);
     }
 
     //! Specialized insert method.
@@ -1331,7 +1334,7 @@ private:
     //! Specialized rinsert method.
     template <class IntegralType>
     void rinsert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
-        rinsert(pos, (size_type)n, item);
+        rinsert(pos, static_cast<size_type>(n), item);
     }
 
     //! Specialized rinsert method.

@@ -129,16 +129,19 @@ void constructor_and_element_access_test() {
 
 void size_test() {
 
-    CB_CONTAINER<Integer> cb(3);
-    cb.push_back(1);
-    cb.push_back(2);
-    cb.push_back(3);
-    cb.push_back(4);
+    CB_CONTAINER<Integer> cb1(3);
+    cb1.push_back(1);
+    cb1.push_back(2);
+    cb1.push_back(3);
+    cb1.push_back(4);
+    CB_CONTAINER<Integer> cb2(5);
 
-    BOOST_CHECK(cb.size() == 3);
-    BOOST_CHECK(cb.max_size() == cb.get_allocator().max_size());
+    BOOST_CHECK(cb1.size() == 3);
+    BOOST_CHECK(cb2.size() == 0);
+    BOOST_CHECK(cb1.max_size() == cb2.max_size());
     
-    generic_test(cb);
+    generic_test(cb1);
+    generic_test(cb2);
 }
 
 void boundary_capacity_test() {

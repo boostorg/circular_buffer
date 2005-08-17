@@ -505,7 +505,7 @@ private:
     //! Specialized insert method.
     template <class InputIterator>
     void insert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
-        insert(pos, (size_type)n, item);
+        insert(pos, static_cast<size_type>(n), item);
     }
 
     //! Specialized insert method.
@@ -519,7 +519,7 @@ private:
     //! Specialized rinsert method.
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
-        rinsert(pos, (size_type)n, item);
+        rinsert(pos, static_cast<size_type>(n), item);
     }
 
     //! Specialized rinsert method.

@@ -78,15 +78,19 @@ t21  docs: consider better documentation for the "overwrite" term; add glossary
 t22  REJECTED - postponed to later version
      implement a "hook" for the overwrite operation (maybe as an adaptor)
 
-t23  amend the source code according to the formal review (line 1578); use
+t23  DONE - but the new iterator not applied (because of compilation problems
+            with VC6); only some improvements from the new iterator taken
+     amend the source code according to the formal review (line 1578); use
      the new iterator if possible
 
-t24  ammend the test in order to compile with the new iterator if really
+t24  REJECTED
+     ammend the test in order to compile with the new iterator if really
      needed (line 1857)
 
 t25  add constructor taking just two iterators as a parameter
 
-t26  change the current implementation of "overwrite" operation -> overwrite
+t26  DONE
+     change the current implementation of "overwrite" operation -> overwrite
      will be equivalent to assign
 
 t27  docs: apply the DefaultConstructible and Assignable type requirements
@@ -139,7 +143,7 @@ t40  DONE - verify
 t41  REJECTED - not important; causing problems with generated documentation
      typedef for circular_buffer<T, Alloc> (line 4450)
 
-t42  documentation may add some rationale on its internal data structures
+t42  docs: documentation may add some rationale on its internal data structures
      and their advantage over std::deque
 
 t43  REJECTED - fixed another way

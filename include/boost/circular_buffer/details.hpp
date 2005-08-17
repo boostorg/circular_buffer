@@ -227,9 +227,9 @@ public:
         helper_pointer<Traits> lhs = create_helper_pointer(*this);
         helper_pointer<Traits> rhs = create_helper_pointer(it);
         if (less(rhs, lhs) && lhs.m_it <= rhs.m_it)
-            return lhs.m_it + m_buff->capacity() - rhs.m_it;
+            return (lhs.m_it - rhs.m_it) + static_cast<difference_type>(m_buff->capacity());
         if (less(lhs, rhs) && lhs.m_it >= rhs.m_it)
-            return lhs.m_it - m_buff->capacity() - rhs.m_it;
+            return (lhs.m_it - rhs.m_it) - static_cast<difference_type>(m_buff->capacity());
         return lhs.m_it - rhs.m_it;
     }
 
@@ -355,39 +355,32 @@ private:
         return helper;
     }
 
-    //! Compare two pointers.
-    /*!
-    \return 1 if p1 is greater than p2.
-    \return 0 if p1 is equal to p2.
-    \return -1 if p1 is lower than p2.
-    */
-    template <class Pointer0, class Pointer1>
-    static difference_type compare(Pointer0 p1, Pointer1 p2) {
-        return p1 < p2 ? -1 : (p1 > p2 ? 1 : 0);
-    }
-
     //! Less.
     template <class InternalIterator0, class InternalIterator1>
     bool less(const InternalIterator0& lhs, const InternalIterator1& rhs) const {
-        switch (compare(lhs.m_it, m_buff->m_first)) {
-        case -1:
-            switch (compare(rhs.m_it, m_buff->m_first)) {
-            case -1: return lhs.m_it < rhs.m_it;
-            case 0: return rhs.m_end;
-            case 1: return false;
-            }
-        case 0:
-            switch (compare(rhs.m_it, m_buff->m_first)) {
-            case -1: return !lhs.m_end;
-            case 0: return !lhs.m_end && rhs.m_end;
-            case 1: return !lhs.m_end;
-            }
-        case 1:
-            switch (compare(rhs.m_it, m_buff->m_first)) {
-            case -1: return true;
-            case 0: return rhs.m_end;
-            case 1: return lhs.m_it < rhs.m_it;
-            }
+        difference_type ldiff = lhs.m_it - m_buff->m_first;
+        difference_type rdiff = rhs.m_it - m_buff->m_first;
+        if (ldiff < 0) {
+            if (rdiff < 0)
+                return lhs.m_it < rhs.m_it;
+            else if (rdiff == 0)
+                return rhs.m_end;
+            else
+                return false;
+        } else if (ldiff == 0) {
+            if (rdiff < 0)
+                return !lhs.m_end;
+            else if (rdiff == 0)
+                return !lhs.m_end && rhs.m_end;
+            else
+                return !lhs.m_end;
+        } else { // ldiff > 0
+            if (rdiff < 0)
+                return true;
+            else if (rdiff == 0)
+                return rhs.m_end;
+            else
+                return lhs.m_it < rhs.m_it;
         }
         return false;
     }
