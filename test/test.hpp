@@ -54,18 +54,18 @@ public:
     static void set_exception_trigger(int n) { ms_exception_trigger = n; }
 };
 
-struct A
+struct X
 {
-    A() : m_n(1) {}
-    A(int n) : m_n(n) {}
+    X() : m_n(1) {}
+    X(int n) : m_n(n) {}
     int m_n;
 };
 
-class B {
+class Y {
 public:
-    B() { increment(); }
-    B(const B& y) { y.increment(); }
-    ~B() { decrement(); }
+    Y() { increment(); }
+    Y(const Y& y) { y.increment(); }
+    ~Y() { decrement(); }
     static int count() { return ms_count; }
 private:
     void increment() const { ++ms_count; }
@@ -73,9 +73,9 @@ private:
     static int ms_count;
 };
 
-class C {
+class Z {
 public:
-    C() : m_num(255) {}
+    Z() : m_num(255) {}
     virtual int test_reference1() const { return m_num; }
     int test_reference2() const { return 255; }
 private:

@@ -39,9 +39,9 @@ void iterator_constructor_and_assign_test() {
 
 void iterator_reference_test() {
 
-    circular_buffer<C> cb(3, C());
-    circular_buffer<C>::iterator it = cb.begin();
-    circular_buffer<C>::const_iterator cit = cb.begin() + 1;
+    circular_buffer<Z> cb(3, Z());
+    circular_buffer<Z>::iterator it = cb.begin();
+    circular_buffer<Z>::const_iterator cit = cb.begin() + 1;
 
     BOOST_CHECK((*it).test_reference1() == it->test_reference2());
     BOOST_CHECK((*cit).test_reference2() == cit->test_reference1());

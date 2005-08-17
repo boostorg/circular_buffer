@@ -197,7 +197,7 @@ public:
     */
     iterator(const Buff* cb, const pointer p) : iterator_base(cb), m_buff(cb), m_it(p) {}
 
-    // Assign operator.
+    //! Assign operator.
     iterator& operator = (const iterator& it) {
         if (this == &it)
             return *this;

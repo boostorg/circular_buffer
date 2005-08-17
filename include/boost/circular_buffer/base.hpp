@@ -1329,8 +1329,8 @@ private:
     }
 
     //! Specialized rinsert method.
-    template <class InputIterator>
-    void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
+    template <class IntegralType>
+    void rinsert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
         rinsert(pos, (size_type)n, item);
     }
 
