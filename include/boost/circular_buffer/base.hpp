@@ -13,13 +13,13 @@
     #pragma once
 #endif
 
+#include <boost/limits.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/concept_check.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <algorithm>
-#include <limits>
 #include <utility>
 #include <deque>
 #if !defined(BOOST_NO_EXCEPTIONS)
@@ -1215,7 +1215,8 @@ private:
     //! Specialized assign method.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last, std::input_iterator_tag) {
-        std::deque<value_type> tmp(first, last); // won't compile if the STL implementation doesn't provide templated iterator constructor
+        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS;
+        std::deque<value_type> tmp(first, last);
         do_assign(tmp.size(), assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator>(tmp.begin(), tmp.end(), m_alloc));
     }
     
