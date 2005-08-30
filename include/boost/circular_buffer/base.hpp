@@ -330,7 +330,7 @@ public:
 
     //! Return the largest possible size (or capacity) of the circular buffer.
     size_type max_size() const {
-        return std::min(m_alloc.max_size(), static_cast<size_type>(std::numeric_limits<difference_type>::max()));
+        return std::min<size_type>(m_alloc.max_size(), std::numeric_limits<difference_type>::max());
     }
 
     //! Is the circular buffer empty?
@@ -370,16 +370,13 @@ public:
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    void set_capacity(size_type new_capacity, bool remove_front = true) {
+    void set_capacity(size_type new_capacity) {
         if (new_capacity == capacity())
             return;
         pointer buff = allocate(new_capacity);
         size_type new_size = std::min(new_capacity, size());
         BOOST_CB_TRY
-        if (remove_front)
-            cb_details::uninitialized_copy(end() - new_size, end(), buff, m_alloc);
-        else
-            cb_details::uninitialized_copy(begin(), begin() + new_size, buff, m_alloc);
+        cb_details::uninitialized_copy(end() - new_size, end(), buff, m_alloc);
         BOOST_CB_UNWIND(deallocate(buff, new_capacity))
         destroy();
         m_size = new_size;
@@ -397,7 +394,7 @@ public:
                is greater than the desired new capacity. If set to
                <code>true</code> then the first (leftmost) elements
                will be removed. If set to <code>false</code> then the
-               last (leftmost) elements will be removed.
+               last (rightmost) elements will be removed.
         \post <code>(*this).size() == new_size</code><br>
               If the new size is greater than the current size, the rest
               of the circular buffer is filled with copies of <code>item</code>.
@@ -410,16 +407,40 @@ public:
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    void resize(size_type new_size, param_value_type item = T(), bool remove_front = true) {
+    void resize(size_type new_size, param_value_type item = T()) {
         if (new_size > size()) {
             if (new_size > capacity())
                 set_capacity(new_size);
             insert(end(), new_size - size(), item);
         } else {
-            if (remove_front)
-                erase(begin(), end() - new_size);
-            else
-                erase(begin() + new_size, end());
+            erase(begin(), end() - new_size);
+        }
+    }
+
+    // TODO
+    void rset_capacity(size_type new_capacity) {
+        if (new_capacity == capacity())
+            return;
+        pointer buff = allocate(new_capacity);
+        size_type new_size = std::min(new_capacity, size());
+        BOOST_CB_TRY
+        cb_details::uninitialized_copy(begin(), begin() + new_size, buff, m_alloc);
+        BOOST_CB_UNWIND(deallocate(buff, new_capacity))
+        destroy();
+        m_size = new_size;
+        m_buff = m_first = buff;
+        m_end = m_buff + new_capacity;
+        m_last = add(m_buff, size());
+    }
+
+    // TODO
+    void rresize(size_type new_size, param_value_type item = T()) {
+        if (new_size > size()) {
+            if (new_size > capacity())
+                set_capacity(new_size);
+            insert(end(), new_size - size(), item);
+        } else {
+            erase(begin() + new_size, end());
         }
     }
 
@@ -495,36 +516,6 @@ public:
     //! Destructor.
     ~circular_buffer() { destroy(); }
 
-private:
-// Helper functors
-
-    // Functor for assigning n items.
-    struct assign_n {
-        size_type m_n;
-        param_value_type m_item;
-        allocator_type& m_alloc;
-        explicit assign_n(size_type n, param_value_type item, allocator_type& alloc) : m_n(n), m_item(item), m_alloc(alloc) {}
-        void operator () (pointer p) const {
-            cb_details::uninitialized_fill_n(p, m_n, m_item, m_alloc);
-        }
-    private:
-        assign_n& operator = (const assign_n&); // do not generate
-    };
-
-    // Functor for assigning range of items.
-    template <class InputIterator>
-    struct assign_range {
-        InputIterator m_first;
-        InputIterator m_last;
-        allocator_type& m_alloc;
-        explicit assign_range(InputIterator first, InputIterator last, allocator_type& alloc) : m_first(first), m_last(last), m_alloc(alloc) {}
-        void operator () (pointer p) const {
-            cb_details::uninitialized_copy(m_first, m_last, p, m_alloc);
-        }
-    private:
-        assign_range& operator = (const assign_range&); // do not generate
-    };
-
 public:
 // Assign methods
 
@@ -561,7 +552,7 @@ public:
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    void assign(size_type n, param_value_type item) { do_assign(n, assign_n(n, item, m_alloc)); }
+    void assign(size_type n, param_value_type item) { do_assign(n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc)); }
 
     //! Assign a copy of range.
     /*!
@@ -672,24 +663,6 @@ public:
         --m_size;
     }
 
-private:
-// Helper wrappers
-
-    // Iterator dereference wrapper.
-    template <class InputIterator>
-    struct iterator_wrapper {
-        mutable InputIterator m_it;
-        explicit iterator_wrapper(InputIterator it) : m_it(it) {}
-        InputIterator get_reference() const { return m_it++; }
-    };
-
-    // Item dereference wrapper.
-    struct item_wrapper {
-        const_pointer m_item;
-        explicit item_wrapper(param_value_type item) : m_item(&item) {}
-        const_pointer get_reference() const { return m_item; }
-    };
-
 public:
 // Insert
 
@@ -765,7 +738,7 @@ public:
             return;
         if (n > copy)
             n = copy;
-        insert_n_item(pos, n, item_wrapper(item));
+        insert_n_item(pos, n, cb_details::item_wrapper<const_pointer, param_value_type>(item));
     }
 
     //! Insert the range <code>[first, last)</code> before the given position.
@@ -865,7 +838,7 @@ public:
     */
     void rinsert(iterator pos, size_type n, param_value_type item) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        rinsert_n_item(pos, n, item_wrapper(item));
+        rinsert_n_item(pos, n, cb_details::item_wrapper<const_pointer, param_value_type>(item));
     }
 
     //! Insert the range <code>[first, last)</code> before the given position.
@@ -1215,16 +1188,16 @@ private:
     //! Specialized assign method.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last, std::input_iterator_tag) {
-        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS;
+        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS; // check if the STL provides templated iterator constructors for containers
         std::deque<value_type> tmp(first, last);
-        do_assign(tmp.size(), assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator>(tmp.begin(), tmp.end(), m_alloc));
+        do_assign(tmp.size(), cb_details::assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator, allocator_type>(tmp.begin(), tmp.end(), m_alloc));
     }
     
     //! Specialized assign method.
     template <class ForwardIterator>
     void assign(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
-        do_assign(std::distance(first, last), assign_range<ForwardIterator>(first, last, m_alloc));
+        do_assign(std::distance(first, last), cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
     }
 
     //! Helper assign method.
@@ -1285,7 +1258,7 @@ private:
             std::advance(first, n - copy);
             n = copy;
         }
-        insert_n_item(pos, n, iterator_wrapper<ForwardIterator>(first));
+        insert_n_item(pos, n, cb_details::iterator_wrapper<ForwardIterator>(first));
     }
     
     //! Helper insert method.
@@ -1299,9 +1272,9 @@ private:
             pointer p = m_last;
             BOOST_CB_TRY
             for (; ii < construct; ++ii, increment(p))
-                m_alloc.construct(p, *wrapper.get_reference());
+                m_alloc.construct(p, *wrapper.get());
             for (;ii < n; ++ii, increment(p))
-                replace(p, *wrapper.get_reference());
+                replace(p, *wrapper.get());
             BOOST_CB_UNWIND(
                 size_type constructed = std::min(ii, construct);
                 m_last = add(m_last, constructed);
@@ -1319,7 +1292,7 @@ private:
                 decrement(dest);
             }
             for (; ii < n; ++ii, increment(p))
-                construct_or_replace(is_uninitialized(p), p, *wrapper.get_reference());
+                construct_or_replace(is_uninitialized(p), p, *wrapper.get());
             BOOST_CB_UNWIND(
                 for (p = add(m_last, n - 1); p != dest; decrement(p))
                     destroy_if_constructed(p);
@@ -1358,7 +1331,7 @@ private:
     template <class ForwardIterator>
     void rinsert(iterator pos, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
-        rinsert_n_item(pos, std::distance(first, last), iterator_wrapper<ForwardIterator>(first));
+        rinsert_n_item(pos, std::distance(first, last), cb_details::iterator_wrapper<ForwardIterator>(first));
     }
 
     //! Helper rinsert method.
@@ -1379,9 +1352,9 @@ private:
             size_type ii = n;
             BOOST_CB_TRY
             for (;ii > construct; --ii, increment(p))
-                replace(p, *wrapper.get_reference());
+                replace(p, *wrapper.get());
             for (; ii > 0; --ii, increment(p))
-                m_alloc.construct(p, *wrapper.get_reference());
+                m_alloc.construct(p, *wrapper.get());
             BOOST_CB_UNWIND(
                 size_type constructed = ii < construct ? construct - ii : 0;
                 m_last = add(m_last, constructed);
@@ -1398,7 +1371,7 @@ private:
                 increment(dest);
             }
             for (size_type ii = 0; ii < n; ++ii, increment(dest))
-                construct_or_replace(is_uninitialized(dest), dest, *wrapper.get_reference());
+                construct_or_replace(is_uninitialized(dest), dest, *wrapper.get());
             BOOST_CB_UNWIND(
                 for (p = sub(m_first, n); p != dest; increment(p))
                     destroy_if_constructed(p);

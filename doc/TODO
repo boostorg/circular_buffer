@@ -51,7 +51,8 @@ t13  docs: fix precondition "*(this).size() > index" to "(*this).size()"
 t14  docs: explicitly document methods which do not throw any exception,
      e.g. "Exceptions: none"
 
-t15  rename the data() method to something meaningful concerning its mutation
+t15  DONE
+     rename the data() method to something meaningful concerning its mutation
      status (e.g to_array); mention its linear complexity in the docs
 
 t16  docs: document that push_back() or other methods that they can choose NOT
@@ -61,7 +62,8 @@ t16  docs: document that push_back() or other methods that they can choose NOT
 t17  docs: delete the "Semantics" paragraph and move its content directly
      into the documentation of the particular methods
 
-t18  Perhaps in addition to a data() function, it would be useful if the
+t18  DONE
+     Perhaps in addition to a data() function, it would be useful if the
      container provided constant-time access to the data as two arrays.
      Perhaps something like std::pair<T *, T *> array_1() and 
      std::pair<T *, T *> array_2(). (Consider also returning of
@@ -101,7 +103,8 @@ t28  docs: the difference between resize() and set_capacity() should be
 t29  DONE
      add rerase methods
 
-t30  The insert() function has its rinsert() counterpart. The same issue
+t30  DONE
+     The insert() function has its rinsert() counterpart. The same issue
      for resize and set_capacity is solved with the boolean parameter
      remove_front, which is not consistent.
 

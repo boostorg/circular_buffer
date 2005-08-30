@@ -455,11 +455,6 @@ void set_capacity_test() {
     cb3.push_back(1);
     cb3.set_capacity(2);
     cb3.set_capacity(2);
-    CB_CONTAINER<Integer> cb4(10);
-    cb4.push_back(2);
-    cb4.push_back(3);
-    cb4.push_back(1);
-    cb4.set_capacity(2, false);
 
     BOOST_CHECK(cb1.size() == 3);
     BOOST_CHECK(cb1[0] == 2);
@@ -470,14 +465,25 @@ void set_capacity_test() {
     BOOST_CHECK(cb3.size() == 2);
     BOOST_CHECK(cb3[0] == 3);
     BOOST_CHECK(cb3.capacity() == 2);
-    BOOST_CHECK(cb4.size() == 2);
-    BOOST_CHECK(cb4[0] == 2);
-    BOOST_CHECK(cb4.capacity() == 2);
     
     generic_test(cb1);
     generic_test(cb2);
     generic_test(cb3);
-    generic_test(cb4);
+}
+
+void rset_capacity_test() {
+
+    CB_CONTAINER<Integer> cb(10);
+    cb.push_back(2);
+    cb.push_back(3);
+    cb.push_back(1);
+    cb.rset_capacity(2);
+
+    BOOST_CHECK(cb.size() == 2);
+    BOOST_CHECK(cb[0] == 2);
+    BOOST_CHECK(cb.capacity() == 2);
+    
+    generic_test(cb);
 }
 
 void resize_test() {
@@ -494,16 +500,10 @@ void resize_test() {
     cb2.push_back(3);
     cb2.push_back(4);
     cb2.resize(2);
-    CB_CONTAINER<Integer> cb3(10);
-    cb3.push_back(1);
-    cb3.push_back(2);
-    cb3.push_back(3);
-    cb3.push_back(4);
-    cb3.resize(2, Integer(), false);
+    CB_CONTAINER<Integer> cb3(10 CB_MIN_CAPACITY, 1);
+    cb3.resize(0);
     CB_CONTAINER<Integer> cb4(10 CB_MIN_CAPACITY, 1);
-    cb4.resize(0);
-    CB_CONTAINER<Integer> cb5(10 CB_MIN_CAPACITY, 1);
-    cb5.resize(10);
+    cb4.resize(10);
 
     BOOST_CHECK(cb1.size() == 20);
     BOOST_CHECK(cb1.capacity() == 20);
@@ -515,22 +515,34 @@ void resize_test() {
     BOOST_CHECK(cb2.capacity() == 10);
     BOOST_CHECK(cb2[0] == 3);
     BOOST_CHECK(cb2[1] == 4);
-    BOOST_CHECK(cb3.size() == 2);
+    BOOST_CHECK(cb3.size() == 0);
     BOOST_CHECK(cb3.capacity() == 10);
-    BOOST_CHECK(cb3[0] == 1);
-    BOOST_CHECK(cb3[1] == 2);
-    BOOST_CHECK(cb4.size() == 0);
+    BOOST_CHECK(cb4.size() == 10);
     BOOST_CHECK(cb4.capacity() == 10);
-    BOOST_CHECK(cb5.size() == 10);
-    BOOST_CHECK(cb5.capacity() == 10);
-    BOOST_CHECK(cb5[0] == 1);
-    BOOST_CHECK(cb5[9] == 1);
+    BOOST_CHECK(cb4[0] == 1);
+    BOOST_CHECK(cb4[9] == 1);
     
     generic_test(cb1);
     generic_test(cb2);
     generic_test(cb3);
     generic_test(cb4);
-    generic_test(cb5);
+}
+
+void rresize_test() {
+
+    CB_CONTAINER<Integer> cb(10);
+    cb.push_back(1);
+    cb.push_back(2);
+    cb.push_back(3);
+    cb.push_back(4);
+    cb.rresize(2);
+
+    BOOST_CHECK(cb.size() == 2);
+    BOOST_CHECK(cb.capacity() == 10);
+    BOOST_CHECK(cb[0] == 1);
+    BOOST_CHECK(cb[1] == 2);
+    
+    generic_test(cb);
 }
 
 void constructor_test() {
@@ -1399,7 +1411,9 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&capacity_test));
     tests->add(BOOST_TEST_CASE(&full_and_empty_test));
     tests->add(BOOST_TEST_CASE(&set_capacity_test));
+    tests->add(BOOST_TEST_CASE(&rset_capacity_test));
     tests->add(BOOST_TEST_CASE(&resize_test));
+    tests->add(BOOST_TEST_CASE(&rresize_test));
     tests->add(BOOST_TEST_CASE(&constructor_test));
     tests->add(BOOST_TEST_CASE(&assign_test));
     tests->add(BOOST_TEST_CASE(&copy_constructor_and_assign_test));

@@ -135,27 +135,43 @@ public:
                <code>new_capacity > (*this).min_capacity()</code>) and an assertion
                will be invoked in the debug mode.
     */
-    void set_capacity(size_type new_capacity, bool remove_front = true) {
+    void set_capacity(size_type new_capacity) {
         BOOST_CB_ASSERT(new_capacity >= min_capacity()); // check for too low new capacity
         if (new_capacity < circular_buffer<T, Alloc>::capacity())
-            circular_buffer<T, Alloc>::set_capacity(new_capacity, remove_front);
+            circular_buffer<T, Alloc>::set_capacity(new_capacity);
         m_capacity = new_capacity;
     }
 
     //! See the circular_buffer source documentation.
-    void resize(size_type new_size, param_value_type item = T(), bool remove_front = true) {
+    void resize(size_type new_size, param_value_type item = T()) {
         if (new_size > size()) {
             if (new_size > capacity())
                 m_capacity = new_size;
             insert(end(), new_size - size(), item);
         } else {
-            if (remove_front)
-                erase(begin(), end() - new_size);
-            else
-                erase(begin() + new_size, end());
+            erase(begin(), end() - new_size);
         }
     }
 
+    // TODO
+    void rset_capacity(size_type new_capacity) {
+        BOOST_CB_ASSERT(new_capacity >= min_capacity()); // check for too low new capacity
+        if (new_capacity < circular_buffer<T, Alloc>::capacity())
+            circular_buffer<T, Alloc>::rset_capacity(new_capacity);
+        m_capacity = new_capacity;
+    }
+    
+    // TODO
+    void rresize(size_type new_size, param_value_type item = T()) {
+        if (new_size > size()) {
+            if (new_size > capacity())
+                m_capacity = new_size;
+            insert(end(), new_size - size(), item);
+        } else {
+            erase(begin() + new_size, end());
+        }
+    }
+    
     //! Create an empty space optimized circular buffer with a given capacity.
     /*!
         \param capacity The capacity of the buffer.

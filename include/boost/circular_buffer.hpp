@@ -22,7 +22,7 @@
     #define BOOST_CB_ENABLE_DEBUG 1
 #endif
 
-// BOOST_CB_ASSERT - assertion.
+// BOOST_CB_ASSERT - runtime assertion.
 #if BOOST_CB_ENABLE_DEBUG
     #include <boost/assert.hpp>
     #define BOOST_CB_ASSERT(Expr) BOOST_ASSERT(Expr)
@@ -30,7 +30,7 @@
     #define BOOST_CB_ASSERT(Expr) ((void)0)
 #endif
 
-// BOOST_CB_STATIC_ASSERT - static assertion.
+// BOOST_CB_STATIC_ASSERT - compile time assertion.
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     #define BOOST_CB_STATIC_ASSERT(Expr) ((void)0)
 #else
@@ -48,8 +48,8 @@
         BOOST_CB_STATIC_ASSERT((is_convertible<typename detail::iterator_traits<Iterator>::value_type, Type>::value))
 #endif
 
-// BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS - check if the STL implements templated
-//                                                   iterator constructors for containers.
+// BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS - check if the STL
+// provides templated iterator constructors for its containers.
 #if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
     #define BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS BOOST_CB_STATIC_ASSERT(false)
 #else

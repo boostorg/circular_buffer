@@ -124,6 +124,65 @@ struct helper_pointer {
 };
 
 /*!
+    \struct iterator_wrapper
+    \brief Helper iterator dereference wrapper.
+*/
+template <class Iterator>
+struct iterator_wrapper {
+    mutable Iterator m_it;
+    explicit iterator_wrapper(Iterator it) : m_it(it) {}
+    Iterator get() const { return m_it++; }
+};
+
+/*!
+    \struct item_wrapper
+    \brief Helper item dereference wrapper.
+*/
+template <class Pointer, class Value>
+struct item_wrapper {
+    Pointer m_item;
+    explicit item_wrapper(Value item) : m_item(&item) {}
+    Pointer get() const { return m_item; }
+};
+
+/*!
+    \struct assign_n
+    \brief Helper functor for assigning n items.
+*/
+template <class Value, class Alloc>
+struct assign_n {
+    typedef typename Alloc::size_type size_type;
+    size_type m_n;
+    Value m_item;
+    Alloc& m_alloc;
+    explicit assign_n(size_type n, Value item, Alloc& alloc) : m_n(n), m_item(item), m_alloc(alloc) {}
+    template <class Pointer>
+    void operator () (Pointer p) const {
+        uninitialized_fill_n(p, m_n, m_item, m_alloc);
+    }
+private:
+    assign_n& operator = (const assign_n&); // do not generate
+};
+
+/*!
+    \struct assign_range
+    \brief Helper functor for assigning range of items.
+*/
+template <class Iterator, class Alloc>
+struct assign_range {
+    Iterator m_first;
+    Iterator m_last;
+    Alloc& m_alloc;
+    explicit assign_range(Iterator first, Iterator last, Alloc& alloc) : m_first(first), m_last(last), m_alloc(alloc) {}
+    template <class Pointer>
+    void operator () (Pointer p) const {
+        uninitialized_copy(m_first, m_last, p, m_alloc);
+    }
+private:
+    assign_range& operator = (const assign_range&); // do not generate
+};
+
+/*!
     \class iterator
     \brief Random access iterator for the circular buffer.
     \param Buff The type of the underlying circular buffer.
