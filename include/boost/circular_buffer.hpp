@@ -13,6 +13,7 @@
     #pragma once
 #endif
 
+#include "circular_buffer_fwd.hpp"
 #include <boost/detail/workaround.hpp>
 
 // BOOST_CB_ENABLE_DEBUG - debug support control.
@@ -39,7 +40,7 @@
 #endif
 
 // BOOST_CB_IS_CONVERTIBLE - check if Iterator::value_type is convertible to Type.
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x0550) || BOOST_WORKAROUND(__MWERKS__, <= 0x2407)    
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x0550) || BOOST_WORKAROUND(__MWERKS__, <= 0x2407) || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     #define BOOST_CB_IS_CONVERTIBLE(Iterator, Type) ((void)0)
 #else
     #include <boost/detail/iterator.hpp>
@@ -65,7 +66,6 @@
     #define BOOST_CB_UNWIND(action) } catch(...) { action; throw; }
 #endif
 
-#include "circular_buffer_fwd.hpp"
 #include "circular_buffer/debug.hpp"
 #include "circular_buffer/details.hpp"
 #include "circular_buffer/base.hpp"

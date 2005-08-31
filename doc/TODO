@@ -173,6 +173,9 @@ t49  test non-invalidation of the iterators after call to methods such as insert
 
 t50  add assign methods with capacity parameter
 
+t51  docs: add troubleshooting section for VC6: amend #define _VIRTUAL
+     in xlocnum header
+
 -------------------------------------------------------------------------------
 
 Some routine tasks:
