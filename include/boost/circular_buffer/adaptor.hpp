@@ -144,13 +144,10 @@ public:
 
     //! See the circular_buffer source documentation.
     void resize(size_type new_size, param_value_type item = T()) {
-        if (new_size > size()) {
-            if (new_size > capacity())
-                m_capacity = new_size;
-            insert(end(), new_size - size(), item);
-        } else {
+        if (new_size > size())
+			increase_size(new_size, item);
+        else
             erase(begin(), end() - new_size);
-        }
     }
 
     // TODO
@@ -163,13 +160,10 @@ public:
     
     // TODO
     void rresize(size_type new_size, param_value_type item = T()) {
-        if (new_size > size()) {
-            if (new_size > capacity())
-                m_capacity = new_size;
-            insert(end(), new_size - size(), item);
-        } else {
+        if (new_size > size())
+            increase_size(new_size, item);
+        else
             erase(begin() + new_size, end());
-        }
     }
     
     //! Create an empty space optimized circular buffer with a given capacity.
@@ -517,6 +511,13 @@ private:
         return std::min(capacity, std::max(min_capacity,
             static_cast<size_type>(std::distance(first, last))));
     }
+
+	//! Increase the size of the space optimized circular buffer.
+	void increase_size(size_type new_size, param_value_type item) {
+		if (new_size > capacity())
+            m_capacity = new_size;
+        insert(end(), new_size - size(), item);
+	}
 
     //! Specialized insert method.
     template <class InputIterator>

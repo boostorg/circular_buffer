@@ -374,15 +374,9 @@ public:
         if (new_capacity == capacity())
             return;
         pointer buff = allocate(new_capacity);
-        size_type new_size = std::min(new_capacity, size());
         BOOST_CB_TRY
-        cb_details::uninitialized_copy(end() - new_size, end(), buff, m_alloc);
+		reset(buff, cb_details::uninitialized_copy(end() - std::min(new_capacity, size()), end(), buff, m_alloc), new_capacity);
         BOOST_CB_UNWIND(deallocate(buff, new_capacity))
-        destroy();
-        m_size = new_size;
-        m_buff = m_first = buff;
-        m_end = m_buff + new_capacity;
-        m_last = add(m_buff, size());
     }
 
     //! Change the size of the circular buffer.
@@ -408,13 +402,10 @@ public:
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     void resize(size_type new_size, param_value_type item = T()) {
-        if (new_size > size()) {
-            if (new_size > capacity())
-                set_capacity(new_size);
-            insert(end(), new_size - size(), item);
-        } else {
+        if (new_size > size())
+            increase_size(new_size, item);
+        else
             erase(begin(), end() - new_size);
-        }
     }
 
     // TODO
@@ -422,26 +413,17 @@ public:
         if (new_capacity == capacity())
             return;
         pointer buff = allocate(new_capacity);
-        size_type new_size = std::min(new_capacity, size());
         BOOST_CB_TRY
-        cb_details::uninitialized_copy(begin(), begin() + new_size, buff, m_alloc);
+		reset(buff, cb_details::uninitialized_copy(begin(), begin() + std::min(new_capacity, size()), buff, m_alloc), new_capacity);
         BOOST_CB_UNWIND(deallocate(buff, new_capacity))
-        destroy();
-        m_size = new_size;
-        m_buff = m_first = buff;
-        m_end = m_buff + new_capacity;
-        m_last = add(m_buff, size());
     }
 
     // TODO
     void rresize(size_type new_size, param_value_type item = T()) {
-        if (new_size > size()) {
-            if (new_size > capacity())
-                set_capacity(new_size);
-            insert(end(), new_size - size(), item);
-        } else {
+        if (new_size > size())
+            increase_size(new_size, item);
+        else
             erase(begin() + new_size, end());
-        }
     }
 
 // Construction/Destruction
@@ -455,26 +437,37 @@ public:
         size_type capacity,
         const allocator_type& alloc = allocator_type())
     : m_size(0), m_alloc(alloc) {
-        m_first = m_last = m_buff = allocate(capacity);
-        m_end = m_buff + capacity;
+        initialize(capacity);
     }
 
     //! Create a full circular buffer with a given capacity and filled with copies of <code>item</code>.
     /*!
-        \post <code>(*this).size() == capacity \&\& (*this)[0] == (*this)[1] == ... == (*this).back() == item</code>
+        \post <code>capacity() == n \&\& size() == n \&\& (*this)[0] == (*this)[1] == ... == (*this)[n - 1] == item</code>
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
         \throws Whatever T::T(const T&) throws.
     */
     circular_buffer(
-        size_type capacity,
+        size_type n,
         param_value_type item,
         const allocator_type& alloc = allocator_type())
-    : m_size(capacity), m_alloc(alloc) {
-        m_first = m_last = m_buff = allocate(capacity);
-        m_end = m_buff + capacity;
+    : m_size(n), m_alloc(alloc) {
+        initialize(n);
         BOOST_CB_TRY
         cb_details::uninitialized_fill_n(m_buff, size(), item, m_alloc);
-        BOOST_CB_UNWIND(deallocate(m_buff, capacity))
+        BOOST_CB_UNWIND(deallocate(m_buff, n))
+    }
+
+	// TODO
+    circular_buffer(
+		size_type capacity,
+        size_type n,
+        param_value_type item,
+        const allocator_type& alloc = allocator_type())
+    : m_size(n), m_alloc(alloc) {
+        initialize(capacity);
+        BOOST_CB_TRY
+        cb_details::uninitialized_fill_n(m_buff, size(), item, m_alloc);
+        BOOST_CB_UNWIND(deallocate(m_buff, n))
     }
 
     //! Copy constructor.
@@ -490,6 +483,15 @@ public:
         m_end = cb_details::uninitialized_copy(cb.begin(), cb.end(), m_buff, m_alloc);
         BOOST_CB_UNWIND(deallocate(m_buff, cb.capacity()))
     }
+
+	// TODO
+	/*template <class InputIterator>
+    circular_buffer(
+        InputIterator first,
+        InputIterator last,
+        const allocator_type& alloc = allocator_type())
+    : m_alloc(alloc) {
+    }*/
 
     //! Create a circular buffer with a copy of a range.
     /*!
@@ -531,15 +533,13 @@ public:
             return *this;
         pointer buff = allocate(cb.capacity());
         BOOST_CB_TRY
-        pointer last = cb_details::uninitialized_copy(cb.begin(), cb.end(), buff, m_alloc);
-        destroy();
-        m_size = cb.size();
-        m_first = m_buff = buff;
-        m_end = m_buff + cb.capacity();
-        m_last = last == m_end ? m_buff : last;
-        BOOST_CB_UNWIND(deallocate(buff, cb.capacity()))
+		reset(buff, cb_details::uninitialized_copy(cb.begin(), cb.end(), buff, m_alloc), cb.capacity());
+		BOOST_CB_UNWIND(deallocate(buff, cb.capacity()))
         return *this;
     }
+
+	// TODO
+	void assign(size_type capacity, size_type n, param_value_type item) {}
 
     //! Assign <code>n</code> items into the circular buffer.
     /*!
@@ -553,6 +553,10 @@ public:
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     void assign(size_type n, param_value_type item) { do_assign(n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc)); }
+
+	// TODO
+	template <class InputIterator>
+	void assign(size_type capacity, InputIterator first, InputIterator last) {}
 
     //! Assign a copy of range.
     /*!
@@ -1115,14 +1119,19 @@ private:
 #endif
     }
 
-    //! Initialize the circular buffer (specialized method).
+	//! Initialize the circular buffer.
+	void initialize(size_type capacity) {
+		m_first = m_last = m_buff = allocate(capacity);
+        m_end = m_buff + capacity;
+	}
+
+    //! Specialized initialize method.
     template <class InputIterator>
     void initialize(size_type capacity,
         InputIterator first,
         InputIterator last,
         std::input_iterator_tag) {
-        m_first = m_last = m_buff = allocate(capacity);
-        m_end = m_buff + capacity;
+        initialize(capacity);
         m_size = 0;
         if (capacity == 0)
             return;
@@ -1138,7 +1147,7 @@ private:
         }    
     }
     
-    //! Initialize the circular buffer (specialized method).
+    //! Specialized initialize method.
     template <class ForwardIterator>
     void initialize(size_type capacity,
         ForwardIterator first,
@@ -1154,17 +1163,13 @@ private:
         ForwardIterator first,
         ForwardIterator last,
         size_type diff) {
-        m_first = m_buff = allocate(capacity);
-        m_end = m_buff + capacity;
+		initialize(capacity);
         if (diff > capacity) {
             std::advance(first, diff - capacity);
             m_size = capacity;
-            m_last = m_buff;
         } else {
             m_size = diff;
-            if (diff == capacity)
-                m_last = m_buff;
-            else
+            if (diff != capacity)
                 m_last = m_buff + size();
         }
         BOOST_CB_TRY
@@ -1172,6 +1177,22 @@ private:
         BOOST_CB_UNWIND(deallocate(m_buff, capacity))
     }
     
+	//! Increase the size of the circular buffer.
+	void increase_size(size_type new_size, param_value_type item) {
+		if (new_size > capacity())
+            set_capacity(new_size);
+        insert(end(), new_size - size(), item);
+	}
+
+	//! Reset the circular buffer.
+	void reset(pointer buff, pointer last, size_type new_capacity) {
+		destroy();
+        m_size = last - buff;
+        m_first = m_buff = buff;
+        m_end = m_buff + new_capacity;
+        m_last = last == m_end ? m_buff : last;
+	}
+
     //! Specialized assign method.
     template <class IntegralType>
     void assign(IntegralType n, IntegralType item, cb_details::int_tag) {
