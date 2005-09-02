@@ -159,7 +159,8 @@ t44  DONE
 t45  DONE - no action needed
      check the iterator's operator []; add assertion if needed
 
-t46  rename files e.g. from adaptor to space_optimized_adaptor
+t46  DONE
+     rename files e.g. from adaptor to space_optimized
 
 t47  constructor and insert methods taking input iterator does not work with
      istream_iterator - std::distance() function does't work as expected - fix

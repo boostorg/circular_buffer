@@ -6,8 +6,8 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#if !defined(BOOST_CIRCULAR_BUFFER_ADAPTOR_HPP)
-#define BOOST_CIRCULAR_BUFFER_ADAPTOR_HPP
+#if !defined(BOOST_CIRCULAR_BUFFER_SPACE_OPTIMIZED_HPP)
+#define BOOST_CIRCULAR_BUFFER_SPACE_OPTIMIZED_HPP
 
 #if defined(_MSC_VER) && _MSC_VER >= 1200
     #pragma once
@@ -607,4 +607,4 @@ inline void swap(circular_buffer_space_optimized<T, Alloc>& lhs,
 
 } // namespace boost
 
-#endif // #if !defined(BOOST_CIRCULAR_BUFFER_ADAPTOR_HPP)
+#endif // #if !defined(BOOST_CIRCULAR_BUFFER_SPACE_OPTIMIZED_HPP)

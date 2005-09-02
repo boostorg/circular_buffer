@@ -69,7 +69,7 @@
 #include "circular_buffer/debug.hpp"
 #include "circular_buffer/details.hpp"
 #include "circular_buffer/base.hpp"
-#include "circular_buffer/adaptor.hpp"
+#include "circular_buffer/space_optimized.hpp"
 
 #undef BOOST_CB_UNWIND
 #undef BOOST_CB_TRY
