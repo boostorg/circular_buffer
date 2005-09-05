@@ -97,9 +97,9 @@ void basic_test() {
     v.push_back(5);
     v.push_back(6);
     v.push_back(7);
-    CB_CONTAINER<Integer> cb1(3 CB_MIN_CAPACITY, v.begin(), v.end());
-    CB_CONTAINER<Integer> cb2(10 CB_MIN_CAPACITY, v.begin(), v.end());
-    CB_CONTAINER<Integer> cb3(7 CB_MIN_CAPACITY, v.begin(), v.end());
+    CB_CONTAINER<Integer> cb1(3, v.begin(), v.end());
+    CB_CONTAINER<Integer> cb2(10, v.begin(), v.end());
+    CB_CONTAINER<Integer> cb3(7, v.begin(), v.end());
 
     BOOST_CHECK(cb1.full());
     BOOST_CHECK(cb1.capacity() == 3);
@@ -119,7 +119,7 @@ void basic_test() {
 
 void constructor_and_element_access_test() {
 
-    CB_CONTAINER<int> cb(5 CB_MIN_CAPACITY, 3);
+    CB_CONTAINER<int> cb(5, 3);
     cb[1] = 10;
 
     BOOST_CHECK(cb.full());
@@ -204,7 +204,7 @@ void element_access_and_insert_test() {
     cb.push_back(2);
     cb.insert(cb.begin(), 3);
     cb.push_back(4);
-    const CB_CONTAINER<Integer> ccb(3 CB_MIN_CAPACITY, 2);
+    const CB_CONTAINER<Integer> ccb(3, 2);
 
     BOOST_CHECK(cb[0] == 1);
     BOOST_CHECK(cb[1] == 2);
@@ -274,11 +274,11 @@ void linearize_test() {
 	v.push_back(10);
 	v.push_back(11);
 	v.push_back(12);
-    CB_CONTAINER<Integer> cb1(10 CB_MIN_CAPACITY, v.begin(), v.begin() + 10);
+    CB_CONTAINER<Integer> cb1(10, v.begin(), v.begin() + 10);
     cb1.push_back(11);
     cb1.push_back(12);
     cb1.push_back(13);
-    CB_CONTAINER<Integer> cb2(10 CB_MIN_CAPACITY, v.begin(), v.begin() + 10);
+    CB_CONTAINER<Integer> cb2(10, v.begin(), v.begin() + 10);
     cb2.push_back(11);
     cb2.push_back(12);
     cb2.push_back(13);
@@ -286,14 +286,14 @@ void linearize_test() {
     cb2.push_back(15);
     cb2.push_back(16);
     cb2.push_back(17);
-    CB_CONTAINER<Integer> cb3(10 CB_MIN_CAPACITY, v.begin(), v.begin() + 10);
+    CB_CONTAINER<Integer> cb3(10, v.begin(), v.begin() + 10);
     cb3.push_back(11);
     cb3.push_back(12);
     cb3.push_back(13);
     cb3.pop_front();
     cb3.pop_front();
     CB_CONTAINER<Integer> cb4(5);
-	CB_CONTAINER<Integer> cb5(12 CB_MIN_CAPACITY, v.begin(), v.end());
+	CB_CONTAINER<Integer> cb5(12, v.begin(), v.end());
     cb5.push_back(13);
     cb5.push_back(14);
     cb5.push_back(15);
@@ -500,9 +500,9 @@ void resize_test() {
     cb2.push_back(3);
     cb2.push_back(4);
     cb2.resize(2);
-    CB_CONTAINER<Integer> cb3(10 CB_MIN_CAPACITY, 1);
+    CB_CONTAINER<Integer> cb3(10, 1);
     cb3.resize(0);
-    CB_CONTAINER<Integer> cb4(10 CB_MIN_CAPACITY, 1);
+    CB_CONTAINER<Integer> cb4(10, 1);
     cb4.resize(10);
 
     BOOST_CHECK(cb1.size() == 20);
@@ -548,7 +548,7 @@ void rresize_test() {
 void constructor_test() {
 
     CB_CONTAINER<Integer> cb1(3);
-    CB_CONTAINER<Integer> cb2(3 CB_MIN_CAPACITY, 2);
+    CB_CONTAINER<Integer> cb2(3, 2);
 
     BOOST_CHECK(cb1.size() == 0);
     BOOST_CHECK(cb1.capacity() == 3);
@@ -733,7 +733,7 @@ void insert_n_test() {
     cb1.push_back(2);
     cb1.push_back(3);
     cb1.insert(cb1.begin() + 1, 2, 10);
-    CB_CONTAINER<Integer> cb2(2 CB_MIN_CAPACITY, 3);
+    CB_CONTAINER<Integer> cb2(2, 3);
     cb2.insert(cb2.begin(), 10, 5);
     CB_CONTAINER<Integer> cb3(4);
     cb3.insert(cb3.end(), 1, 6);
@@ -779,7 +779,7 @@ void insert_range_test() {
     cb1.push_back(2);
     cb1.push_back(3);
     cb1.insert(cb1.begin() + 1, v.begin(), v.end());
-    CB_CONTAINER<Integer> cb2(2 CB_MIN_CAPACITY, 2);
+    CB_CONTAINER<Integer> cb2(2, 2);
     cb2.insert(cb2.end(), v.begin(), v.end());
     CB_CONTAINER<Integer> cb3(5);
     cb3.insert(cb3.end(), v.end(), v.end());
@@ -943,7 +943,7 @@ void rinsert_n_test() {
     cb1.push_front(2);
     cb1.push_front(3);
     cb1.rinsert(cb1.begin() + 1, 2, 10);
-    CB_CONTAINER<Integer> cb2(2 CB_MIN_CAPACITY, 3);
+    CB_CONTAINER<Integer> cb2(2, 3);
     cb2.rinsert(cb2.begin(), 10, 5);
     CB_CONTAINER<Integer> cb3(4);
     cb3.rinsert(cb3.end(), 1, 6);
@@ -1002,7 +1002,7 @@ void rinsert_range_test() {
     cb1.push_back(2);
     cb1.push_back(3);
     cb1.rinsert(cb1.begin() + 1, v.begin(), v.end());
-    CB_CONTAINER<Integer> cb2(2 CB_MIN_CAPACITY, 2);
+    CB_CONTAINER<Integer> cb2(2, 2);
     cb2.rinsert(cb2.begin(), v.begin(), v.end());
     CB_CONTAINER<Integer> cb3(5);
     cb3.rinsert(cb3.begin(), v.end(), v.end());
@@ -1034,7 +1034,7 @@ void erase_test() {
     cb1.push_back(3);
     CB_CONTAINER<Integer>::iterator it1 = cb1.erase(cb1.begin() + 1);
 
-    CB_CONTAINER<Integer> cb2(1 CB_MIN_CAPACITY, 1);
+    CB_CONTAINER<Integer> cb2(1, 1);
     CB_CONTAINER<Integer>::iterator it2 = cb2.erase(cb2.begin());
 
     CB_CONTAINER<Integer> cb3(4);
@@ -1085,7 +1085,7 @@ void erase_range_test() {
     cb3.push_back(4);
     CB_CONTAINER<Integer>::iterator it3 = cb3.erase(cb3.begin() + 2, cb3.end());
 
-    CB_CONTAINER<Integer> cb4(10 CB_MIN_CAPACITY, 1);
+    CB_CONTAINER<Integer> cb4(10, 1);
     CB_CONTAINER<Integer>::iterator it4 = cb4.erase(cb4.begin(), cb4.end());
 
     BOOST_CHECK(cb1.size() == 2);
@@ -1120,7 +1120,7 @@ void rerase_test() {
     cb1.push_back(3);
     CB_CONTAINER<Integer>::iterator it1 = cb1.rerase(cb1.begin() + 1);
 
-    CB_CONTAINER<Integer> cb2(1 CB_MIN_CAPACITY, 1);
+    CB_CONTAINER<Integer> cb2(1, 1);
     CB_CONTAINER<Integer>::iterator it2 = cb2.rerase(cb2.begin());
 
     CB_CONTAINER<Integer> cb3(4);
@@ -1172,7 +1172,7 @@ void rerase_range_test() {
     cb3.push_back(4);
     CB_CONTAINER<Integer>::iterator it3 = cb3.rerase(cb3.begin(), cb3.begin() + 2);
 
-    CB_CONTAINER<Integer> cb4(10 CB_MIN_CAPACITY, 1);
+    CB_CONTAINER<Integer> cb4(10, 1);
     CB_CONTAINER<Integer>::iterator it4 = cb4.rerase(cb4.begin(), cb4.end());
 
     BOOST_CHECK(cb1.size() == 2);
@@ -1298,7 +1298,7 @@ void example_test() {
     BOOST_CHECK(cb1.size() == 3);
     BOOST_CHECK(cb1.capacity() == 3);
 
-    CB_CONTAINER<int> cb2(5 CB_MIN_CAPACITY, 1);
+    CB_CONTAINER<int> cb2(5, 1);
     cb2.insert(cb2.begin(), 2);
 
     BOOST_CHECK(cb2[0] == 1);
@@ -1356,7 +1356,7 @@ void const_methods_test() {
     v.push_back(3);
     v.push_back(4);
     v.push_back(5);
-    const CB_CONTAINER<Integer> cb(5 CB_MIN_CAPACITY, v.begin(), v.end());
+    const CB_CONTAINER<Integer> cb(5, v.begin(), v.end());
 
     BOOST_CHECK(*cb.begin() == 1);
     BOOST_CHECK(*(cb.end() - 1) == 5);

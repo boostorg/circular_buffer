@@ -14,7 +14,6 @@ using namespace std;
 using unit_test_framework::test_suite;
 
 #define CB_CONTAINER circular_buffer
-#define CB_MIN_CAPACITY /* none */
 
 #include "common.cpp"
 

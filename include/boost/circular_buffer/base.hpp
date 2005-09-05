@@ -538,9 +538,6 @@ public:
         return *this;
     }
 
-	// TODO
-	void assign(size_type capacity, size_type n, param_value_type item) {}
-
     //! Assign <code>n</code> items into the circular buffer.
     /*!
         \post <code>(*this).size() == n \&\&
@@ -555,8 +552,7 @@ public:
     void assign(size_type n, param_value_type item) { do_assign(n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc)); }
 
 	// TODO
-	template <class InputIterator>
-	void assign(size_type capacity, InputIterator first, InputIterator last) {}
+	void assign(size_type capacity, size_type n, param_value_type item) {}
 
     //! Assign a copy of range.
     /*!
@@ -573,6 +569,10 @@ public:
     void assign(InputIterator first, InputIterator last) {
         assign(first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
     }
+
+	// TODO
+	template <class InputIterator>
+	void assign(size_type capacity, InputIterator first, InputIterator last) {}
 
     //! Swap the contents of two circular buffers.
     /*!

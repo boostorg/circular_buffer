@@ -16,11 +16,13 @@ using namespace std;
 using unit_test_framework::test_suite;
 
 #define CB_CONTAINER circular_buffer_space_optimized
-#define CB_MIN_CAPACITY ,0
 
 #include "common.cpp"
 
-// min_capacity test (it is useful to use any debug tool)
+typedef circular_buffer_space_optimized<Integer> cb_space_optimized;
+typedef cb_space_optimized::capacity_control capacity_ctrl;
+
+// min_capacity test (it is useful to use a debug tool)
 void min_capacity_test() {
 
     vector<int> v;
@@ -30,9 +32,9 @@ void min_capacity_test() {
     v.push_back(4);
     v.push_back(5);
 
-    circular_buffer_space_optimized<Integer> cb1(10, 10);
-    circular_buffer_space_optimized<Integer> cb2(10, 5, 1);
-    circular_buffer_space_optimized<Integer> cb3(20, 10, v.begin(), v.end());
+    cb_space_optimized cb1(capacity_ctrl(10, 10));
+    cb_space_optimized cb2(capacity_ctrl(10, 5), 1);
+    cb_space_optimized cb3(capacity_ctrl(20, 10), v.begin(), v.end());
 
     BOOST_CHECK(cb1.size() == 0);
     BOOST_CHECK(cb1.capacity() == 10);

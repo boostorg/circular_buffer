@@ -80,7 +80,6 @@ template <class Traits> struct nonconst_traits;
 /*!
     \struct const_traits
     \brief Defines the data types for a const iterator.
-    \param Traits Defines the basic types.
 */
 template <class Traits>
 struct const_traits {
@@ -98,7 +97,6 @@ struct const_traits {
 /*!
     \struct nonconst_traits
     \brief Defines the data types for a non-const iterator.
-    \param Traits Defines the basic types.
 */
 template <class Traits>
 struct nonconst_traits {
@@ -183,10 +181,34 @@ private:
 };
 
 /*!
+    \struct capacity_control
+    \brief Capacity controller of the space optimized circular buffer.
+*/
+template <class Size>
+struct capacity_control {
+	
+	//! The capacity of the space optimized circular buffer.
+	Size m_capacity;
+
+	//! The lowest guaranteed capacity of the adapted circular buffer.
+	Size m_min_capacity;
+
+	//! Constructor.
+	capacity_control(Size capacity, Size min_capacity = 0)
+	: m_capacity(capacity), m_min_capacity(min_capacity) {
+		BOOST_CB_ASSERT(capacity >= min_capacity); // check for capacity lower than min_capacity
+	}
+
+	// Default copy constructor.
+
+	// Default assign operator.
+};
+
+/*!
     \class iterator
     \brief Random access iterator for the circular buffer.
     \param Buff The type of the underlying circular buffer.
-    \param Traits Defines basic iterator types.
+    \param Traits Basic iterator types.
     \note This iterator is not circular. It was designed
           for iterating from begin() to end() of the circular buffer.
 */

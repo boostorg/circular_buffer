@@ -51,6 +51,9 @@ public:
     typedef typename circular_buffer<T, Alloc>::param_value_type param_value_type;
     typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
 
+	//! Capacity type of the space optimized circular buffer.
+	typedef cb_details::capacity_control<size_type> capacity_control;
+
 // Inherited
 
     using circular_buffer<T, Alloc>::get_allocator;
@@ -78,11 +81,8 @@ public:
 private:
 // Member variables
 
-    //! The capacity of the optimized circular buffer.
-    size_type m_capacity;
-
-    //! The lowest guaranteed capacity of the adapted circular buffer.
-    size_type m_min_capacity;
+    //! The capacity controller of the space optimized circular buffer.
+    capacity_control m_capacity_ctrl;
 
 public:
 // Overridden
@@ -94,7 +94,7 @@ public:
     /*
         The allocated memory will never drop under this value.
     */
-    size_type min_capacity() const { return m_min_capacity; }
+    size_type min_capacity() const { return m_capacity_ctrl.m_min_capacity; }
 
     //! Change the minimal guaranteed amount of allocated memory.
     /*!
@@ -107,7 +107,7 @@ public:
     */
     void set_min_capacity(size_type new_min_capacity) {
         BOOST_CB_ASSERT(capacity() >= new_min_capacity); // check for too large new min_capacity
-        m_min_capacity = new_min_capacity;
+        m_capacity_ctrl.m_min_capacity = new_min_capacity;
         if (new_min_capacity > circular_buffer<T, Alloc>::capacity())
             circular_buffer<T, Alloc>::set_capacity(new_min_capacity);
         else
@@ -115,7 +115,7 @@ public:
     }
 
     //! See the circular_buffer source documentation.
-    size_type capacity() const { return m_capacity; }
+    size_type capacity() const { return m_capacity_ctrl.m_capacity; }
 
 #if defined(BOOST_CB_TEST)
 
@@ -130,16 +130,16 @@ public:
 
     //!! See the circular_buffer source documentation.
     /*!
-         \pre <code>(*this).min_capacity() <= new_capacity</code>
+         \pre <code>min_capacity() <= new_capacity</code>
          \note It is considered as a bug if the precondition is not met (i.e. if
-               <code>new_capacity > (*this).min_capacity()</code>) and an assertion
+               <code>new_capacity > min_capacity()</code>) and an assertion
                will be invoked in the debug mode.
     */
     void set_capacity(size_type new_capacity) {
         BOOST_CB_ASSERT(new_capacity >= min_capacity()); // check for too low new capacity
         if (new_capacity < circular_buffer<T, Alloc>::capacity())
             circular_buffer<T, Alloc>::set_capacity(new_capacity);
-        m_capacity = new_capacity;
+        m_capacity_ctrl.m_capacity = new_capacity;
     }
 
     //! See the circular_buffer source documentation.
@@ -150,15 +150,21 @@ public:
             erase(begin(), end() - new_size);
     }
 
-    // TODO
+    //!! See the circular_buffer source documentation.
+    /*!
+         \pre <code>min_capacity() <= new_capacity</code>
+         \note It is considered as a bug if the precondition is not met (i.e. if
+               <code>new_capacity > min_capacity()</code>) and an assertion
+               will be invoked in the debug mode.
+    */
     void rset_capacity(size_type new_capacity) {
         BOOST_CB_ASSERT(new_capacity >= min_capacity()); // check for too low new capacity
         if (new_capacity < circular_buffer<T, Alloc>::capacity())
             circular_buffer<T, Alloc>::rset_capacity(new_capacity);
-        m_capacity = new_capacity;
+        m_capacity_ctrl.m_capacity = new_capacity;
     }
     
-    // TODO
+    //! See the circular_buffer source documentation.
     void rresize(size_type new_size, param_value_type item = T()) {
         if (new_size > size())
             increase_size(new_size, item);
@@ -181,14 +187,10 @@ public:
               in the debug mode.
     */
     explicit circular_buffer_space_optimized(
-        size_type capacity,
-        size_type min_capacity = 0,
+        capacity_control capacity_ctrl,
         const allocator_type& alloc = allocator_type())
-    : circular_buffer<T, Alloc>(min_capacity, alloc)
-    , m_capacity(capacity)
-    , m_min_capacity(min_capacity) {
-        BOOST_CB_ASSERT(capacity >= min_capacity); // check for capacity lower than min_capacity
-    }
+    : circular_buffer<T, Alloc>(capacity_ctrl.m_min_capacity, alloc)
+	, m_capacity_ctrl(capacity_ctrl) {}
 
     //! Create a full space optimized circular buffer filled with copies of <code>item</code>.
     /*!
@@ -206,17 +208,29 @@ public:
               in the debug mode.
     */
     circular_buffer_space_optimized(
-        size_type capacity,
-        size_type min_capacity,
+        capacity_control capacity_ctrl,
         param_value_type item,
         const allocator_type& alloc = allocator_type())
-    : circular_buffer<T, Alloc>(capacity, item, alloc)
-    , m_capacity(capacity)
-    , m_min_capacity(min_capacity) {
-        BOOST_CB_ASSERT(capacity >= min_capacity); // check for capacity lower than min_capacity
-    }
+    : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, item, alloc)
+    , m_capacity_ctrl(capacity_ctrl) {}
+
+	// TODO
+	circular_buffer_space_optimized(
+		capacity_control capacity_ctrl,
+        size_type n,
+        param_value_type item,
+        const allocator_type& alloc = allocator_type()) {}
 
     // Default copy constructor
+
+	// TODO
+	/*template <class InputIterator>
+    circular_buffer_space_optimized(
+        InputIterator first,
+        InputIterator last,
+        const allocator_type& alloc = allocator_type())
+    : m_alloc(alloc) {
+    }*/
 
     //! Create a space optimized circular buffer with a copy of a range.
     /*!
@@ -242,15 +256,13 @@ public:
     */
     template <class InputIterator>
     circular_buffer_space_optimized(
-        size_type capacity,
-        size_type min_capacity,
+        capacity_control capacity_ctrl,
         InputIterator first,
         InputIterator last,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(
-        init_capacity(capacity, min_capacity, first, last), first, last, alloc)
-    , m_capacity(capacity)
-    , m_min_capacity(min_capacity) { }
+        init_capacity(capacity_ctrl.m_capacity, capacity_ctrl.m_min_capacity, first, last), first, last, alloc)
+    , m_capacity_ctrl(capacity_ctrl) {}
 
     // Default destructor
 
@@ -267,24 +279,30 @@ public:
 
     //! See the circular_buffer source documentation.
     void assign(size_type n, param_value_type item) {
-        if (n > m_capacity)
-            m_capacity = n;
+        if (n > m_capacity_ctrl.m_capacity)
+            m_capacity_ctrl.m_capacity = n;
         circular_buffer<T, Alloc>::assign(n, item);
     }
+
+	// TODO
+	void assign(capacity_control capacity_ctrl, size_type n, param_value_type item) {}
 
     //! See the circular_buffer source documentation.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
         circular_buffer<T, Alloc>::assign(first, last);
         size_type capacity = circular_buffer<T, Alloc>::capacity();
-        if (capacity > m_capacity)
-            m_capacity = capacity;
+        if (capacity > m_capacity_ctrl.m_capacity)
+            m_capacity_ctrl.m_capacity = capacity;
     }
+
+	// TODO
+	template <class InputIterator>
+	void assign(capacity_control capacity_ctrl, InputIterator first, InputIterator last) {}
 
     //! See the circular_buffer source documentation.
     void swap(circular_buffer_space_optimized<T, Alloc>& cb) {
-        std::swap(m_capacity, cb.m_capacity);
-        std::swap(m_min_capacity, cb.m_min_capacity);
+        std::swap(m_capacity_ctrl, cb.m_capacity_ctrl);
         circular_buffer<T, Alloc>::swap(cb);
     }
 
@@ -515,7 +533,7 @@ private:
 	//! Increase the size of the space optimized circular buffer.
 	void increase_size(size_type new_size, param_value_type item) {
 		if (new_size > capacity())
-            m_capacity = new_size;
+            m_capacity_ctrl.m_capacity = new_size;
         insert(end(), new_size - size(), item);
 	}
 
