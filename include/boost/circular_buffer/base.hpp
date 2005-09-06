@@ -253,27 +253,27 @@ public:
         return *((m_last == m_buff ? m_end : m_last) - 1);
     }
 
-    // TODO
+    // TODO doc
     array_range array_one() {
         return array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
     
-    // TODO
+    // TODO doc
     array_range array_two() {
         return array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
     
-    // TODO
+    // TODO doc
     const_array_range array_one() const {
         return const_array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
     
-    // TODO
+    // TODO doc
     const_array_range array_two() const {
         return const_array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
     
-    //! TODO Return pointer to data stored in the circular buffer as a continuous array of values.
+    //! TODO doc - Return pointer to data stored in the circular buffer as a continuous array of values.
     /*!
         This method can be useful e.g. when passing the stored data into the legacy C API.
         \post <code>\&(*this)[0] \< \&(*this)[1] \< ... \< \&(*this).back()</code>
@@ -408,7 +408,7 @@ public:
             erase(begin(), end() - new_size);
     }
 
-    // TODO
+    // TODO doc
     void rset_capacity(size_type new_capacity) {
         if (new_capacity == capacity())
             return;
@@ -418,7 +418,7 @@ public:
         BOOST_CB_UNWIND(deallocate(buff, new_capacity))
     }
 
-    // TODO
+    // TODO doc
     void rresize(size_type new_size, param_value_type item = T()) {
         if (new_size > size())
             increase_size(new_size, item);
@@ -451,23 +451,18 @@ public:
         param_value_type item,
         const allocator_type& alloc = allocator_type())
     : m_size(n), m_alloc(alloc) {
-        initialize(n);
-        BOOST_CB_TRY
-        cb_details::uninitialized_fill_n(m_buff, size(), item, m_alloc);
-        BOOST_CB_UNWIND(deallocate(m_buff, n))
+        initialize(n, item);
     }
 
-	// TODO
+	// TODO doc
     circular_buffer(
 		size_type capacity,
         size_type n,
         param_value_type item,
         const allocator_type& alloc = allocator_type())
     : m_size(n), m_alloc(alloc) {
-        initialize(capacity);
-        BOOST_CB_TRY
-        cb_details::uninitialized_fill_n(m_buff, size(), item, m_alloc);
-        BOOST_CB_UNWIND(deallocate(m_buff, n))
+		BOOST_CB_ASSERT(capacity >= size()); // check for capacity lower than size
+        initialize(capacity, item);
     }
 
     //! Copy constructor.
@@ -511,7 +506,7 @@ public:
         InputIterator last,
         const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
-        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for valid iterator type
+        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for invalid iterator type
         initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<InputIterator>::type());
     }
 
@@ -1125,6 +1120,22 @@ private:
         m_end = m_buff + capacity;
 	}
 
+	//! Initialize the circular buffer.
+	void initialize(size_type capacity, param_value_type item) {
+		initialize(capacity);
+		BOOST_CB_TRY
+        cb_details::uninitialized_fill_n(m_buff, size(), item, m_alloc);
+        BOOST_CB_UNWIND(deallocate(m_buff, size()))
+	}
+
+	//! Specialized initialize method.
+    template <class InputIterator>
+    void initialize(InputIterator first, InputIterator last, std::input_iterator_tag) {
+		std::deque<value_type> tmp(first, last);
+		size_type distance = tmp.size();
+		initialize(distance, tmp.begin(), tmp.last(), distance);
+	}
+
     //! Specialized initialize method.
     template <class InputIterator>
     void initialize(size_type capacity,
@@ -1202,7 +1213,7 @@ private:
     //! Specialized assign method.
     template <class Iterator>
     void assign(Iterator first, Iterator last, cb_details::iterator_tag) {
-        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for valid iterator type
+        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         assign(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
     
@@ -1252,7 +1263,7 @@ private:
     //! Specialized insert method.
     template <class Iterator>
     void insert(iterator pos, Iterator first, Iterator last, cb_details::iterator_tag) {
-        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for valid iterator type
+        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         insert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
     
@@ -1335,7 +1346,7 @@ private:
     //! Specialized rinsert method.
     template <class Iterator>
     void rinsert(iterator pos, Iterator first, Iterator last, cb_details::iterator_tag) {
-        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for valid iterator type
+        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
     
