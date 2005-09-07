@@ -479,14 +479,15 @@ public:
         BOOST_CB_UNWIND(deallocate(m_buff, cb.capacity()))
     }
 
-	// TODO
-	/*template <class InputIterator>
+	// TODO doc
+	template <class InputIterator>
     circular_buffer(
         InputIterator first,
         InputIterator last,
         const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
-    }*/
+		initialize(first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
+    }
 
     //! Create a circular buffer with a copy of a range.
     /*!
@@ -1129,12 +1130,35 @@ private:
 	}
 
 	//! Specialized initialize method.
+    template <class IntegralType>
+    void initialize(IntegralType n, IntegralType item, cb_details::int_tag) {
+		m_size = static_cast<size_type>(n);
+        initialize(size(), item);
+    }
+
+    //! Specialized initialize method.
+    template <class Iterator>
+    void initialize(Iterator first, Iterator last, cb_details::iterator_tag) {
+        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+        initialize(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+    }
+
+	//! Specialized initialize method.
     template <class InputIterator>
     void initialize(InputIterator first, InputIterator last, std::input_iterator_tag) {
+		BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS; // check if the STL provides templated iterator constructors for containers
 		std::deque<value_type> tmp(first, last);
 		size_type distance = tmp.size();
 		initialize(distance, tmp.begin(), tmp.last(), distance);
 	}
+
+	//! Specialized initialize method.
+    template <class ForwardIterator>
+    void initialize(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
+        BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
+		size_type distance = std::distance(first, last);
+        initialize(distance, first, last, distance);
+    }
 
     //! Specialized initialize method.
     template <class InputIterator>
@@ -1155,9 +1179,9 @@ private:
             replace(m_last, *first++);
             increment(m_last);
             m_first = m_last;
-        }    
+        }
     }
-    
+
     //! Specialized initialize method.
     template <class ForwardIterator>
     void initialize(size_type capacity,
@@ -1173,14 +1197,14 @@ private:
     void initialize(size_type capacity,
         ForwardIterator first,
         ForwardIterator last,
-        size_type diff) {
+        size_type distance) {
 		initialize(capacity);
-        if (diff > capacity) {
-            std::advance(first, diff - capacity);
+        if (distance > capacity) {
+            std::advance(first, distance - capacity);
             m_size = capacity;
         } else {
-            m_size = diff;
-            if (diff != capacity)
+            m_size = distance;
+            if (distance != capacity)
                 m_last = m_buff + size();
         }
         BOOST_CB_TRY
