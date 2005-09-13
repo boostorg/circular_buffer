@@ -8,10 +8,10 @@ function rb {
 
 rb ../../../boost/circular_buffer.hpp
 rb ../../../boost/circular_buffer_fwd.hpp
-rb ../../../boost/circular_buffer/adaptor.hpp
 rb ../../../boost/circular_buffer/base.hpp
 rb ../../../boost/circular_buffer/debug.hpp
 rb ../../../boost/circular_buffer/details.hpp
+rb ../../../boost/circular_buffer/space_optimized.hpp
 rb ../index.html
 rb Doxyfile
 rb circular_buffer.html
@@ -25,7 +25,7 @@ rb update_srcdoc.bat
 rb update_srcdoc.sh
 rb update_srcdoc.xslt
 rb ../test/Jamfile
-rb ../test/adaptor_test.cpp
 rb ../test/base_test.cpp
 rb ../test/common.cpp
+rb ../test/space_optimized_test.cpp
 rb ../test/test.hpp

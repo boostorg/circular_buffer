@@ -214,23 +214,25 @@ public:
     : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
-	// TODO
+	// TODO doc
 	circular_buffer_space_optimized(
 		capacity_control capacity_ctrl,
         size_type n,
         param_value_type item,
-        const allocator_type& alloc = allocator_type()) {}
+        const allocator_type& alloc = allocator_type())
+    : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, n, item, alloc)
+    , m_capacity_ctrl(capacity_ctrl) {}
 
     // Default copy constructor
 
-	// TODO
-	/*template <class InputIterator>
+	// TODO doc
+	template <class InputIterator>
     circular_buffer_space_optimized(
         InputIterator first,
         InputIterator last,
         const allocator_type& alloc = allocator_type())
-    : m_alloc(alloc) {
-    }*/
+    : circular_buffer<T, Alloc>(first, last, alloc)
+    , m_capacity_ctrl(circular_buffer<T, Alloc>::capacity()) {}
 
     //! Create a space optimized circular buffer with a copy of a range.
     /*!
@@ -261,7 +263,7 @@ public:
         InputIterator last,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(
-        init_capacity(capacity_ctrl.m_capacity, capacity_ctrl.m_min_capacity, first, last), first, last, alloc)
+        init_capacity(capacity_ctrl, first, last), first, last, alloc) // TODO
     , m_capacity_ctrl(capacity_ctrl) {}
 
     // Default destructor
@@ -270,7 +272,7 @@ public:
 
     // Assignment operator - declared only for documentation purpose.
     /*
-       \note This section will be never compiled. The default assignment
+       \note This section will never be compiled. The default assignment
              operator will be generated instead.
     */
     circular_buffer_space_optimized<T, Alloc>& operator = (const circular_buffer_space_optimized<T, Alloc>& cb);
@@ -279,13 +281,18 @@ public:
 
     //! See the circular_buffer source documentation.
     void assign(size_type n, param_value_type item) {
+        circular_buffer<T, Alloc>::assign(n, item);
         if (n > m_capacity_ctrl.m_capacity)
             m_capacity_ctrl.m_capacity = n;
-        circular_buffer<T, Alloc>::assign(n, item);
+        check_high_capacity();
     }
 
-	// TODO
-	void assign(capacity_control capacity_ctrl, size_type n, param_value_type item) {}
+	//! See the circular_buffer source documentation.
+	void assign(capacity_control capacity_ctrl, size_type n, param_value_type item) {
+	   BOOST_CB_ASSERT(capacity_ctrl.m_capacity >= n); // check for new capacity lower than n
+	   circular_buffer<T, Alloc>::assign(std::max(capacity_ctrl.m_min_capacity, n), n, item);
+	   m_capacity_ctrl = capacity_ctrl;
+    }
 
     //! See the circular_buffer source documentation.
     template <class InputIterator>
@@ -294,11 +301,14 @@ public:
         size_type capacity = circular_buffer<T, Alloc>::capacity();
         if (capacity > m_capacity_ctrl.m_capacity)
             m_capacity_ctrl.m_capacity = capacity;
+        check_high_capacity();
     }
 
 	// TODO
 	template <class InputIterator>
-	void assign(capacity_control capacity_ctrl, InputIterator first, InputIterator last) {}
+	void assign(capacity_control capacity_ctrl, InputIterator first, InputIterator last) {
+	   m_capacity_ctrl = capacity_ctrl;
+    }
 
     //! See the circular_buffer source documentation.
     void swap(circular_buffer_space_optimized<T, Alloc>& cb) {
@@ -522,11 +532,10 @@ private:
 
     //! Determine the initial capacity.
     template <class InputIterator>
-    static size_type init_capacity(size_type capacity, size_type min_capacity, InputIterator first, InputIterator last) {
+    static size_type init_capacity(const capacity_control& capacity_ctrl, InputIterator first, InputIterator last) {
         BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for invalid iterator type
-        BOOST_CB_ASSERT(capacity >= min_capacity);          // check for capacity lower than min_capacity
         BOOST_CB_ASSERT(std::distance(first, last) >= 0);   // check for wrong range
-        return std::min(capacity, std::max(min_capacity,
+        return std::min(capacity_ctrl.m_capacity, std::max(capacity_ctrl.m_min_capacity,
             static_cast<size_type>(std::distance(first, last))));
     }
 

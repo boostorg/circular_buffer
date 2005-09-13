@@ -1153,7 +1153,7 @@ private:
 	//! Specialized initialize method.
     template <class InputIterator>
     void initialize(InputIterator first, InputIterator last, std::input_iterator_tag) {
-		BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS; // check if the STL provides templated iterator constructors for containers
+		BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
 		std::deque<value_type> tmp(first, last);
 		size_type distance = tmp.size();
 		initialize(distance, tmp.begin(), tmp.last(), distance);
@@ -1251,7 +1251,7 @@ private:
     //! Specialized assign method.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last, std::input_iterator_tag) {
-        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS; // check if the STL provides templated iterator constructors for containers
+        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
         std::deque<value_type> tmp(first, last);
         size_type distance = tmp.size();
         do_assign(std::max(distance, capacity()), distance, cb_details::assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator, allocator_type>(tmp.begin(), tmp.end(), m_alloc));
