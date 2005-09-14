@@ -507,8 +507,7 @@ public:
         InputIterator last,
         const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
-        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for invalid iterator type
-        initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<InputIterator>::type());
+        initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
     }
 
     //! Destructor.
@@ -1168,6 +1167,21 @@ private:
     }
 
     //! Specialized initialize method.
+    template <class IntegralType>
+    void initialize(size_type capacity, IntegralType n, IntegralType item, cb_details::int_tag) {
+        BOOST_CB_ASSERT(capacity >= static_cast<size_type>(n)); // check for capacity lower than n
+		m_size = static_cast<size_type>(n);
+        initialize(capacity, item);
+    }
+
+    //! Specialized initialize method.
+    template <class Iterator>
+    void initialize(size_type capacity, Iterator first, Iterator last, cb_details::iterator_tag) {
+        BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+        initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+    }
+    
+    //! Specialized initialize method.
     template <class InputIterator>
     void initialize(size_type capacity,
         InputIterator first,
@@ -1268,7 +1282,7 @@ private:
     //! Specialized assign method.
     template <class IntegralType>
     void assign(size_type capacity, IntegralType n, IntegralType item, cb_details::int_tag) {
-        assign(capacity, static_cast<size_type>(n), item);
+        // TODO assign(capacity, static_cast<size_type>(n), item);
     }
 
     //! Specialized assign method.
@@ -1281,7 +1295,7 @@ private:
     //! Specialized assign method.
     template <class InputIterator>
     void assign(size_type capacity, InputIterator first, InputIterator last, std::input_iterator_tag) {
-        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS; // check if the STL provides templated iterator constructors for containers
+        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
         std::deque<value_type> tmp(first, last);
         size_type distance = tmp.size();
         BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator begin = tmp.begin();
