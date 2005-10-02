@@ -1282,7 +1282,7 @@ private:
     //! Specialized assign method.
     template <class IntegralType>
     void assign(size_type capacity, IntegralType n, IntegralType item, cb_details::int_tag) {
-        // TODO assign(capacity, static_cast<size_type>(n), item);
+        assign(capacity, static_cast<size_type>(n), item);
     }
 
     //! Specialized assign method.

@@ -264,7 +264,9 @@ public:
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(
         init_capacity(capacity_ctrl, first, last), first, last, alloc) // TODO
-    , m_capacity_ctrl(capacity_ctrl) {}
+    , m_capacity_ctrl(capacity_ctrl) {
+    
+    }
 
     // Default destructor
 
