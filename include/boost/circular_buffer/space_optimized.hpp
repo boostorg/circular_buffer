@@ -220,7 +220,7 @@ public:
         size_type n,
         param_value_type item,
         const allocator_type& alloc = allocator_type())
-    : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, n, item, alloc)
+    : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, n, item, alloc) // TODO wrong capacity initialization
     , m_capacity_ctrl(capacity_ctrl) {}
 
     // Default copy constructor
@@ -263,10 +263,10 @@ public:
         InputIterator last,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(
-        init_capacity(capacity_ctrl, first, last), first, last, alloc) // TODO
-    , m_capacity_ctrl(capacity_ctrl) {
-    
-    }
+		init_capacity(capacity_ctrl, first, last,
+			BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag()),
+		first, last, alloc)
+    , m_capacity_ctrl(capacity_ctrl) {}
 
     // Default destructor
 
@@ -306,10 +306,12 @@ public:
         check_high_capacity();
     }
 
-	// TODO
+	//! See the circular_buffer source documentation.
 	template <class InputIterator>
 	void assign(capacity_control capacity_ctrl, InputIterator first, InputIterator last) {
 	   m_capacity_ctrl = capacity_ctrl;
+	   circular_buffer<T, Alloc>::assign(capacity(), first, last);
+	   check_high_capacity();
     }
 
     //! See the circular_buffer source documentation.
@@ -532,14 +534,32 @@ private:
             ensure_reserve(new_capacity, size()));
     }
 
-    //! Determine the initial capacity.
-    template <class InputIterator>
-    static size_type init_capacity(const capacity_control& capacity_ctrl, InputIterator first, InputIterator last) {
-        BOOST_CB_IS_CONVERTIBLE(InputIterator, value_type); // check for invalid iterator type
-        BOOST_CB_ASSERT(std::distance(first, last) >= 0);   // check for wrong range
-        return std::min(capacity_ctrl.m_capacity, std::max(capacity_ctrl.m_min_capacity,
-            static_cast<size_type>(std::distance(first, last))));
-    }
+	//! Specialized method for determining the initial capacity.
+	template <class IntegralType>
+    static size_type init_capacity(const capacity_control& capacity_ctrl, IntegralType n, IntegralType item, cb_details::int_tag) {
+		BOOST_CB_ASSERT(capacity_ctrl.m_capacity >= static_cast<size_type>(n)); // check for capacity lower than n
+		return std::max(capacity_ctrl.m_min_capacity, static_cast<size_type>(n));
+	}
+
+	//! Specialized method for determining the initial capacity.
+	template <class Iterator>
+    static size_type init_capacity(const capacity_control& capacity_ctrl, Iterator first, Iterator last, cb_details::iterator_tag) {
+		BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+		return init_capacity(capacity_ctrl, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+	}
+
+	//! Specialized method for determining the initial capacity.
+	template <class InputIterator>
+    static size_type init_capacity(const capacity_control& capacity_ctrl, InputIterator first, InputIterator last, std::input_iterator_tag) {
+		return capacity_ctrl.m_capacity;
+	}
+
+	//! Specialized method for determining the initial capacity.
+	template <class ForwardIterator>
+    static size_type init_capacity(const capacity_control& capacity_ctrl, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
+        BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
+        return std::min(capacity_ctrl.m_capacity, std::max(capacity_ctrl.m_min_capacity, static_cast<size_type>(std::distance(first, last))));
+	}
 
 	//! Increase the size of the space optimized circular buffer.
 	void increase_size(size_type new_size, param_value_type item) {
@@ -549,28 +569,28 @@ private:
 	}
 
     //! Specialized insert method.
-    template <class InputIterator>
-    void insert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
-        insert(pos, static_cast<size_type>(n), item);
+    template <class IntegralType>
+    void insert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
+        insert(pos, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized insert method.
-    template <class InputIterator>
-    void insert(iterator pos, InputIterator first, InputIterator last, cb_details::iterator_tag) {
+    template <class Iterator>
+    void insert(iterator pos, Iterator first, Iterator last, cb_details::iterator_tag) {
         size_type index = pos - begin();
         check_low_capacity(std::distance(first, last));
         circular_buffer<T, Alloc>::insert(begin() + index, first, last);
     }
 
     //! Specialized rinsert method.
-    template <class InputIterator>
-    void rinsert(iterator pos, InputIterator n, InputIterator item, cb_details::int_tag) {
-        rinsert(pos, static_cast<size_type>(n), item);
+    template <class IntegralType>
+    void rinsert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
+        rinsert(pos, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized rinsert method.
-    template <class InputIterator>
-    void rinsert(iterator pos, InputIterator first, InputIterator last, cb_details::iterator_tag) {
+    template <class Iterator>
+    void rinsert(iterator pos, Iterator first, Iterator last, cb_details::iterator_tag) {
         size_type index = pos - begin();
         check_low_capacity(std::distance(first, last));
         circular_buffer<T, Alloc>::rinsert(begin() + index, first, last);

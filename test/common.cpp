@@ -572,7 +572,7 @@ void assign_test() {
     cb1.push_back(5);
     cb1.assign(3, 8);
     BOOST_CHECK(cb1.size() == 3);
-    BOOST_CHECK(cb1.capacity() == 4);
+    BOOST_CHECK(cb1.capacity() == 3);
     BOOST_CHECK(cb1[0] == 8);
     BOOST_CHECK(cb1[2] == 8);
 
@@ -1266,7 +1266,7 @@ void assign_range_test() {
     cb2.push_back(2);
     cb2.assign(v.begin(), v.end());
 
-    BOOST_CHECK(!cb1.full());
+    BOOST_CHECK(cb1.capacity() == 2);
     BOOST_CHECK(cb1[0] == 12);
     BOOST_CHECK(cb1[1] == 13);
     BOOST_CHECK(cb2.full());

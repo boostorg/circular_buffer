@@ -19,6 +19,7 @@
 #include <boost/throw_exception.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+#include <boost/type_traits/is_stateless.hpp>
 #include <algorithm>
 #include <utility>
 #include <deque>
@@ -87,6 +88,9 @@ public:
 
     //! Const (random access) iterator used to iterate through a circular buffer.
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::const_traits<Alloc> > const_iterator;
+                                                                          
+
+
 
     //! Iterator (random access) used to iterate through a circular buffer.
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::nonconst_traits<Alloc> > iterator;
@@ -535,32 +539,27 @@ public:
 
     //! Assign <code>n</code> items into the circular buffer.
     /*!
-        \post <code>(*this).size() == n \&\&
-              (*this)[0] == (*this)[1] == ... == (*this).back() == item</code><br>
-              If the number of items to be assigned exceeds
-              the capacity of the circular buffer the capacity
-              is increased to <code>n</code> otherwise it stays unchanged.
+        \post <code>(*this).capacity() == n \&\& (*this).size() == n \&\&
+              (*this)[0] == (*this)[1] == ... == (*this).back() == item</code>
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     void assign(size_type n, param_value_type item) {
-        do_assign(std::max(n, capacity()), n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
+		assign_n(n, n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
     }
 
 	// TODO doc
 	void assign(size_type capacity, size_type n, param_value_type item) {
 	   BOOST_CB_ASSERT(capacity >= n); // check for new capacity lower than n
-	   do_assign(capacity, n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
+	   assign_n(capacity, n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
     }
 
     //! Assign a copy of range.
     /*!
         \pre Valid range <code>[first, last)</code>.
-        \post <code>(*this).size() == std::distance(first, last)</code><br>
-              If the number of items to be assigned exceeds
-              the capacity of the circular buffer the capacity
-              is set to that number otherwise is stays unchanged.
+        \post <code>(*this).capacity() == std::distance(first, last) \&\&
+		      (*this).size() == std::distance(first, last)</code>
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
@@ -584,6 +583,7 @@ public:
     void swap(circular_buffer<T, Alloc>& cb) {
         std::swap(m_alloc, cb.m_alloc); // in general this is not necessary,
                                         // because allocators should not have state
+		// TODO is_stateless<allocator_type>::value -> std::swap(m_alloc, cb.m_alloc));
         std::swap(m_buff, cb.m_buff);
         std::swap(m_end, cb.m_end);
         std::swap(m_first, cb.m_first);
@@ -744,7 +744,7 @@ public:
             return;
         if (n > copy)
             n = copy;
-        insert_n_item(pos, n, cb_details::item_wrapper<const_pointer, param_value_type>(item));
+        insert_n(pos, n, cb_details::item_wrapper<const_pointer, param_value_type>(item));
     }
 
     //! Insert the range <code>[first, last)</code> before the given position.
@@ -844,7 +844,7 @@ public:
     */
     void rinsert(iterator pos, size_type n, param_value_type item) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        rinsert_n_item(pos, n, cb_details::item_wrapper<const_pointer, param_value_type>(item));
+        rinsert_n(pos, n, cb_details::item_wrapper<const_pointer, param_value_type>(item));
     }
 
     //! Insert the range <code>[first, last)</code> before the given position.
@@ -1153,7 +1153,7 @@ private:
     template <class InputIterator>
     void initialize(InputIterator first, InputIterator last, std::input_iterator_tag) {
 		BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
-		std::deque<value_type> tmp(first, last);
+		std::deque<value_type, allocator_type> tmp(first, last, m_alloc);
 		size_type distance = tmp.size();
 		initialize(distance, tmp.begin(), tmp.last(), distance);
 	}
@@ -1252,7 +1252,7 @@ private:
     //! Specialized assign method.
     template <class IntegralType>
     void assign(IntegralType n, IntegralType item, cb_details::int_tag) {
-        assign(static_cast<size_type>(n), item);
+		assign(static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized assign method.
@@ -1266,9 +1266,9 @@ private:
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last, std::input_iterator_tag) {
         BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
-        std::deque<value_type> tmp(first, last);
+        std::deque<value_type, allocator_type> tmp(first, last, m_alloc);
         size_type distance = tmp.size();
-        do_assign(std::max(distance, capacity()), distance, cb_details::assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator, allocator_type>(tmp.begin(), tmp.end(), m_alloc));
+        assign_n(distance, distance, cb_details::assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type, allocator_type>::iterator, allocator_type>(tmp.begin(), tmp.end(), m_alloc));
     }
     
     //! Specialized assign method.
@@ -1276,64 +1276,62 @@ private:
     void assign(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         size_type distance = std::distance(first, last);
-        do_assign(std::max(distance, capacity()), distance, cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
+        assign_n(distance, distance, cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
     }
     
     //! Specialized assign method.
     template <class IntegralType>
-    void assign(size_type capacity, IntegralType n, IntegralType item, cb_details::int_tag) {
-        assign(capacity, static_cast<size_type>(n), item);
+    void assign(size_type new_capacity, IntegralType n, IntegralType item, cb_details::int_tag) {
+        assign(new_capacity, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized assign method.
     template <class Iterator>
-    void assign(size_type capacity, Iterator first, Iterator last, cb_details::iterator_tag) {
+    void assign(size_type new_capacity, Iterator first, Iterator last, cb_details::iterator_tag) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
-        assign(capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+        assign(new_capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
     
     //! Specialized assign method.
     template <class InputIterator>
-    void assign(size_type capacity, InputIterator first, InputIterator last, std::input_iterator_tag) {
-        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
-        std::deque<value_type> tmp(first, last);
-        size_type distance = tmp.size();
-        BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator begin = tmp.begin();
-        if (distance > capacity) {
-            std::advance(begin, distance - capacity);
-            distance = capacity;
-        }
-        do_assign(capacity, distance, cb_details::assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type>::iterator, allocator_type>(begin, tmp.end(), m_alloc));
+    void assign(size_type new_capacity, InputIterator first, InputIterator last, std::input_iterator_tag) {
+		if (new_capacity == capacity()) {
+			clear();
+			insert(begin(), first, last);
+		} else {
+			circular_buffer<value_type, allocator_type> tmp(new_capacity, first, last, m_alloc);
+			tmp.swap(*this);
+		}
     }
     
     //! Specialized assign method.
     template <class ForwardIterator>
-    void assign(size_type capacity, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
+    void assign(size_type new_capacity, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         size_type distance = std::distance(first, last);
-        if (distance > capacity) {
+        if (distance > new_capacity) {
             std::advance(first, distance - capacity);
-            distance = capacity;
+            distance = new_capacity;
         }
-        do_assign(capacity, distance, cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
+        assign_n(new_capacity, distance, cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
     }
 
     //! Helper assign method.
     template <class Functor>
-    void do_assign(size_type new_capacity, size_type n, const Functor& fnc) {
-        if (new_capacity != capacity()) {
-            pointer buff = allocate(new_capacity);
+    void assign_n(size_type new_capacity, size_type n, const Functor& fnc) {
+        if (new_capacity == capacity()) {
+            destroy_content();
+            BOOST_CB_TRY
+            fnc(m_buff);
+            BOOST_CB_UNWIND(m_size = 0)
+        } else {
+			pointer buff = allocate(new_capacity);
             BOOST_CB_TRY
             fnc(buff);
             BOOST_CB_UNWIND(deallocate(buff, new_capacity))
             destroy();
             m_buff = buff;
             m_end = m_buff + new_capacity;
-        } else {
-            destroy_content();
-            BOOST_CB_TRY
-            fnc(m_buff);
-            BOOST_CB_UNWIND(m_size = 0)
         }
         m_size = n;
         m_first = m_buff;
@@ -1343,7 +1341,7 @@ private:
     //! Specialized insert method.
     template <class IntegralType>
     void insert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
-        insert(pos, static_cast<size_type>(n), item);
+        insert(pos, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized insert method.
@@ -1376,12 +1374,12 @@ private:
             std::advance(first, n - copy);
             n = copy;
         }
-        insert_n_item(pos, n, cb_details::iterator_wrapper<ForwardIterator>(first));
+        insert_n(pos, n, cb_details::iterator_wrapper<ForwardIterator>(first));
     }
     
     //! Helper insert method.
     template <class Wrapper>
-    void insert_n_item(iterator pos, size_type n, const Wrapper& wrapper) {
+    void insert_n(iterator pos, size_type n, const Wrapper& wrapper) {
         size_type construct = capacity() - size();
         if (construct > n)
             construct = n;
@@ -1426,7 +1424,7 @@ private:
     //! Specialized rinsert method.
     template <class IntegralType>
     void rinsert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
-        rinsert(pos, static_cast<size_type>(n), item);
+        rinsert(pos, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized rinsert method.
@@ -1449,12 +1447,12 @@ private:
     template <class ForwardIterator>
     void rinsert(iterator pos, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
-        rinsert_n_item(pos, std::distance(first, last), cb_details::iterator_wrapper<ForwardIterator>(first));
+        rinsert_n(pos, std::distance(first, last), cb_details::iterator_wrapper<ForwardIterator>(first));
     }
 
     //! Helper rinsert method.
     template <class Wrapper>
-    void rinsert_n_item(iterator pos, size_type n, const Wrapper& wrapper) {
+    void rinsert_n(iterator pos, size_type n, const Wrapper& wrapper) {
         if (n == 0)
             return;
         size_type copy = capacity() - (pos - begin());
