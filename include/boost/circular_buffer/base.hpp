@@ -13,13 +13,13 @@
     #pragma once
 #endif
 
-#include <boost/limits.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/concept_check.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/limits.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/type_traits/is_stateless.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <algorithm>
 #include <utility>
 #include <deque>
@@ -88,9 +88,6 @@ public:
 
     //! Const (random access) iterator used to iterate through a circular buffer.
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::const_traits<Alloc> > const_iterator;
-                                                                          
-
-
 
     //! Iterator (random access) used to iterate through a circular buffer.
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::nonconst_traits<Alloc> > iterator;
@@ -295,31 +292,33 @@ public:
         pointer dest = m_buff;
         size_type moved = 0;
         size_type constructed = 0;
-        BOOST_CB_TRY
-        for (pointer first = m_first; dest < src; src = first) {
-            for (size_type ii = 0; src < m_end; ++src, ++dest, ++moved, ++ii) {
-                if (moved == size()) {
-                    first = dest;
-                    break;
-                }
-                if (dest == first) {
-                    first += ii;
-                    break;
-                }
-                if (is_uninitialized(dest)) {
-                    m_alloc.construct(dest, *src);
-                    ++constructed;
-                } else {
-                    value_type tmp = *src;
-                    replace(src, *dest);
-                    replace(dest, tmp);
-                }
-            }
-        }
-        BOOST_CB_UNWIND(
-            m_last += constructed;
+        BOOST_TRY {
+			for (pointer first = m_first; dest < src; src = first) {
+				for (size_type ii = 0; src < m_end; ++src, ++dest, ++moved, ++ii) {
+					if (moved == size()) {
+						first = dest;
+						break;
+					}
+					if (dest == first) {
+						first += ii;
+						break;
+					}
+					if (is_uninitialized(dest)) {
+						m_alloc.construct(dest, *src);
+						++constructed;
+					} else {
+						value_type tmp = *src;
+						replace(src, *dest);
+						replace(dest, tmp);
+					}
+				}
+			}
+		} BOOST_CATCH(...) {
+			m_last += constructed;
             m_size += constructed;
-        )
+			BOOST_RETHROW
+		}
+		BOOST_CATCH_END
         for (src = m_end - constructed; src < m_end; ++src)
             destroy_item(src);
         m_first = m_buff;
@@ -378,9 +377,13 @@ public:
         if (new_capacity == capacity())
             return;
         pointer buff = allocate(new_capacity);
-        BOOST_CB_TRY
-		reset(buff, cb_details::uninitialized_copy(end() - std::min(new_capacity, size()), end(), buff, m_alloc), new_capacity);
-        BOOST_CB_UNWIND(deallocate(buff, new_capacity))
+        BOOST_TRY {
+			reset(buff, cb_details::uninitialized_copy(end() - std::min(new_capacity, size()), end(), buff, m_alloc), new_capacity);
+		} BOOST_CATCH(...) {
+			deallocate(buff, new_capacity);
+			BOOST_RETHROW
+		}
+		BOOST_CATCH_END
     }
 
     //! Change the size of the circular buffer.
@@ -405,7 +408,7 @@ public:
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
-    void resize(size_type new_size, param_value_type item = T()) {
+    void resize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size())
             increase_size(new_size, item);
         else
@@ -417,13 +420,17 @@ public:
         if (new_capacity == capacity())
             return;
         pointer buff = allocate(new_capacity);
-        BOOST_CB_TRY
-		reset(buff, cb_details::uninitialized_copy(begin(), begin() + std::min(new_capacity, size()), buff, m_alloc), new_capacity);
-        BOOST_CB_UNWIND(deallocate(buff, new_capacity))
+        BOOST_TRY {
+			reset(buff, cb_details::uninitialized_copy(begin(), begin() + std::min(new_capacity, size()), buff, m_alloc), new_capacity);
+		} BOOST_CATCH(...) {
+			deallocate(buff, new_capacity);
+			BOOST_RETHROW
+		}
+		BOOST_CATCH_END
     }
 
     // TODO doc
-    void rresize(size_type new_size, param_value_type item = T()) {
+    void rresize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size())
             increase_size(new_size, item);
         else
@@ -478,9 +485,13 @@ public:
     circular_buffer(const circular_buffer<T, Alloc>& cb)
     : m_size(cb.size()), m_alloc(cb.get_allocator()) {
         m_first = m_last = m_buff = allocate(cb.capacity());
-        BOOST_CB_TRY
-        m_end = cb_details::uninitialized_copy(cb.begin(), cb.end(), m_buff, m_alloc);
-        BOOST_CB_UNWIND(deallocate(m_buff, cb.capacity()))
+        BOOST_TRY {
+			m_end = cb_details::uninitialized_copy(cb.begin(), cb.end(), m_buff, m_alloc);
+		} BOOST_CATCH(...) {
+			deallocate(m_buff, cb.capacity());
+			BOOST_RETHROW
+		}
+		BOOST_CATCH_END
     }
 
 	// TODO doc
@@ -490,7 +501,7 @@ public:
         InputIterator last,
         const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
-		initialize(first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
+		initialize(first, last, is_integral<InputIterator>());
     }
 
     //! Create a circular buffer with a copy of a range.
@@ -511,7 +522,7 @@ public:
         InputIterator last,
         const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
-        initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
+        initialize(capacity, first, last, is_integral<InputIterator>());
     }
 
     //! Destructor.
@@ -531,9 +542,13 @@ public:
         if (this == &cb)
             return *this;
         pointer buff = allocate(cb.capacity());
-        BOOST_CB_TRY
-		reset(buff, cb_details::uninitialized_copy(cb.begin(), cb.end(), buff, m_alloc), cb.capacity());
-		BOOST_CB_UNWIND(deallocate(buff, cb.capacity()))
+        BOOST_TRY {
+			reset(buff, cb_details::uninitialized_copy(cb.begin(), cb.end(), buff, m_alloc), cb.capacity());
+		} BOOST_CATCH(...) {
+			deallocate(buff, cb.capacity());
+			BOOST_RETHROW
+		}
+		BOOST_CATCH_END
         return *this;
     }
 
@@ -566,13 +581,13 @@ public:
     */
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
-        assign(first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
+        assign(first, last, is_integral<InputIterator>());
     }
 
 	// TODO doc
 	template <class InputIterator>
 	void assign(size_type capacity, InputIterator first, InputIterator last) {
-	   assign(capacity, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
+	   assign(capacity, first, last, is_integral<InputIterator>());
     }
 
     //! Swap the contents of two circular buffers.
@@ -581,9 +596,7 @@ public:
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     void swap(circular_buffer<T, Alloc>& cb) {
-        std::swap(m_alloc, cb.m_alloc); // in general this is not necessary,
-                                        // because allocators should not have state
-		// TODO is_stateless<allocator_type>::value -> std::swap(m_alloc, cb.m_alloc));
+		swap_allocator(cb, is_stateless<allocator_type>());
         std::swap(m_buff, cb.m_buff);
         std::swap(m_end, cb.m_end);
         std::swap(m_first, cb.m_first);
@@ -626,19 +639,23 @@ public:
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     void push_front(param_value_type item = value_type()) {
-        BOOST_CB_TRY
-        if (full()) {
-            if (empty())
-                return;
-            decrement(m_first);
-            replace(m_first, item);
-            m_last = m_first;
-        } else {
-            decrement(m_first);
-            m_alloc.construct(m_first, item);
-            ++m_size;
-        }
-        BOOST_CB_UNWIND(increment(m_first))
+        BOOST_TRY {
+			if (full()) {
+				if (empty())
+					return;
+				decrement(m_first);
+				replace(m_first, item);
+				m_last = m_first;
+			} else {
+				decrement(m_first);
+				m_alloc.construct(m_first, item);
+				++m_size;
+			}
+		} BOOST_CATCH(...) {
+			increment(m_first);
+			BOOST_RETHROW
+		}
+		BOOST_CATCH_END
     }
 
     //! Remove the last (rightmost) element.
@@ -686,34 +703,7 @@ public:
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
         if (full() && pos == begin())
             return begin();
-        if (pos.m_it == 0) {
-            construct_or_replace(!full(), m_last, item);
-            pos.m_it = m_last;
-        } else {
-            pointer src = m_last;
-            pointer dest = m_last;
-            bool construct = !full();
-            BOOST_CB_TRY
-            while (src != pos.m_it) {
-                decrement(src);
-                construct_or_replace(construct, dest, *src);
-                decrement(dest);
-                construct = false;
-            }
-            replace(pos.m_it, item);
-            BOOST_CB_UNWIND(
-                if (!construct && !full()) {
-                    increment(m_last);
-                    ++m_size;
-                }
-            )
-        }
-        increment(m_last);
-        if (full())
-            m_first = m_last;
-        else
-            ++m_size;
-        return iterator(this, pos.m_it);
+		return insert_item(pos, item);
     }
 
     //! Insert <code>n</code> copies of the item before the given position.
@@ -772,7 +762,7 @@ public:
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        insert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
+        insert(pos, first, last, is_integral<InputIterator>());
     }
 
     //! Insert an <code>item</code> before the given position.
@@ -787,33 +777,41 @@ public:
     */
     iterator rinsert(iterator pos, param_value_type item = value_type()) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        if (full() && pos == end())
+        if (full() && pos.m_it == 0)
             return end();
         if (pos == begin()) {
-            BOOST_CB_TRY
-            decrement(m_first);
-            construct_or_replace(!full(), m_first, item);
-            BOOST_CB_UNWIND(increment(m_first))
+            BOOST_TRY {
+				decrement(m_first);
+				construct_or_replace(!full(), m_first, item);
+			} BOOST_CATCH(...) {
+				increment(m_first);
+				BOOST_RETHROW
+			}
+			BOOST_CATCH_END
+			pos.m_it = m_first;
         } else {
             pointer src = m_first;
             pointer dest = m_first;
             decrement(dest);
-            pointer it = map_pointer(pos.m_it);
+            pos.m_it = map_pointer(pos.m_it);
             bool construct = !full();
-            BOOST_CB_TRY
-            while (src != it) {
-                construct_or_replace(construct, dest, *src);
-                increment(src);
-                increment(dest);
-                construct = false;
-            }
-            replace((--pos).m_it, item);
-            BOOST_CB_UNWIND(
+            BOOST_TRY {
+				while (src != pos.m_it) {
+					construct_or_replace(construct, dest, *src);
+					increment(src);
+					increment(dest);
+					construct = false;
+				}
+				decrement(pos.m_it);
+				replace(pos.m_it, item);
+			} BOOST_CATCH(...) {
                 if (!construct && !full()) {
                     decrement(m_first);
                     ++m_size;
                 }
-            )
+				BOOST_RETHROW
+			}
+			BOOST_CATCH_END
             decrement(m_first);
         }
         if (full())
@@ -872,7 +870,7 @@ public:
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME cb_details::iterator_cat_traits<InputIterator>::tag());
+        rinsert(pos, first, last, is_integral<InputIterator>());
     }
 
 // Erase
@@ -1130,37 +1128,41 @@ private:
 	//! Initialize the circular buffer.
 	void initialize(size_type capacity, param_value_type item) {
 		initialize(capacity);
-		BOOST_CB_TRY
-        cb_details::uninitialized_fill_n(m_buff, size(), item, m_alloc);
-        BOOST_CB_UNWIND(deallocate(m_buff, size()))
+		BOOST_TRY {
+			cb_details::uninitialized_fill_n(m_buff, size(), item, m_alloc);
+		} BOOST_CATCH(...) {
+			deallocate(m_buff, size());
+			BOOST_RETHROW
+		}
+		BOOST_CATCH_END
 	}
 
 	//! Specialized initialize method.
     template <class IntegralType>
-    void initialize(IntegralType n, IntegralType item, cb_details::int_tag) {
+    void initialize(IntegralType n, IntegralType item, const true_type&) {
 		m_size = static_cast<size_type>(n);
         initialize(size(), item);
     }
 
     //! Specialized initialize method.
     template <class Iterator>
-    void initialize(Iterator first, Iterator last, cb_details::iterator_tag) {
+    void initialize(Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         initialize(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
 
 	//! Specialized initialize method.
     template <class InputIterator>
-    void initialize(InputIterator first, InputIterator last, std::input_iterator_tag) {
+    void initialize(InputIterator first, InputIterator last, const std::input_iterator_tag&) {
 		BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
 		std::deque<value_type, allocator_type> tmp(first, last, m_alloc);
 		size_type distance = tmp.size();
-		initialize(distance, tmp.begin(), tmp.last(), distance);
+		initialize(distance, tmp.begin(), tmp.end(), distance);
 	}
 
 	//! Specialized initialize method.
     template <class ForwardIterator>
-    void initialize(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
+    void initialize(ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
 		size_type distance = std::distance(first, last);
         initialize(distance, first, last, distance);
@@ -1168,7 +1170,7 @@ private:
 
     //! Specialized initialize method.
     template <class IntegralType>
-    void initialize(size_type capacity, IntegralType n, IntegralType item, cb_details::int_tag) {
+    void initialize(size_type capacity, IntegralType n, IntegralType item, const true_type&) {
         BOOST_CB_ASSERT(capacity >= static_cast<size_type>(n)); // check for capacity lower than n
 		m_size = static_cast<size_type>(n);
         initialize(capacity, item);
@@ -1176,7 +1178,7 @@ private:
 
     //! Specialized initialize method.
     template <class Iterator>
-    void initialize(size_type capacity, Iterator first, Iterator last, cb_details::iterator_tag) {
+    void initialize(size_type capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
@@ -1186,7 +1188,7 @@ private:
     void initialize(size_type capacity,
         InputIterator first,
         InputIterator last,
-        std::input_iterator_tag) {
+        const std::input_iterator_tag&) {
         initialize(capacity);
         m_size = 0;
         if (capacity == 0)
@@ -1208,7 +1210,7 @@ private:
     void initialize(size_type capacity,
         ForwardIterator first,
         ForwardIterator last,
-        std::forward_iterator_tag) {
+        const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         initialize(capacity, first, last, std::distance(first, last));
     }
@@ -1228,9 +1230,13 @@ private:
             if (distance != capacity)
                 m_last = m_buff + size();
         }
-        BOOST_CB_TRY
-        cb_details::uninitialized_copy(first, last, m_buff, m_alloc);
-        BOOST_CB_UNWIND(deallocate(m_buff, capacity))
+        BOOST_TRY {
+			cb_details::uninitialized_copy(first, last, m_buff, m_alloc);
+		} BOOST_CATCH(...) {
+			deallocate(m_buff, capacity);
+			BOOST_RETHROW
+		}
+		BOOST_CATCH_END
     }
     
 	//! Increase the size of the circular buffer.
@@ -1249,22 +1255,32 @@ private:
         m_last = last == m_end ? m_buff : last;
 	}
 
+	//! Specialized method for swapping the allocator.
+	void swap_allocator(circular_buffer<T, Alloc>& cb, const true_type&) {
+		// Swap is not needed because allocators have no state.
+	}
+
+	//! Specialized method for swapping the allocator.
+	void swap_allocator(circular_buffer<T, Alloc>& cb, const false_type&) {
+		std::swap(m_alloc, cb.m_alloc);
+	}
+
     //! Specialized assign method.
     template <class IntegralType>
-    void assign(IntegralType n, IntegralType item, cb_details::int_tag) {
+    void assign(IntegralType n, IntegralType item, const true_type&) {
 		assign(static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized assign method.
     template <class Iterator>
-    void assign(Iterator first, Iterator last, cb_details::iterator_tag) {
+    void assign(Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         assign(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
     
     //! Specialized assign method.
     template <class InputIterator>
-    void assign(InputIterator first, InputIterator last, std::input_iterator_tag) {
+    void assign(InputIterator first, InputIterator last, const std::input_iterator_tag&) {
         BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
         std::deque<value_type, allocator_type> tmp(first, last, m_alloc);
         size_type distance = tmp.size();
@@ -1273,7 +1289,7 @@ private:
     
     //! Specialized assign method.
     template <class ForwardIterator>
-    void assign(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
+    void assign(ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         size_type distance = std::distance(first, last);
         assign_n(distance, distance, cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
@@ -1281,20 +1297,20 @@ private:
     
     //! Specialized assign method.
     template <class IntegralType>
-    void assign(size_type new_capacity, IntegralType n, IntegralType item, cb_details::int_tag) {
+    void assign(size_type new_capacity, IntegralType n, IntegralType item, const true_type&) {
         assign(new_capacity, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized assign method.
     template <class Iterator>
-    void assign(size_type new_capacity, Iterator first, Iterator last, cb_details::iterator_tag) {
+    void assign(size_type new_capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         assign(new_capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
     
     //! Specialized assign method.
     template <class InputIterator>
-    void assign(size_type new_capacity, InputIterator first, InputIterator last, std::input_iterator_tag) {
+    void assign(size_type new_capacity, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
 		if (new_capacity == capacity()) {
 			clear();
 			insert(begin(), first, last);
@@ -1306,7 +1322,7 @@ private:
     
     //! Specialized assign method.
     template <class ForwardIterator>
-    void assign(size_type new_capacity, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
+    void assign(size_type new_capacity, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         size_type distance = std::distance(first, last);
         if (distance > new_capacity) {
@@ -1321,14 +1337,22 @@ private:
     void assign_n(size_type new_capacity, size_type n, const Functor& fnc) {
         if (new_capacity == capacity()) {
             destroy_content();
-            BOOST_CB_TRY
-            fnc(m_buff);
-            BOOST_CB_UNWIND(m_size = 0)
+            BOOST_TRY {
+				fnc(m_buff);
+			} BOOST_CATCH(...) {
+				m_size = 0;
+				BOOST_RETHROW
+			}
+			BOOST_CATCH_END
         } else {
 			pointer buff = allocate(new_capacity);
-            BOOST_CB_TRY
-            fnc(buff);
-            BOOST_CB_UNWIND(deallocate(buff, new_capacity))
+            BOOST_TRY {
+				fnc(buff);
+			} BOOST_CATCH(...) {
+				deallocate(buff, new_capacity);
+				BOOST_RETHROW
+			}
+			BOOST_CATCH_END
             destroy();
             m_buff = buff;
             m_end = m_buff + new_capacity;
@@ -1338,31 +1362,66 @@ private:
         m_last = add(m_buff, size());
     }
 
+	//! Helper insert method.
+	iterator insert_item(const iterator& pos, param_value_type item) {
+		pointer p = pos.m_it;
+        if (p == 0) {
+            construct_or_replace(!full(), m_last, item);
+            p = m_last;
+        } else {
+            pointer src = m_last;
+            pointer dest = m_last;
+            bool construct = !full();
+            BOOST_TRY {
+				while (src != p) {
+					decrement(src);
+					construct_or_replace(construct, dest, *src);
+					decrement(dest);
+					construct = false;
+				}
+				replace(p, item);
+			} BOOST_CATCH(...) {
+				if (!construct && !full()) {
+                    increment(m_last);
+                    ++m_size;
+                }
+				BOOST_RETHROW
+			}
+			BOOST_CATCH_END
+        }
+        increment(m_last);
+        if (full())
+            m_first = m_last;
+        else
+            ++m_size;
+        return iterator(this, p);
+    }
+
     //! Specialized insert method.
     template <class IntegralType>
-    void insert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
+    void insert(const iterator& pos, IntegralType n, IntegralType item, const true_type&) {
         insert(pos, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized insert method.
     template <class Iterator>
-    void insert(iterator pos, Iterator first, Iterator last, cb_details::iterator_tag) {
+    void insert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         insert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
     
     //! Specialized insert method.
     template <class InputIterator>
-    void insert(iterator pos, InputIterator first, InputIterator last, std::input_iterator_tag) {
+    void insert(iterator pos, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
         if (!full() || pos != begin()) {
             for (;first != last; ++pos)
-                pos = insert(pos, *first++);
+                pos = insert_item(pos, *first++);
         }
     }
-    
+
     //! Specialized insert method.
     template <class ForwardIterator>
-    void insert(iterator pos, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
+    void insert(const iterator& pos, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         difference_type n = std::distance(first, last);
         if (n == 0)
@@ -1379,42 +1438,46 @@ private:
     
     //! Helper insert method.
     template <class Wrapper>
-    void insert_n(iterator pos, size_type n, const Wrapper& wrapper) {
+    void insert_n(const iterator& pos, size_type n, const Wrapper& wrapper) {
         size_type construct = capacity() - size();
         if (construct > n)
             construct = n;
         if (pos.m_it == 0) {
             size_type ii = 0;
             pointer p = m_last;
-            BOOST_CB_TRY
-            for (; ii < construct; ++ii, increment(p))
-                m_alloc.construct(p, *wrapper.get());
-            for (;ii < n; ++ii, increment(p))
-                replace(p, *wrapper.get());
-            BOOST_CB_UNWIND(
-                size_type constructed = std::min(ii, construct);
+            BOOST_TRY {
+				for (; ii < construct; ++ii, increment(p))
+					m_alloc.construct(p, *wrapper.get());
+				for (;ii < n; ++ii, increment(p))
+					replace(p, *wrapper.get());
+			} BOOST_CATCH(...) {
+				size_type constructed = std::min(ii, construct);
                 m_last = add(m_last, constructed);
                 m_size += constructed;
-            )
+				BOOST_RETHROW
+			}
+			BOOST_CATCH_END
         } else {
             pointer src = m_last;
             pointer dest = add(m_last, n - 1);
             pointer p = pos.m_it;
             size_type ii = 0;
-            BOOST_CB_TRY
-            while (src != pos.m_it) {
-                decrement(src);
-                construct_or_replace(is_uninitialized(dest), dest, *src);
-                decrement(dest);
-            }
-            for (; ii < n; ++ii, increment(p))
-                construct_or_replace(is_uninitialized(p), p, *wrapper.get());
-            BOOST_CB_UNWIND(
-                for (p = add(m_last, n - 1); p != dest; decrement(p))
+            BOOST_TRY {
+				while (src != pos.m_it) {
+					decrement(src);
+					construct_or_replace(is_uninitialized(dest), dest, *src);
+					decrement(dest);
+				}
+				for (; ii < n; ++ii, increment(p))
+					construct_or_replace(is_uninitialized(p), p, *wrapper.get());
+			} BOOST_CATCH(...) {
+				for (p = add(m_last, n - 1); p != dest; decrement(p))
                     destroy_if_constructed(p);
                 for (n = 0, p = pos.m_it; n < ii; ++n, increment(p))
                     destroy_if_constructed(p);
-            )
+				BOOST_RETHROW
+			}
+			BOOST_CATCH_END
         }
         m_last = add(m_last, n);
         m_first = add(m_first, n - construct);
@@ -1423,36 +1486,39 @@ private:
 
     //! Specialized rinsert method.
     template <class IntegralType>
-    void rinsert(iterator pos, IntegralType n, IntegralType item, cb_details::int_tag) {
+    void rinsert(const iterator& pos, IntegralType n, IntegralType item, const true_type&) {
         rinsert(pos, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized rinsert method.
     template <class Iterator>
-    void rinsert(iterator pos, Iterator first, Iterator last, cb_details::iterator_tag) {
+    void rinsert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
     
     //! Specialized insert method.
     template <class InputIterator>
-    void rinsert(iterator pos, InputIterator first, InputIterator last, std::input_iterator_tag) {
-        if (!full() || pos != end()) {
-            while (first != last)
-                rinsert(pos, *first++);
+    void rinsert(iterator pos, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
+        if (!full() || pos.m_it != 0) {
+            for (;first != last; ++pos) {
+                pos = rinsert(pos, *first++);
+				if (pos.m_it == 0)
+					break;
+			}
         }
     }
-    
+
     //! Specialized rinsert method.
     template <class ForwardIterator>
-    void rinsert(iterator pos, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag) {
+    void rinsert(const iterator& pos, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         rinsert_n(pos, std::distance(first, last), cb_details::iterator_wrapper<ForwardIterator>(first));
     }
 
     //! Helper rinsert method.
     template <class Wrapper>
-    void rinsert_n(iterator pos, size_type n, const Wrapper& wrapper) {
+    void rinsert_n(const iterator& pos, size_type n, const Wrapper& wrapper) {
         if (n == 0)
             return;
         size_type copy = capacity() - (pos - begin());
@@ -1466,32 +1532,36 @@ private:
         if (pos == begin()) {
             pointer p = sub(m_first, n);
             size_type ii = n;
-            BOOST_CB_TRY
-            for (;ii > construct; --ii, increment(p))
-                replace(p, *wrapper.get());
-            for (; ii > 0; --ii, increment(p))
-                m_alloc.construct(p, *wrapper.get());
-            BOOST_CB_UNWIND(
-                size_type constructed = ii < construct ? construct - ii : 0;
+            BOOST_TRY {
+				for (;ii > construct; --ii, increment(p))
+					replace(p, *wrapper.get());
+				for (; ii > 0; --ii, increment(p))
+					m_alloc.construct(p, *wrapper.get());
+			} BOOST_CATCH(...) {
+				size_type constructed = ii < construct ? construct - ii : 0;
                 m_last = add(m_last, constructed);
                 m_size += constructed;
-            )
+				BOOST_RETHROW
+			}
+			BOOST_CATCH_END
         } else {
             pointer src = m_first;
             pointer dest = sub(m_first, n);
             pointer p = map_pointer(pos.m_it);
-            BOOST_CB_TRY
-            while (src != p) {
-                construct_or_replace(is_uninitialized(dest), dest, *src);
-                increment(src);
-                increment(dest);
-            }
-            for (size_type ii = 0; ii < n; ++ii, increment(dest))
-                construct_or_replace(is_uninitialized(dest), dest, *wrapper.get());
-            BOOST_CB_UNWIND(
-                for (p = sub(m_first, n); p != dest; increment(p))
-                    destroy_if_constructed(p);
-            )
+            BOOST_TRY {
+				while (src != p) {
+					construct_or_replace(is_uninitialized(dest), dest, *src);
+					increment(src);
+					increment(dest);
+				}
+				for (size_type ii = 0; ii < n; ++ii, increment(dest))
+					construct_or_replace(is_uninitialized(dest), dest, *wrapper.get());
+			} BOOST_CATCH(...) {
+				for (src = sub(m_first, n); src != dest; increment(src))
+                    destroy_if_constructed(src);
+				BOOST_RETHROW
+			}
+			BOOST_CATCH_END
         }
         m_first = sub(m_first, n);
         m_last = sub(m_last, n - construct);

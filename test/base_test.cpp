@@ -7,11 +7,6 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include "test.hpp"
-#include <boost/test/included/unit_test_framework.hpp>
-
-using namespace boost;
-using namespace std;
-using unit_test_framework::test_suite;
 
 #define CB_CONTAINER circular_buffer
 
@@ -190,7 +185,7 @@ void iterator_comparison_test() {
 
 void iterator_invalidation_test() {
 
-#if !defined(NDEBUG) && !defined(BOOST_DISABLE_CB_DEBUG)
+#if BOOST_CB_ENABLE_DEBUG
 
     circular_buffer<Integer>::iterator it1;
     circular_buffer<Integer>::const_iterator it2;
@@ -320,7 +315,7 @@ void iterator_invalidation_test() {
     BOOST_CHECK(!it4.is_valid());
     BOOST_CHECK(it2.is_valid());
 
-#endif // #if !defined(NDEBUG) && !defined(BOOST_DISABLE_CB_DEBUG)
+#endif // #if BOOST_CB_ENABLE_DEBUG
 }
 
 // basic exception safety test (it is useful to use any memory-leak detection tool)
@@ -490,7 +485,6 @@ void exception_safety_test() {
 test_suite* init_unit_test_suite(int argc, char * argv[]) {
 
     test_suite* tests = BOOST_TEST_SUITE("Unit tests for the circular_buffer.");
-
     add_common_tests(tests);
 
     tests->add(BOOST_TEST_CASE(&iterator_constructor_and_assign_test));

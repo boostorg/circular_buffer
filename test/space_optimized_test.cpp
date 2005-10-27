@@ -1,4 +1,4 @@
-// Test of the adaptor of the circular buffer.
+// Test of the space optimized adaptor of the circular buffer.
 
 // Copyright (c) 2003-2005 Jan Gaspar
 
@@ -9,11 +9,6 @@
 #define BOOST_CB_TEST
 
 #include "test.hpp"
-#include <boost/test/included/unit_test_framework.hpp>
-
-using namespace boost;
-using namespace std;
-using unit_test_framework::test_suite;
 
 #define CB_CONTAINER circular_buffer_space_optimized
 

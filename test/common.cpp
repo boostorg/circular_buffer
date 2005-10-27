@@ -6,6 +6,13 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/test/included/unit_test_framework.hpp>
+#include <numeric>
+
+using namespace boost;
+using namespace std;
+using unit_test_framework::test_suite;
+
 void generic_test(CB_CONTAINER<Integer>& cb) {
     
     vector<int> v;
@@ -1392,6 +1399,133 @@ void adaptor_test() {
     BOOST_CHECK(container[7] == 3);
 }
 
+// TODO - split into sections: constructor, insert, assign ...
+void input_range_test() {
+
+	vector<int> v2;
+	v2.push_back(1);
+	v2.push_back(2);
+	v2.push_back(3);
+	v2.push_back(4);
+	v2.push_back(5);
+	CB_CONTAINER<int> cbx(v2.begin(), v2.end());
+
+#if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+
+	vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+
+	CB_CONTAINER<int> cb1(InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+
+	CB_CONTAINER<int> cb2(3, InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+
+	CB_CONTAINER<int> cb3(3);
+	cb3.assign(InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+
+	CB_CONTAINER<int> cb4(3);
+	cb4.assign(4, InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+
+	CB_CONTAINER<int> cb5(4);
+	cb5.push_back(0);
+	cb5.push_back(-1);
+	cb5.push_back(-2);
+	cb5.insert(cb5.begin() + 1, InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+
+	CB_CONTAINER<int> cb6(4);
+	cb6.push_back(0);
+	cb6.push_back(-1);
+	cb6.push_back(-2);
+	cb6.rinsert(cb6.begin() + 1, InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+
+	BOOST_CHECK(cb1.capacity() == 5);
+	BOOST_CHECK(cb2.capacity() == 3);
+	BOOST_CHECK(cb3.capacity() == 5);
+	BOOST_CHECK(cb4.capacity() == 4);
+	BOOST_CHECK(cb5.capacity() == 4);
+	BOOST_CHECK(cb6.capacity() == 4);
+
+	v.clear();
+    v.push_back(11);
+    v.push_back(12);
+    v.push_back(13);
+    v.push_back(14);
+    CB_CONTAINER<int> cb11(4);
+    cb11.push_back(1);
+    cb11.push_back(2);
+    cb11.push_back(3);
+    cb11.rinsert(cb11.begin() + 1, InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+    CB_CONTAINER<int> cb12(2, 2);
+    cb12.rinsert(cb12.begin(), InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+    CB_CONTAINER<int> cb13(5);
+    cb13.rinsert(cb13.begin(), InputIteratorSimulator(v.end()), InputIteratorSimulator(v.end()));
+    CB_CONTAINER<int> cb14(5);
+    cb14.rinsert(cb14.begin(), InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.begin() + 1));
+
+	BOOST_CHECK(cb11.full());
+    BOOST_CHECK(cb11[0] == 1);
+    BOOST_CHECK(cb11[1] == 11);
+    BOOST_CHECK(cb11[2] == 12);
+    BOOST_CHECK(cb11[3] == 13);
+    BOOST_CHECK(cb12[0] == 11);
+    BOOST_CHECK(cb12[1] == 12);
+    BOOST_CHECK(cb13.empty());
+    BOOST_CHECK(cb14[0] == 11);
+    BOOST_CHECK(cb14.size() == 1);
+
+	v.clear();
+    v.push_back(11);
+    v.push_back(12);
+    v.push_back(13);
+    CB_CONTAINER<int> cb21(4);
+    cb21.push_back(1);
+    cb21.push_back(2);
+    cb21.push_back(3);
+    cb21.insert(cb21.begin() + 1, InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+    CB_CONTAINER<int> cb22(2, 2);
+    cb22.insert(cb22.end(), InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.end()));
+    CB_CONTAINER<int> cb23(5);
+    cb23.insert(cb23.end(), InputIteratorSimulator(v.end()), InputIteratorSimulator(v.end()));
+    CB_CONTAINER<int> cb24(5);
+    cb24.insert(cb24.end(), InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.begin() + 1));
+	v.clear();
+	v.push_back(5);
+    v.push_back(6);
+    v.push_back(7);
+	v.push_back(8);
+    v.push_back(9);
+    CB_CONTAINER<int> cb25(6);
+    cb25.push_back(1);
+    cb25.push_back(2);
+    cb25.push_back(3);
+    cb25.push_back(4);
+    cb25.insert(cb25.begin() + 2, InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.begin() + 5));
+    cb25.insert(cb25.begin(), InputIteratorSimulator(v.begin()), InputIteratorSimulator(v.begin() + 5));
+
+    BOOST_CHECK(cb21.full());
+    BOOST_CHECK(cb21[0] == 12);
+    BOOST_CHECK(cb21[1] == 13);
+    BOOST_CHECK(cb21[2] == 2);
+    BOOST_CHECK(cb21[3] == 3);
+    BOOST_CHECK(cb22[0] == 12);
+    BOOST_CHECK(cb22[1] == 13);
+    BOOST_CHECK(cb23.empty());
+    BOOST_CHECK(cb24[0] == 11);
+    BOOST_CHECK(cb24.size() == 1);
+    BOOST_CHECK(cb25.size() == 6);
+    BOOST_CHECK(cb25[0] == 6);
+    BOOST_CHECK(cb25[1] == 7);
+    BOOST_CHECK(cb25[2] == 8);
+    BOOST_CHECK(cb25[3] == 9);
+    BOOST_CHECK(cb25[4] == 3);
+    BOOST_CHECK(cb25[5] == 4);
+
+#endif // #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+}
+
 int Integer::ms_exception_trigger = 0;
 int Y::ms_count = 0;
 
@@ -1440,4 +1574,5 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&element_destruction_test));
     tests->add(BOOST_TEST_CASE(&const_methods_test));
     tests->add(BOOST_TEST_CASE(&adaptor_test));
+	tests->add(BOOST_TEST_CASE(&input_range_test));
 }

@@ -14,14 +14,14 @@
 #endif
 
 #include "../../../boost/circular_buffer.hpp"
-#include <numeric>
+#include <boost/iterator.hpp>
 #include <iterator>
 #include <vector>
 #if !defined(BOOST_NO_EXCEPTIONS)
     #include <exception>
 #endif
 
-// Integer - substitute for int - more appropriate for testing
+// Integer (substitute for int) - more appropriate for testing
 class Integer {
 private:
     int* m_pValue;
@@ -54,6 +54,7 @@ public:
     static void set_exception_trigger(int n) { ms_exception_trigger = n; }
 };
 
+// TODO doc
 struct X
 {
     X() : m_n(1) {}
@@ -61,6 +62,7 @@ struct X
     int m_n;
 };
 
+// TODO doc
 class Y {
 public:
     Y() { increment(); }
@@ -82,6 +84,7 @@ private:
     int m_num;
 };
 
+// TODO doc
 template <class T> class Adaptor {
 private:
     boost::circular_buffer<T> m_buff;
@@ -113,5 +116,48 @@ public:
         }
     }
 };
+
+// simulator of an input iterator
+struct InputIteratorSimulator
+: boost::iterator<std::input_iterator_tag, int, ptrdiff_t, int*, int&> {
+	typedef std::vector<int>::iterator vector_iterator;
+    typedef int value_type;
+    typedef int* pointer;
+    typedef int& reference;
+    typedef size_t size_type;
+    typedef ptrdiff_t difference_type;
+    explicit InputIteratorSimulator(const vector_iterator& it) : m_it(it) {}
+	InputIteratorSimulator& operator = (const InputIteratorSimulator& it) {
+        if (this == &it)
+            return *this;
+        m_it = it.m_it;
+        return *this;
+    }
+    reference operator * () const { return *m_it; }
+    pointer operator -> () const { return &(operator*()); }
+    InputIteratorSimulator& operator ++ () {
+        ++m_it;
+        return *this;
+    }
+    InputIteratorSimulator operator ++ (int) {
+        InputIteratorSimulator tmp = *this;
+        ++*this;
+        return tmp;
+    }
+    bool operator == (const InputIteratorSimulator& it) const { return m_it == it.m_it; }
+    bool operator != (const InputIteratorSimulator& it) const { return m_it != it.m_it; }
+private:
+	vector_iterator m_it;
+};
+
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
+
+inline std::input_iterator_tag iterator_category(const InputIteratorSimulator&) {
+    return std::input_iterator_tag();
+}
+inline int* value_type(const InputIteratorSimulator&) { return 0; }
+inline ptrdiff_t* distance_type(const InputIteratorSimulator&) { return 0; }
+
+#endif // #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
 
 #endif // #if !defined(BOOST_CIRCULAR_BUFFER_TEST_HPP)

@@ -14,66 +14,13 @@
 #endif
 
 #include <boost/iterator.hpp>
-#include <boost/type_traits/is_integral.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 #include <iterator>
 
 namespace boost {
 
 namespace cb_details {
-
-/*!
-    \struct iterator_tag
-    \brief Identifying tag for iterator types.
-*/
-struct iterator_tag {
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x6000)
-    char dummy_; // BCB: by default empty structure has 8 bytes
-#endif
-};
-
-/*!
-    \struct int_tag
-    \brief Identifying tag for integer types.
-*/
-struct int_tag {
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x6000)
-    char dummy_; // BCB: by default empty structure has 8 bytes
-#endif
-};
-
-/*!
-    \struct iterator_cat
-    \brief Defines iterator category.
-*/
-template <bool>
-struct iterator_cat {
-    //! Represents iterators.
-    typedef iterator_tag iterator_cat_tag;
-};
-
-template <>
-struct iterator_cat<true> {
-    //! Represents integral types (not iterators).
-    typedef int_tag iterator_cat_tag;
-};
-
-/*!
-    \struct iterator_cat_traits
-    \brief Defines the iterator category tag for the given iterator.
-*/
-template <class Iterator>
-struct iterator_cat_traits {
-    //! Iterator category tag type.
-    /*!
-        Depending on the template parameter the <code>tag</code> distinguishes
-        between iterators and non-iterators. If the template parameter
-        is an iterator, the <code>tag</code> is typedef for <code>iterator_tag</code>.
-        If the parameter is not an iterator, the <code>tag</code> is typedef for
-        <code>int_tag</code>.
-    */
-    typedef typename iterator_cat<
-        is_integral<Iterator>::value>::iterator_cat_tag tag;
-};
 
 template <class Traits> struct nonconst_traits;
 
@@ -499,13 +446,15 @@ inline typename Traits::difference_type* distance_type(const iterator<Buff, Trai
 template<class InputIterator, class ForwardIterator, class Alloc>
 inline ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& alloc) {
     ForwardIterator next = dest;
-    BOOST_CB_TRY
-    for (; first != last; ++first, ++dest)
-        alloc.construct(dest, *first);
-    BOOST_CB_UNWIND(
-        for (; next != dest; ++next)
-            alloc.destroy(next);
-    )
+    BOOST_TRY {
+		for (; first != last; ++first, ++dest)
+			alloc.construct(dest, *first);
+	} BOOST_CATCH(...) {
+		for (; next != dest; ++next)
+            alloc.destroy(next);	
+		BOOST_RETHROW
+	}
+	BOOST_CATCH_END
     return dest;
 }
 
@@ -516,13 +465,15 @@ inline ForwardIterator uninitialized_copy(InputIterator first, InputIterator las
 template<class ForwardIterator, class Diff, class T, class Alloc>
 inline void uninitialized_fill_n(ForwardIterator first, Diff n, const T& item, Alloc& alloc) {
     ForwardIterator next = first;
-    BOOST_CB_TRY
+    BOOST_TRY {
         for (; n > 0; ++first, --n)
             alloc.construct(first, item);
-    BOOST_CB_UNWIND(
-        for (; next != first; ++next)
+	} BOOST_CATCH(...) {
+		for (; next != first; ++next)
             alloc.destroy(next);
-    )
+		BOOST_RETHROW
+	}
+	BOOST_CATCH_END
 }
 
 } // namespace cb_details

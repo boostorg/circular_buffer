@@ -89,7 +89,8 @@ t24  REJECTED
      ammend the test in order to compile with the new iterator if really
      needed (line 1857)
 
-t25  add constructor taking just two iterators as a parameter
+t25  DONE
+     add constructor taking just two iterators as a parameter
 
 t26  DONE
      change the current implementation of "overwrite" operation -> overwrite
@@ -128,7 +129,8 @@ t35  docs: there should be warning for data() documentation that the returned
 t36  docs: Synopsis in circular_buffer.html could be splitted by <p> into
      two paragraphs - it would look less "heavy"
 
-t37  the macros as BOOST_CB_TRY should be at some time replaced by common
+t37  DONE
+     the macros as BOOST_CB_TRY should be at some time replaced by common
      Boost macros (BOOST_TRY/BOOST_CATCH/BOOST_RETHROW)
 
 t38  DONE
@@ -162,7 +164,8 @@ t45  DONE - no action needed
 t46  DONE
      rename files e.g. from adaptor to space_optimized
 
-t47  constructor and insert methods taking input iterator does not work with
+t47  DONE
+     constructor and insert methods taking input iterator does not work with
      istream_iterator - std::distance() function does't work as expected - fix
      needed
 
@@ -172,10 +175,13 @@ t48  DONE
 t49  test non-invalidation of the iterators after call to methods such as insert
      or rinsert
 
-t50  add assign methods with capacity parameter
+t50  DONE
+     add assign methods with capacity parameter
 
 t51  docs: add troubleshooting section for VC6: amend #define _VIRTUAL
      in xlocnum header
+
+t52  rename BOOST_DISABLE_CB_DEBUG to BOOST_CB_DISABLE_DEBUG
 
 -------------------------------------------------------------------------------
 
