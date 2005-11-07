@@ -115,10 +115,10 @@ private:
 */
 template <class Iterator, class Alloc>
 struct assign_range {
-    Iterator m_first;
-    Iterator m_last;
+    const Iterator& m_first;
+    const Iterator& m_last;
     Alloc& m_alloc;
-    explicit assign_range(Iterator first, Iterator last, Alloc& alloc) : m_first(first), m_last(last), m_alloc(alloc) {}
+    explicit assign_range(const Iterator& first, const Iterator& last, Alloc& alloc) : m_first(first), m_last(last), m_alloc(alloc) {}
     template <class Pointer>
     void operator () (Pointer p) const {
         uninitialized_copy(m_first, m_last, p, m_alloc);

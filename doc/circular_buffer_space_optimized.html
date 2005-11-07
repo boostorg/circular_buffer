@@ -3,22 +3,22 @@
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
-    <title>Space Optimized Circular Buffer Container Adaptor</title>
+    <title>Space Optimized Circular Buffer</title>
   </head>
   <body bgcolor="#ffffff">
-    <h1>Space Optimized Circular Buffer Container Adaptor</h1>
+    <h1>Space Optimized Circular Buffer</h1>
     <table id="title" border="0">
       <tr>
 <td>
                     <h1>circular_buffer_space_optimized&lt;T, Alloc&gt;</h1>
                 </td>
-                <td><a href="../../../"><img height="86" src="../../../c++boost.gif" width="277" border="0" alt="Boost"></a></td>
+                <td><a href="../../../"><img src="../../../boost.png" width="277" height="86" alt="Boost" border="0"></a></td>
             </tr>
     </table>
     <h2>Contents</h2>
 <a href="#description">Description</a><br>
-            <a href="#synopsis">Synopsis</a><br>
             <a href="#rationale">Rationale</a><br>
+            <a href="#synopsis">Synopsis</a><br>
             <a href="#header">Header files</a><br>
             <a href="#model">Modeled concepts</a><br>
             <a href="#members">Template Parameters, Members and Standalone
@@ -41,7 +41,7 @@
     <table id="figure" border="0">
       <tr>
 <td></td>
-                <td><img height="350" src="circular_buffer_space_optimized.png" width="700" alt="Space Optimized Circular Buffer"></td>
+                <td><img src="circular_buffer_space_optimized.png" width="700" height="350" alt="Space Optimized Circular Buffer" border="0"></td>
             </tr>
       <tr>
 <td valign="top"><b>Figure:</b></td>
@@ -53,6 +53,15 @@
             </tr>
     </table>
     <br>
+    <h2>
+      <a name="rationale">Rationale</a>
+    </h2>
+    <p>The auto-resizing mode of the space optimized circular buffer can be useful in
+            situations when the container can possibly store large number of elements but
+            most of its lifetime the container stores just few of them. The usage of the <code>circular_buffer_space_optimized</code>
+            will result in decreased memory consumption and can improve the CPU cache
+            effectiveness.
+        </p>
     <h2>
       <a name="synopsis">Synopsis</a>
     </h2>
@@ -172,15 +181,6 @@ template &lt;class T, class Alloc&gt;
         </tr>
       </table>
     </div>
-    <h2>
-      <a name="rationale">Rationale</a>
-    </h2>
-    <p>The auto-resizing mode of the space optimized circular buffer can be useful in
-            situations when the container can possibly store large number of elements but
-            most of its lifetime the container stores just few of them. The usage of the <code>circular_buffer_space_optimized</code>
-            will result in decreased memory consumption and can improve the CPU cache
-            effectiveness.
-        </p>
     <h2>
       <a name="header">Header files</a>
     </h2>
@@ -778,7 +778,7 @@ See the <a href="#classboost_1_1circular__buffer">circular_buffer</a> source doc
 <td align="left" valign="top"><small>Copyright © 2003-2005 <a href="mailto:jano_gaspar%5Bat%5Dyahoo.com">Jan Gaspar</a></small></td>
         <td align="right" valign="top">
           <a href="http://validator.w3.org/check?url=http://www.boost.org/libs/circular_buffer/doc/circular_buffer_space_optimized.html">
-            <img border="0" src="valid-html40.png" alt="Valid HTML 4.0!" height="31" width="88"></a>
+            <img src="valid-html40.png" height="31" width="88" alt="Valid HTML 4.0!" border="0"></a>
         </td>
       </tr>
     </table>

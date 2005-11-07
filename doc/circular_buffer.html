@@ -12,14 +12,14 @@
                     <h1>Templated Circular Buffer Container</h1>
                     <h1>circular_buffer&lt;T, Alloc&gt;</h1>
                 </td>
-                <td><a href="../../../"><IMG height=86 alt=Boost src="../../../c++boost.gif" width=277 border=0></a></td>
+                <td><a href="../../../"><img src="../../../boost.png" width="277" height="86" alt="Boost" border="0"></a></td>
             </tr>
     </table>
     <h2>Contents</h2>
     <A href="#description">Description</A><br>
     <A href="#simpleexample">Simple Example</A><br>
-    <A href="#synopsis">Synopsis</A><br>
     <A href="#rationale">Rationale</A><br>
+    <A href="#synopsis">Synopsis</A><br>
     <A href="#header">Header files</A><br>
     <A href="#model">Modeled concepts</A><br>
     <A href="#parameters">Template Parameters</A><br>
@@ -37,7 +37,7 @@
     <A href="#ack">Acknowledgments</A>
     <table id="table_figure" border="0" align="right">
       <tr>
-<td><IMG height=332 alt="Circular Buffer" src="circular_buffer.png" width=300 ></td>
+<td><img src="circular_buffer.png" width="300" height="332" alt="Circular Buffer"></td>
               </tr>
       <tr>
 <td width="300">
@@ -51,14 +51,20 @@
     <h2>
       <a name="description">Description</a>
     </h2>
-    <p>The <code>circular_buffer</code> container provides fixed capacity storage with
-            constant time insertion and removal of elements at each end of a circular
-            buffer. When the capacity of the <code>circular_buffer</code> is exhausted,
+    <p>The <code>circular_buffer</code> is a STL compliant container which provides fixed capacity
+            storage with constant time insertion and removal of elements at each end of a buffer.
+            When the capacity of the <code>circular_buffer</code> is exhausted,
             inserted elements will cause elements at the opposite end to be overwritten (see the Figure).
+        </p>
+        <p>
+        The most likely use of the <code>circular_buffer</code> is as a storage of the most
+        recently received samples, overwriting the oldest as new samples arrive.
+        </p>
+        <p>
             The <code>circular_buffer</code> only allocates memory when
             created, when the capacity is adjusted explicitly, or as necessary to
             accommodate a resizing or assign operation. (There is also a <code><A href="circular_buffer_space_optimized.html">circular_buffer_space_optimized</A>
-            </code>available. It is an adaptor of the <code>circular_buffer</code>
+            </code> available. It is an adaptor of the <code>circular_buffer</code>
             which does not allocate memory at once when created rather it allocates memory as needed.)
         </p>
     <h2>
@@ -97,6 +103,70 @@
 
       return 0;
    }</pre>
+   <h2>
+      <a name="rationale">Rationale</a>
+    </h2>
+    <p>A contiguous region of memory utilized as a circular buffer has several unique
+            and useful characteristics:
+        </p>
+    <ol>
+<li>
+            Fixed memory use and no implicit or unexpected memory
+  allocation.
+
+<li>
+            Fast constant-time insertion and removal of elements
+  from the front and back.
+
+<li>
+            Fast constant-time random access of elements.
+
+<li>
+                Suitability for real-time and performance critical applications.
+            </li>
+        </ol>
+    <p>The <code>circular_buffer</code> container provides a similar interface to <code>std::vector</code>,
+            <code>std::deque</code> and <code>std::list</code> including <code>push</code>, <code>
+                pop</code>, <code>insert</code>, <code>erase</code>, iterators and
+            compatibility with <code>std</code> algorithms.
+        </p>
+    <p>The design of the <code>circular_buffer</code> container is guided by the
+            following principles:
+        </p>
+    <ol>
+<li>
+                Maximum <em>efficiency</em> for
+  envisaged applications.
+      <li>
+                Suitable for <em>general purpose</em> use.
+      <li>
+                <em>Interoperable</em> with other <code>std</code> containers and algorithms.
+      <li>
+                The behaviour of the buffer as <em>intuitive</em> as possible.
+      <li>
+                Suitable for <em>specialization</em> by means of adaptors. (The <code><A href="circular_buffer_space_optimized.html">circular_buffer_space_optimized</A>
+            </code>is such an example of the adaptor.)
+      <li>
+                Guarantee of (at least) <em>basic exception safety</em>.</li>
+    </ol>
+    <h3>Thread-safety</h3>
+    <p>Like all STL containers, also the circular_buffer is <b>not thread-safe</b>. E.g. if one
+    thread writes to a vector and another reads from it, the threads have to be synchronized.
+    The same applies to threads accessing a circular_buffer.</p>
+
+    <h3>Writing to a full buffer</h3>
+    <p>There are several options how to cope with the case if a data source produces more data
+    than can fit in the buffer [link to wikipedia]:</p>
+    <ul>
+        <li>If possible, tell the data source to wait until there is room in the buffer.
+        <li>If the latest data is the most important, write over the oldest data that has not been read, and move the read pointer to the position of the oldest remaining data.
+        <li>If the oldest data is the most important, ignore new data from the source until there is room again in the buffer.
+    </ul>
+
+    <h3>Reading from an empty buffer</h3>
+    <p>
+    TODO
+    </p>
     <h2>
       <a name="synopsis">Synopsis</a>
     </h2>
@@ -207,67 +277,6 @@ template&nbsp;&lt;class&nbsp;T, class&nbsp;Alloc&gt;
         </tr>
       </table>
     </div>
-    <h2>
-      <a name="rationale">Rationale</a>
-    </h2>
-    <p>A contiguous region of memory utilized as a circular buffer has several unique
-            and useful characteristics:
-        </p>
-    <ol>
-<li>
-            Fixed memory use and no implicit or unexpected memory
-  allocation.
-
-<li>
-            Fast constant-time insertion and removal of elements
-  from the front and back.
-
-<li>
-            Fast constant-time random access of elements.
-
-<li>
-                Suitability for real-time and performance critical applications.
-            </li>
-        </ol>
-    <p>The <code>circular_buffer</code> container provides a similar interface to <code>std::vector</code>,
-            <code>std::deque</code> and <code>std::list</code> including <code>push</code>, <code>
-                pop</code>, <code>insert</code>, <code>erase</code>, iterators and
-            compatibility with <code>std</code> algorithms.
-        </p>
-    <p>Possible applications of the <code>circular_buffer</code> include:
-        </p>
-    <ul>
-<li>
-            Storage of the most recently received samples,
-  overwriting the oldest as new samples arrive.
-
-<li>
-            Efficient fixed capacity FIFO (First In, First Out)
-  queue.
-
-<li>
-            Efficient fixed capacity LIFO (Last In, First Out) queue.
-            </li>
-        </ul>
-    <p>The design of the <code>circular_buffer</code> container is guided by the
-            following principles:
-        </p>
-    <ol>
-<li>
-                Maximum <em>efficiency</em> for
-  envisaged applications.
-      <li>
-                Suitable for <em>general purpose</em> use.
-      <li>
-                <em>Interoperable</em> with other <code>std</code> containers and algorithms.
-      <li>
-                The behaviour of the buffer as <em>intuitive</em> as possible.
-      <li>
-                Suitable for <em>specialization</em> by means of adaptors. (The <code><A href="circular_buffer_space_optimized.html">circular_buffer_space_optimized</A>
-            </code>is such an example of the adaptor.)
-      <li>
-                Guarantee of <em>basic exception safety</em>.</li>
-    </ol>
     <h2>
       <a name="header">Header files</a>
     </h2>
@@ -2148,7 +2157,7 @@ buffer which allocates memory at once when created.</p>
 <td align="left" valign="top"><small>Copyright © 2003-2005 <A href="mailto:jano_gaspar%5Bat%5Dyahoo.com">Jan Gaspar</A></small></td>
         <td align="right" valign="top">
           <a href="http://validator.w3.org/check?url=http://www.boost.org/libs/circular_buffer/doc/circular_buffer.html">
-            <IMG height=31 alt="Valid HTML 4.0!" src ="valid-html40.png" width=88 border=0 ></a>
+            <img src="valid-html40.png" width="88" height="31" alt="Valid HTML 4.0!" border="0"></a>
         </td>
       </tr>
     </table>
