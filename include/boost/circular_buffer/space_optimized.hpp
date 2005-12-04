@@ -172,6 +172,15 @@ public:
             erase(begin() + new_size, end());
     }
     
+	//! Create an empty space optimized circular buffer with a maximum capacity.
+    /*!
+        TODO - doc
+    */
+    explicit circular_buffer_space_optimized(
+        const allocator_type& alloc = allocator_type())
+    : circular_buffer<T, Alloc>(0, alloc)
+	, m_capacity_ctrl(max_size()) {}
+
     //! Create an empty space optimized circular buffer with a given capacity.
     /*!
         \param capacity The capacity of the buffer.
@@ -181,7 +190,7 @@ public:
         \pre <code>capacity >= min_capacity</code>
         \post <code>(*this).capacity() == capacity \&\& (*this).size == 0</code><br>
               Allocates memory specified by the <code>min_capacity</code> parameter.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \note It is considered as a bug if the precondition is not met (i.e. if
               <code>capacity < min_capacity</code>) and an assertion will be invoked
               in the debug mode.
@@ -201,7 +210,7 @@ public:
         \param alloc The allocator.
         \pre <code>capacity >= min_capacity</code>
         \post <code>(*this).size() == capacity \&\& (*this)[0] == (*this)[1] == ... == (*this).back() == item</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \note It is considered as a bug if the precondition is not met (i.e. if
               <code>capacity < min_capacity</code>) and an assertion will be invoked
@@ -214,7 +223,7 @@ public:
     : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
-	// TODO doc
+	//! TODO doc
 	circular_buffer_space_optimized(
 		capacity_control capacity_ctrl,
         size_type n,
@@ -225,19 +234,30 @@ public:
 
     // Default copy constructor
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 	
-	// TODO doc
 	template <class InputIterator>
     circular_buffer_space_optimized(
         InputIterator first,
         InputIterator last)
-    : circular_buffer<T, Alloc>(first, last, allocator_type())
+    : circular_buffer<T, Alloc>(first, last)
     , m_capacity_ctrl(circular_buffer<T, Alloc>::capacity()) {}
+
+	template <class InputIterator>
+    circular_buffer_space_optimized(
+        capacity_control capacity_ctrl,
+        InputIterator first,
+        InputIterator last)
+    : circular_buffer<T, Alloc>(
+		init_capacity(capacity_ctrl, first, last, is_integral<InputIterator>()),
+		first, last)
+	, m_capacity_ctrl(capacity_ctrl) {
+		check_high_capacity(is_integral<InputIterator>());
+	}
 
 #else
 
-	// TODO doc
+	//! TODO doc
 	template <class InputIterator>
     circular_buffer_space_optimized(
         InputIterator first,
@@ -246,7 +266,6 @@ public:
     : circular_buffer<T, Alloc>(first, last, alloc)
     , m_capacity_ctrl(circular_buffer<T, Alloc>::capacity()) {}
 
-#endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
     //! Create a space optimized circular buffer with a copy of a range.
     /*!
@@ -264,7 +283,7 @@ public:
               <code>[first, last)</code> is greater than the specified
               <code>capacity</code> then only elements from the range
               <code>[last - capacity, last)</code> will be copied.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \note It is considered as a bug if the precondition is not met (i.e. if
               <code>capacity < min_capacity</code>) and an assertion will be invoked
@@ -282,6 +301,8 @@ public:
 	, m_capacity_ctrl(capacity_ctrl) {
 		check_high_capacity(is_integral<InputIterator>());
 	}
+
+#endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
     // Default destructor
 
@@ -546,15 +567,15 @@ private:
             ensure_reserve(new_capacity, size()));
     }
 
-	// TODO doc
+	//! TODO doc
 	void check_high_capacity(const true_type&) {}
 
-	// TODO doc
+	//! TODO doc
 	void check_high_capacity(const false_type&) {
 		check_high_capacity();
 	}
 
-	// TODO doc
+	//! TODO doc
     static size_type init_capacity(const capacity_control& capacity_ctrl, size_type n) {
 		BOOST_CB_ASSERT(capacity_ctrl.m_capacity >= n); // check for capacity lower than n
 		return std::max(capacity_ctrl.m_min_capacity, n);

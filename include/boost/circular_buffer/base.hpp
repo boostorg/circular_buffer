@@ -41,9 +41,6 @@ namespace boost {
     \author <a href="mailto:jano_gaspar[at]yahoo.com">Jan Gaspar</a>
     \version 3.7
     \date 2005
-
-    For more information how to use the circular buffer see the
-    <a href="../circular_buffer.html">documentation</a>.
 */
 template <class T, class Alloc>
 class circular_buffer : cb_details::iterator_registry {
@@ -254,22 +251,22 @@ public:
         return *((m_last == m_buff ? m_end : m_last) - 1);
     }
 
-    // TODO doc
+    //! TODO doc
     array_range array_one() {
         return array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
     
-    // TODO doc
+    //! TODO doc
     array_range array_two() {
         return array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
     
-    // TODO doc
+    //! TODO doc
     const_array_range array_one() const {
         return const_array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
     
-    // TODO doc
+    //! TODO doc
     const_array_range array_two() const {
         return const_array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
@@ -369,7 +366,7 @@ public:
               <code>((*this).size() - new_capacity)</code> elements
               will be removed according to the <code>remove_front</code>
               parameter.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
@@ -404,7 +401,7 @@ public:
               If the new size is lower than the current size then
               <code>((*this).size() - new_size)</code> elements will be removed
               according to the <code>remove_front</code> parameter.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
@@ -415,7 +412,7 @@ public:
             erase(begin(), end() - new_size);
     }
 
-    // TODO doc
+    //! TODO doc
     void rset_capacity(size_type new_capacity) {
         if (new_capacity == capacity())
             return;
@@ -429,7 +426,7 @@ public:
 		BOOST_CATCH_END
     }
 
-    // TODO doc
+    //! TODO doc
     void rresize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size())
             increase_size(new_size, item);
@@ -439,10 +436,21 @@ public:
 
 // Construction/Destruction
 
+	//! Create an empty circular buffer with a maximum capacity.
+    /*!
+        \post <code>capacity() == max_size() \&\& size() == 0</code>
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+    */
+    explicit circular_buffer(
+        const allocator_type& alloc = allocator_type())
+    : m_size(0), m_alloc(alloc) {
+        initialize(max_size());
+    }
+
     //! Create an empty circular buffer with a given capacity.
     /*!
         \post <code>(*this).capacity() == capacity \&\& (*this).size == 0</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
     */
     explicit circular_buffer(
         size_type capacity,
@@ -454,7 +462,7 @@ public:
     //! Create a full circular buffer with a given capacity and filled with copies of <code>item</code>.
     /*!
         \post <code>capacity() == n \&\& size() == n \&\& (*this)[0] == (*this)[1] == ... == (*this)[n - 1] == item</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
     */
     circular_buffer(
@@ -465,7 +473,7 @@ public:
         initialize(n, item);
     }
 
-	// TODO doc
+	//! TODO doc
     circular_buffer(
 		size_type capacity,
         size_type n,
@@ -479,7 +487,7 @@ public:
     //! Copy constructor.
     /*!
         \post <code>*this == cb</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
     */
     circular_buffer(const circular_buffer<T, Alloc>& cb)
@@ -494,7 +502,30 @@ public:
 		BOOST_CATCH_END
     }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
 	// TODO doc
+	template <class InputIterator>
+    circular_buffer(
+        InputIterator first,
+        InputIterator last)
+    : m_alloc(allocator_type()) {
+		initialize(first, last, is_integral<InputIterator>());
+    }
+
+	// TODO doc
+    template <class InputIterator>
+    circular_buffer(
+        size_type capacity,
+        InputIterator first,
+        InputIterator last)
+    : m_alloc(allocator_type()) {
+        initialize(capacity, first, last, is_integral<InputIterator>());
+    }
+
+#else
+
+	//! TODO doc
 	template <class InputIterator>
     circular_buffer(
         InputIterator first,
@@ -512,7 +543,7 @@ public:
               <code>[first, last)</code> is greater than the specified
               <code>capacity</code> then only elements from the range
               <code>[last - capacity, last)</code> will be copied.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
     */
     template <class InputIterator>
@@ -525,6 +556,8 @@ public:
         initialize(capacity, first, last, is_integral<InputIterator>());
     }
 
+#endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
     //! Destructor.
     ~circular_buffer() { destroy(); }
 
@@ -534,7 +567,7 @@ public:
     //! Assignment operator.
     /*!
         \post <code>*this == cb</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
@@ -556,7 +589,7 @@ public:
     /*!
         \post <code>(*this).capacity() == n \&\& (*this).size() == n \&\&
               (*this)[0] == (*this)[1] == ... == (*this).back() == item</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
@@ -564,7 +597,7 @@ public:
 		assign_n(n, n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
     }
 
-	// TODO doc
+	//! TODO doc
 	void assign(size_type capacity, size_type n, param_value_type item) {
 	   BOOST_CB_ASSERT(capacity >= n); // check for new capacity lower than n
 	   assign_n(capacity, n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
@@ -575,7 +608,7 @@ public:
         \pre Valid range <code>[first, last)</code>.
         \post <code>(*this).capacity() == std::distance(first, last) \&\&
 		      (*this).size() == std::distance(first, last)</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
@@ -584,7 +617,7 @@ public:
         assign(first, last, is_integral<InputIterator>());
     }
 
-	// TODO doc
+	//! TODO doc
 	template <class InputIterator>
 	void assign(size_type capacity, InputIterator first, InputIterator last) {
 	   assign(capacity, first, last, is_integral<InputIterator>());

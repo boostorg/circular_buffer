@@ -17,7 +17,7 @@
 #include <boost/detail/workaround.hpp>
 
 // BOOST_CB_ENABLE_DEBUG: Debug support control.
-#if defined(NDEBUG) || defined(BOOST_DISABLE_CB_DEBUG)
+#if defined(NDEBUG) || defined(BOOST_CB_DISABLE_DEBUG)
     #define BOOST_CB_ENABLE_DEBUG 0
 #else
     #define BOOST_CB_ENABLE_DEBUG 1
