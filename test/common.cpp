@@ -6,13 +6,6 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/test/included/unit_test_framework.hpp>
-#include <numeric>
-
-using namespace boost;
-using namespace std;
-using unit_test_framework::test_suite;
-
 void generic_test(CB_CONTAINER<Integer>& cb) {
     
     vector<int> v;

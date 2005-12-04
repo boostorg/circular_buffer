@@ -13,5 +13,6 @@ DEPENDS all : circular_buffer ;
     test-suite "circular_buffer"
         : [ run base_test.cpp ]
           [ run space_optimized_test.cpp ]
+          [ run iterator_test.cpp ]
         ;
 }

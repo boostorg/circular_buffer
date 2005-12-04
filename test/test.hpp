@@ -14,8 +14,10 @@
 #endif
 
 #include "../../../boost/circular_buffer.hpp"
+#include <boost/test/included/unit_test_framework.hpp>
 #include <boost/iterator.hpp>
 #include <iterator>
+#include <numeric>
 #include <vector>
 #if !defined(BOOST_NO_EXCEPTIONS)
     #include <exception>
@@ -159,5 +161,9 @@ inline int* value_type(const InputIteratorSimulator&) { return 0; }
 inline ptrdiff_t* distance_type(const InputIteratorSimulator&) { return 0; }
 
 #endif // #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
+
+using namespace std;
+using namespace boost;
+using boost::unit_test::test_suite;
 
 #endif // #if !defined(BOOST_CIRCULAR_BUFFER_TEST_HPP)
