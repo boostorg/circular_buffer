@@ -5,7 +5,7 @@ DOCFILE="$1.html"
 if [ -f $DOCFILE ]; then
 
   echo Starting Doxygen ...
-  # doxygen
+  doxygen
 
   echo Generating source XHTML documentation ...
   xsltproc --stringparam container $1 --stringparam xmldir srcdoc -o srcdoc/srcdoc.xhtml $1.xslt srcdoc/index.xml
@@ -17,7 +17,7 @@ if [ -f $DOCFILE ]; then
   xsltproc --stringparam srcdoc srcdoc/srcdoc.xhtml -o $DOCFILE update_srcdoc.xslt srcdoc/$1.xhtml
 
   echo Removing temporary directory ...
-  # rm -rf srcdoc
+  rm -rf srcdoc
 
   echo Done.
 

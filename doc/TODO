@@ -181,7 +181,8 @@ t50  DONE
 t51  docs: add troubleshooting section for VC6: amend #define _VIRTUAL
      in xlocnum header
 
-t52  rename BOOST_DISABLE_CB_DEBUG to BOOST_CB_DISABLE_DEBUG
+t52  DONE
+     rename BOOST_DISABLE_CB_DEBUG to BOOST_CB_DISABLE_DEBUG
 
 -------------------------------------------------------------------------------
 
