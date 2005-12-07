@@ -1,106 +1,86 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
-  <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    
-    <title>
-            Templated Circular Buffer Container
-        </title>
-  </head>
-  <body bgcolor="#ffffff">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>Templated Circular Buffer Container</title>
+</head>
+<body bgcolor="#ffffff">
     <table id="title" border="0">
-      <tr>
-<td>
-                    <h1>Templated Circular Buffer Container</h1>
-                    <h1>circular_buffer&lt;T, Alloc&gt;</h1>
-                </td>
-                <td>
-                    <a href="../../../">
-                        <img height="86" alt="Boost" src="../../../boost.png" width="277" border="0"></a>
-                </td>
-            </tr>
+    <tr>
+    <td>
+        <h1>Templated Circular Buffer Container</h1>
+        <h1>circular_buffer&lt;T, Alloc&gt;</h1>
+    </td>
+    <td>
+        <a href="../../../"><img src="../../../boost.png" width="277" height="86" border="0" alt="Boost"></a>
+    </td>
+    </tr>
     </table>
     <h2>Contents</h2>
-    <a href="#description">Description</a>
-    <br>
-    <a href="#simpleexample">Simple Example</a>
-    <br>
-    <a href="#rationale">Rationale</a>
-    <br>
-    <a href="#synopsis">Synopsis</a>
-    <br>
-    <a href="#header">Header Files</a>
-    <br>
-    <a href="#model">Modeled Concepts</a>
-    <br>
-    <a href="#parameters">Template Parameters</a>
-    <br>
-    <a href="#types">Public Types</a>
-    <br>
-    <a href="#constructors">Constructors and Destructor</a>
-    <br>
-    <a href="#methods">Public Member Functions</a>
-    <br>
-    <a href="#functions">Standalone Functions</a>
-    <br>
-    <a href="#semantics">Semantics</a>
-    <br>
-    <a href="#caveats">Caveats</a>
-    <br>
-    <a href="#debug">Debug Support</a>
-    <br>
-    <a href="#example">Example</a>
-    <br>
-    <a href="#notes">Notes</a>
-    <br>
-    <a href="#see">See also</a>
-    <br>
+    <a href="#description">Description</a><br>
+    <a href="#simpleexample">Simple Example</a><br>
+    <a href="#rationale">Rationale</a><br>
+    <a href="#synopsis">Synopsis</a><br>
+    <a href="#header">Header Files</a><br>
+    <a href="#model">Modeled Concepts</a><br>
+    <a href="#parameters">Template Parameters</a><br>
+    <a href="#types">Public Types</a><br>
+    <a href="#constructors">Constructors and Destructor</a><br>
+    <a href="#methods">Public Member Functions</a><br>
+    <a href="#functions">Standalone Functions</a><br>
+    <a href="#semantics">Semantics</a><br>
+    <a href="#caveats">Caveats</a><br>
+    <a href="#debug">Debug Support</a><br>
+    <a href="#example">Example</a><br>
+    <a href="#notes">Notes</a><br>
+    <a href="#see">See also</a><br>
     <a href="#ack">Acknowledgments</a>
     <table id="table_figure" align="right" border="0">
-      <tr>
-<td>
-                    <img height="332" alt="Circular Buffer" src="circular_buffer.png" width="300">
-</td>
-            </tr>
-      <tr>
-<td width="300">
-                    <table id="table_figure_desc" cellpadding="5" align="right" border="0"><tr>
-<td valign="top">
-                                <b>Figure:</b>
-                            </td>
-                            <td valign="top">
-                                The circular buffer (for someone known as ring or cyclic buffer).
-                            </td>
-                        </tr></table>
-</td>
-            </tr>
+    <tr>
+    <td>
+        <img src="circular_buffer.png" width="300" height="332" alt="Circular Buffer">
+    </td>
+    </tr>
+    <tr>
+    <td width="300">
+        <table id="table_figure_desc" cellpadding="5" align="right" border="0">
+        <tr>
+        <td valign="top"><b>Figure:</b></td>
+        <td valign="top">The circular buffer (for someone known as <i>ring</i> or <i>cyclic buffer</i>).</td>
+        </tr>
+        </table>
+    </td>
+    </tr>
     </table>
-    <h2>
-            <a name="description">Description</a>
-</h2>
+    <h2><a name="description">Description</a></h2>
     <p>
-    The <code>circular_buffer</code> is a STL compliant container which provides 
-    fixed capacity storage with constant time insertion and removal of elements at 
-    each end of the buffer. When the capacity of the <code>circular_buffer</code> 
-    is exhausted, inserted elements will cause elements at the opposite end to be 
-    overwritten (see the Figure). The 
-            <code>
-                circular_buffer
-            </code>
-            only allocates memory when created, when the
-            capacity is adjusted explicitly, or as necessary to accommodate a resizing or
-            assign operation. (There is also a 
-            <code>
-                <a href="circular_buffer_space_optimized.html">circular_buffer_space_optimized</a>
-            </code>
-            available. It is an adaptor
-            of the 
-            <code>
-                circular_buffer
-            </code>
-            which does not allocate memory at once when
-            created rather it allocates memory as needed.
-        </p>
+    In general the term <i>circular buffer</i> refers to an area in memory which is 
+    used to store incoming data. When the buffer is filled, new data is written 
+    starting at the beginning of the buffer and overwriting the old. <a 
+    href="#1">[1]</a> (Also see the Figure.)
+    </p>
+    <p>
+    The <code>circular_buffer</code> is a STL compliant container. It is a kind of 
+    sequence that, like <code>std::vector</code> or <code>std::deque</code>, 
+    supports random access iterators. In addition, it supports constant time insert 
+    and erase operations at the beginning or the end of the buffer. The 
+    <code>circular_buffer</code> is specially designed to provide fixed capacity 
+    storage. When its capacity is exhausted, newly inserted elements will cause 
+    elements either at the beginning or end of the buffer (depending on what insert 
+    operation is used) to be overwritten.
+    <p>
+    There are also several container adaptors which are bundled with the 
+    <code>circular_buffer</code>:<br>
+    TODO<br>
+        
+    The <code> circular_buffer </code> only allocates memory when created, when the 
+    capacity is adjusted explicitly, or as necessary to accommodate a resizing or 
+    assign operation. (There is also a <code><a 
+    href="circular_buffer_space_optimized.html">circular_buffer_space_optimized</a> 
+    </code> available. It is an adaptor of the <code> circular_buffer </code> which 
+    does not allocate memory at once when created rather it allocates memory as 
+    needed.
+    </p>
     <h2>
             <a name="simpleexample">Simple Example</a>
 </h2>
@@ -2645,14 +2625,14 @@ Swap the contents of two circular buffers.         </td></tr></table>
                 full, further insertion will overwrite the stored pointers - resulting in a 
                 <b>
                     memoryleak</b>. One recommend alternative is the use of smart pointers 
-                <a href="#1">[1]</a>.
+                <a href="#2">[2]</a>.
                 (Any container of 
                 <code>
                     std::auto_ptr
                 </code>
                 is considered particularly
                 hazardous. 
-                <a href="#2">[2]</a>
+                <a href="#3">[3]</a>
                 )
             </p>
     <p>
@@ -2857,13 +2837,17 @@ return 0;
     <h2>
                 <a name="notes">Notes</a>
 </h2>
-    <p>
-                <a name="1">[1]</a>
+<p>
+<a name="1">[1]</a>
+A detailed description can be found at <a href="http://en.wikipedia.org/wiki/Circular_buffer">Wikipedia</a>.
+</p>
+<p>
+                <a name="2">[2]</a>
                 A good implementation of smart pointers is included in 
                 <a href="../../../libs/smart_ptr/">Boost</a>.
             </p>
     <p>
-                <a name="2">[2]</a>
+                <a name="3">[3]</a>
                 Never create a circular buffer of 
                 <code>
                     std::auto_ptr
