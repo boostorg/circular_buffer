@@ -97,10 +97,10 @@ public:
 
 // Container specific types
 
-    //! An array range.
+    //! An array range. TODO - better doc
     typedef std::pair<pointer, size_type> array_range;
 
-	//! A range of a const array.
+	//! A range of a const array. TODO - better doc
     typedef std::pair<const_pointer, size_type> const_array_range;
     
 // Helper types

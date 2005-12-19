@@ -61,7 +61,7 @@ void min_capacity_test() {
 }
 
 // test main
-test_suite* init_unit_test_suite(int argc, char* argv[]) {
+test_suite* init_unit_test_suite(int /*argc*/, char*[] /*argv*/) {
 
     test_suite* tests = BOOST_TEST_SUITE("Unit tests for the circular_buffer_space_optimized.");
     add_common_tests(tests);
