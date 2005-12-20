@@ -1,7 +1,6 @@
 
 #define BOOST_CB_DISABLE_DEBUG 1
 
-
 #include "boost/circular_buffer.hpp"
 #include <boost/thread/xtime.hpp>
 #include <boost/thread/mutex.hpp>
@@ -14,8 +13,16 @@
 #include <string>
 #include <iostream>
 
-const unsigned int queue_size     = 500L;
-const unsigned int total_elements = queue_size * 1000L;
+const unsigned int QUEUE_SIZE     = 1000L;
+const unsigned int TOTAL_ELEMENTS = QUEUE_SIZE * 1000L;
+
+class Test {
+    std::string dummy;
+public:
+    virtual ~Test();
+};
+
+Test::~Test() {}
 
 template <class T>
 class bounded_buffer {
@@ -29,29 +36,31 @@ public:
 	
 	void push_back(const value_type& item) {
 		boost::mutex::scoped_lock lock(m_mutex);
-		m_full_condition.wait(lock, boost::bind(&bounded_buffer<value_type>::is_not_full, this));
-		m_empty_condition.notify_one();
+		m_not_full.wait(lock, boost::bind(&bounded_buffer<value_type>::is_not_full, this));
 		m_buffer.push_back(item);
 		++m_unread;
+		m_not_empty.notify_one();
 	}
 	
 	value_type pop_front() {
 		boost::mutex::scoped_lock lock(m_mutex);
-		m_empty_condition.wait(lock, boost::bind(&bounded_buffer<value_type>::is_not_empty, this));
-		m_full_condition.notify_one();
+		m_not_empty.wait(lock, boost::bind(&bounded_buffer<value_type>::is_not_empty, this));
+		m_not_full.notify_one(); // Wakes up one of the threads waiting for the buffer to free a space
+		                         // for the next item. However the woken-up thread has to regain the mutex, which
+		                         // means it will not proceed until the pop_front() method returns.
 		return m_buffer[m_buffer.size() - (m_unread--)];
 	}
 
 private:
 	
-	bool is_not_empty() const { return m_unread > 0;}
-	bool is_not_full() const { return m_unread < m_buffer.capacity();}
+	bool is_not_empty() const { return m_unread > 0; }
+	bool is_not_full() const { return m_unread < m_buffer.capacity(); }
 	
 	size_type m_unread;
 	buffer_type m_buffer;
 	boost::mutex m_mutex;
-	boost::condition m_empty_condition;
-	boost::condition m_full_condition;
+	boost::condition m_not_empty;
+	boost::condition m_not_full;
 };
 
 template <class T>
@@ -67,16 +76,16 @@ public:
 	void push_back(const value_type& item) {
 		boost::mutex::scoped_lock lock(m_mutex);
 		m_full_condition.wait(lock, boost::bind(&deque_bounded_buffer<value_type>::is_not_full, this));
-		m_empty_condition.notify_one();
 		m_buffer.push_back(item);
+		m_empty_condition.notify_one();
 	}
 	
 	value_type pop_front() {
 		boost::mutex::scoped_lock lock(m_mutex);
 		m_empty_condition.wait(lock, boost::bind(&deque_bounded_buffer<value_type>::is_not_empty, this));
-		m_full_condition.notify_one();
 		value_type item = m_buffer.front();
 		m_buffer.pop_front();
+		m_full_condition.notify_one();
 		return item;
 	}
 
@@ -102,7 +111,7 @@ public:
     reader(Queue& q) : m_q(q) { }
     
     void operator()() {
-		for (int i = 0; i < total_elements; ++i) {
+		for (int i = 0; i < TOTAL_ELEMENTS; ++i) {
 			value_type item = m_q.pop_front();
 		}
     }
@@ -118,7 +127,7 @@ public:
     writer(Queue& q) : m_q(q) {}
     
     void operator()() {
-		for (int i = 0; i < total_elements; ++i) {
+		for (int i = 0; i < TOTAL_ELEMENTS; ++i) {
 			m_q.push_back(value_type());
 		}
     }
@@ -127,9 +136,9 @@ public:
 template<typename Queue>
 void fifo_test()
 {
-	boost::progress_timer t;
+	boost::progress_timer pt;
 
-    Queue q(queue_size);
+    Queue q(QUEUE_SIZE);
     
 	reader<Queue> reader(q);
 	writer<Queue> writer(q);
@@ -149,11 +158,11 @@ int main(int argc, char* argv[])
     std::cout << "deque_bounded_buffer<int>: ";
     fifo_test< deque_bounded_buffer<int> >();
 
-    std::cout << "bounded_buffer<string>: ";
-    fifo_test< bounded_buffer<std::string> >();
+    std::cout << "bounded_buffer<Test>: ";
+    fifo_test< bounded_buffer<Test> >();
     
-    std::cout << "deque_bounded_buffer<string>: ";
-    fifo_test< deque_bounded_buffer<std::string> >();
+    std::cout << "deque_bounded_buffer<Test>: ";
+    fifo_test< deque_bounded_buffer<Test> >();
 
 	return 0;
 }

@@ -10,7 +10,7 @@
 
 #define CB_CONTAINER circular_buffer
 
-#include "common.cpp"
+#include "common.inl"
 
 void iterator_constructor_and_assign_test() {
 
@@ -482,7 +482,7 @@ void exception_safety_test() {
 }
 
 // test main
-test_suite* init_unit_test_suite(int /*argc*/, char*[] /*argv*/) {
+test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
 
     test_suite* tests = BOOST_TEST_SUITE("Unit tests for the circular_buffer.");
     add_common_tests(tests);

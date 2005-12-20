@@ -1368,30 +1368,6 @@ void const_methods_test() {
     BOOST_CHECK(cb.back() == 5);
 }
 
-void adaptor_test() {
-    int array[] = {0, 1, 2, 3};
-    Adaptor<int> container(5);
-    container.insert(container.begin(), array, array + 4);
-
-    BOOST_CHECK(container.size() == 4);
-    BOOST_CHECK(container[0] == 0);
-    BOOST_CHECK(container[1] == 1);
-    BOOST_CHECK(container[2] == 2);
-    BOOST_CHECK(container[3] == 3);
-
-    container.insert(container.begin() + 1, array, array + 4);
-
-    BOOST_CHECK(container.size() == 8);
-    BOOST_CHECK(container[0] == 0);
-    BOOST_CHECK(container[1] == 0);
-    BOOST_CHECK(container[2] == 1);
-    BOOST_CHECK(container[3] == 2);
-    BOOST_CHECK(container[4] == 3);
-    BOOST_CHECK(container[5] == 1);
-    BOOST_CHECK(container[6] == 2);
-    BOOST_CHECK(container[7] == 3);
-}
-
 // TODO - split into sections: constructor, insert, assign ...
 void input_range_test() {
 
@@ -1566,6 +1542,5 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&example_test));
     tests->add(BOOST_TEST_CASE(&element_destruction_test));
     tests->add(BOOST_TEST_CASE(&const_methods_test));
-    tests->add(BOOST_TEST_CASE(&adaptor_test));
 	tests->add(BOOST_TEST_CASE(&input_range_test));
 }

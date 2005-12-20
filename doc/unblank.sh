@@ -25,7 +25,8 @@ rb update_srcdoc.bat
 rb update_srcdoc.sh
 rb update_srcdoc.xslt
 rb ../test/Jamfile
+rb ../test/common.inl
 rb ../test/base_test.cpp
-rb ../test/common.cpp
 rb ../test/space_optimized_test.cpp
+rb ../test/iterator_test.cpp
 rb ../test/test.hpp

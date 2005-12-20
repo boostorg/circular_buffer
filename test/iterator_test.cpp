@@ -21,7 +21,7 @@ void validity_test() {
 }
 
 // test main
-test_suite* init_unit_test_suite(int /*argc*/, char*[] /*argv*/) {
+test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
 
     test_suite* tests = BOOST_TEST_SUITE("Unit tests for the iterator of the circular_buffer.");
 

@@ -12,7 +12,7 @@
 
 #define CB_CONTAINER circular_buffer_space_optimized
 
-#include "common.cpp"
+#include "common.inl"
 
 typedef circular_buffer_space_optimized<Integer> cb_space_optimized;
 typedef cb_space_optimized::capacity_control capacity_ctrl;
@@ -61,7 +61,7 @@ void min_capacity_test() {
 }
 
 // test main
-test_suite* init_unit_test_suite(int /*argc*/, char*[] /*argv*/) {
+test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
 
     test_suite* tests = BOOST_TEST_SUITE("Unit tests for the circular_buffer_space_optimized.");
     add_common_tests(tests);

@@ -77,6 +77,7 @@ private:
     static int ms_count;
 };
 
+// TODO doc
 class Z {
 public:
     Z() : m_num(255) {}
@@ -84,39 +85,6 @@ public:
     int test_reference2() const { return 255; }
 private:
     int m_num;
-};
-
-// TODO doc
-template <class T> class Adaptor {
-private:
-    boost::circular_buffer<T> m_buff;
-public:
-    typedef typename boost::circular_buffer<T>::iterator iterator;
-    typedef typename boost::circular_buffer<T>::size_type size_type;
-
-    Adaptor(size_type capacity) : m_buff(capacity) {}
-    template <class InputIterator>
-    Adaptor(size_type capacity, InputIterator first, InputIterator last)
-    : m_buff(capacity, first, last) {}
-
-    iterator begin() { return m_buff.begin(); }
-    iterator end() { return m_buff.end(); }
-    size_type size() const { return m_buff.size(); }
-    size_type capacity() const { return m_buff.capacity(); }
-    T& operator [] (size_type index) { return m_buff[index]; }
-
-    template <class InputIterator>
-    void insert(iterator pos, InputIterator first, InputIterator last) {
-        size_type new_size = size() + distance(first, last);
-        if (new_size > capacity()) {
-            boost::circular_buffer<T> buff(new_size, begin(), pos);
-            buff.insert(buff.end(), first, last);
-            buff.insert(buff.end(), pos, end());
-            m_buff.swap(buff);
-        } else {
-            m_buff.insert(pos, first, last);
-        }
-    }
 };
 
 // simulator of an input iterator
