@@ -76,7 +76,7 @@ template <class Iterator>
 struct iterator_wrapper {
     mutable Iterator m_it;
     explicit iterator_wrapper(Iterator it) : m_it(it) {}
-    Iterator get() const { return m_it++; }
+    Iterator operator () () const { return m_it++; }
 };
 
 /*!
@@ -85,9 +85,9 @@ struct iterator_wrapper {
 */
 template <class Pointer, class Value>
 struct item_wrapper {
-    Pointer m_item;
-    explicit item_wrapper(Value item) : m_item(&item) {}
-    Pointer get() const { return m_item; }
+    Value m_item;
+    explicit item_wrapper(Value item) : m_item(item) {}
+    Pointer operator () () const { return &m_item; }
 };
 
 /*!

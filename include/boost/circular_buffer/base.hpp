@@ -1480,9 +1480,9 @@ private:
             pointer p = m_last;
             BOOST_TRY {
 				for (; ii < construct; ++ii, increment(p))
-					m_alloc.construct(p, *wrapper.get());
+					m_alloc.construct(p, *wrapper());
 				for (;ii < n; ++ii, increment(p))
-					replace(p, *wrapper.get());
+					replace(p, *wrapper());
 			} BOOST_CATCH(...) {
 				size_type constructed = std::min(ii, construct);
                 m_last = add(m_last, constructed);
@@ -1502,7 +1502,7 @@ private:
 					decrement(dest);
 				}
 				for (; ii < n; ++ii, increment(p))
-					construct_or_replace(is_uninitialized(p), p, *wrapper.get());
+					construct_or_replace(is_uninitialized(p), p, *wrapper());
 			} BOOST_CATCH(...) {
 				for (p = add(m_last, n - 1); p != dest; decrement(p))
                     destroy_if_constructed(p);
@@ -1567,9 +1567,9 @@ private:
             size_type ii = n;
             BOOST_TRY {
 				for (;ii > construct; --ii, increment(p))
-					replace(p, *wrapper.get());
+					replace(p, *wrapper());
 				for (; ii > 0; --ii, increment(p))
-					m_alloc.construct(p, *wrapper.get());
+					m_alloc.construct(p, *wrapper());
 			} BOOST_CATCH(...) {
 				size_type constructed = ii < construct ? construct - ii : 0;
                 m_last = add(m_last, constructed);
@@ -1588,7 +1588,7 @@ private:
 					increment(dest);
 				}
 				for (size_type ii = 0; ii < n; ++ii, increment(dest))
-					construct_or_replace(is_uninitialized(dest), dest, *wrapper.get());
+					construct_or_replace(is_uninitialized(dest), dest, *wrapper());
 			} BOOST_CATCH(...) {
 				for (src = sub(m_first, n); src != dest; increment(src))
                     destroy_if_constructed(src);
