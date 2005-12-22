@@ -14,6 +14,6 @@ DEPENDS all : circular_buffer ;
         : [ run base_test.cpp ]
           [ run space_optimized_test.cpp ]
           [ run iterator_test.cpp ]
-          [ compile bounded_buffer.cpp ]
+          [ compile bounded_buffer_comparison.cpp ]
         ;
 }

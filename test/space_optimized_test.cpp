@@ -12,7 +12,7 @@
 
 #define CB_CONTAINER circular_buffer_space_optimized
 
-#include "common.inl"
+#include "common.ipp"
 
 typedef circular_buffer_space_optimized<Integer> cb_space_optimized;
 typedef cb_space_optimized::capacity_control capacity_ctrl;

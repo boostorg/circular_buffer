@@ -10,7 +10,7 @@
 
 #define CB_CONTAINER circular_buffer
 
-#include "common.inl"
+#include "common.ipp"
 
 void iterator_constructor_and_assign_test() {
 

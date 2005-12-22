@@ -102,6 +102,9 @@ public:
 
 	//! A range of a const array. TODO - better doc
     typedef std::pair<const_pointer, size_type> const_array_range;
+
+	//! Capacity type (defined just for consistency with circular_buffer_space_optimized).
+	typedef size_type capacity_control; 
     
 // Helper types
 
