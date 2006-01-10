@@ -13,7 +13,7 @@
     #pragma once
 #endif
 
-#include "../../../boost/circular_buffer.hpp"
+#include <boost/circular_buffer.hpp>
 #include <boost/test/included/unit_test_framework.hpp>
 #include <boost/iterator.hpp>
 #include <iterator>
