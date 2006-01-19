@@ -1147,7 +1147,6 @@ private:
         destroy_content();
         deallocate(m_buff, capacity());
 #if BOOST_CB_ENABLE_DEBUG
-        invalidate_all_iterators(); // invalidate iterators pointing to end()
         m_buff = 0;
         m_first = 0;
         m_last = 0;
