@@ -659,9 +659,9 @@ void swap_test() {
 
 void push_back_test() {
 
-    CB_CONTAINER<X> cb1(5);
+    CB_CONTAINER<DefaultConstructible> cb1(5);
     cb1.push_back();
-    cb1.push_back(X(2));
+    cb1.push_back(DefaultConstructible(2));
     BOOST_CHECK(cb1[0].m_n == 1);
     BOOST_CHECK(cb1[1].m_n == 2);
 
@@ -821,9 +821,9 @@ void insert_range_test() {
 
 void push_front_test() {
 
-    CB_CONTAINER<X> cb1(5);
+    CB_CONTAINER<DefaultConstructible> cb1(5);
     cb1.push_front();
-    cb1.push_front(X(2));
+    cb1.push_front(DefaultConstructible(2));
     BOOST_CHECK(cb1[0].m_n == 2);
     BOOST_CHECK(cb1[1].m_n == 1);
 
@@ -1336,16 +1336,16 @@ void example_test() {
 
 void element_destruction_test() {
 
-    CB_CONTAINER<Y> cb(5);
-    cb.push_back(Y());
-    cb.push_back(Y());
-    cb.push_back(Y());
-    int prevCount = Y::count();
+    CB_CONTAINER<InstanceCounter> cb(5);
+    cb.push_back(InstanceCounter());
+    cb.push_back(InstanceCounter());
+    cb.push_back(InstanceCounter());
+    int prevCount = InstanceCounter::count();
     cb.clear();
 
     BOOST_CHECK(cb.empty());
     BOOST_CHECK(prevCount == 3);
-    BOOST_CHECK(Y::count() == 0);
+    BOOST_CHECK(InstanceCounter::count() == 0);
 }
 
 void const_methods_test() {
@@ -1496,7 +1496,7 @@ void input_range_test() {
 }
 
 int Integer::ms_exception_trigger = 0;
-int Y::ms_count = 0;
+int InstanceCounter::ms_count = 0;
 
 // add common tests into a test suite
 void add_common_tests(test_suite* tests) {

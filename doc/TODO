@@ -172,7 +172,8 @@ t47  DONE
 t48  DONE
      verify the correctness of the SGIAssignableConcept
 
-t49  test non-invalidation of the iterators after call to methods such as insert
+t49  DONE
+     test non-invalidation of the iterators after call to methods such as insert
      or rinsert
 
 t50  DONE

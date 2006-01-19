@@ -56,20 +56,21 @@ public:
     static void set_exception_trigger(int n) { ms_exception_trigger = n; }
 };
 
-// TODO doc
-struct X
+// default constructible class
+class DefaultConstructible
 {
-    X() : m_n(1) {}
-    X(int n) : m_n(n) {}
+public:
+    DefaultConstructible() : m_n(1) {}
+    DefaultConstructible(int n) : m_n(n) {}
     int m_n;
 };
 
-// TODO doc
-class Y {
+// class counting instances of self
+class InstanceCounter {
 public:
-    Y() { increment(); }
-    Y(const Y& y) { y.increment(); }
-    ~Y() { decrement(); }
+    InstanceCounter() { increment(); }
+    InstanceCounter(const InstanceCounter& y) { y.increment(); }
+    ~InstanceCounter() { decrement(); }
     static int count() { return ms_count; }
 private:
     void increment() const { ++ms_count; }
@@ -77,14 +78,20 @@ private:
     static int ms_count;
 };
 
-// TODO doc
-class Z {
+// dummy class suitable for iterator referencing test
+class Dummy {
 public:
-    Z() : m_num(255) {}
-    virtual int test_reference1() const { return m_num; }
-    int test_reference2() const { return 255; }
-private:
-    int m_num;
+	enum DummyEnum {
+		eVar,
+		eFnc,
+		eConst,
+		eVirtual
+	};
+	Dummy() : m_n(eVar) {}
+    DummyEnum fnc() { return eFnc; }
+    DummyEnum const_fnc() const { return eConst; }
+	virtual DummyEnum virtual_fnc() { return eVirtual; }
+	DummyEnum m_n;
 };
 
 // simulator of an input iterator
