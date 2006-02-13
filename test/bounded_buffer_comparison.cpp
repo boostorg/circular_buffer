@@ -1,12 +1,12 @@
 // Comparison of bounded buffers based on different containers.
 
-// Copyright (c) 2003-2005 Jan Gaspar
+// Copyright (c) 2003-2006 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_CB_DISABLE_DEBUG 1
+#define BOOST_CB_DISABLE_DEBUG
 
 #include <boost/circular_buffer.hpp>
 #include <boost/thread/mutex.hpp>

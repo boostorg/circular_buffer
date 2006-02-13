@@ -1,6 +1,6 @@
 // Header file for the test of the circular buffer library.
 
-// Copyright (c) 2003-2005 Jan Gaspar
+// Copyright (c) 2003-2006 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -137,8 +137,8 @@ inline ptrdiff_t* distance_type(const InputIteratorSimulator&) { return 0; }
 
 #endif // #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
 
-using namespace std;
-using namespace boost;
 using boost::unit_test::test_suite;
+using namespace boost;
+using namespace std;
 
 #endif // #if !defined(BOOST_CIRCULAR_BUFFER_TEST_HPP)

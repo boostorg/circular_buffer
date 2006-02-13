@@ -1,6 +1,6 @@
 // Implementation of the circular buffer adaptor.
 
-// Copyright (c) 2003-2005 Jan Gaspar
+// Copyright (c) 2003-2006 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -21,13 +21,12 @@ namespace boost {
     \param T The type of the elements stored in the space optimized circular buffer.
     \param Alloc The allocator type used for all internal memory management.
            Default: std::allocator<T>
-    \author <a href="mailto:jano_gaspar[at]yahoo.com">Jan Gaspar</a>
+    \author Jan Gaspar
     \version 1.4
-    \date 2005
+    \date 2006
 
-    For more information how to use the space optimized circular
-    buffer see the <a href="../circular_buffer_adaptor.html">
-    documentation</a>.
+    For detailed documentation of the space_optimized_circular_buffer visit:
+    http://www.boost.org/libs/circular_buffer/doc/circular_buffer_adaptor.html
 */
 template<class T, class Alloc>
 class circular_buffer_space_optimized : private circular_buffer<T, Alloc> {
