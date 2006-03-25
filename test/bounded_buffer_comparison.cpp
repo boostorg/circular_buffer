@@ -15,6 +15,7 @@
 #include <boost/progress.hpp>
 #include <boost/bind.hpp>
 #include <deque>
+#include <list>
 #include <string>
 #include <iostream>
 
@@ -25,27 +26,27 @@ template <class T>
 class bounded_buffer {
 public:
 
-	typedef boost::circular_buffer<T> buffer_type;	
-	typedef typename buffer_type::size_type size_type;
-	typedef typename buffer_type::value_type value_type;
+	typedef boost::circular_buffer<T> container_type;	
+	typedef typename container_type::size_type size_type;
+	typedef typename container_type::value_type value_type;
 
-	bounded_buffer(size_type capacity) : m_unread(0), m_buffer(capacity) {}
+	explicit bounded_buffer(size_type capacity) : m_unread(0), m_container(capacity) {}
 	
 	void push_front(const value_type& item) {
 		boost::mutex::scoped_lock lock(m_mutex);
 		m_not_full.wait(lock, boost::bind(&bounded_buffer<value_type>::is_not_full, this));
-		m_not_empty.notify_one();
-		m_buffer.push_front(item);
+		m_container.push_front(item);
 		++m_unread;
+		lock.unlock();
+		m_not_empty.notify_one();
 	}
 	
 	void pop_back(value_type* pItem) {
 		boost::mutex::scoped_lock lock(m_mutex);
 		m_not_empty.wait(lock, boost::bind(&bounded_buffer<value_type>::is_not_empty, this));
-		m_not_full.notify_one(); // Wakes up one of the threads waiting for the buffer to free a space
-		                         // for the next item. However the woken-up thread has to regain the mutex, which
-		                         // means it will not proceed until the pop_front() method returns.
-		*pItem = m_buffer[--m_unread];
+		*pItem = m_container[--m_unread];
+		lock.unlock();
+		m_not_full.notify_one();
 	}
 
 private:
@@ -53,10 +54,10 @@ private:
 	bounded_buffer& operator = (const bounded_buffer&); // Disabled assign operator
 
 	bool is_not_empty() const { return m_unread > 0; }
-	bool is_not_full() const { return m_unread < m_buffer.capacity(); }
+	bool is_not_full() const { return m_unread < m_container.capacity(); }
 
 	size_type m_unread;
-	buffer_type m_buffer;
+	container_type m_container;
 	boost::mutex m_mutex;
 	boost::condition m_not_empty;
 	boost::condition m_not_full;
@@ -66,25 +67,27 @@ template <class T>
 class bounded_buffer_space_optimized {
 public:
 
-	typedef boost::circular_buffer_space_optimized<T> buffer_type;	
-	typedef typename buffer_type::size_type size_type;
-	typedef typename buffer_type::value_type value_type;
+	typedef boost::circular_buffer_space_optimized<T> container_type;	
+	typedef typename container_type::size_type size_type;
+	typedef typename container_type::value_type value_type;
 
-	bounded_buffer_space_optimized(size_type capacity) : m_buffer(capacity) {}
+	explicit bounded_buffer_space_optimized(size_type capacity) : m_container(capacity) {}
 
 	void push_front(const value_type& item) {
 		boost::mutex::scoped_lock lock(m_mutex);
 		m_not_full.wait(lock, boost::bind(&bounded_buffer_space_optimized<value_type>::is_not_full, this));
+		m_container.push_front(item);
+		lock.unlock();
 		m_not_empty.notify_one();
-		m_buffer.push_front(item);
 	}
 
 	void pop_back(value_type* pItem) {
 		boost::mutex::scoped_lock lock(m_mutex);
 		m_not_empty.wait(lock, boost::bind(&bounded_buffer_space_optimized<value_type>::is_not_empty, this));
+		*pItem = m_container.back();
+		m_container.pop_back();
+		lock.unlock();
 		m_not_full.notify_one();
-		*pItem = m_buffer.back();
-		m_buffer.pop_back();
 	}
 
 private:
@@ -92,10 +95,10 @@ private:
 	bounded_buffer_space_optimized(const bounded_buffer_space_optimized&);              // Disabled copy constructor
 	bounded_buffer_space_optimized& operator = (const bounded_buffer_space_optimized&); // Disabled assign operator
 
-	bool is_not_empty() const { return m_buffer.size() > 0; }
-	bool is_not_full() const { return m_buffer.size() < m_buffer.capacity(); }
+	bool is_not_empty() const { return m_container.size() > 0; }
+	bool is_not_full() const { return m_container.size() < m_container.capacity(); }
 
-	buffer_type m_buffer;
+	container_type m_container;
 	boost::mutex m_mutex;
 	boost::condition m_not_empty;
 	boost::condition m_not_full;
@@ -105,25 +108,27 @@ template <class T>
 class bounded_buffer_deque_based {
 public:
 
-	typedef std::deque<T> buffer_type;	
-	typedef typename buffer_type::size_type size_type;
-	typedef typename buffer_type::value_type value_type;
+	typedef std::deque<T> container_type;	
+	typedef typename container_type::size_type size_type;
+	typedef typename container_type::value_type value_type;
 
-	bounded_buffer_deque_based(size_type capacity) : m_capacity(capacity) {}
+	explicit bounded_buffer_deque_based(size_type capacity) : m_capacity(capacity) {}
 	
 	void push_front(const value_type& item) {
 		boost::mutex::scoped_lock lock(m_mutex);
 		m_not_full.wait(lock, boost::bind(&bounded_buffer_deque_based<value_type>::is_not_full, this));
+		m_container.push_front(item);
+		lock.unlock();
 		m_not_empty.notify_one();
-		m_buffer.push_front(item);
 	}
 	
 	void pop_back(value_type* pItem) {
 		boost::mutex::scoped_lock lock(m_mutex);
 		m_not_empty.wait(lock, boost::bind(&bounded_buffer_deque_based<value_type>::is_not_empty, this));
+		*pItem = m_container.back();
+		m_container.pop_back();
+		lock.unlock();
 		m_not_full.notify_one();
-		*pItem = m_buffer.back();
-		m_buffer.pop_back();
 	}
 
 private:
@@ -131,11 +136,53 @@ private:
 	bounded_buffer_deque_based(const bounded_buffer_deque_based&);              // Disabled copy constructor
 	bounded_buffer_deque_based& operator = (const bounded_buffer_deque_based&); // Disabled assign operator
 
-	bool is_not_empty() const { return m_buffer.size() > 0; }
-	bool is_not_full() const { return m_buffer.size() < m_capacity; }
+	bool is_not_empty() const { return m_container.size() > 0; }
+	bool is_not_full() const { return m_container.size() < m_capacity; }
 	
 	const size_type m_capacity;
-	buffer_type m_buffer;
+	container_type m_container;
+	boost::mutex m_mutex;
+	boost::condition m_not_empty;
+	boost::condition m_not_full;
+};
+
+template <class T>
+class bounded_buffer_list_based {
+public:
+
+	typedef std::list<T> container_type;	
+	typedef typename container_type::size_type size_type;
+	typedef typename container_type::value_type value_type;
+
+	explicit bounded_buffer_list_based(size_type capacity) : m_capacity(capacity) {}
+	
+	void push_front(const value_type& item) {
+		boost::mutex::scoped_lock lock(m_mutex);
+		m_not_full.wait(lock, boost::bind(&bounded_buffer_list_based<value_type>::is_not_full, this));
+		m_container.push_front(item);
+		lock.unlock();
+		m_not_empty.notify_one();
+	}
+	
+	void pop_back(value_type* pItem) {
+		boost::mutex::scoped_lock lock(m_mutex);
+		m_not_empty.wait(lock, boost::bind(&bounded_buffer_list_based<value_type>::is_not_empty, this));
+		*pItem = m_container.back();
+		m_container.pop_back();
+		lock.unlock();
+		m_not_full.notify_one();
+	}
+
+private:
+	
+	bounded_buffer_list_based(const bounded_buffer_list_based&);              // Disabled copy constructor
+	bounded_buffer_list_based& operator = (const bounded_buffer_list_based&); // Disabled assign operator
+
+	bool is_not_empty() const { return m_container.size() > 0; }
+	bool is_not_full() const { return m_container.size() < m_capacity; }
+	
+	const size_type m_capacity;
+	container_type m_container;
 	boost::mutex m_mutex;
 	boost::condition m_not_empty;
 	boost::condition m_not_full;
@@ -145,15 +192,15 @@ template<class Buffer>
 class Consumer {
 
 	typedef typename Buffer::value_type value_type;
-    Buffer* m_buffer;
+    Buffer* m_container;
 	value_type m_item;
 
 public:
-    Consumer(Buffer* buffer) : m_buffer(buffer) {}
+    Consumer(Buffer* buffer) : m_container(buffer) {}
     
     void operator()() {
 		for (unsigned long i = 0L; i < TOTAL_ELEMENTS; ++i) {
-			m_buffer->pop_back(&m_item);
+			m_container->pop_back(&m_item);
 		}
     }
 };
@@ -162,14 +209,14 @@ template<class Buffer>
 class Producer {
 
     typedef typename Buffer::value_type value_type;
-    Buffer* m_buffer;
+    Buffer* m_container;
 
 public:
-    Producer(Buffer* buffer) : m_buffer(buffer) {}
+    Producer(Buffer* buffer) : m_container(buffer) {}
     
     void operator()() {
 		for (unsigned long i = 0L; i < TOTAL_ELEMENTS; ++i) {
-			m_buffer->push_front(value_type());
+			m_container->push_front(value_type());
 		}
     }
 };
@@ -213,6 +260,10 @@ int main(int /*argc*/, char* /*argv*/[]) {
 	std::cout << "bounded_buffer_deque_based<int> ";
 	fifo_test(&bb_deque_based_int);
 
+	bounded_buffer_list_based<int> bb_list_based_int(QUEUE_SIZE);
+	std::cout << "bounded_buffer_list_based<int> ";
+	fifo_test(&bb_list_based_int);
+
 	bounded_buffer<std::string> bb_string(QUEUE_SIZE);
 	std::cout << "bounded_buffer<std::string> ";
     fifo_test(&bb_string);
@@ -224,6 +275,10 @@ int main(int /*argc*/, char* /*argv*/[]) {
 	bounded_buffer_deque_based<std::string> bb_deque_based_string(QUEUE_SIZE);
 	std::cout << "bounded_buffer_deque_based<std::string> ";
 	fifo_test(&bb_deque_based_string);
+
+	bounded_buffer_list_based<std::string> bb_list_based_string(QUEUE_SIZE);
+	std::cout << "bounded_buffer_list_based<std::string> ";
+	fifo_test(&bb_list_based_string);
 
 	return 0;
 }

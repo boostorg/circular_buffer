@@ -1286,6 +1286,13 @@ void example_test() {
     CB_CONTAINER<int> cb1(3);
     cb1.push_back(1);
     cb1.push_back(2);
+
+	BOOST_CHECK(cb1[0] == 1);
+    BOOST_CHECK(cb1[1] == 2);
+    BOOST_CHECK(!cb1.full());
+    BOOST_CHECK(cb1.size() == 2);
+    BOOST_CHECK(cb1.capacity() == 3);
+
     cb1.push_back(3);
     cb1.push_back(4);
     int sum = accumulate(cb1.begin(), cb1.end(), 0);
@@ -1293,6 +1300,9 @@ void example_test() {
     BOOST_CHECK(cb1[0] == 2);
     BOOST_CHECK(cb1[1] == 3);
     BOOST_CHECK(cb1[2] == 4);
+	BOOST_CHECK(*cb1.begin() == 2);
+    BOOST_CHECK(cb1.front() == 2);
+    BOOST_CHECK(cb1.back() == 4);
     BOOST_CHECK(sum == 9);
     BOOST_CHECK(cb1.full());
     BOOST_CHECK(cb1.size() == 3);
@@ -1323,15 +1333,22 @@ void example_test() {
     cb3.push_back(1);
     cb3.push_back(2);
     cb3.push_back(3);
+
+	BOOST_CHECK(cb3[0] == 1);
+    BOOST_CHECK(cb3[1] == 2);
+    BOOST_CHECK(cb3[2] == 3);
+
     cb3.push_back(4);
     cb3.push_back(5);
+
     BOOST_CHECK(cb3[0] == 3);
     BOOST_CHECK(cb3[1] == 4);
     BOOST_CHECK(cb3[2] == 5);
 
     cb3.pop_back();
     cb3.pop_front();
-    BOOST_CHECK(cb3[0] == 4);
+    
+	BOOST_CHECK(cb3[0] == 4);
 }
 
 void element_destruction_test() {

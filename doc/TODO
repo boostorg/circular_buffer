@@ -74,7 +74,8 @@ t19  DONE
 
 t20  docs: define requirements on the Alloc type parameter
 
-t21  docs: consider better documentation for the "overwrite" term; add glossary
+t21  DONE
+     docs: consider better documentation for the "overwrite" term; add glossary
      section
 
 t22  REJECTED - postponed to later version
@@ -126,7 +127,8 @@ t34  REJECTED - postponed to later version
 t35  docs: there should be warning for data() documentation that the returned
      pointer gets very easily invalidated
 
-t36  docs: Synopsis in circular_buffer.html could be splitted by <p> into
+t36  DONE
+     docs: Description in circular_buffer.html could be splitted by <p> into
      two paragraphs - it would look less "heavy"
 
 t37  DONE
@@ -148,7 +150,8 @@ t40  DONE - verify
 t41  REJECTED - not important; causing problems with generated documentation
      typedef for circular_buffer<T, Alloc> (line 4450)
 
-t42  docs: documentation may add some rationale on its internal data structures
+t42  DONE
+     docs: documentation may add some rationale on its internal data structures
      and their advantage over std::deque
 
 t43  REJECTED - fixed another way
@@ -186,7 +189,7 @@ t51  REJECTED - fixed
 t52  DONE
      rename BOOST_DISABLE_CB_DEBUG to BOOST_CB_DISABLE_DEBUG
      
-t53 check for multiple parameters passed into function for exception safety
+t53  check for multiple parameters passed into function for exception safety
 
 -------------------------------------------------------------------------------
 
