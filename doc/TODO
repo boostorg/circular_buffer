@@ -11,7 +11,7 @@ t03  DONE
      docs: "Friend Functions" should be rather "Standalone Functions"
      and should mention swap, <=, >= as well
 
-t04  DONE
+t04  DONE - REMOVED
      docs: paragraph "Model of": change (SGI) to (SGI specific)
 
 t05  docs: "Type Requirements" will be part of "Template Parameters"
@@ -97,7 +97,8 @@ t26  DONE
      change the current implementation of "overwrite" operation -> overwrite
      will be equivalent to assign
 
-t27  docs: apply the DefaultConstructible and Assignable type requirements
+t27  REJECTED
+     docs: apply the DefaultConstructible and Assignable type requirements
 
 t28  docs: the difference between resize() and set_capacity() should be 
      mentioned more explicitly
@@ -110,7 +111,8 @@ t30  DONE
      for resize and set_capacity is solved with the boolean parameter
      remove_front, which is not consistent.
 
-t31  docs: "... According to the semantics of rinsert, insertion overwrites
+t31  DONE
+     docs: "... According to the semantics of rinsert, insertion overwrites
      front-most items as necessary ..." should probably read "back-most items"
      if this is a valid english word
 
@@ -188,7 +190,8 @@ t51  REJECTED - fixed
 
 t52  DONE
      rename BOOST_DISABLE_CB_DEBUG to BOOST_CB_DISABLE_DEBUG
-     
+
+     DONE
 t53  check for multiple parameters passed into function for exception safety
 
 -------------------------------------------------------------------------------

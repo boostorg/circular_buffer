@@ -2,7 +2,6 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <meta content="HTML Tidy for Windows (vers 1st February 2003), see www.w3.org" name="generator">
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
     <title>
       Templated Circular Buffer Container
@@ -3060,7 +3059,7 @@ template &lt;class T, class Alloc&gt;
     </p>
     <p>
       Elements inserted near the back of a full <code>circular_buffer</code> can be lost. According to the <a href="#semantics">semantics</a> of <code>rinsert</code> , insertion overwrites
-      front-most items as necessary - possibly including elements currently being <b>inserted at the back</b> of the buffer. Conversely, <code>push_back</code> to a full
+      back-most items as necessary - possibly including elements currently being <b>inserted at the back</b> of the buffer. Conversely, <code>push_back</code> to a full
       <code>circular_buffer</code> is guaranteed to overwrite the front-most element.
     </p>
     <p>
