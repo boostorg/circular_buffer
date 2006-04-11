@@ -50,7 +50,20 @@ public:
     typedef typename circular_buffer<T, Alloc>::param_value_type param_value_type;
     typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
 
-	//! Capacity type of the space optimized circular buffer.
+	//! Capacity controller of the space optimized circular buffer.
+	/*!
+		<code>
+		struct capacity_control {
+			capacity_control(size_type capacity, size_type min_capacity = 0);
+			size_type m_capacity;
+			size_type m_min_capacity;
+		};
+		</code>
+		The converting constructor of the <code>capacity_control</code>
+		allows implicit conversion from <code>size_type</code> like types
+		which ensures compatibility of creating an instance of the
+		<code>circular_buffer_space_optimized</code> with other STL containers.
+	*/
 	typedef cb_details::capacity_control<size_type> capacity_control;
 
 // Inherited
@@ -90,7 +103,7 @@ public:
     bool full() const { return size() == capacity(); }
 
     //! Return the minimal guaranteed amount of allocated memory.
-    /*
+    /*!
         The allocated memory will never drop under this value.
     */
     size_type min_capacity() const { return m_capacity_ctrl.m_min_capacity; }
