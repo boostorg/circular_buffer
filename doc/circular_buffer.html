@@ -165,28 +165,28 @@ public:
    typedef typename Alloc::value_type <a href="#classboost_1_1circular__buffer_1w16">value_type</a>;
 
    template &lt;class InputIterator&gt;
-<a href="#classboost_1_1circular__buffer_1a15">circular_buffer</a>(size_type capacity, 
+      <a href="#classboost_1_1circular__buffer_1a15">circular_buffer</a>(size_type capacity, 
          InputIterator first, InputIterator last, 
          const allocator_type&amp; alloc = allocator_type());
    template &lt;class InputIterator&gt;
-<a href="#classboost_1_1circular__buffer_1a16">circular_buffer</a>(InputIterator first, 
+      <a href="#classboost_1_1circular__buffer_1a16">circular_buffer</a>(InputIterator first, 
          InputIterator last, const allocator_type&amp; alloc = allocator_type());
    template &lt;class InputIterator&gt;
-<a href=
+      <a href=
 "#classboost_1_1circular__buffer_1a17">circular_buffer</a>(size_type capacity, InputIterator first, InputIterator last);
    template &lt;class InputIterator&gt;
-<a href="#classboost_1_1circular__buffer_1a18">circular_buffer</a>(InputIterator first, InputIterator last);
-<a href="#classboost_1_1circular__buffer_1a19">circular_buffer</a>(const circular_buffer&lt;T,Alloc&gt;&amp; cb);
-<a href="#classboost_1_1circular__buffer_1a20">circular_buffer</a>(size_type capacity, 
+      <a href="#classboost_1_1circular__buffer_1a18">circular_buffer</a>(InputIterator first, InputIterator last);
+   <a href="#classboost_1_1circular__buffer_1a19">circular_buffer</a>(const circular_buffer&lt;T,Alloc&gt;&amp; cb);
+   <a href="#classboost_1_1circular__buffer_1a20">circular_buffer</a>(size_type capacity, 
       size_type n, value_type item, 
       const allocator_type&amp; alloc = allocator_type());
-<a href="#classboost_1_1circular__buffer_1a21">circular_buffer</a>(size_type n, 
+   <a href="#classboost_1_1circular__buffer_1a21">circular_buffer</a>(size_type n, 
       value_type item, const allocator_type&amp; alloc = allocator_type());
    explicit <a href=
 "#classboost_1_1circular__buffer_1a22">circular_buffer</a>(size_type capacity, const allocator_type&amp; alloc = allocator_type());
    explicit <a href=
 "#classboost_1_1circular__buffer_1a23">circular_buffer</a>(const allocator_type&amp; alloc = allocator_type());
-<a href="#classboost_1_1circular__buffer_1a62">~circular_buffer</a>();
+   <a href="#classboost_1_1circular__buffer_1a62">~circular_buffer</a>();
 
    const_array_range <a href="#classboost_1_1circular__buffer_1a0">array_one</a>() const;
    array_range <a href="#classboost_1_1circular__buffer_1a1">array_one</a>();
@@ -523,7 +523,9 @@ template &lt;class T, class Alloc&gt;
           <td>
             The type of the elements stored in the circular buffer.
           </td>
-          <td></td>
+          <td>
+             
+          </td>
         </tr>
         <tr>
           <td>
@@ -683,14 +685,16 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="classboost_1_1circular__buffer_1a15"></a> <code><b>template &lt;class InputIterator&gt;<br>
-             circular_buffer(<a href="#classboost_1_1circular__buffer_1w15">size_type</a> capacity,<br>
-             InputIterator first, InputIterator last,<br>
-             const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc =
+                circular_buffer(<a href="#classboost_1_1circular__buffer_1w15">size_type</a> capacity,<br>
+                    InputIterator first, InputIterator last,<br>
+                    const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
              
             <table id="table_function_desc_id4488523">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4488644">
                     <tr>
@@ -731,13 +735,15 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="classboost_1_1circular__buffer_1a16"></a> <code><b>template &lt;class InputIterator&gt;<br>
-             circular_buffer(InputIterator first,<br>
-             InputIterator last, const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc =
-            allocator_type());</b></code><br>
+                circular_buffer(InputIterator first,<br>
+                    InputIterator last, const <a href=
+            "#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
              
             <table id="table_function_desc_id4488781">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4488884">
                     <tr>
@@ -754,12 +760,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="classboost_1_1circular__buffer_1a17"></a> <code><b>template &lt;class InputIterator&gt;<br>
-             circular_buffer(<a href="#classboost_1_1circular__buffer_1w15">size_type</a> capacity, InputIterator
-            first, InputIterator last);</b></code><br>
+                circular_buffer(<a href="#classboost_1_1circular__buffer_1w15">size_type</a> capacity,
+            InputIterator first, InputIterator last);</b></code><br>
              
             <table id="table_function_desc_id4488935">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4489024">
                     <tr>
@@ -774,11 +782,13 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="classboost_1_1circular__buffer_1a18"></a> <code><b>template &lt;class InputIterator&gt;<br>
-             circular_buffer(InputIterator first, InputIterator last);</b></code><br>
+                circular_buffer(InputIterator first, InputIterator last);</b></code><br>
              
             <table id="table_function_desc_id4489072">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4489145">
                     <tr>
@@ -792,12 +802,14 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a19"></a> <code><b>circular_buffer(const
-            circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
+            <a name="classboost_1_1circular__buffer_1a19"></a>
+            <code><b>circular_buffer(const circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
              
             <table id="table_function_desc_id4489192">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4489246">
                     <tr>
@@ -825,14 +837,16 @@ template &lt;class T, class Alloc&gt;
           <td>
             <a name="classboost_1_1circular__buffer_1a20"></a> <code><b>circular_buffer(<a href=
             "#classboost_1_1circular__buffer_1w15">size_type</a> capacity,<br>
-             <a href="#classboost_1_1circular__buffer_1w15">size_type</a> n, <a href=
+                 <a href="#classboost_1_1circular__buffer_1w15">size_type</a> n, <a href=
             "#classboost_1_1circular__buffer_1w16">value_type</a> item,<br>
-             const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc =
+                 const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
              
             <table id="table_function_desc_id4489682">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4489791">
                     <tr>
@@ -850,12 +864,14 @@ template &lt;class T, class Alloc&gt;
           <td>
             <a name="classboost_1_1circular__buffer_1a21"></a> <code><b>circular_buffer(<a href=
             "#classboost_1_1circular__buffer_1w15">size_type</a> n,<br>
-             <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item, const <a href=
+                 <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item, const <a href=
             "#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
              
             <table id="table_function_desc_id4489864">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4489961">
                     <tr>
@@ -890,7 +906,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4490097">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4490179">
                     <tr>
@@ -922,7 +940,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4490287">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4490352">
                     <tr>
@@ -954,7 +974,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4498314">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4498348">
                     <tr>
@@ -983,7 +1005,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4486171">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4486212">
                     <tr>
@@ -1004,7 +1028,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4486285">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4486325">
                     <tr>
@@ -1025,7 +1051,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4486398">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4486438">
                     <tr>
@@ -1046,7 +1074,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4486511">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4486551">
                     <tr>
@@ -1063,12 +1093,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="classboost_1_1circular__buffer_1a4"></a> <code><b>template &lt;class InputIterator&gt;<br>
-             void assign(<a href="#classboost_1_1circular__buffer_1w15">size_type</a> capacity, InputIterator first,
+                void assign(<a href="#classboost_1_1circular__buffer_1w15">size_type</a> capacity, InputIterator first,
             InputIterator last);</b></code><br>
              
             <table id="table_function_desc_id4486623">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4486712">
                     <tr>
@@ -1085,11 +1117,13 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="classboost_1_1circular__buffer_1a5"></a> <code><b>template &lt;class InputIterator&gt;<br>
-             void assign(InputIterator first, InputIterator last);</b></code><br>
+                void assign(InputIterator first, InputIterator last);</b></code><br>
              
             <table id="table_function_desc_id4486751">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4486830">
                     <tr>
@@ -1145,7 +1179,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4486966">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4487050">
                     <tr>
@@ -1167,7 +1203,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4487100">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4487174">
                     <tr>
@@ -1213,7 +1251,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4487334">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4487391">
                     <tr>
@@ -1235,7 +1275,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4487463">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4487519">
                     <tr>
@@ -1256,7 +1298,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4487590">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4487631">
                     <tr>
@@ -1287,7 +1331,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4487722">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4487763">
                     <tr>
@@ -1318,7 +1364,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4487854">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4487895">
                     <tr>
@@ -1339,7 +1387,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4487945">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4487985">
                     <tr>
@@ -1360,7 +1410,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4488261">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4488308">
                     <tr>
@@ -1380,7 +1432,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4490489">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4490529">
                     <tr>
@@ -1421,7 +1475,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4490627">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4490661">
                     <tr>
@@ -1453,7 +1509,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4490850">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4490891">
                     <tr>
@@ -1474,7 +1532,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4490918">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4490957">
                     <tr>
@@ -1497,7 +1557,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4491149">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4491228">
                     <tr>
@@ -1564,7 +1626,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4491416">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4491479">
                     <tr>
@@ -1630,7 +1694,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4491702">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4491743">
                     <tr>
@@ -1661,7 +1727,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4491812">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4491852">
                     <tr>
@@ -1691,7 +1759,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4491921">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4491962">
                     <tr>
@@ -1723,7 +1793,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4492111">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4492153">
                     <tr>
@@ -1755,7 +1827,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4492202">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4492243">
                     <tr>
@@ -1772,12 +1846,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="classboost_1_1circular__buffer_1a35"></a> <code><b>template &lt;class InputIterator&gt;<br>
-             void insert(<a href="#classboost_1_1circular__buffer_1w9">iterator</a> pos, InputIterator first,
+                void insert(<a href="#classboost_1_1circular__buffer_1w9">iterator</a> pos, InputIterator first,
             InputIterator last);</b></code><br>
              
             <table id="table_function_desc_id4492294">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4492389">
                     <tr>
@@ -1843,7 +1919,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4492538">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4492627">
                     <tr>
@@ -1907,7 +1985,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4492797">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4492887">
                     <tr>
@@ -1970,7 +2050,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4493085">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4493125">
                     <tr>
@@ -2031,7 +2113,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4493381">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4493421">
                     <tr>
@@ -2047,12 +2131,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a40"></a> <code><b>circular_buffer&lt;T,Alloc&gt;&amp;
-            operator=(const circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
+            <a name="classboost_1_1circular__buffer_1a40"></a>
+            <code><b>circular_buffer&lt;T,Alloc&gt;&amp; operator=(const circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
+
              
             <table id="table_function_desc_id4493487">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4493549">
                     <tr>
@@ -2095,7 +2182,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4493693">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4493756">
                     <tr>
@@ -2127,7 +2216,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4493844">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4493907">
                     <tr>
@@ -2157,7 +2248,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4493995">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4494036">
                     <tr>
@@ -2209,7 +2302,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4494188">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4494228">
                     <tr>
@@ -2262,7 +2357,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4494380">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4494448">
                     <tr>
@@ -2305,7 +2402,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4494628">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4494695">
                     <tr>
@@ -2348,7 +2447,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4494888">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4494930">
                     <tr>
@@ -2369,7 +2470,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4495037">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4495078">
                     <tr>
@@ -2390,7 +2493,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4495117">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4495159">
                     <tr>
@@ -2411,7 +2516,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4495199">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4495239">
                     <tr>
@@ -2434,7 +2541,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4495279">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4495359">
                     <tr>
@@ -2502,7 +2611,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4495574">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4495637">
                     <tr>
@@ -2570,7 +2681,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4495834">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4495919">
                     <tr>
@@ -2613,12 +2726,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="classboost_1_1circular__buffer_1a54"></a> <code><b>template &lt;class InputIterator&gt;<br>
-             void rinsert(<a href="#classboost_1_1circular__buffer_1w9">iterator</a> pos, InputIterator first,
+                void rinsert(<a href="#classboost_1_1circular__buffer_1w9">iterator</a> pos, InputIterator first,
             InputIterator last);</b></code><br>
              
             <table id="table_function_desc_id4496178">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4496273">
                     <tr>
@@ -2684,7 +2799,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4496422">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4496512">
                     <tr>
@@ -2748,7 +2865,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4496655">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4496745">
                     <tr>
@@ -2812,7 +2931,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4497017">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4497101">
                     <tr>
@@ -2833,7 +2954,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4497194">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4497252">
                     <tr>
@@ -2854,7 +2977,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4497369">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4497426">
                     <tr>
@@ -2901,7 +3026,9 @@ template &lt;class T, class Alloc&gt;
              
             <table id="table_function_desc_id4497699">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4497740">
                     <tr>
@@ -2917,12 +3044,14 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a61"></a> <code><b>void swap(circular_buffer&lt;T,Alloc&gt;&amp;
-            cb);</b></code><br>
+            <a name="classboost_1_1circular__buffer_1a61"></a>
+            <code><b>void swap(circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
              
             <table id="table_function_desc_id4498097">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4498149">
                     <tr>
@@ -2968,12 +3097,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="namespaceboost_1a2"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
-             bool operator!=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const circular_buffer&lt;T,Alloc&gt;&amp;
-            rhs);</b></code><br>
+                bool operator!=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
+            const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
             <table id="table_function_desc_id4481602">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4481706">
                     <tr>
@@ -2990,12 +3121,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="namespaceboost_1a1"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
-             bool operator&lt;(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const circular_buffer&lt;T,Alloc&gt;&amp;
-            rhs);</b></code><br>
+                bool operator&lt;(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
+            const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
             <table id="table_function_desc_id4511674">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4511778">
                     <tr>
@@ -3012,12 +3145,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="namespaceboost_1a4"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
-             bool operator&lt;=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const
-            circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
+                bool operator&lt;=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
+            const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
             <table id="table_function_desc_id4511937">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4512041">
                     <tr>
@@ -3034,12 +3169,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="namespaceboost_1a0"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
-             bool operator==(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const circular_buffer&lt;T,Alloc&gt;&amp;
-            rhs);</b></code><br>
+                bool operator==(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
+            const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
             <table id="table_function_desc_id4512202">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4512305">
                     <tr>
@@ -3056,12 +3193,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="namespaceboost_1a3"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
-             bool operator&gt;(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const circular_buffer&lt;T,Alloc&gt;&amp;
-            rhs);</b></code><br>
+                bool operator&gt;(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
+            const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
             <table id="table_function_desc_id4512478">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4512582">
                     <tr>
@@ -3078,12 +3217,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="namespaceboost_1a5"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
-             bool operator&gt;=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const
-            circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
+                bool operator&gt;=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
+            const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
             <table id="table_function_desc_id4512741">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4512845">
                     <tr>
@@ -3100,12 +3241,14 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a name="namespaceboost_1a6"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
-             void swap(circular_buffer&lt;T,Alloc&gt;&amp; lhs, circular_buffer&lt;T,Alloc&gt;&amp;
-            rhs);</b></code><br>
+                void swap(circular_buffer&lt;T,Alloc&gt;&amp; lhs,
+            circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
             <table id="table_function_desc_id4513001">
               <tr>
-                <td></td>
+                <td>
+                     
+                </td>
                 <td>
                   <table id="table_detailed_desc_id4513101">
                     <tr>
@@ -3479,9 +3622,9 @@ template &lt;class T, class Alloc&gt;
             <small>Copyright © 2003-2006 Jan Gaspar</small>
           </p>
           <p>
-            <small>Use, modification, and distribution is subject to the Boost Software License, Version 1.0. (See
-            accompanying file <code>LICENSE_1_0.txt</code> or copy at <a href=
-            "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</small>
+            <small>Use, modification, and distribution is subject to the Boost Software License, Version 1.0.<br>
+             (See accompanying file <code>LICENSE_1_0.txt</code> or copy at <a href=
+            "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>.)</small>
           </p>
         </td>
         <td valign="top" align="right">
