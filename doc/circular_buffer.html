@@ -3389,7 +3389,7 @@ template &lt;class T, class Alloc&gt;
       The <code>circular_buffer</code> maintains a list of valid iterators. As soon as any element gets destroyed all
       iterators pointing to this element are removed from this list and explicitly invalidated (an invalidation flag is
       set). The debug support also consists of many assertions ( <a href=
-      "../../../libs/utility/assert.html"><code>BOOST_ASSERT</code></a> macros) which ensure the
+      "../../utility/assert.html"><code>BOOST_ASSERT</code></a> macros) which ensure the
       <code>circular_buffer</code> and its iterators are used in the correct manner at runtime. In case an invalid
       iterator is used the assertion will report an error. The connection of explicit iterator invalidation and
       assertions makes a very robust debug technique which catches most of the errors.
@@ -3572,7 +3572,7 @@ template &lt;class T, class Alloc&gt;
       <li>
         <a id="note2"></a> 
         <p>
-          A good implementation of smart pointers is included in <a href="../../../libs/smart_ptr/">Boost</a>.
+          A good implementation of smart pointers is included in <a href="../../smart_ptr/">Boost</a>.
         </p>
       </li>
       <li>
