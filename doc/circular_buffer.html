@@ -518,10 +518,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="templateparam_T"><code>T</code></a>
+            <a id="templateparam_T"><code>T</code></a>
           </td>
           <td>
-            The type of the elements stored in the circular buffer.
+            The type of the elements stored in the circular buffer. <code>T</code> has to be <a href=
+            "http://www.sgi.com/tech/stl/Assignable.html">SGIAssignable</a> (SGI STL defined combination of
+                <a href="../../utility/Assignable.html">Assignable</a> and <a href=
+                "../../utility/CopyConstructible.html">CopyConstructible</a>). Moreover <code>T</code> has to be
+                <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">DefaultConstructible</a> if supplied as
+                a default parameter during invocation of some methods e.g. insert(iterator pos, const T&amp; item =
+                T()).
           </td>
           <td>
              
@@ -529,10 +535,11 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="templateparam_Alloc"><code>Alloc</code></a>
+            <a id="templateparam_Alloc"><code>Alloc</code></a>
           </td>
           <td>
-            The allocator type used for all internal memory management.
+            The allocator type used for all internal memory management. The <code>Alloc</code> has to meet the
+            allocator requirements imposed by STL.
           </td>
           <td>
             <code>std::allocator&lt;T&gt;</code>
@@ -556,7 +563,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w0"><code>allocator_type</code></a>
+            <a id="classboost_1_1circular__buffer_1w0"><code>allocator_type</code></a>
           </td>
           <td>
             The type of the allocator used in the circular buffer.
@@ -564,7 +571,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w1"><code>array_range</code></a>
+            <a id="classboost_1_1circular__buffer_1w1"><code>array_range</code></a>
           </td>
           <td>
             An array range. TODO - better doc.
@@ -572,7 +579,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w2"><code>capacity_control</code></a>
+            <a id="classboost_1_1circular__buffer_1w2"><code>capacity_control</code></a>
           </td>
           <td>
             Capacity type (defined just for consistency with circular_buffer_space_optimized).
@@ -580,7 +587,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w3"><code>const_array_range</code></a>
+            <a id="classboost_1_1circular__buffer_1w3"><code>const_array_range</code></a>
           </td>
           <td>
             A range of a const array. TODO - better doc.
@@ -588,7 +595,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w4"><code>const_iterator</code></a>
+            <a id="classboost_1_1circular__buffer_1w4"><code>const_iterator</code></a>
           </td>
           <td>
             Const (random access) iterator used to iterate through a circular buffer.
@@ -596,7 +603,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w5"><code>const_pointer</code></a>
+            <a id="classboost_1_1circular__buffer_1w5"><code>const_pointer</code></a>
           </td>
           <td>
             Const pointer to the element.
@@ -604,7 +611,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w6"><code>const_reference</code></a>
+            <a id="classboost_1_1circular__buffer_1w6"><code>const_reference</code></a>
           </td>
           <td>
             Const reference to the element.
@@ -612,7 +619,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w7"><code>const_reverse_iterator</code></a>
+            <a id="classboost_1_1circular__buffer_1w7"><code>const_reverse_iterator</code></a>
           </td>
           <td>
             Const iterator used to iterate backwards through a circular buffer.
@@ -620,7 +627,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w8"><code>difference_type</code></a>
+            <a id="classboost_1_1circular__buffer_1w8"><code>difference_type</code></a>
           </td>
           <td>
             Distance type.
@@ -628,7 +635,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w9"><code>iterator</code></a>
+            <a id="classboost_1_1circular__buffer_1w9"><code>iterator</code></a>
           </td>
           <td>
             Iterator (random access) used to iterate through a circular buffer.
@@ -636,7 +643,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w11"><code>pointer</code></a>
+            <a id="classboost_1_1circular__buffer_1w11"><code>pointer</code></a>
           </td>
           <td>
             Pointer to the element.
@@ -644,7 +651,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w12"><code>reference</code></a>
+            <a id="classboost_1_1circular__buffer_1w12"><code>reference</code></a>
           </td>
           <td>
             Reference to the element.
@@ -652,7 +659,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w14"><code>reverse_iterator</code></a>
+            <a id="classboost_1_1circular__buffer_1w14"><code>reverse_iterator</code></a>
           </td>
           <td>
             Iterator used to iterate backwards through a circular buffer.
@@ -660,7 +667,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w15"><code>size_type</code></a>
+            <a id="classboost_1_1circular__buffer_1w15"><code>size_type</code></a>
           </td>
           <td>
             Size type.
@@ -668,7 +675,7 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1w16"><code>value_type</code></a>
+            <a id="classboost_1_1circular__buffer_1w16"><code>value_type</code></a>
           </td>
           <td>
             The type of the elements stored in the circular buffer.
@@ -684,26 +691,25 @@ template &lt;class T, class Alloc&gt;
       <table id="table_constructors" border="1">
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a15"></a> <code><b>template &lt;class InputIterator&gt;<br>
-                circular_buffer(<a href="#classboost_1_1circular__buffer_1w15">size_type</a> capacity,<br>
+            <a id="classboost_1_1circular__buffer_1a15"></a> <code><b>template &lt;class InputIterator&gt;<br>
+                circular_buffer(<a>size_type</a> capacity,<br>
                     InputIterator first, InputIterator last,<br>
-                    const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc =
-            allocator_type());</b></code><br>
+                    const <a>allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
              
-            <table id="table_function_desc_id4488523">
+            <table id="table_function_desc_id4488777">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4488644">
+                  <table id="table_detailed_desc_id4488897">
                     <tr>
                       <td>
                         Create a circular buffer with a copy of a range.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4488654">
+                  <table id="table_pre_desc_id4488907">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
@@ -713,14 +719,13 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4488664">
+                  <table id="table_post_desc_id4488918">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a14">capacity()</a> ==
-                        capacity</code><br>
+                        <code>(*this).<a>capacity()</a> == capacity</code><br>
                          If the number of items to copy from the range <code>[first, last)</code> is greater than the
                         specified <code>capacity</code> then only elements from the range <code>[last - capacity,
                         last)</code> will be copied.
@@ -734,18 +739,17 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a16"></a> <code><b>template &lt;class InputIterator&gt;<br>
+            <a id="classboost_1_1circular__buffer_1a16"></a> <code><b>template &lt;class InputIterator&gt;<br>
                 circular_buffer(InputIterator first,<br>
-                    InputIterator last, const <a href=
-            "#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
+                    InputIterator last, const <a>allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
              
-            <table id="table_function_desc_id4488781">
+            <table id="table_function_desc_id4489034">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4488884">
+                  <table id="table_detailed_desc_id4489137">
                     <tr>
                       <td>
                         TODO doc.
@@ -759,17 +763,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a17"></a> <code><b>template &lt;class InputIterator&gt;<br>
-                circular_buffer(<a href="#classboost_1_1circular__buffer_1w15">size_type</a> capacity,
-            InputIterator first, InputIterator last);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a17"></a> <code><b>template &lt;class InputIterator&gt;<br>
+                circular_buffer(<a>size_type</a> capacity, InputIterator first, InputIterator last);</b></code><br>
              
-            <table id="table_function_desc_id4488935">
+            <table id="table_function_desc_id4489188">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4489024">
+                  <table id="table_detailed_desc_id4489277">
                     <tr>
                       <td></td>
                     </tr>
@@ -781,16 +784,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a18"></a> <code><b>template &lt;class InputIterator&gt;<br>
+            <a id="classboost_1_1circular__buffer_1a18"></a> <code><b>template &lt;class InputIterator&gt;<br>
                 circular_buffer(InputIterator first, InputIterator last);</b></code><br>
              
-            <table id="table_function_desc_id4489072">
+            <table id="table_function_desc_id4489324">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4489145">
+                  <table id="table_detailed_desc_id4489396">
                     <tr>
                       <td></td>
                     </tr>
@@ -802,23 +805,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a19"></a>
+            <a id="classboost_1_1circular__buffer_1a19"></a>
             <code><b>circular_buffer(const circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
              
-            <table id="table_function_desc_id4489192">
+            <table id="table_function_desc_id4489444">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4489246">
+                  <table id="table_detailed_desc_id4489498">
                     <tr>
                       <td>
                         Copy constructor.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4489256">
+                  <table id="table_post_desc_id4489508">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
@@ -835,20 +838,17 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a20"></a> <code><b>circular_buffer(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> capacity,<br>
-                 <a href="#classboost_1_1circular__buffer_1w15">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> item,<br>
-                 const <a href="#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc =
-            allocator_type());</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a20"></a> <code><b>circular_buffer(<a>size_type</a> capacity,<br>
+                 <a>size_type</a> n, <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item,<br>
+                 const <a>allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
              
-            <table id="table_function_desc_id4489682">
+            <table id="table_function_desc_id4489698">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4489791">
+                  <table id="table_detailed_desc_id4489812">
                     <tr>
                       <td>
                         TODO doc.
@@ -862,18 +862,17 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a21"></a> <code><b>circular_buffer(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> n,<br>
-                 <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item, const <a href=
-            "#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a21"></a> <code><b>circular_buffer(<a>size_type</a> n,<br>
+                 <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item,
+            const <a>allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
              
-            <table id="table_function_desc_id4489864">
+            <table id="table_function_desc_id4489887">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4489961">
+                  <table id="table_detailed_desc_id4489985">
                     <tr>
                       <td>
                         Create a full circular buffer with a given capacity and filled with copies of
@@ -881,15 +880,14 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4489975">
+                  <table id="table_post_desc_id4489999">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code><a href="#classboost_1_1circular__buffer_1a14">capacity()</a> == n &amp;&amp; <a href=
-                        "#classboost_1_1circular__buffer_1a60">size()</a> == n &amp;&amp; (*this)[0] == (*this)[1] ==
-                        ... == (*this)[n - 1] == item</code>
+                        <code><a>capacity()</a> == n &amp;&amp; <a>size()</a> == n &amp;&amp; (*this)[0] == (*this)[1]
+                        == ... == (*this)[n - 1] == item</code>
                       </td>
                     </tr>
                   </table>
@@ -900,31 +898,30 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a22"></a> <code><b>explicit circular_buffer(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> capacity, const <a href=
-            "#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a22"></a> <code><b>explicit
+            circular_buffer(<a>size_type</a> capacity, const <a>allocator_type</a>&amp; alloc =
+            allocator_type());</b></code><br>
              
-            <table id="table_function_desc_id4490097">
+            <table id="table_function_desc_id4490121">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4490179">
+                  <table id="table_detailed_desc_id4490202">
                     <tr>
                       <td>
                         Create an empty circular buffer with a given capacity.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4490189">
+                  <table id="table_post_desc_id4490213">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a14">capacity()</a> == capacity
-                        &amp;&amp; (*this).size == 0</code>
+                        <code>(*this).<a>capacity()</a> == capacity &amp;&amp; (*this).size == 0</code>
                       </td>
                     </tr>
                   </table>
@@ -935,31 +932,29 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a23"></a> <code><b>explicit circular_buffer(const <a href=
-            "#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a23"></a> <code><b>explicit
+            circular_buffer(const <a>allocator_type</a>&amp; alloc = allocator_type());</b></code><br>
              
-            <table id="table_function_desc_id4490287">
+            <table id="table_function_desc_id4490311">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4490352">
+                  <table id="table_detailed_desc_id4490375">
                     <tr>
                       <td>
                         Create an empty circular buffer with a maximum capacity.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4490362">
+                  <table id="table_post_desc_id4490386">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code><a href="#classboost_1_1circular__buffer_1a14">capacity()</a> == <a href=
-                        "#classboost_1_1circular__buffer_1a39">max_size()</a> &amp;&amp; <a href=
-                        "#classboost_1_1circular__buffer_1a60">size()</a> == 0</code>
+                        <code><a>capacity()</a> == <a>max_size()</a> &amp;&amp; <a>size()</a> == 0</code>
                       </td>
                     </tr>
                   </table>
@@ -970,15 +965,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a62"></a> <code><b>~circular_buffer();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a62"></a> <code><b>~circular_buffer();</b></code><br>
              
-            <table id="table_function_desc_id4498314">
+            <table id="table_function_desc_id4500249">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4498348">
+                  <table id="table_detailed_desc_id4500284">
                     <tr>
                       <td>
                         Destructor.
@@ -1000,16 +995,16 @@ template &lt;class T, class Alloc&gt;
       <table id="table_methods" border="1">
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a0"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w3">const_array_range</a> array_one() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a0"></a> <code><b><a>const_array_range</a> array_one()
+            const;</b></code><br>
              
-            <table id="table_function_desc_id4486171">
+            <table id="table_function_desc_id4486193">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4486212">
+                  <table id="table_detailed_desc_id4486234">
                     <tr>
                       <td>
                         TODO doc.
@@ -1023,16 +1018,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a1"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w1">array_range</a> array_one();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a1"></a> <code><b><a>array_range</a> array_one();</b></code><br>
              
-            <table id="table_function_desc_id4486285">
+            <table id="table_function_desc_id4486307">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4486325">
+                  <table id="table_detailed_desc_id4486348">
                     <tr>
                       <td>
                         TODO doc.
@@ -1046,16 +1040,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a2"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w3">const_array_range</a> array_two() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a2"></a> <code><b><a>const_array_range</a> array_two()
+            const;</b></code><br>
              
-            <table id="table_function_desc_id4486398">
+            <table id="table_function_desc_id4486420">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4486438">
+                  <table id="table_detailed_desc_id4486461">
                     <tr>
                       <td>
                         TODO doc.
@@ -1069,16 +1063,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a3"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w1">array_range</a> array_two();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a3"></a> <code><b><a>array_range</a> array_two();</b></code><br>
              
-            <table id="table_function_desc_id4486511">
+            <table id="table_function_desc_id4486533">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4486551">
+                  <table id="table_detailed_desc_id4486573">
                     <tr>
                       <td>
                         TODO doc.
@@ -1092,17 +1085,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a4"></a> <code><b>template &lt;class InputIterator&gt;<br>
-                void assign(<a href="#classboost_1_1circular__buffer_1w15">size_type</a> capacity, InputIterator first,
-            InputIterator last);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a4"></a> <code><b>template &lt;class InputIterator&gt;<br>
+                void assign(<a>size_type</a> capacity, InputIterator first, InputIterator last);</b></code><br>
              
-            <table id="table_function_desc_id4486623">
+            <table id="table_function_desc_id4486645">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4486712">
+                  <table id="table_detailed_desc_id4486734">
                     <tr>
                       <td>
                         TODO doc.
@@ -1116,23 +1108,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a5"></a> <code><b>template &lt;class InputIterator&gt;<br>
+            <a id="classboost_1_1circular__buffer_1a5"></a> <code><b>template &lt;class InputIterator&gt;<br>
                 void assign(InputIterator first, InputIterator last);</b></code><br>
              
-            <table id="table_function_desc_id4486751">
+            <table id="table_function_desc_id4486773">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4486830">
+                  <table id="table_detailed_desc_id4486852">
                     <tr>
                       <td>
                         Assign a copy of range.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4486840">
+                  <table id="table_pre_desc_id4486862">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
@@ -1142,19 +1134,18 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4486851">
+                  <table id="table_post_desc_id4486873">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a14">capacity()</a> ==
-                        std::distance(first, last) &amp;&amp; (*this).<a href=
-                        "#classboost_1_1circular__buffer_1a60">size()</a> == std::distance(first, last)</code>
+                        <code>(*this).<a>capacity()</a> == std::distance(first, last) &amp;&amp; (*this).<a>size()</a>
+                        == std::distance(first, last)</code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4486922">
+                  <table id="table_note_desc_id4486944">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -1172,18 +1163,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a6"></a> <code><b>void assign(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> capacity, <a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> item);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a6"></a> <code><b>void assign(<a>size_type</a> capacity,
+            <a>size_type</a> n, <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item);</b></code><br>
              
-            <table id="table_function_desc_id4486966">
+            <table id="table_function_desc_id4486988">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4487050">
+                  <table id="table_detailed_desc_id4487072">
                     <tr>
                       <td>
                         TODO doc.
@@ -1197,37 +1186,34 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a7"></a> <code><b>void assign(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> n, <a href=
+            <a id="classboost_1_1circular__buffer_1a7"></a> <code><b>void assign(<a>size_type</a> n, <a href=
             "#classboost_1_1circular__buffer_1w16">value_type</a> item);</b></code><br>
              
-            <table id="table_function_desc_id4487100">
+            <table id="table_function_desc_id4487123">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4487174">
+                  <table id="table_detailed_desc_id4487196">
                     <tr>
                       <td>
                         Assign <code>n</code> items into the circular buffer.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4487188">
+                  <table id="table_post_desc_id4487210">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a14">capacity()</a> == n &amp;&amp;
-                        (*this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> == n &amp;&amp; (*this)[0] ==
-                        (*this)[1] == ... == (*this).<a href="#classboost_1_1circular__buffer_1a11">back()</a> ==
-                        item</code>
+                        <code>(*this).<a>capacity()</a> == n &amp;&amp; (*this).<a>size()</a> == n &amp;&amp;
+                        (*this)[0] == (*this)[1] == ... == (*this).<a>back()</a> == item</code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4487265">
+                  <table id="table_note_desc_id4487288">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -1245,17 +1231,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a8"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> at(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> index) const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a8"></a> <code><b><a href=
+            "#classboost_1_1circular__buffer_1w16">value_type</a> at(<a>size_type</a> index) const;</b></code><br>
              
-            <table id="table_function_desc_id4487334">
+            <table id="table_function_desc_id4487357">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4487391">
+                  <table id="table_detailed_desc_id4487414">
                     <tr>
                       <td>
                         Return the element at the <code>index</code> position.
@@ -1269,17 +1254,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a9"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w12">reference</a> at(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> index);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a9"></a>
+            <code><b><a>reference</a> at(<a>size_type</a> index);</b></code><br>
              
-            <table id="table_function_desc_id4487463">
+            <table id="table_function_desc_id4487485">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4487519">
+                  <table id="table_detailed_desc_id4487542">
                     <tr>
                       <td>
                         Return the element at the <code>index</code> position.
@@ -1293,29 +1277,29 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a10"></a> <code><b><a href=
+            <a id="classboost_1_1circular__buffer_1a10"></a> <code><b><a href=
             "#classboost_1_1circular__buffer_1w16">value_type</a> back() const;</b></code><br>
              
-            <table id="table_function_desc_id4487590">
+            <table id="table_function_desc_id4487613">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4487631">
+                  <table id="table_detailed_desc_id4487654">
                     <tr>
                       <td>
                         Return the last (rightmost) element.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4487642">
+                  <table id="table_pre_desc_id4487664">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        <code>!*(this).<a href="#classboost_1_1circular__buffer_1a25">empty()</a></code>
+                        <code>!*(this).<a>empty()</a></code>
                       </td>
                     </tr>
                   </table>
@@ -1326,29 +1310,28 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a11"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w12">reference</a> back();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a11"></a> <code><b><a>reference</a> back();</b></code><br>
              
-            <table id="table_function_desc_id4487722">
+            <table id="table_function_desc_id4487984">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4487763">
+                  <table id="table_detailed_desc_id4488021">
                     <tr>
                       <td>
                         Return the last (rightmost) element.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4487773">
+                  <table id="table_pre_desc_id4488032">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        <code>!*(this).<a href="#classboost_1_1circular__buffer_1a25">empty()</a></code>
+                        <code>!*(this).<a>empty()</a></code>
                       </td>
                     </tr>
                   </table>
@@ -1359,16 +1342,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a12"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w4">const_iterator</a> begin() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a12"></a> <code><b><a>const_iterator</a> begin()
+            const;</b></code><br>
              
-            <table id="table_function_desc_id4487854">
+            <table id="table_function_desc_id4488110">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4487895">
+                  <table id="table_detailed_desc_id4488151">
                     <tr>
                       <td>
                         Return a const iterator pointing to the beginning of the circular buffer.
@@ -1382,16 +1365,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a13"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> begin();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a13"></a> <code><b><a>iterator</a> begin();</b></code><br>
              
-            <table id="table_function_desc_id4487945">
+            <table id="table_function_desc_id4488202">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4487985">
+                  <table id="table_detailed_desc_id4488242">
                     <tr>
                       <td>
                         Return an iterator pointing to the beginning of the circular buffer.
@@ -1405,16 +1387,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a14"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> capacity() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a14"></a> <code><b><a>size_type</a> capacity() const;</b></code><br>
              
-            <table id="table_function_desc_id4488261">
+            <table id="table_function_desc_id4488516">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4488308">
+                  <table id="table_detailed_desc_id4488563">
                     <tr>
                       <td>
                         Return the capacity of the circular buffer.
@@ -1428,32 +1409,32 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a24"></a> <code><b>void clear();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a24"></a> <code><b>void clear();</b></code><br>
              
-            <table id="table_function_desc_id4490489">
+            <table id="table_function_desc_id4490512">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4490529">
+                  <table id="table_detailed_desc_id4490553">
                     <tr>
                       <td>
                         Erase all stored elements.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4490540">
+                  <table id="table_post_desc_id4490563">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        (*this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> == 0
+                        (*this).<a>size()</a> == 0
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4490555">
+                  <table id="table_note_desc_id4490578">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -1471,22 +1452,22 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a25"></a> <code><b>bool empty() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a25"></a> <code><b>bool empty() const;</b></code><br>
              
-            <table id="table_function_desc_id4490627">
+            <table id="table_function_desc_id4490650">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4490661">
+                  <table id="table_detailed_desc_id4490684">
                     <tr>
                       <td>
                         Is the circular buffer empty?
                       </td>
                     </tr>
                   </table>
-                  <table id="table_return_desc_id4490671">
+                  <table id="table_return_desc_id4490695">
                     <tr>
                       <td valign="top">
                         <b>Returns:</b>
@@ -1504,16 +1485,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a26"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w4">const_iterator</a> end() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a26"></a> <code><b><a>const_iterator</a> end() const;</b></code><br>
              
-            <table id="table_function_desc_id4490850">
+            <table id="table_function_desc_id4490873">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4490891">
+                  <table id="table_detailed_desc_id4490914">
                     <tr>
                       <td>
                         Return a const iterator pointing to the end of the circular buffer.
@@ -1527,16 +1507,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a27"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> end();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a27"></a> <code><b><a>iterator</a> end();</b></code><br>
              
-            <table id="table_function_desc_id4490918">
+            <table id="table_function_desc_id4490941">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4490957">
+                  <table id="table_detailed_desc_id4490981">
                     <tr>
                       <td>
                         Return an iterator pointing to the end of the circular buffer.
@@ -1550,59 +1529,55 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a28"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> erase(<a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> first, <a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> last);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a28"></a> <code><b><a>iterator</a> erase(<a>iterator</a> first,
+            <a>iterator</a> last);</b></code><br>
              
-            <table id="table_function_desc_id4491149">
+            <table id="table_function_desc_id4491173">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4491228">
+                  <table id="table_detailed_desc_id4491253">
                     <tr>
                       <td>
                         Erase the range <code>[first, last)</code>.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4491242">
+                  <table id="table_pre_desc_id4491266">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        Valid range <code>[first, last)</code>. <code>size_type old_size = (*this).<a href=
-                        "#classboost_1_1circular__buffer_1a60">size()</a></code>
+                        Valid range <code>[first, last)</code>. <code>size_type old_size = (*this).<a>size()</a></code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4491265">
+                  <table id="table_post_desc_id4491289">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> == old_size -
-                        std::distance(first, last)</code><br>
+                        <code>(*this).<a>size()</a> == old_size - std::distance(first, last)</code><br>
                          Removes the elements from the range <code>[first, last)</code>.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_return_desc_id4491288">
+                  <table id="table_return_desc_id4491312">
                     <tr>
                       <td valign="top">
                         <b>Returns:</b>
                       </td>
                       <td>
-                        iterator to the first element remaining beyond the removed element or <code>(*this).<a href=
-                        "#classboost_1_1circular__buffer_1a27">end()</a></code> if no such element exists.
+                        iterator to the first element remaining beyond the removed element or
+                        <code>(*this).<a>end()</a></code> if no such element exists.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4491308">
+                  <table id="table_note_desc_id4491332">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -1620,58 +1595,55 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a29"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> erase(<a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> pos);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a29"></a>
+            <code><b><a>iterator</a> erase(<a>iterator</a> pos);</b></code><br>
              
-            <table id="table_function_desc_id4491416">
+            <table id="table_function_desc_id4491441">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4491479">
+                  <table id="table_detailed_desc_id4491504">
                     <tr>
                       <td>
                         Erase the element at the given position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4491490">
+                  <table id="table_pre_desc_id4491514">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        Valid <code>pos</code> iterator. <code>size_type old_size = (*this).<a href=
-                        "#classboost_1_1circular__buffer_1a60">size()</a></code>
+                        Valid <code>pos</code> iterator. <code>size_type old_size = (*this).<a>size()</a></code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4491512">
+                  <table id="table_post_desc_id4491536">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> == old_size -
-                        1</code><br>
+                        <code>(*this).<a>size()</a> == old_size - 1</code><br>
                          Removes an element at the position <code>pos</code>.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_return_desc_id4491535">
+                  <table id="table_return_desc_id4491559">
                     <tr>
                       <td valign="top">
                         <b>Returns:</b>
                       </td>
                       <td>
-                        iterator to the first element remaining beyond the removed element or <code>(*this).<a href=
-                        "#classboost_1_1circular__buffer_1a27">end()</a></code> if no such element exists.
+                        iterator to the first element remaining beyond the removed element or
+                        <code>(*this).<a>end()</a></code> if no such element exists.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4491554">
+                  <table id="table_note_desc_id4491578">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -1689,29 +1661,29 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a30"></a> <code><b><a href=
+            <a id="classboost_1_1circular__buffer_1a30"></a> <code><b><a href=
             "#classboost_1_1circular__buffer_1w16">value_type</a> front() const;</b></code><br>
              
-            <table id="table_function_desc_id4491702">
+            <table id="table_function_desc_id4491727">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4491743">
+                  <table id="table_detailed_desc_id4491768">
                     <tr>
                       <td>
                         Return the first (leftmost) element.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4491754">
+                  <table id="table_pre_desc_id4491778">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        <code>!*(this).<a href="#classboost_1_1circular__buffer_1a25">empty()</a></code>
+                        <code>!*(this).<a>empty()</a></code>
                       </td>
                     </tr>
                   </table>
@@ -1722,29 +1694,28 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a31"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w12">reference</a> front();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a31"></a> <code><b><a>reference</a> front();</b></code><br>
              
-            <table id="table_function_desc_id4491812">
+            <table id="table_function_desc_id4487722">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4491852">
+                  <table id="table_detailed_desc_id4487762">
                     <tr>
                       <td>
                         Return the first (leftmost) element.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4491863">
+                  <table id="table_pre_desc_id4487773">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        <code>!*(this).<a href="#classboost_1_1circular__buffer_1a25">empty()</a></code>
+                        <code>!*(this).<a>empty()</a></code>
                       </td>
                     </tr>
                   </table>
@@ -1755,22 +1726,22 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a32"></a> <code><b>bool full() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a32"></a> <code><b>bool full() const;</b></code><br>
              
-            <table id="table_function_desc_id4491921">
+            <table id="table_function_desc_id4487831">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4491962">
+                  <table id="table_detailed_desc_id4487872">
                     <tr>
                       <td>
                         Is the circular buffer full?
                       </td>
                     </tr>
                   </table>
-                  <table id="table_return_desc_id4491972">
+                  <table id="table_return_desc_id4487882">
                     <tr>
                       <td valign="top">
                         <b>Returns:</b>
@@ -1788,23 +1759,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a33"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w0">allocator_type</a>&amp; get_allocator();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a33"></a>
+            <code><b><a>allocator_type</a>&amp; get_allocator();</b></code><br>
              
-            <table id="table_function_desc_id4492111">
+            <table id="table_function_desc_id4494046">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4492153">
+                  <table id="table_detailed_desc_id4494089">
                     <tr>
                       <td>
                         Return the allocator.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4492164">
+                  <table id="table_note_desc_id4494099">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -1822,16 +1793,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a34"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w0">allocator_type</a> get_allocator() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a34"></a> <code><b><a>allocator_type</a> get_allocator()
+            const;</b></code><br>
              
-            <table id="table_function_desc_id4492202">
+            <table id="table_function_desc_id4494137">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4492243">
+                  <table id="table_detailed_desc_id4494178">
                     <tr>
                       <td>
                         Return the allocator.
@@ -1845,24 +1816,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a35"></a> <code><b>template &lt;class InputIterator&gt;<br>
-                void insert(<a href="#classboost_1_1circular__buffer_1w9">iterator</a> pos, InputIterator first,
-            InputIterator last);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a35"></a> <code><b>template &lt;class InputIterator&gt;<br>
+                void insert(<a>iterator</a> pos, InputIterator first, InputIterator last);</b></code><br>
              
-            <table id="table_function_desc_id4492294">
+            <table id="table_function_desc_id4494229">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4492389">
+                  <table id="table_detailed_desc_id4494324">
                     <tr>
                       <td>
                         Insert the range <code>[first, last)</code> before the given position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4492403">
+                  <table id="table_pre_desc_id4494338">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
@@ -1872,7 +1842,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4492417">
+                  <table id="table_post_desc_id4494352">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
@@ -1894,7 +1864,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4492494">
+                  <table id="table_note_desc_id4494428">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -1912,25 +1882,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a36"></a> <code><b>void insert(<a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> pos, <a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> item);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a36"></a> <code><b>void insert(<a>iterator</a> pos,
+            <a>size_type</a> n, <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item);</b></code><br>
              
-            <table id="table_function_desc_id4492538">
+            <table id="table_function_desc_id4494473">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4492627">
+                  <table id="table_detailed_desc_id4494562">
                     <tr>
                       <td>
                         Insert <code>n</code> copies of the item before the given position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4492641">
+                  <table id="table_pre_desc_id4494576">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
@@ -1940,7 +1908,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4492651">
+                  <table id="table_post_desc_id4494586">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
@@ -1960,7 +1928,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4492726">
+                  <table id="table_note_desc_id4494661">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -1978,25 +1946,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a37"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> insert(<a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> pos, <a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a37"></a> <code><b><a>iterator</a> insert(<a>iterator</a> pos,
+            <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
              
-            <table id="table_function_desc_id4492797">
+            <table id="table_function_desc_id4494732">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4492887">
+                  <table id="table_detailed_desc_id4494822">
                     <tr>
                       <td>
                         Insert the <code>item</code> before the given position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4492901">
+                  <table id="table_pre_desc_id4494836">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
@@ -2006,7 +1972,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4492911">
+                  <table id="table_post_desc_id4494846">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
@@ -2017,7 +1983,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_return_desc_id4492929">
+                  <table id="table_return_desc_id4494864">
                     <tr>
                       <td valign="top">
                         <b>Returns:</b>
@@ -2027,7 +1993,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4492973">
+                  <table id="table_note_desc_id4494907">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2045,16 +2011,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a38"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w11">pointer</a> linearize();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a38"></a> <code><b><a>pointer</a> linearize();</b></code><br>
              
-            <table id="table_function_desc_id4493085">
+            <table id="table_function_desc_id4495020">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4493125">
+                  <table id="table_detailed_desc_id4495060">
                     <tr>
                       <td>
                         TODO doc - Return pointer to data stored in the circular buffer as a continuous array of
@@ -2062,25 +2027,24 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_detailed_desc_id4493136">
+                  <table id="table_detailed_desc_id4495070">
                     <tr>
                       <td>
                         This method can be useful e.g. when passing the stored data into the legacy C API.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4493139">
+                  <table id="table_post_desc_id4495074">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>&amp;(*this)[0] &lt; &amp;(*this)[1] &lt; ... &lt; &amp;(*this).<a href=
-                        "#classboost_1_1circular__buffer_1a11">back()</a></code>
+                        <code>&amp;(*this)[0] &lt; &amp;(*this)[1] &lt; ... &lt; &amp;(*this).<a>back()</a></code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_return_desc_id4493157">
+                  <table id="table_return_desc_id4495091">
                     <tr>
                       <td valign="top">
                         <b>Returns:</b>
@@ -2090,7 +2054,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4493200">
+                  <table id="table_note_desc_id4495134">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2108,16 +2072,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a39"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> max_size() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a39"></a> <code><b><a>size_type</a> max_size() const;</b></code><br>
              
-            <table id="table_function_desc_id4493381">
+            <table id="table_function_desc_id4495315">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4493421">
+                  <table id="table_detailed_desc_id4495356">
                     <tr>
                       <td>
                         Return the largest possible size (or capacity) of the circular buffer.
@@ -2131,24 +2094,24 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a40"></a>
+            <a id="classboost_1_1circular__buffer_1a40"></a>
             <code><b>circular_buffer&lt;T,Alloc&gt;&amp; operator=(const circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
 
              
-            <table id="table_function_desc_id4493487">
+            <table id="table_function_desc_id4495421">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4493549">
+                  <table id="table_detailed_desc_id4495484">
                     <tr>
                       <td>
                         Assignment operator.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4493559">
+                  <table id="table_post_desc_id4495494">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
@@ -2158,7 +2121,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4493609">
+                  <table id="table_note_desc_id4495543">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2176,30 +2139,30 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a41"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> operator[](<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> index) const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a41"></a> <code><b><a href=
+            "#classboost_1_1circular__buffer_1w16">value_type</a> operator[](<a>size_type</a> index)
+            const;</b></code><br>
              
-            <table id="table_function_desc_id4493693">
+            <table id="table_function_desc_id4495626">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4493756">
+                  <table id="table_detailed_desc_id4495690">
                     <tr>
                       <td>
                         Return the element at the <code>index</code> position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4493770">
+                  <table id="table_pre_desc_id4495704">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        <code>*(this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> &gt; index</code>
+                        <code>*(this).<a>size()</a> &gt; index</code>
                       </td>
                     </tr>
                   </table>
@@ -2210,30 +2173,29 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a42"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w12">reference</a> operator[](<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> index);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a42"></a>
+            <code><b><a>reference</a> operator[](<a>size_type</a> index);</b></code><br>
              
-            <table id="table_function_desc_id4493844">
+            <table id="table_function_desc_id4495778">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4493907">
+                  <table id="table_detailed_desc_id4495841">
                     <tr>
                       <td>
                         Return the element at the <code>index</code> position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4493921">
+                  <table id="table_pre_desc_id4495855">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        <code>*(this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> &gt; index</code>
+                        <code>*(this).<a>size()</a> &gt; index</code>
                       </td>
                     </tr>
                   </table>
@@ -2244,43 +2206,42 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a43"></a> <code><b>void pop_back();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a43"></a> <code><b>void pop_back();</b></code><br>
              
-            <table id="table_function_desc_id4493995">
+            <table id="table_function_desc_id4495928">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4494036">
+                  <table id="table_detailed_desc_id4495969">
                     <tr>
                       <td>
                         Remove the last (rightmost) element.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4494046">
+                  <table id="table_pre_desc_id4495979">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        <code>!*(this).<a href="#classboost_1_1circular__buffer_1a25">empty()</a></code> <code>iterator
-                        it = ((*this).<a href="#classboost_1_1circular__buffer_1a27">end()</a> - 1)</code>
+                        <code>!*(this).<a>empty()</a></code> <code>iterator it = ((*this).<a>end()</a> - 1)</code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4494075">
+                  <table id="table_post_desc_id4496009">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>((*this).<a href="#classboost_1_1circular__buffer_1a27">end()</a> - 1) != it</code>
+                        <code>((*this).<a>end()</a> - 1) != it</code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4494093">
+                  <table id="table_note_desc_id4496026">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2298,43 +2259,42 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a44"></a> <code><b>void pop_front();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a44"></a> <code><b>void pop_front();</b></code><br>
              
-            <table id="table_function_desc_id4494188">
+            <table id="table_function_desc_id4496121">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4494228">
+                  <table id="table_detailed_desc_id4496162">
                     <tr>
                       <td>
                         Remove the first (leftmost) element.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4494239">
+                  <table id="table_pre_desc_id4496172">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        <code>!*(this).<a href="#classboost_1_1circular__buffer_1a25">empty()</a></code> <code>iterator
-                        it = (*this).<a href="#classboost_1_1circular__buffer_1a13">begin()</a></code>
+                        <code>!*(this).<a>empty()</a></code> <code>iterator it = (*this).<a>begin()</a></code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4494267">
+                  <table id="table_post_desc_id4496200">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a13">begin()</a> != it</code>
+                        <code>(*this).<a>begin()</a> != it</code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4494285">
+                  <table id="table_note_desc_id4496218">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2352,34 +2312,34 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a45"></a> <code><b>void push_back(<a href=
+            <a id="classboost_1_1circular__buffer_1a45"></a> <code><b>void push_back(<a href=
             "#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
              
-            <table id="table_function_desc_id4494380">
+            <table id="table_function_desc_id4496313">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4494448">
+                  <table id="table_detailed_desc_id4496381">
                     <tr>
                       <td>
                         Insert a new element at the end.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4494458">
+                  <table id="table_post_desc_id4496391">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a11">back()</a> == item</code><br>
+                        <code>(*this).<a>back()</a> == item</code><br>
                          If the circular buffer is full, the first (leftmost) element will be removed.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4494498">
+                  <table id="table_note_desc_id4496432">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2397,34 +2357,34 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a46"></a> <code><b>void push_front(<a href=
+            <a id="classboost_1_1circular__buffer_1a46"></a> <code><b>void push_front(<a href=
             "#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
              
-            <table id="table_function_desc_id4494628">
+            <table id="table_function_desc_id4496560">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4494695">
+                  <table id="table_detailed_desc_id4496629">
                     <tr>
                       <td>
                         Insert a new element at the start.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4494706">
+                  <table id="table_post_desc_id4496639">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a31">front()</a> == item</code><br>
+                        <code>(*this).<a>front()</a> == item</code><br>
                          If the circular buffer is full, the last (rightmost) element will be removed.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4494746">
+                  <table id="table_note_desc_id4496679">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2442,16 +2402,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a47"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w7">const_reverse_iterator</a> rbegin() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a47"></a> <code><b><a>const_reverse_iterator</a> rbegin()
+            const;</b></code><br>
              
-            <table id="table_function_desc_id4494888">
+            <table id="table_function_desc_id4496822">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4494930">
+                  <table id="table_detailed_desc_id4496863">
                     <tr>
                       <td>
                         Return a const reverse iterator pointing to the beginning of the reversed circular buffer.
@@ -2465,16 +2425,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a48"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w14">reverse_iterator</a> rbegin();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a48"></a> <code><b><a>reverse_iterator</a> rbegin();</b></code><br>
              
-            <table id="table_function_desc_id4495037">
+            <table id="table_function_desc_id4496903">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4495078">
+                  <table id="table_detailed_desc_id4496944">
                     <tr>
                       <td>
                         Return a reverse iterator pointing to the beginning of the reversed circular buffer.
@@ -2488,16 +2447,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a49"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w7">const_reverse_iterator</a> rend() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a49"></a> <code><b><a>const_reverse_iterator</a> rend()
+            const;</b></code><br>
              
-            <table id="table_function_desc_id4495117">
+            <table id="table_function_desc_id4496984">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4495159">
+                  <table id="table_detailed_desc_id4497025">
                     <tr>
                       <td>
                         Return a const reverse iterator pointing to the end of the reversed circular buffer.
@@ -2511,16 +2470,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a50"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w14">reverse_iterator</a> rend();</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a50"></a> <code><b><a>reverse_iterator</a> rend();</b></code><br>
              
-            <table id="table_function_desc_id4495199">
+            <table id="table_function_desc_id4497065">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4495239">
+                  <table id="table_detailed_desc_id4497106">
                     <tr>
                       <td>
                         Return a reverse iterator pointing to the end of the reversed circular buffer.
@@ -2534,60 +2492,55 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a51"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> rerase(<a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> first, <a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> last);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a51"></a> <code><b><a>iterator</a> rerase(<a>iterator</a> first,
+            <a>iterator</a> last);</b></code><br>
              
-            <table id="table_function_desc_id4495279">
+            <table id="table_function_desc_id4497145">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4495359">
+                  <table id="table_detailed_desc_id4497225">
                     <tr>
                       <td>
                         Erase the range <code>[first, last)</code>.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4495372">
+                  <table id="table_pre_desc_id4497238">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        Valid range <code>[first, last)</code>. <code>size_type old_size = (*this).<a href=
-                        "#classboost_1_1circular__buffer_1a60">size()</a></code>
+                        Valid range <code>[first, last)</code>. <code>size_type old_size = (*this).<a>size()</a></code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4495395">
+                  <table id="table_post_desc_id4497261">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> == old_size -
-                        std::distance(first, last)</code><br>
+                        <code>(*this).<a>size()</a> == old_size - std::distance(first, last)</code><br>
                          Removes the elements from the range <code>[first, last)</code>.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_return_desc_id4495418">
+                  <table id="table_return_desc_id4497285">
                     <tr>
                       <td valign="top">
                         <b>Returns:</b>
                       </td>
                       <td>
                         iterator to the first element remaining in front of the removed element or
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a13">begin()</a></code> if no such
-                        element exists.
+                        <code>(*this).<a>begin()</a></code> if no such element exists.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4495438">
+                  <table id="table_note_desc_id4497304">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2605,59 +2558,55 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a52"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> rerase(<a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> pos);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a52"></a>
+            <code><b><a>iterator</a> rerase(<a>iterator</a> pos);</b></code><br>
              
-            <table id="table_function_desc_id4495574">
+            <table id="table_function_desc_id4497440">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4495637">
+                  <table id="table_detailed_desc_id4497503">
                     <tr>
                       <td>
                         Erase the element at the given position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4495648">
+                  <table id="table_pre_desc_id4497514">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
                       </td>
                       <td>
-                        Valid <code>pos</code> iterator. <code>size_type old_size = (*this).<a href=
-                        "#classboost_1_1circular__buffer_1a60">size()</a></code>
+                        Valid <code>pos</code> iterator. <code>size_type old_size = (*this).<a>size()</a></code>
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4495670">
+                  <table id="table_post_desc_id4497536">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> == old_size -
-                        1</code><br>
+                        <code>(*this).<a>size()</a> == old_size - 1</code><br>
                          Removes an element at the position <code>pos</code>.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_return_desc_id4495693">
+                  <table id="table_return_desc_id4497559">
                     <tr>
                       <td valign="top">
                         <b>Returns:</b>
                       </td>
                       <td>
                         iterator to the first element remaining in front of the removed element or
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a13">begin()</a></code> if no such
-                        element exists.
+                        <code>(*this).<a>begin()</a></code> if no such element exists.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4495712">
+                  <table id="table_note_desc_id4497578">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2675,39 +2624,38 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a53"></a> <code><b>void resize(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> new_size, <a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a53"></a> <code><b>void resize(<a>size_type</a> new_size,
+               <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
              
-            <table id="table_function_desc_id4495834">
+            <table id="table_function_desc_id4497701">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4495919">
+                  <table id="table_detailed_desc_id4497785">
                     <tr>
                       <td>
                         Change the size of the circular buffer.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4495992">
+                  <table id="table_post_desc_id4497858">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> == new_size</code><br>
+                        <code>(*this).<a>size()</a> == new_size</code><br>
                          If the new size is greater than the current size, the rest of the circular buffer is filled
                         with copies of <code>item</code>. In case the resulting size exceeds the current capacity the
                         capacity is set to <code>new_size</code>. If the new size is lower than the current size then
-                        <code>((*this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> - new_size)</code>
-                        elements will be removed according to the <code>remove_front</code> parameter.
+                        <code>((*this).<a>size()</a> - new_size)</code> elements will be removed according to the
+                        <code>remove_front</code> parameter.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4496080">
+                  <table id="table_note_desc_id4497946">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2725,24 +2673,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a54"></a> <code><b>template &lt;class InputIterator&gt;<br>
-                void rinsert(<a href="#classboost_1_1circular__buffer_1w9">iterator</a> pos, InputIterator first,
-            InputIterator last);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a54"></a> <code><b>template &lt;class InputIterator&gt;<br>
+                void rinsert(<a>iterator</a> pos, InputIterator first, InputIterator last);</b></code><br>
              
-            <table id="table_function_desc_id4496178">
+            <table id="table_function_desc_id4498045">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4496273">
+                  <table id="table_detailed_desc_id4498140">
                     <tr>
                       <td>
                         Insert the range <code>[first, last)</code> before the given position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4496288">
+                  <table id="table_pre_desc_id4498154">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
@@ -2752,7 +2699,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4496302">
+                  <table id="table_post_desc_id4498168">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
@@ -2774,7 +2721,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4496378">
+                  <table id="table_note_desc_id4498244">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2792,25 +2739,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a55"></a> <code><b>void rinsert(<a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> pos, <a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> item);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a55"></a> <code><b>void rinsert(<a>iterator</a> pos,
+            <a>size_type</a> n, <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item);</b></code><br>
              
-            <table id="table_function_desc_id4496422">
+            <table id="table_function_desc_id4498289">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4496512">
+                  <table id="table_detailed_desc_id4498379">
                     <tr>
                       <td>
                         Insert <code>n</code> copies of the item before the given position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4496526">
+                  <table id="table_pre_desc_id4498393">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
@@ -2820,7 +2765,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4496536">
+                  <table id="table_post_desc_id4498403">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
@@ -2840,7 +2785,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4496610">
+                  <table id="table_note_desc_id4498477">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2858,25 +2803,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a56"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> rinsert(<a href=
-            "#classboost_1_1circular__buffer_1w9">iterator</a> pos, <a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a56"></a> <code><b><a>iterator</a> rinsert(<a>iterator</a> pos,
+            <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
              
-            <table id="table_function_desc_id4496655">
+            <table id="table_function_desc_id4498589">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4496745">
+                  <table id="table_detailed_desc_id4498679">
                     <tr>
                       <td>
                         Insert an <code>item</code> before the given position.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_pre_desc_id4496759">
+                  <table id="table_pre_desc_id4498693">
                     <tr>
                       <td valign="top">
                         <b>Precondition:</b>
@@ -2886,7 +2829,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4496769">
+                  <table id="table_post_desc_id4498703">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
@@ -2897,7 +2840,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_return_desc_id4496787">
+                  <table id="table_return_desc_id4498721">
                     <tr>
                       <td valign="top">
                         <b>Returns:</b>
@@ -2907,7 +2850,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4496830">
+                  <table id="table_note_desc_id4498764">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -2925,17 +2868,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a57"></a> <code><b>void rresize(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> new_size, <a href=
-            "#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a57"></a> <code><b>void rresize(<a>size_type</a> new_size,
+               <a href="#classboost_1_1circular__buffer_1w16">value_type</a> item = value_type());</b></code><br>
              
-            <table id="table_function_desc_id4497017">
+            <table id="table_function_desc_id4498951">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4497101">
+                  <table id="table_detailed_desc_id4499035">
                     <tr>
                       <td>
                         TODO doc.
@@ -2949,16 +2891,16 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a58"></a> <code><b>void rset_capacity(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> new_capacity);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a58"></a>
+            <code><b>void rset_capacity(<a>size_type</a> new_capacity);</b></code><br>
              
-            <table id="table_function_desc_id4497194">
+            <table id="table_function_desc_id4499128">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4497252">
+                  <table id="table_detailed_desc_id4499186">
                     <tr>
                       <td>
                         TODO doc.
@@ -2972,38 +2914,36 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a59"></a> <code><b>void set_capacity(<a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> new_capacity);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a59"></a>
+            <code><b>void set_capacity(<a>size_type</a> new_capacity);</b></code><br>
              
-            <table id="table_function_desc_id4497369">
+            <table id="table_function_desc_id4499302">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4497426">
+                  <table id="table_detailed_desc_id4499360">
                     <tr>
                       <td>
                         Change the capacity of the circular buffer.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4497484">
+                  <table id="table_post_desc_id4499418">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
                       </td>
                       <td>
-                        <code>(*this).<a href="#classboost_1_1circular__buffer_1a14">capacity()</a> ==
-                        new_capacity</code><br>
+                        <code>(*this).<a>capacity()</a> == new_capacity</code><br>
                          If the current number of elements stored in the circular buffer is greater than the desired
-                        new capacity then <code>((*this).<a href="#classboost_1_1circular__buffer_1a60">size()</a> -
-                        new_capacity)</code> elements will be removed according to the <code>remove_front</code>
-                        parameter.
+                        new capacity then <code>((*this).<a>size()</a> - new_capacity)</code> elements will be removed
+                        according to the <code>remove_front</code> parameter.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4497562">
+                  <table id="table_note_desc_id4499496">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -3021,16 +2961,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a60"></a> <code><b><a href=
-            "#classboost_1_1circular__buffer_1w15">size_type</a> size() const;</b></code><br>
+            <a id="classboost_1_1circular__buffer_1a60"></a> <code><b><a>size_type</a> size() const;</b></code><br>
              
-            <table id="table_function_desc_id4497699">
+            <table id="table_function_desc_id4499633">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4497740">
+                  <table id="table_detailed_desc_id4499674">
                     <tr>
                       <td>
                         Return the number of elements currently stored in the circular buffer.
@@ -3044,23 +2983,23 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="classboost_1_1circular__buffer_1a61"></a>
+            <a id="classboost_1_1circular__buffer_1a61"></a>
             <code><b>void swap(circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
              
-            <table id="table_function_desc_id4498097">
+            <table id="table_function_desc_id4500032">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4498149">
+                  <table id="table_detailed_desc_id4500084">
                     <tr>
                       <td>
                         Swap the contents of two circular buffers.
                       </td>
                     </tr>
                   </table>
-                  <table id="table_post_desc_id4498160">
+                  <table id="table_post_desc_id4500094">
                     <tr>
                       <td valign="top">
                         <b>Postcondition:</b>
@@ -3070,7 +3009,7 @@ template &lt;class T, class Alloc&gt;
                       </td>
                     </tr>
                   </table>
-                  <table id="table_note_desc_id4498173">
+                  <table id="table_note_desc_id4500108">
                     <tr>
                       <td valign="top">
                         <b>Note:</b>
@@ -3096,17 +3035,17 @@ template &lt;class T, class Alloc&gt;
       <table id="table_functions" border="1">
         <tr>
           <td>
-            <a name="namespaceboost_1a2"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
+            <a id="namespaceboost_1a2"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
                 bool operator!=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
             const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
-            <table id="table_function_desc_id4481602">
+            <table id="table_function_desc_id4481616">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4481706">
+                  <table id="table_detailed_desc_id4481720">
                     <tr>
                       <td>
                         Test two circular buffers for non-equality.
@@ -3120,17 +3059,17 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="namespaceboost_1a1"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
+            <a id="namespaceboost_1a1"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
                 bool operator&lt;(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
             const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
-            <table id="table_function_desc_id4511674">
+            <table id="table_function_desc_id4513662">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4511778">
+                  <table id="table_detailed_desc_id4513766">
                     <tr>
                       <td>
                         Lexicographical comparison.
@@ -3144,17 +3083,17 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="namespaceboost_1a4"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
+            <a id="namespaceboost_1a4"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
                 bool operator&lt;=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
             const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
-            <table id="table_function_desc_id4511937">
+            <table id="table_function_desc_id4513926">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4512041">
+                  <table id="table_detailed_desc_id4514029">
                     <tr>
                       <td>
                         Lexicographical comparison.
@@ -3168,17 +3107,17 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="namespaceboost_1a0"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
+            <a id="namespaceboost_1a0"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
                 bool operator==(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
             const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
-            <table id="table_function_desc_id4512202">
+            <table id="table_function_desc_id4514189">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4512305">
+                  <table id="table_detailed_desc_id4514293">
                     <tr>
                       <td>
                         Test two circular buffers for equality.
@@ -3192,17 +3131,17 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="namespaceboost_1a3"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
+            <a id="namespaceboost_1a3"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
                 bool operator&gt;(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
             const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
-            <table id="table_function_desc_id4512478">
+            <table id="table_function_desc_id4514465">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4512582">
+                  <table id="table_detailed_desc_id4514569">
                     <tr>
                       <td>
                         Lexicographical comparison.
@@ -3216,17 +3155,17 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="namespaceboost_1a5"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
+            <a id="namespaceboost_1a5"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
                 bool operator&gt;=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs,
             const circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
-            <table id="table_function_desc_id4512741">
+            <table id="table_function_desc_id4514729">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4512845">
+                  <table id="table_detailed_desc_id4514832">
                     <tr>
                       <td>
                         Lexicographical comparison.
@@ -3240,17 +3179,17 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a name="namespaceboost_1a6"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
+            <a id="namespaceboost_1a6"></a> <code><b>template &lt;class T, class Alloc&gt;<br>
                 void swap(circular_buffer&lt;T,Alloc&gt;&amp; lhs,
             circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
              
-            <table id="table_function_desc_id4513001">
+            <table id="table_function_desc_id4514989">
               <tr>
                 <td>
                      
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4513101">
+                  <table id="table_detailed_desc_id4515089">
                     <tr>
                       <td>
                         Swap the contents of two circular buffers.
@@ -3389,10 +3328,10 @@ template &lt;class T, class Alloc&gt;
       The <code>circular_buffer</code> maintains a list of valid iterators. As soon as any element gets destroyed all
       iterators pointing to this element are removed from this list and explicitly invalidated (an invalidation flag is
       set). The debug support also consists of many assertions ( <a href=
-      "../../utility/assert.html"><code>BOOST_ASSERT</code></a> macros) which ensure the
-      <code>circular_buffer</code> and its iterators are used in the correct manner at runtime. In case an invalid
-      iterator is used the assertion will report an error. The connection of explicit iterator invalidation and
-      assertions makes a very robust debug technique which catches most of the errors.
+      "../../utility/assert.html"><code>BOOST_ASSERT</code></a> macros) which ensure the <code>circular_buffer</code>
+      and its iterators are used in the correct manner at runtime. In case an invalid iterator is used the assertion
+      will report an error. The connection of explicit iterator invalidation and assertions makes a very robust debug
+      technique which catches most of the errors.
     </p>
     <p>
       Moreover, the uninitialized memory allocated by <code>circular_buffer</code> is filled with the value

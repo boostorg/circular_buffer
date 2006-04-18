@@ -9,7 +9,7 @@
 
   <xsl:param name="container"/>
   <xsl:param name="xmldir"/>
-  <xsl:variable name="default-keyword">Default: </xsl:variable>
+  <xsl:variable name="default-keyword">Default </xsl:variable>
   <xsl:variable name="doxygen-version">1.4.1</xsl:variable>
   <xsl:variable name="container-ref" select="//compound[name=concat('boost::', $container) and @kind='class']/@refid"/>
   <xsl:variable name="class-file" select="concat($xmldir, '/', $container-ref, '.xml')"/>
@@ -42,7 +42,7 @@
 
   <xsl:template match="ref">
     <xsl:element name="a">
-      <xsl:attribute name="href"><xsl:call-template name="reference"/></xsl:attribute>
+      <xsl:attribute id="href"><xsl:call-template name="reference"/></xsl:attribute>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
@@ -239,22 +239,20 @@ public:
   </xsl:template>
 
   <xsl:template match="parameteritem" mode="description">
-    <tr><td><a name="templateparam_{parameternamelist/parametername}"><code><xsl:value-of select="parameternamelist/parametername"/></code></a></td>
+    <tr><td><a id="templateparam_{parameternamelist/parametername}"><code><xsl:value-of select="parameternamelist/parametername"/></code></a></td>
+    <td><xsl:apply-templates select="parameterdescription"/></td>
     <xsl:choose>
-      <xsl:when test="contains(parameterdescription, $default-keyword)">
-        <td><xsl:value-of select="substring-before(parameterdescription, $default-keyword)"/></td>
-        <td><code><xsl:value-of select="substring-after(parameterdescription, $default-keyword)"/></code></td>
-      </xsl:when>
-      <xsl:otherwise>
-        <td><xsl:value-of select="parameterdescription"/></td>
-        <td>&nbsp;</td>
-      </xsl:otherwise>
-    </xsl:choose></tr>
+     <xsl:when test="../../simplesect[@kind='par']/title = concat($default-keyword, parameternamelist/parametername)">
+       <td><code><xsl:value-of select="../../simplesect[@kind='par']/para"/></code></td>
+     </xsl:when>
+     <xsl:otherwise><td>&nbsp;</td></xsl:otherwise>
+    </xsl:choose>
+    </tr>
   </xsl:template>
 
   <xsl:template match="memberdef[@kind='typedef']" mode="description">
     <xsl:if test="normalize-space(briefdescription) != ''">
-      <tr><td><a name="{@id}"><code><xsl:value-of select="name"/></code></a></td>
+      <tr><td><a id="{@id}"><code><xsl:value-of select="name"/></code></a></td>
       <td><xsl:value-of select="briefdescription"/></td></tr>
     </xsl:if>
   </xsl:template>
@@ -262,7 +260,7 @@ public:
   <xsl:template match="memberdef[@kind='function']" mode="description">
     <xsl:param name="link-prefix" select="''"/>
     <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; 80"/>
-    <tr><td><a name="{@id}" /><code><b><xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
+    <tr><td><a id="{@id}" /><code><b><xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
     <xsl:if test="count(templateparamlist) &gt; 0">
       template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<br />&nbsp;&nbsp;&nbsp;
     </xsl:if>
@@ -293,7 +291,7 @@ public:
         <xsl:when test="contains($item, 'circular_buffer')"><xsl:value-of select="$item"/></xsl:when>
         <xsl:when test="@refid">
           <xsl:element name="a">
-            <xsl:attribute name="href"><xsl:call-template name="reference"/></xsl:attribute>
+            <xsl:attribute id="href"><xsl:call-template name="reference"/></xsl:attribute>
             <xsl:value-of select="$item"/>
           </xsl:element>
         </xsl:when>
