@@ -42,8 +42,8 @@
 
   <xsl:template match="ref">
     <xsl:element name="a">
-      <xsl:attribute id="href"><xsl:call-template name="reference"/></xsl:attribute>
-      <xsl:apply-templates/>
+      <xsl:attribute name="href"><xsl:call-template name="reference"/></xsl:attribute>
+      <xsl:value-of select="substring-after(text(), concat($container, '::'))"/>
     </xsl:element>
   </xsl:template>
 
@@ -245,7 +245,7 @@ public:
      <xsl:when test="../../simplesect[@kind='par']/title = concat($default-keyword, parameternamelist/parametername)">
        <td><code><xsl:value-of select="../../simplesect[@kind='par']/para"/></code></td>
      </xsl:when>
-     <xsl:otherwise><td>&nbsp;</td></xsl:otherwise>
+     <xsl:otherwise><td><br/></td></xsl:otherwise>
     </xsl:choose>
     </tr>
   </xsl:template>
@@ -291,7 +291,7 @@ public:
         <xsl:when test="contains($item, 'circular_buffer')"><xsl:value-of select="$item"/></xsl:when>
         <xsl:when test="@refid">
           <xsl:element name="a">
-            <xsl:attribute id="href"><xsl:call-template name="reference"/></xsl:attribute>
+            <xsl:attribute name="href"><xsl:call-template name="reference"/></xsl:attribute>
             <xsl:value-of select="$item"/>
           </xsl:element>
         </xsl:when>

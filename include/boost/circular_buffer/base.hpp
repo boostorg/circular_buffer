@@ -41,7 +41,7 @@ namespace boost {
 		   Assignable</a> and <a href="../../utility/CopyConstructible.html">CopyConstructible</a>).
 		   Moreover <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">
 		   DefaultConstructible</a> if supplied as a default parameter during invocation of some methods
-		   e.g. insert(iterator pos, const T& item = T()).
+		   e.g. circular_buffer::insert(iterator pos, const T& item = T()).
     \param Alloc The allocator type used for all internal memory management.
 	       The <code>Alloc</code> has to meet the allocator requirements imposed by STL.
     \par Default Alloc
