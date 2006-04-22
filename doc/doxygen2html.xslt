@@ -10,6 +10,7 @@
   <xsl:param name="container"/>
   <xsl:param name="xmldir"/>
   <xsl:variable name="default-keyword">Default </xsl:variable>
+  <xsl:variable name="type-rqmts-keyword">Type Requirements </xsl:variable>
   <xsl:variable name="doxygen-version">1.4.1</xsl:variable>
   <xsl:variable name="container-ref" select="//compound[name=concat('boost::', $container) and @kind='class']/@refid"/>
   <xsl:variable name="class-file" select="concat($xmldir, '/', $container-ref, '.xml')"/>
@@ -240,10 +241,18 @@ public:
 
   <xsl:template match="parameteritem" mode="description">
     <tr><td><a id="templateparam_{parameternamelist/parametername}"><code><xsl:value-of select="parameternamelist/parametername"/></code></a></td>
-    <td><xsl:apply-templates select="parameterdescription"/></td>
+    <td>
+        <xsl:apply-templates select="parameterdescription"/>
+        <xsl:variable name="type-rqmts" select="concat($type-rqmts-keyword, parameternamelist/parametername)"/>
+        <xsl:if test="../../simplesect[@kind='par']/title = $type-rqmts">
+            <dl><dt><b>Type Requirements:</b></dt>
+            <dd><xsl:apply-templates select="../../simplesect[@kind='par'][title=$type-rqmts]/para"/></dd></dl>
+        </xsl:if>
+    </td>
+    <xsl:variable name="default-value" select="concat($default-keyword, parameternamelist/parametername)"/>
     <xsl:choose>
-     <xsl:when test="../../simplesect[@kind='par']/title = concat($default-keyword, parameternamelist/parametername)">
-       <td><code><xsl:value-of select="../../simplesect[@kind='par']/para"/></code></td>
+     <xsl:when test="../../simplesect[@kind='par']/title = $default-value">
+       <td><code><xsl:value-of select="../../simplesect[@kind='par'][title=$default-value]/para"/></code></td>
      </xsl:when>
      <xsl:otherwise><td><br/></td></xsl:otherwise>
     </xsl:choose>

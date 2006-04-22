@@ -18,9 +18,18 @@ namespace boost {
 /*!
     \class circular_buffer_space_optimized
     \brief Space optimized circular buffer container adaptor.
-    \param T The type of the elements stored in the space optimized circular buffer.
+	\param T The type of the elements stored in the space optimized circular buffer.
+	\par Type Requirements T
+	     The <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/Assignable.html">
+		 SGIAssignable</a> (SGI STL defined combination of <a href="../../utility/Assignable.html">
+		 Assignable</a> and <a href="../../utility/CopyConstructible.html">CopyConstructible</a>).
+		 Moreover <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">
+		 DefaultConstructible</a> if supplied as a default parameter when invoking some of the methods.
     \param Alloc The allocator type used for all internal memory management.
-           Default: std::allocator<T>
+	\par Type Requirements Alloc
+         The <code>Alloc</code> has to meet the allocator requirements imposed by STL.
+    \par Default Alloc
+	     std::allocator<T>
     \author Jan Gaspar
     \version 1.4
     \date 2006
