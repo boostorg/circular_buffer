@@ -86,7 +86,11 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
 
   <xsl:template name="template-parameters-details"/>
 
-  <xsl:template name="public-types-details"/>
+  <xsl:template name="public-types-details">
+    <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef[not(contains(type, 'circular_buffer&lt;'))]" mode="description">
+      <xsl:sort select="name"/>
+    </xsl:apply-templates>
+  </xsl:template>
 
   <xsl:template name="constructors-details">
     <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
