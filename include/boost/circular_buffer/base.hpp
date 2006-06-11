@@ -82,7 +82,7 @@ public:
 
     //! Distance type.
     /*!
-        A signed integral type used to represent the distance between two iterators.
+        (A signed integral type used to represent the distance between two iterators.)
     */
     typedef typename Alloc::difference_type difference_type;
 
@@ -111,21 +111,35 @@ public:
 
 // Container specific types
 
-    //! An array range. TODO - better doc
+    //! An array range.
+    /*!
+        A typedef for a <a href="http://www.sgi.com/tech/stl/pair.html"><code>std::pair</code></a> where
+        its first element is a pointer to a beginning of an array and its second element represents
+        a size of the array.
+    */
     typedef std::pair<pointer, size_type> array_range;
 
-	//! A range of a const array. TODO - better doc
+	//! A range of a const array.
+	/*!
+        (A typedef for a <a href="http://www.sgi.com/tech/stl/pair.html"><code>std::pair</code></a> where
+        its first element is a pointer to a beginning of a const array and its second element represents
+        a size of the const array.)
+    */
     typedef std::pair<const_pointer, size_type> const_array_range;
 
-	//! Capacity type (defined just for consistency with circular_buffer_space_optimized).
+	//! The capacity type.
+	/*!
+	    Defined just for consistency with <a href="circular_buffer_space_optimized.html">
+        <code>circular_buffer_space_optimized</code></a>.
+	*/
 	typedef size_type capacity_control; 
     
 // Helper types
 
-    // Define a type that represents the "best" way to pass the value_type to a method.
+    // A type that represents the "best" way to pass the value_type to a method.
     typedef typename call_traits<value_type>::param_type param_value_type;
 
-    // Define a type that represents the "best" way to return the value_type from a const method.
+    // A type that represents the "best" way to return the value_type from a const method.
     typedef typename call_traits<value_type>::param_type return_value_type;
 
 private:
@@ -288,14 +302,22 @@ public:
         return const_array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
     
-    //! TODO doc - Return pointer to data stored in the circular buffer as a continuous array of values.
+    //! Linearize the internal buffer into a continuous array.
     /*!
-        This method can be useful e.g. when passing the stored data into the legacy C API.
-        \post <code>\&(*this)[0] \< \&(*this)[1] \< ... \< \&(*this).back()</code>
-        \return 0 if empty.
+        This method can be useful when passing the stored data into the legacy C API as an array.
+        \post <code>\&(*this)[0] \< \&(*this)[1] \< ... \< \&(*this)[size() - 1]</code>
+        \return A pointer to the beginning of the array or 0 if empty.
         \throws Whatever T::T(const T&) throws.
         \throws Whatever T::operator = (const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \warning In general invoking any method which modifies the internal state of the circular_buffer
+                 may delinearize the internal buffer and invalidate the returned pointer. 
+        \note This is not the only way how to pass data into the legacy C API - see array_one()
+              and array_two() for the other option.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the circular_buffer; does not invalidate any iterator
+             if the postcondition is already met prior calling this method.
+        \par Complexity
+             Linear in the size of the circular_buffer; constant if the postcondition is already met.
     */
     pointer linearize() {
         if (empty())

@@ -11,7 +11,7 @@
   <xsl:param name="xmldir"/>
   <xsl:variable name="default-keyword">Default </xsl:variable>
   <xsl:variable name="type-rqmts-keyword">Type Requirements </xsl:variable>
-  <xsl:variable name="doxygen-version">1.4.1</xsl:variable>
+  <xsl:variable name="doxygen-version">1.4.6</xsl:variable>
   <xsl:variable name="container-ref" select="//compound[name=concat('boost::', $container) and @kind='class']/@refid"/>
   <xsl:variable name="class-file" select="concat($xmldir, '/', $container-ref, '.xml')"/>
   <xsl:variable name="class" select="document($class-file)/doxygen/compounddef[@id = $container-ref]"/>
@@ -263,8 +263,10 @@ public:
     <xsl:if test="normalize-space(briefdescription) != ''">
       <tr><td><a id="{@id}"><code><xsl:value-of select="name"/></code></a></td>
       <td>
-        <xsl:apply-templates select="briefdescription"/>
-        <xsl:apply-templates select="detaileddescription"/>
+        <xsl:apply-templates select="briefdescription/child::*"/>
+        <xsl:if test="boolean(detaileddescription/para)"> 
+          <xsl:apply-templates select="detaileddescription/para/text()|detaileddescription/para/child::*"/>
+        </xsl:if>
       </td></tr>
     </xsl:if>
   </xsl:template>
