@@ -65,63 +65,63 @@ class circular_buffer : cb_details::iterator_registry {
 public:
 // Basic types
 
-    //! The type of the elements stored in the circular buffer.
+    //! The type of elements stored in the circular buffer.
     typedef typename Alloc::value_type value_type;
 
-    //! Pointer to the element.
+    //! A pointer to an element.
     typedef typename Alloc::pointer pointer;
 
-    //! Const pointer to the element.
+    //! A const pointer to the element.
     typedef typename Alloc::const_pointer const_pointer;
 
-    //! Reference to the element.
+    //! A reference to an element.
     typedef typename Alloc::reference reference;
 
-    //! Const reference to the element.
+    //! A const reference to an element.
     typedef typename Alloc::const_reference const_reference;
 
-    //! Distance type.
+    //! The distance type.
     /*!
         (A signed integral type used to represent the distance between two iterators.)
     */
     typedef typename Alloc::difference_type difference_type;
 
-    //! Size type.
+    //! The size type.
     /*!
-        An unsigned integral type that can represent any nonnegative value of the container's distance type.
+        (An unsigned integral type that can represent any nonnegative value of the container's distance type.)
     */
     typedef typename Alloc::size_type size_type;
 
-    //! The type of the allocator used in the circular buffer.
+    //! The type of an allocator used in the circular buffer.
     typedef Alloc allocator_type;
 
 // Iterators
 
-    //! Const (random access) iterator used to iterate through a circular buffer.
+    //! A const (random access) iterator used to iterate through the circular buffer.
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::const_traits<Alloc> > const_iterator;
 
-    //! Iterator (random access) used to iterate through a circular buffer.
+    //! A (random access) iterator used to iterate through the circular buffer.
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::nonconst_traits<Alloc> > iterator;
 
-    //! Const iterator used to iterate backwards through a circular buffer.
+    //! A const iterator used to iterate backwards through a circular buffer.
     typedef reverse_iterator<const_iterator> const_reverse_iterator;
 
-    //! Iterator used to iterate backwards through a circular buffer.
+    //! An iterator used to iterate backwards through a circular buffer.
     typedef reverse_iterator<iterator> reverse_iterator;
 
 // Container specific types
 
     //! An array range.
     /*!
-        A typedef for a <a href="http://www.sgi.com/tech/stl/pair.html"><code>std::pair</code></a> where
+        (A typedef for the <a href="http://www.sgi.com/tech/stl/pair.html"><code>std::pair</code></a> where
         its first element is a pointer to a beginning of an array and its second element represents
-        a size of the array.
+        a size of the array.)
     */
     typedef std::pair<pointer, size_type> array_range;
 
 	//! A range of a const array.
 	/*!
-        (A typedef for a <a href="http://www.sgi.com/tech/stl/pair.html"><code>std::pair</code></a> where
+        (A typedef for the <a href="http://www.sgi.com/tech/stl/pair.html"><code>std::pair</code></a> where
         its first element is a pointer to a beginning of a const array and its second element represents
         a size of the const array.)
     */
@@ -129,17 +129,17 @@ public:
 
 	//! The capacity type.
 	/*!
-	    Defined just for consistency with <a href="circular_buffer_space_optimized.html">
-        <code>circular_buffer_space_optimized</code></a>.
+	    (Defined just for consistency with the <a href="circular_buffer_space_optimized.html">
+        <code>circular_buffer_space_optimized</code></a>.)
 	*/
 	typedef size_type capacity_control; 
     
 // Helper types
 
-    // A type that represents the "best" way to pass the value_type to a method.
+    // A type representing the "best" way to pass the value_type to a method.
     typedef typename call_traits<value_type>::param_type param_value_type;
 
-    // A type that represents the "best" way to return the value_type from a const method.
+    // A type representing the "best" way to return the value_type from a const method.
     typedef typename call_traits<value_type>::param_type return_value_type;
 
 private:
