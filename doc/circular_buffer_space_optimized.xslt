@@ -30,7 +30,6 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
 
   <xsl:template name="public-types">
     <xsl:for-each select="sectiondef[@kind='public-type']/memberdef | document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef">
-      <xsl:sort select="name"/>
       <xsl:if test="string-length(normalize-space(briefdescription)) &gt; 0 and count(reimplements) = 0">
         <xsl:choose>
           <xsl:when test="../../compoundname = 'boost::circular_buffer_space_optimized'">
@@ -49,7 +48,6 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   <xsl:template name="member-functions">
     <xsl:variable name="current" select="sectiondef[@kind='public-func']/memberdef[type != '']"/>
     <xsl:for-each select="$current | document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']">
-      <xsl:sort select="name"/>
       <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
       <xsl:if test="string-length($briefdescription) &gt; 0 and (starts-with($briefdescription, $override-mark) or count(reimplements) = 0)">
         <xsl:choose>
@@ -75,7 +73,6 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
 
   <xsl:template name="standalone-functions">
     <xsl:for-each select="$standalone-functions/memberdef[contains(argsstring, 'circular_buffer_space_optimized&lt;')]">
-      <xsl:sort select="name"/>
       <xsl:apply-templates select="." mode="synopsis">
         <xsl:with-param name="indent" select="''"/>
         <xsl:with-param name="link-prefix" select="$link-prefix"/>
@@ -87,20 +84,15 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   <xsl:template name="template-parameters-details"/>
 
   <xsl:template name="public-types-details">
-    <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef[not(contains(type, 'circular_buffer&lt;'))]" mode="description">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef[not(contains(type, 'circular_buffer&lt;'))]" mode="description"/>
   </xsl:template>
 
   <xsl:template name="constructors-details">
-    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description"/>
   </xsl:template>
 
   <xsl:template name="member-functions-details">
     <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != '']">
-      <xsl:sort select="name"/>
       <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
       <xsl:if test="string-length($briefdescription) &gt; 0 and (starts-with($briefdescription, $override-mark) or count(reimplements) = 0)">
         <xsl:apply-templates select="." mode="description"/>

@@ -22,20 +22,15 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   </xsl:template>
 
   <xsl:template name="public-types">
-    <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="synopsis">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="synopsis"/>
   </xsl:template>
 
   <xsl:template name="member-functions">
-    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="synopsis">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="synopsis"/>
   </xsl:template>
 
   <xsl:template name="standalone-functions">
     <xsl:apply-templates select="$standalone-functions/memberdef[contains(argsstring, 'circular_buffer&lt;')]" mode="synopsis">
-      <xsl:sort select="name"/>
       <xsl:with-param name="indent" select="''"/>
     </xsl:apply-templates>
   </xsl:template>
@@ -45,27 +40,19 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   </xsl:template>
 
   <xsl:template name="public-types-details">
-    <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="description"/>
   </xsl:template>
 
   <xsl:template name="constructors-details">
-    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description"/>
   </xsl:template>
 
   <xsl:template name="member-functions-details">
-    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="description">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="description"/>
   </xsl:template>
 
   <xsl:template name="standalone-functions-details">
-    <xsl:apply-templates select="$standalone-functions/memberdef[contains(argsstring, 'circular_buffer&lt;')]" mode="description">
-      <xsl:sort select="name"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="$standalone-functions/memberdef[contains(argsstring, 'circular_buffer&lt;')]" mode="description"/>
   </xsl:template>
 
 </xsl:stylesheet>

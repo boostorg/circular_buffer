@@ -138,9 +138,7 @@ class <xsl:value-of select="$container"/>
 public:
 <xsl:call-template name="public-types"/><xsl:text disable-output-escaping="yes">
 </xsl:text>
-<xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="synopsis">
-  <xsl:sort select="name"/>
-</xsl:apply-templates><xsl:text disable-output-escaping="yes">
+<xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="synopsis"/><xsl:text disable-output-escaping="yes">
 </xsl:text>
 <xsl:call-template name="member-functions"/><xsl:text disable-output-escaping="yes">};
 
@@ -163,7 +161,7 @@ public:
     <xsl:if test="normalize-space(briefdescription) != ''">&nbsp;&nbsp;&nbsp;typedef&nbsp;<xsl:value-of select="substring('typename ', 1 div (contains(type, '::') and not(contains(type, '&gt;'))))"/>
       <xsl:choose>
         <xsl:when test="contains(type, 'cb_details::')"><i>implementation-defined</i>&nbsp;</xsl:when>
-        <xsl:otherwise><xsl:value-of select="type"/>&nbsp;</xsl:otherwise>
+        <xsl:otherwise><xsl:apply-templates select="type" mode="synopsis"/>&nbsp;</xsl:otherwise>
       </xsl:choose>
       <a href="{$link-prefix}#{@id}"><xsl:value-of select="name"/></a>;<xsl:text disable-output-escaping="yes">
 </xsl:text>
@@ -200,10 +198,15 @@ public:
     <xsl:for-each select="text() | ref">
       <xsl:variable name="item" select="translate(., '&space;', '')"/>
       <xsl:choose>
-        <xsl:when test="$item = 'return_value_type' or $item = 'param_value_type'">value_type</xsl:when>
-        <xsl:otherwise><xsl:value-of select="$item"/></xsl:otherwise>
+        <xsl:when test="contains($item, 'return_value_type') or contains($item, 'param_value_type')">value_type</xsl:when>
+        <xsl:otherwise>
+        <xsl:choose>
+            <xsl:when test="contains($item, ',')"><xsl:value-of select="concat(substring-before($item, ','), ',&nbsp;', substring-after($item, ','))"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$item"/></xsl:otherwise>
+        </xsl:choose>
+        </xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="name(.) != 'ref' and position() != last()">&nbsp;</xsl:if>
+      <xsl:if test="not(contains($item, '&lt;')) and not(contains($item, ',')) and name(.) != 'ref' and position() != last()">&nbsp;</xsl:if>
     </xsl:for-each>
   </xsl:template>
 
