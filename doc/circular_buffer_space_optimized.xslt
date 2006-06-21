@@ -29,16 +29,16 @@ Author: Jan Gaspar (jano_gaspar[at]yahoo.com)
   </xsl:template>
 
   <xsl:template name="public-types">
-    <xsl:for-each select="sectiondef[@kind='public-type']/memberdef | document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef">
-      <xsl:if test="string-length(normalize-space(briefdescription)) &gt; 0 and count(reimplements) = 0">
+    <xsl:for-each select="sectiondef[@kind='public-type']/memberdef">
+      <xsl:if test="string-length(normalize-space(briefdescription)) &gt; 0">
         <xsl:choose>
-          <xsl:when test="../../compoundname = 'boost::circular_buffer_space_optimized'">
-            <xsl:apply-templates select="." mode="synopsis"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="." mode="synopsis">
+          <xsl:when test="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef[name=current()/name]/briefdescription = briefdescription">
+            <xsl:apply-templates select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-type']/memberdef[name=current()/name]" mode="synopsis">
               <xsl:with-param name="link-prefix" select="$link-prefix"/>
             </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="." mode="synopsis"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:if>
