@@ -29,6 +29,10 @@
     </html>
   </xsl:template>
 
+  <xsl:template match="nonbreakablespace">
+    &nbsp;&nbsp;
+  </xsl:template>
+  
   <xsl:template match="linebreak">
     <br />
   </xsl:template>

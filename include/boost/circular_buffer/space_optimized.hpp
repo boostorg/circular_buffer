@@ -61,13 +61,13 @@ public:
 
 	//! Capacity controller of the space optimized circular buffer.
 	/*!
-		<code>
-		struct capacity_control {
-			capacity_control(size_type capacity, size_type min_capacity = 0);
-			size_type m_capacity;
-			size_type m_min_capacity;
-		};
-		</code>
+		<br><code>
+		struct capacity_control {<br>
+		   &nbsp; capacity_control(size_type capacity, size_type min_capacity = 0);<br>
+		   &nbsp; size_type m_capacity;<br>
+		   &nbsp; size_type m_min_capacity;<br>
+		};<br>
+		</code><br>
 		The converting constructor of the <code>capacity_control</code>
 		allows implicit conversion from <code>size_type</code> like types
 		which ensures compatibility of creating an instance of the
