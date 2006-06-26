@@ -61,17 +61,21 @@ public:
 
 	//! Capacity controller of the space optimized circular buffer.
 	/*!
-		<br><code>
+		<p><code>
 		struct capacity_control {<br>
-		   &nbsp; capacity_control(size_type capacity, size_type min_capacity = 0);<br>
+		   &nbsp; capacity_control(size_type capacity, size_type min_capacity = 0)<br>
+           &nbsp;&nbsp; m_capacity(capacity), m_min_capacity(min_capacity) {};<br>
 		   &nbsp; size_type m_capacity;<br>
 		   &nbsp; size_type m_min_capacity;<br>
-		};<br>
-		</code><br>
-		The converting constructor of the <code>capacity_control</code>
+		};</code></p>
+		\pre <code>capacity >= min_capacity</code>
+		<p>The <code>m_capacity</code> denotes the capacity of the
+        <code>circular_buffer_space_optimized</code> and the <code>m_min_capacity</code>
+        deterimines the minimal allocated size of its internal buffer.</p>
+		<p>The converting constructor of the <code>capacity_control</code>
 		allows implicit conversion from <code>size_type</code> like types
 		which ensures compatibility of creating an instance of the
-		<code>circular_buffer_space_optimized</code> with other STL containers.
+		<code>circular_buffer_space_optimized</code> with other STL containers.</p>
 	*/
 	typedef cb_details::capacity_control<size_type> capacity_control;
 
