@@ -194,6 +194,7 @@ t52  DONE
      DONE
 t53  check for multiple parameters passed into function for exception safety
 
+t54  document scripts generating documentation 
 -------------------------------------------------------------------------------
 
 Some routine tasks:

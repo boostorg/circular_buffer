@@ -68,7 +68,7 @@ rem  **********************************************************
 rem  Convert the original HTML documentation into XHTML.
 rem  **********************************************************
 
-xsltproc --html -o srcdoc\%1.xhtml html2xhtml.xslt %docfile%
+tidy --doctype omit -asxhtml -o srcdoc\%1.xhtml -config Tidy.conf %docfile%
 
 
 rem  **********************************************************
@@ -77,7 +77,15 @@ rem  source code documentation. The output will replace the
 rem  original HTML documentation.
 rem  **********************************************************
 
-xsltproc --stringparam srcdoc srcdoc/srcdoc.html -o %docfile% update_srcdoc.xslt srcdoc\%1.xhtml
+xsltproc --stringparam srcdoc srcdoc\srcdoc.html -o %docfile% update_srcdoc.xslt srcdoc\%1.xhtml
+
+
+rem  **********************************************************
+rem  Correcting and pretty-printing HTML documentation with
+rem  HTML Tidy.
+rem  **********************************************************
+
+tidy -ashtml -o %docfile% -config Tidy.conf srcdoc\%docfile%
 
 
 rem  **********************************************************
@@ -92,5 +100,6 @@ rem  Deleting temporary directory.
 rem  **********************************************************
 
 rmdir srcdoc
+
 
 :end

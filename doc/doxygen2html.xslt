@@ -12,6 +12,7 @@
   <xsl:variable name="default-keyword">Default </xsl:variable>
   <xsl:variable name="type-rqmts-keyword">Type Requirements </xsl:variable>
   <xsl:variable name="doxygen-version">1.4.6</xsl:variable>
+  <xsl:variable name="line-length" select="80"/>
   <xsl:variable name="container-ref" select="//compound[name=concat('boost::', $container) and @kind='class']/@refid"/>
   <xsl:variable name="class-file" select="concat($xmldir, '/', $container-ref, '.xml')"/>
   <xsl:variable name="class" select="document($class-file)/doxygen/compounddef[@id = $container-ref]"/>
@@ -176,7 +177,7 @@ public:
     <xsl:param name="indent" select="'&nbsp;&nbsp;&nbsp;'"/>
     <xsl:param name="link-prefix" select="''"/>
     <xsl:param name="link" select="''"/>
-    <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; 80"/>
+    <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; $line-length"/>
     <xsl:value-of select="$indent"/>
     <xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
     <xsl:if test="count(templateparamlist) &gt; 0">template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<xsl:text disable-output-escaping="yes">
@@ -280,7 +281,7 @@ public:
 
   <xsl:template match="memberdef[@kind='function']" mode="description">
     <xsl:param name="link-prefix" select="''"/>
-    <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; 80"/>
+    <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; $line-length"/>
     <tr><td><a id="{@id}" /><code><b><xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
     <xsl:if test="count(templateparamlist) &gt; 0">
       template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<br />&nbsp;&nbsp;&nbsp;

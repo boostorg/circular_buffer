@@ -14,13 +14,13 @@ rb ../../../boost/circular_buffer/details.hpp
 rb ../../../boost/circular_buffer/space_optimized.hpp
 rb ../index.html
 rb Doxyfile
+rb Tidy.conf
 rb circular_buffer.html
 rb circular_buffer.xslt
 rb circular_buffer_space_optimized.html
 rb circular_buffer_space_optimized.xslt
 rb copy.xslt
 rb doxygen2html.xslt
-rb html2xhtml.xslt
 rb update_srcdoc.bat
 rb update_srcdoc.sh
 rb update_srcdoc.xslt
