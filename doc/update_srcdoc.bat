@@ -77,7 +77,7 @@ rem  source code documentation. The output will replace the
 rem  original HTML documentation.
 rem  **********************************************************
 
-xsltproc --stringparam srcdoc srcdoc\srcdoc.html -o %docfile% update_srcdoc.xslt srcdoc\%1.xhtml
+xsltproc --novalid --stringparam srcdoc srcdoc\srcdoc.html -o %docfile% update_srcdoc.xslt srcdoc\%1.xhtml
 
 
 rem  **********************************************************

@@ -31,26 +31,38 @@
   </xsl:template>
 
   <xsl:template match="nonbreakablespace">
-    &nbsp;&nbsp;
+    &nbsp;
   </xsl:template>
   
   <xsl:template match="linebreak">
     <br />
   </xsl:template>
 
+  <xsl:template match="preformatted">
+    <pre><xsl:apply-templates/></pre>
+  </xsl:template>
+  
   <xsl:template match="computeroutput">
     <code><xsl:apply-templates/></code>
   </xsl:template>
 
   <xsl:template match="para">
-    <xsl:apply-templates/>
+    <p><xsl:apply-templates/></p>
   </xsl:template>
 
   <xsl:template match="ref">
-    <xsl:element name="a">
-      <xsl:attribute name="href"><xsl:call-template name="reference"/></xsl:attribute>
-      <xsl:value-of select="substring-after(text(), concat($container, '::'))"/>
-    </xsl:element>
+    <xsl:variable name="link-text" select="substring-after(text(), concat($container, '::'))"/>
+    <xsl:choose>
+      <xsl:when test="string-length($link-text) &gt; 0">
+        <xsl:element name="a">
+          <xsl:attribute name="href"><xsl:call-template name="reference"/></xsl:attribute>
+          <xsl:value-of select="$link-text"/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="text()"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="ulink">
