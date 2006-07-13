@@ -61,13 +61,13 @@ public:
 
 	//! Capacity controller of the space optimized circular buffer.
 	/*!
-		<p><code>
-		struct capacity_control {<br>
-		   &nbsp; capacity_control(size_type capacity, size_type min_capacity = 0)<br>
-           &nbsp;&nbsp; m_capacity(capacity), m_min_capacity(min_capacity) {};<br>
-		   &nbsp; size_type m_capacity;<br>
-		   &nbsp; size_type m_min_capacity;<br>
-		};</code></p>
+	    <p><pre>
+    struct capacity_control {
+       capacity_control(size_type capacity, size_type min_capacity = 0) m_capacity(capacity), m_min_capacity(min_capacity) {};
+       size_type m_capacity;
+       size_type m_min_capacity;
+    };
+        </pre></p>
 		\pre <code>capacity >= min_capacity</code>
 		<p>The <code>m_capacity</code> denotes the capacity of the
         <code>circular_buffer_space_optimized</code> and the <code>m_min_capacity</code>
