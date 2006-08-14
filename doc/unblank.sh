@@ -28,6 +28,6 @@ rb ../test/Jamfile
 rb ../test/common.ipp
 rb ../test/base_test.cpp
 rb ../test/space_optimized_test.cpp
-rb ../test/iterator_test.cpp
+rb ../test/soft_iterator_invalidation.cpp
 rb ../test/bounded_buffer_comparison.cpp
 rb ../test/test.hpp

@@ -191,10 +191,15 @@ t51  REJECTED - fixed
 t52  DONE
      rename BOOST_DISABLE_CB_DEBUG to BOOST_CB_DISABLE_DEBUG
 
-     DONE
-t53  check for multiple parameters passed into function for exception safety
+t53  DONE
+     check for multiple parameters passed into function for exception safety
 
-t54  document scripts generating documentation 
+t54  document scripts generating documentation
+
+t55  Add copy-constructor of cb_space_optimized into synopsis.
+
+t56  Synopsis - do not sort methods.
+ 
 -------------------------------------------------------------------------------
 
 Some routine tasks:

@@ -464,9 +464,8 @@ template &lt;class T, class Alloc&gt;
     <p>
       An iterator is usually considered to be invalidated if an element, the iterator pointed to, had been removed or
       overwritten by an another element. This definition is enforced by the <a href="#debug">Debug Support</a> and
-      refered as <b>strict</b> in the source code documentation. However, some applications utilizing
-      <code>circular_buffer</code> may require less strict definition: an iterator is invalid only if it points to an
-      uninitialized memory. Consider following example:
+      is documented for every method. However, some applications utilizing <code>circular_buffer</code> may require less
+      strict definition: an iterator is invalid only if it points to an uninitialized memory. Consider following example:
     </p>
     <pre>
    #define BOOST_CB_DISABLE_DEBUG // The Debug Support has to be disabled, otherwise the code produces a runtime error.
@@ -495,17 +494,19 @@ template &lt;class T, class Alloc&gt;
 </pre>
     <p>
       The iterator does not point to the original element any more (and is considered to be invalid from the "strict"
-      point of view) but it still points to the same <em>valid</em> place in the memory. This meaning of iterator
-      invalidation is then marked as <b>loose</b> in the source code documentation.
+      point of view) but it still points to the same <em>valid</em> place in the memory. This "soft" definition of iterator
+      invalidation is supported by the <code>circular_buffer</code> but should be considered as an implementation detail
+      rather than a full-fledged feature. The rules when the iterator is still valid can be inferred from the code in
+      <code><a href="../test/soft_iterator_invalidation.cpp">soft_iterator_invalidation.cpp</a></code>.
     </p>
     <h2>
       <a id="header" name="header">Header Files</a>
     </h2>
     <p>
       The <code>circular_buffer</code> is defined in the file <code><a href=
-      "../../../boost/circular_buffer.hpp">boost/circular_buffer.hpp</a></code> . There is also a forward declaration
+      "../../../boost/circular_buffer.hpp">boost/circular_buffer.hpp</a></code>. There is also a forward declaration
       for the <code>circular_buffer</code> in the header file <code><a href=
-      "../../../boost/circular_buffer_fwd.hpp">boost/circular_buffer_fwd.hpp</a></code> .
+      "../../../boost/circular_buffer_fwd.hpp">boost/circular_buffer_fwd.hpp</a></code>.
     </p><br>
     <h2>
       <a id="model" name="model">Modeled Concepts</a>
@@ -3520,7 +3521,7 @@ template &lt;class T, class Alloc&gt;
     <p>
       The <code>circular_buffer</code> maintains a list of valid iterators. As soon as any element gets destroyed all
       iterators pointing to this element are removed from this list and explicitly invalidated (an invalidation flag is
-      set). The debug support also consists of many assertions ( <a href=
+      set). The debug support also consists of many assertions (<a href=
       "../../utility/assert.html"><code>BOOST_ASSERT</code></a> macros) which ensure the <code>circular_buffer</code>
       and its iterators are used in the correct manner at runtime. In case an invalid iterator is used the assertion
       will report an error. The connection of explicit iterator invalidation and assertions makes a very robust debug
@@ -3529,8 +3530,7 @@ template &lt;class T, class Alloc&gt;
     <p>
       Moreover, the uninitialized memory allocated by <code>circular_buffer</code> is filled with the value
       <code>0xcc</code> in the debug mode. This can help the programmer when debugging the code to recognize the
-      initialized memory from the uninitialized. For details refer the <a href=
-      "../../../boost/circular_buffer/base.hpp">source code</a>.
+      initialized memory from the uninitialized. For details refer the source code.
     </p>
     <p>
       The debug support is enabled only in the debug mode (when the <code>NDEBUG</code> is not defined). It can also be

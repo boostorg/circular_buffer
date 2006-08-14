@@ -1,6 +1,7 @@
-// Test of the iterator of the circular buffer.
-// Note: This test concentrates on iterator validity only. Other iterator
-//       tests are included in the base_test.cpp.
+// Demonstration of rules when an iterator is considered to be valid if the soft
+// iterator invalidation definition is applied.
+// Note: The soft iterator invalidation definition can not be applied
+//       to the space optimized circular buffer.
 
 // Copyright (c) 2003-2006 Jan Gaspar
 
