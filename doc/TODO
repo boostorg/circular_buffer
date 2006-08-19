@@ -14,7 +14,8 @@ t03  DONE
 t04  DONE - REMOVED
      docs: paragraph "Model of": change (SGI) to (SGI specific)
 
-t05  docs: "Type Requirements" will be part of "Template Parameters"
+t05  DONE
+     docs: "Type Requirements" will be part of "Template Parameters"
      and will be taken from the source doc.
      (was: change "Type Requirements" to "Element Type Requirements")
 
@@ -72,7 +73,8 @@ t18  DONE
 t19  DONE
      docs: merge the source documentation with the main documentation
 
-t20  docs: define requirements on the Alloc type parameter
+t20  DONE
+     docs: define requirements on the Alloc type parameter
 
 t21  DONE
      docs: consider better documentation for the "overwrite" term; add glossary
@@ -126,7 +128,8 @@ t33  DONE - verify
 t34  REJECTED - postponed to later version
      consider throwing exception when pop_back() an empty container
 
-t35  docs: there should be warning for data() documentation that the returned
+t35  DONE
+     docs: there should be warning for data() documentation that the returned
      pointer gets very easily invalidated
 
 t36  DONE
@@ -194,7 +197,8 @@ t52  DONE
 t53  DONE
      check for multiple parameters passed into function for exception safety
 
-t54  document scripts generating documentation
+t54  DONE
+     document scripts generating documentation
 
 t55  Add copy-constructor of cb_space_optimized into synopsis.
 

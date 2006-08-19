@@ -1,4 +1,14 @@
 #!/bin/sh
+################################################################################
+# Shell script which updates the Circular Buffer library documentation with    #
+# the latest source code documentation (which is in the source files).         #
+#                                                                              #
+# Copyright (c) 2006 Jan Gaspar                                                #
+#                                                                              #
+# Use, modification, and distribution is subject to the Boost Software         #
+# License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at      #
+# http://www.boost.org/LICENSE_1_0.txt)                                        #
+################################################################################
 
 DOCFILE="$1.html"
 
@@ -7,19 +17,19 @@ if [ -f $DOCFILE ]; then
   echo Starting Doxygen ...
   doxygen
 
-  echo Generating source XHTML documentation ...
+  echo Converting Doxygen generated source code documentation into XHTML ...
   xsltproc --stringparam container $1 --stringparam xmldir srcdoc -o srcdoc/srcdoc.xhtml $1.xslt srcdoc/index.xml
 
-  echo Preprocessing original HTML documentation ...
+  echo Preprocessing $DOCFILE ...
   sed 's/<a\s*id="[^"]*"/<a /g' $DOCFILE | sed 's/<a\s*\(name="[^"]*"\)\s*\(id="[^"]*"\)/<a \1/g' > srcdoc/$DOCFILE
 
-  echo Converting original HTML documentation into XHTML ...
+  echo Converting preprocessed $DOCFILE into XHTML ...
   xsltproc --html -o srcdoc/$1.xhtml html2xhtml.xslt srcdoc/$DOCFILE
 
-  echo Creating HTML documentation with updated source documentation ...
+  echo Generating $DOCFILE with updated source code documentation ...
   xsltproc --stringparam srcdoc srcdoc/srcdoc.xhtml -o $DOCFILE update_srcdoc.xslt srcdoc/$1.xhtml
 
-  echo Correcting and pretty-printing HTML documentation with HTML Tidy ...
+  echo Correcting and pretty-printing $DOCFILE with HTML Tidy ...
   tidy -ashtml -config Tidy.conf $DOCFILE
   
   echo Removing temporary directory ...
