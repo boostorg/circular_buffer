@@ -19,9 +19,6 @@ http://www.boost.org/LICENSE_1_0.txt)
 
   <xsl:param name="container"/>
   <xsl:param name="xmldir"/>
-  <xsl:variable name="default-keyword">Default </xsl:variable>
-  <xsl:variable name="type-rqmts-keyword">Type Requirements </xsl:variable>
-  <xsl:variable name="line-length" select="80"/>
   <xsl:variable name="container-ref" select="//compound[name=concat('boost::', $container) and @kind='class']/@refid"/>
   <xsl:variable name="class-file" select="concat($xmldir, '/', $container-ref, '.xml')"/>
   <xsl:variable name="class" select="document($class-file)/doxygen/compounddef[@id = $container-ref]"/>
@@ -88,23 +85,7 @@ http://www.boost.org/LICENSE_1_0.txt)
         <xsl:apply-templates select="parameterdescription"/>
       </td>
     </tr>
-    <xsl:apply-templates select="following-sibling[1]"/>
-  </xsl:template>
-
-  <xsl:template match="parameterlist[@kind='param']">
-    <table id="table_param_desc_{generate-id(.)}">
-      <xsl:apply-templates select="parameteritem[1]">
-        <xsl:with-param name="desc" select="'Parameters:'"/>
-      </xsl:apply-templates>
-    </table>
-  </xsl:template>
-
-  <xsl:template match="parameterlist[@kind='exception']">
-    <table id="table_exception_desc_{generate-id(.)}">
-      <xsl:apply-templates select="parameteritem[1]">
-        <xsl:with-param name="desc" select="'Throws:'"/>
-      </xsl:apply-templates>
-    </table>
+    <xsl:apply-templates select="following-sibling::parameteritem[1]"/>
   </xsl:template>
 
   <xsl:template match="simplesect[@kind='return']">
@@ -124,10 +105,38 @@ http://www.boost.org/LICENSE_1_0.txt)
       <tr><td valign="top"><b>Postcondition:</b></td><td><xsl:apply-templates/></td></tr>
     </table>
   </xsl:template>
+  
+  <xsl:template match="simplesect[@kind='par']">
+    <table id="table_note_desc_{generate-id(.)}">
+      <tr><td valign="top"><b><xsl:value-of select="title"/>:</b></td><td><xsl:apply-templates select="para"/></td></tr>
+    </table>
+  </xsl:template>
 
+  <xsl:template match="simplesect[@kind='warning']">
+    <table id="table_note_desc_{generate-id(.)}">
+      <tr><td valign="top"><b>Warning:</b></td><td><xsl:apply-templates/></td></tr>
+    </table>
+  </xsl:template>
+  
   <xsl:template match="simplesect[@kind='note']">
     <table id="table_note_desc_{generate-id(.)}">
       <tr><td valign="top"><b>Note:</b></td><td><xsl:apply-templates/></td></tr>
+    </table>
+  </xsl:template>
+
+  <xsl:template match="parameterlist[@kind='param']">
+    <table id="table_param_desc_{generate-id(.)}">
+      <xsl:apply-templates select="parameteritem[1]">
+        <xsl:with-param name="desc" select="'Parameters:'"/>
+      </xsl:apply-templates>
+    </table>
+  </xsl:template>
+
+  <xsl:template match="parameterlist[@kind='exception']">
+    <table id="table_exception_desc_{generate-id(.)}">
+      <xsl:apply-templates select="parameteritem[1]">
+        <xsl:with-param name="desc" select="'Throws:'"/>
+      </xsl:apply-templates>
     </table>
   </xsl:template>
 
@@ -135,15 +144,6 @@ http://www.boost.org/LICENSE_1_0.txt)
     <table id="table_detailed_desc_{generate-id(.)}">
       <tr><td><xsl:apply-templates/></td></tr>
     </table>
-  </xsl:template>
-
-  <xsl:template match="detaileddescription/para">
-    <xsl:if test="normalize-space(text()) != ''">
-      <table id="table_detailed_desc_{generate-id(.)}">
-        <tr><td><xsl:apply-templates select="text()"/></td></tr>
-      </table>
-    </xsl:if>
-    <xsl:apply-templates select="*[not(text())]"/>
   </xsl:template>
 
   <!-- Synopsis mode -->
@@ -195,7 +195,6 @@ public:
     <xsl:param name="indent" select="'&nbsp;&nbsp;&nbsp;'"/>
     <xsl:param name="link-prefix" select="''"/>
     <xsl:param name="link" select="''"/>
-    <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; $line-length"/>
     <xsl:value-of select="$indent"/>
     <xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
     <xsl:if test="count(templateparamlist) &gt; 0">template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<xsl:text disable-output-escaping="yes">
@@ -205,11 +204,6 @@ public:
     <a href="{$link-prefix}#{concat(substring(@id, 1 div (string-length($link) = 0)), substring($link, 1 div (string-length($link) &gt; 0)))}">
       <xsl:value-of select="name"/>
     </a>(<xsl:for-each select="param">
-    <xsl:if test="$too-long-args and not((count(preceding-sibling::param) + 1) mod 2)">
-      <xsl:text disable-output-escaping="yes">
-</xsl:text><xsl:value-of select="$indent"/>&nbsp;&nbsp;&nbsp;<xsl:text/>
-      <xsl:if test="count(../templateparamlist) &gt; 0">&nbsp;&nbsp;&nbsp;</xsl:if>
-    </xsl:if>
     <xsl:apply-templates select="type" mode="synopsis"/>&nbsp;<xsl:value-of select="declname"/>
     <xsl:value-of select="substring(concat(' = ', defval), 1 div (normalize-space(defval) != ''))"/>
     <xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>
@@ -269,13 +263,13 @@ public:
     <tr><td><a id="templateparam_{parameternamelist/parametername}"><code><xsl:value-of select="parameternamelist/parametername"/></code></a></td>
     <td>
         <xsl:apply-templates select="parameterdescription"/>
-        <xsl:variable name="type-rqmts" select="concat($type-rqmts-keyword, parameternamelist/parametername)"/>
+        <xsl:variable name="type-rqmts" select="concat('Type Requirements ', parameternamelist/parametername)"/>
         <xsl:if test="../../simplesect[@kind='par']/title = $type-rqmts">
             <dl><dt><b>Type Requirements:</b></dt>
             <dd><xsl:apply-templates select="../../simplesect[@kind='par'][title=$type-rqmts]/para"/></dd></dl>
         </xsl:if>
     </td>
-    <xsl:variable name="default-value" select="concat($default-keyword, parameternamelist/parametername)"/>
+    <xsl:variable name="default-value" select="concat('Default ', parameternamelist/parametername)"/>
     <xsl:choose>
      <xsl:when test="../../simplesect[@kind='par']/title = $default-value">
        <td><code><xsl:value-of select="../../simplesect[@kind='par'][title=$default-value]/para"/></code></td>
@@ -299,17 +293,12 @@ public:
 
   <xsl:template match="memberdef[@kind='function']" mode="description">
     <xsl:param name="link-prefix" select="''"/>
-    <xsl:variable name="too-long-args" select="string-length(argsstring) &gt; $line-length"/>
     <tr><td><a id="{@id}" /><code><b><xsl:value-of select="substring('explicit ', 1 div (@explicit = 'yes'))"/>
     <xsl:if test="count(templateparamlist) &gt; 0">
       template&nbsp;&lt;<xsl:for-each select="templateparamlist/param"><xsl:value-of select="type"/>&nbsp;<xsl:value-of select="declname"/><xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/></xsl:for-each>&gt;<br />&nbsp;&nbsp;&nbsp;
     </xsl:if>
     <xsl:if test="type != ''"><xsl:apply-templates select="type" mode="description"/>&nbsp;</xsl:if>
     <xsl:value-of select="name"/>(<xsl:for-each select="param">
-    <xsl:if test="$too-long-args and not((count(preceding-sibling::param) + 1) mod 2)">
-      <br />&nbsp;&nbsp;&nbsp;
-      <xsl:if test="count(../templateparamlist) &gt; 0">&nbsp;&nbsp;&nbsp;</xsl:if>
-    </xsl:if>
     <xsl:apply-templates select="type" mode="description"/>&nbsp;<xsl:value-of select="declname"/>
     <xsl:value-of select="substring(concat(' = ', defval), 1 div (normalize-space(defval) != ''))"/>
     <xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>

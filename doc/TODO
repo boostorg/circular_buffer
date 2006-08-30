@@ -200,10 +200,12 @@ t53  DONE
 t54  DONE
      document scripts generating documentation
 
-t55  Add copy-constructor of cb_space_optimized into synopsis.
+t55  DONE
+     Add copy-constructor of cb_space_optimized into synopsis.
 
-t56  Synopsis - do not sort methods.
- 
+t56  DONE
+     Synopsis - do not sort methods.
+
 -------------------------------------------------------------------------------
 
 Some routine tasks:

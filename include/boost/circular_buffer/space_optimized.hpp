@@ -257,7 +257,16 @@ public:
     : circular_buffer<T, Alloc>(init_capacity(capacity_ctrl, n), n, item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
-    // Default copy constructor
+#if defined(BOOST_CB_NEVER_DEFINED)
+
+    // Default copy constructor - declared only for documentation purpose.
+    /*
+       \note This section will never be compiled. The default copy constructor
+             will be generated instead.
+    */
+    circular_buffer_space_optimized(const circular_buffer_space_optimized<T, Alloc>& cb);
+
+#endif // #if defined(BOOST_CB_NEVER_DEFINED)
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 	

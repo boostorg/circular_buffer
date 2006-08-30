@@ -309,15 +309,17 @@ public:
         \return A pointer to the beginning of the array or 0 if empty.
         \throws Whatever T::T(const T&) throws.
         \throws Whatever T::operator = (const T&) throws.
+        \par Complexity
+             Linear in the size of the circular_buffer; constant if the postcondition is already met.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the circular_buffer; does not invalidate any iterator
+             if the postcondition is already met prior calling this method.
         \warning In general invoking any method which modifies the internal state of the circular_buffer
                  may delinearize the internal buffer and invalidate the returned pointer. 
         \note This is not the only way how to pass data into the legacy C API - see array_one()
               and array_two() for the other option.
-        \par Iterator Invalidation
-             Invalidates all iterators pointing to the circular_buffer; does not invalidate any iterator
-             if the postcondition is already met prior calling this method.
-        \par Complexity
-             Linear in the size of the circular_buffer; constant if the postcondition is already met.
     */
     pointer linearize() {
         if (empty())

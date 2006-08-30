@@ -24,11 +24,12 @@ Prerequisites:
 1) Unix/Linux shell (with sed editor) available.
    (The script can be easily converted into Windows batch file if you do not
    have access to Unix/Linux shell.)
-2) Installed Doxygen http://www.doxygen.org
+2) Installed Doxygen http://www.doxygen.org.
    (Source documentation generation was tested with the Doxygen version
    1.4.6.)
-3) Installed xsltproc http://xmlsoft.org/XSLT/xsltproc2.html
-4) Installed HTML Tidy http://tidy.sourceforge.net
+3) Installed xsltproc http://xmlsoft.org/XSLT/xsltproc2.html.
+4) Installed HTML Tidy http://tidy.sourceforge.net. (Tested with version
+    released on 1 September 2005.)
 
 
 Updating source code documentation:
