@@ -153,7 +153,7 @@ public:
 
 #endif // #if defined(BOOST_CB_TEST)
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \pre <code>min_capacity() <= new_capacity</code>
          \note It is considered as a bug if the precondition is not met (i.e. if
@@ -175,7 +175,7 @@ public:
             erase(begin(), end() - new_size);
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \pre <code>min_capacity() <= new_capacity</code>
          \note It is considered as a bug if the precondition is not met (i.e. if
@@ -387,7 +387,7 @@ public:
         circular_buffer<T, Alloc>::swap(cb);
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -398,7 +398,7 @@ public:
         circular_buffer<T, Alloc>::push_back(item);
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -409,7 +409,7 @@ public:
         circular_buffer<T, Alloc>::push_front(item);
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -420,7 +420,7 @@ public:
         check_high_capacity();
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -431,7 +431,7 @@ public:
         check_high_capacity();
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -443,7 +443,7 @@ public:
         return circular_buffer<T, Alloc>::insert(begin() + index, item);
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -455,7 +455,7 @@ public:
         circular_buffer<T, Alloc>::insert(begin() + index, n, item);
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -466,7 +466,7 @@ public:
         insert(pos, first, last, is_integral<InputIterator>());
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -478,7 +478,7 @@ public:
         return circular_buffer<T, Alloc>::rinsert(begin() + index, item);
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -490,7 +490,7 @@ public:
         circular_buffer<T, Alloc>::rinsert(begin() + index, n, item);
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -501,7 +501,7 @@ public:
         rinsert(pos, first, last, is_integral<InputIterator>());
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -514,7 +514,7 @@ public:
         return begin() + index;
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -527,7 +527,7 @@ public:
         return begin() + index;
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
@@ -540,7 +540,7 @@ public:
         return begin() + index;
     }
 
-    //!! See the circular_buffer source documentation.
+    //! See the circular_buffer source documentation.
     /*!
          \warning The rules for iterator invalidation differ from the original
                   circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
