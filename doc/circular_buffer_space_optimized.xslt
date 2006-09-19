@@ -16,7 +16,6 @@ http://www.boost.org/LICENSE_1_0.txt)
 
   <xsl:output method="xml" version="1.0" encoding="iso-8859-1" indent="yes" media-type="text/xml"/>
 
-  <xsl:variable name="override-mark" select="'!'"/>
   <xsl:variable name="link-prefix" select="'circular_buffer.html'"/>
   <xsl:variable name="circular_buffer-ref" select="//compound[name='boost::circular_buffer' and @kind='class']/@refid"/>
   <xsl:variable name="circular_buffer-file" select="concat($xmldir, '/', $circular_buffer-ref, '.xml')"/>
@@ -55,7 +54,7 @@ http://www.boost.org/LICENSE_1_0.txt)
     <xsl:variable name="current" select="sectiondef[@kind='public-func']/memberdef[type != '']"/>
     <xsl:for-each select="$current | document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']">
       <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
-      <xsl:if test="string-length($briefdescription) &gt; 0 and (starts-with($briefdescription, $override-mark) or count(reimplements) = 0)">
+      <xsl:if test="string-length($briefdescription) &gt; 0 and count(reimplements) = 0">
         <xsl:choose>
           <xsl:when test="count($current[name=current()/name]) &gt; 0 and count(param/type[ref='circular_buffer']) &gt; 0">
             <xsl:apply-templates select="$current[name=current()/name]" mode="synopsis">
@@ -67,7 +66,7 @@ http://www.boost.org/LICENSE_1_0.txt)
           <xsl:when test="../../compoundname = 'boost::circular_buffer_space_optimized'">
             <xsl:apply-templates select="." mode="synopsis"/>
           </xsl:when>
-          <xsl:when test="count($current[name=current()/name and starts-with(normalize-space(briefdescription), $override-mark)]) = 0">
+          <xsl:when test="count($current[name=current()/name]) = 0">
             <xsl:apply-templates select="." mode="synopsis">
               <xsl:with-param name="link-prefix" select="$link-prefix"/>
             </xsl:apply-templates>
@@ -100,7 +99,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <xsl:template name="member-functions-details">
     <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != '']">
       <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
-      <xsl:if test="string-length($briefdescription) &gt; 0 and (starts-with($briefdescription, $override-mark) or count(reimplements) = 0)">
+      <xsl:if test="string-length($briefdescription) &gt; 0 and count(reimplements) = 0">
         <xsl:apply-templates select="." mode="description"/>
       </xsl:if>
     </xsl:for-each>
