@@ -68,8 +68,8 @@
       <a name="synopsis" id="synopsis">Synopsis</a>
     </h2>
     <p>
-      Note that some of the links point to the original <code><a href="circular_buffer.html">circular_buffer</a></code> if
-      the functionality is the same.
+      Note that some of the links point to the original <code><a href="circular_buffer.html">circular_buffer</a></code>
+      if the functionality is the same.
     </p>
     <div id="srcdoc_synopsis">
       <table id="table_synopsis" border="0" cellpadding="10">
@@ -325,7 +325,7 @@ template &lt;class T, class Alloc&gt;
     };
         
 </pre>
-            <table id="table_pre_desc_id4511757">
+            <table id="table_pre_desc_id4511724">
               <tr>
                 <td valign="top">
                   <b>Precondition:</b>
@@ -356,27 +356,109 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1a05f824b31cd93d7695f4039edc7597f" name=
-            "classboost_1_1circular__buffer__space__optimized_1a05f824b31cd93d7695f4039edc7597f"></a> <code><b>explicit
+            "classboost_1_1circular__buffer__space__optimized_1a05f824b31cd93d7695f4039edc7597f"></a><code><b>explicit
             circular_buffer_space_optimized(const <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
-            <table id="table_function_desc_id4513382">
+            <p>
+              Create an empty space optimized circular buffer with a maximum capacity.
+            </p>
+            <p>
+              TODO - doc
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer__space__optimized_1066bf867e41386da88818addbb22dfeb" name=
+            "classboost_1_1circular__buffer__space__optimized_1066bf867e41386da88818addbb22dfeb"></a><code><b>explicit
+            circular_buffer_space_optimized(<a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_10b8131db04bfa69c99f23aed053ca8a8">capacity_control</a>
+            capacity_ctrl, const <a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
+            alloc = allocator_type());</b></code><br>
+            <p>
+              Create an empty space optimized circular buffer with a given capacity.
+            </p>
+            <table id="table_param_desc_id4513549">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Parameters:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4513451">
-                    <tr>
-                      <td>
-                        <p>
-                          Create an empty space optimized circular buffer with a maximum capacity.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <i>capacity</i>
                   <p>
-                    TODO - doc
+                    The capacity of the buffer.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>min_capacity</i>
+                  <p>
+                    The minimal guaranteed amount of allocated memory. (The metrics of the min_capacity is number of
+                    items.)
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>alloc</i>
+                  <p>
+                    The allocator.
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_pre_desc_id4513602">
+              <tr>
+                <td valign="top">
+                  <b>Precondition:</b>
+                </td>
+                <td>
+                  <p>
+                    <code>capacity &gt;= min_capacity</code>
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_post_desc_id4513612">
+              <tr>
+                <td valign="top">
+                  <b>Postcondition:</b>
+                </td>
+                <td>
+                  <p>
+                    <code>(*this).capacity() == capacity &amp;&amp; (*this).size == 0</code><br>
+                    Allocates memory specified by the <code>min_capacity</code> parameter.
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_exception_desc_id4513638">
+              <tr>
+                <td valign="top">
+                  <b>Throws:</b>
+                </td>
+                <td>
+                  <i>An allocation error</i>
+                  <p>
+                    if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_note_desc_id4513664">
+              <tr>
+                <td valign="top">
+                  <b>Note:</b>
+                </td>
+                <td>
+                  <p>
+                    It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt;
+                    min_capacity</code>) and an assertion will be invoked in the debug mode.
                   </p>
                 </td>
               </tr>
@@ -385,243 +467,114 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_1066bf867e41386da88818addbb22dfeb" name=
-            "classboost_1_1circular__buffer__space__optimized_1066bf867e41386da88818addbb22dfeb"></a> <code><b>explicit
-            circular_buffer_space_optimized(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_10b8131db04bfa69c99f23aed053ca8a8">capacity_control</a>
-            capacity_ctrl, const <a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
-            alloc = allocator_type());</b></code><br>
-            <table id="table_function_desc_id4513484">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4513572">
-                    <tr>
-                      <td>
-                        <p>
-                          Create an empty space optimized circular buffer with a given capacity.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_param_desc_id4513582">
-                    <tr>
-                      <td valign="top">
-                        <b>Parameters:</b>
-                      </td>
-                      <td>
-                        <i>capacity</i>
-                        <p>
-                          The capacity of the buffer.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>min_capacity</i>
-                        <p>
-                          The minimal guaranteed amount of allocated memory. (The metrics of the min_capacity is number
-                          of items.)
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>alloc</i>
-                        <p>
-                          The allocator.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_pre_desc_id4513636">
-                    <tr>
-                      <td valign="top">
-                        <b>Precondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>capacity &gt;= min_capacity</code>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_post_desc_id4513645">
-                    <tr>
-                      <td valign="top">
-                        <b>Postcondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>(*this).capacity() == capacity &amp;&amp; (*this).size == 0</code><br>
-                          Allocates memory specified by the <code>min_capacity</code> parameter.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_exception_desc_id4513671">
-                    <tr>
-                      <td valign="top">
-                        <b>Throws:</b>
-                      </td>
-                      <td>
-                        <i>An allocation error</i>
-                        <p>
-                          if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4513697">
-                    <tr>
-                      <td valign="top">
-                        <b>Note:</b>
-                      </td>
-                      <td>
-                        <p>
-                          It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt;
-                          min_capacity</code>) and an assertion will be invoked in the debug mode.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <a id="classboost_1_1circular__buffer__space__optimized_16d55cc66a4d73e6756e6287fb73990fb" name=
-            "classboost_1_1circular__buffer__space__optimized_16d55cc66a4d73e6756e6287fb73990fb"></a>
-            <code><b>circular_buffer_space_optimized(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_10b8131db04bfa69c99f23aed053ca8a8">capacity_control</a>
+            "classboost_1_1circular__buffer__space__optimized_16d55cc66a4d73e6756e6287fb73990fb"></a><code><b>circular_buffer_space_optimized(<a href="circular_buffer.html#classboost_1_1circular__buffer_10b8131db04bfa69c99f23aed053ca8a8">capacity_control</a>
             capacity_ctrl, <a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item, const <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
-            <table id="table_function_desc_id4513732">
+            <p>
+              Create a full space optimized circular buffer filled with copies of <code>item</code>.
+            </p>
+            <table id="table_param_desc_id4513819">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Parameters:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4513837">
-                    <tr>
-                      <td>
-                        <p>
-                          Create a full space optimized circular buffer filled with copies of <code>item</code>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_param_desc_id4513852">
-                    <tr>
-                      <td valign="top">
-                        <b>Parameters:</b>
-                      </td>
-                      <td>
-                        <i>capacity</i>
-                        <p>
-                          The capacity of the buffer.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>min_capacity</i>
-                        <p>
-                          The minimal guaranteed amount of allocated memory. (The metrics of the min_capacity is number
-                          of items.)
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>item</i>
-                        <p>
-                          The item to be filled with.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>alloc</i>
-                        <p>
-                          The allocator.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_pre_desc_id4513921">
-                    <tr>
-                      <td valign="top">
-                        <b>Precondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>capacity &gt;= min_capacity</code>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_post_desc_id4513930">
-                    <tr>
-                      <td valign="top">
-                        <b>Postcondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>(*this).size() == capacity &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this).back()
-                          == item</code>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_exception_desc_id4513960">
-                    <tr>
-                      <td valign="top">
-                        <b>Throws:</b>
-                      </td>
-                      <td>
-                        <i>An allocation error</i>
-                        <p>
-                          if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>Whatever</i>
-                        <p>
-                          T::T(const T&amp;) throws.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4514000">
-                    <tr>
-                      <td valign="top">
-                        <b>Note:</b>
-                      </td>
-                      <td>
-                        <p>
-                          It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt;
-                          min_capacity</code>) and an assertion will be invoked in the debug mode.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <i>capacity</i>
+                  <p>
+                    The capacity of the buffer.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>min_capacity</i>
+                  <p>
+                    The minimal guaranteed amount of allocated memory. (The metrics of the min_capacity is number of
+                    items.)
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>item</i>
+                  <p>
+                    The item to be filled with.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>alloc</i>
+                  <p>
+                    The allocator.
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_pre_desc_id4513888">
+              <tr>
+                <td valign="top">
+                  <b>Precondition:</b>
+                </td>
+                <td>
+                  <p>
+                    <code>capacity &gt;= min_capacity</code>
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_post_desc_id4513897">
+              <tr>
+                <td valign="top">
+                  <b>Postcondition:</b>
+                </td>
+                <td>
+                  <p>
+                    <code>(*this).size() == capacity &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this).back() ==
+                    item</code>
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_exception_desc_id4513927">
+              <tr>
+                <td valign="top">
+                  <b>Throws:</b>
+                </td>
+                <td>
+                  <i>An allocation error</i>
+                  <p>
+                    if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>Whatever</i>
+                  <p>
+                    T::T(const T&amp;) throws.
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_note_desc_id4513967">
+              <tr>
+                <td valign="top">
+                  <b>Note:</b>
+                </td>
+                <td>
+                  <p>
+                    It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt;
+                    min_capacity</code>) and an assertion will be invoked in the debug mode.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -630,9 +583,7 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_15b15a87914ccc922cd730d5cabc00926" name=
-            "classboost_1_1circular__buffer__space__optimized_15b15a87914ccc922cd730d5cabc00926"></a>
-            <code><b>circular_buffer_space_optimized(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_10b8131db04bfa69c99f23aed053ca8a8">capacity_control</a>
+            "classboost_1_1circular__buffer__space__optimized_15b15a87914ccc922cd730d5cabc00926"></a><code><b>circular_buffer_space_optimized(<a href="circular_buffer.html#classboost_1_1circular__buffer_10b8131db04bfa69c99f23aed053ca8a8">capacity_control</a>
             capacity_ctrl, <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n,
             <a href=
@@ -640,46 +591,16 @@ template &lt;class T, class Alloc&gt;
             item, const <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
-            <table id="table_function_desc_id4514035">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4514157">
-                    <tr>
-                      <td>
-                        <p>
-                          TODO doc.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            <p>
+              TODO doc.
+            </p>
           </td>
         </tr>
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1d9f273c1a794f84484d220e977a3e24b" name=
-            "classboost_1_1circular__buffer__space__optimized_1d9f273c1a794f84484d220e977a3e24b"></a>
-            <code><b>circular_buffer_space_optimized(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp;
-            cb);</b></code><br>
-            <table id="table_function_desc_id4514187">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4514245">
-                    <tr>
-                      <td></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            "classboost_1_1circular__buffer__space__optimized_1d9f273c1a794f84484d220e977a3e24b"></a><code><b>circular_buffer_space_optimized(const
+            circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; cb);</b></code><br>
           </td>
         </tr>
         <tr>
@@ -688,20 +609,6 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer__space__optimized_1296bbfa5c427d05cb02fc35249f83bb4"></a> <code><b>template
             &lt;class InputIterator&gt;<br>
                 circular_buffer_space_optimized(InputIterator first, InputIterator last);</b></code><br>
-            <table id="table_function_desc_id4514263">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4514338">
-                    <tr>
-                      <td></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
           </td>
         </tr>
         <tr>
@@ -712,20 +619,6 @@ template &lt;class T, class Alloc&gt;
                 circular_buffer_space_optimized(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_10b8131db04bfa69c99f23aed053ca8a8">capacity_control</a>
             capacity_ctrl, InputIterator first, InputIterator last);</b></code><br>
-            <table id="table_function_desc_id4514365">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4514457">
-                    <tr>
-                      <td></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
           </td>
         </tr>
         <tr>
@@ -736,24 +629,9 @@ template &lt;class T, class Alloc&gt;
                 circular_buffer_space_optimized(InputIterator first, InputIterator last, const <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
-            <table id="table_function_desc_id4514499">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4514606">
-                    <tr>
-                      <td>
-                        <p>
-                          TODO doc.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            <p>
+              TODO doc.
+            </p>
           </td>
         </tr>
         <tr>
@@ -766,135 +644,120 @@ template &lt;class T, class Alloc&gt;
             capacity_ctrl, InputIterator first, InputIterator last, const <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
-            <table id="table_function_desc_id4514636">
+            <p>
+              Create a space optimized circular buffer with a copy of a range.
+            </p>
+            <table id="table_param_desc_id4514739">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Parameters:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4514762">
-                    <tr>
-                      <td>
-                        <p>
-                          Create a space optimized circular buffer with a copy of a range.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_param_desc_id4514772">
-                    <tr>
-                      <td valign="top">
-                        <b>Parameters:</b>
-                      </td>
-                      <td>
-                        <i>capacity</i>
-                        <p>
-                          The capacity of the buffer.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>min_capacity</i>
-                        <p>
-                          The minimal guaranteed amount of allocated memory. (The metrics of the min_capacity is number
-                          of items.)
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>first</i>
-                        <p>
-                          The beginning of the range.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>last</i>
-                        <p>
-                          The end of the range.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>alloc</i>
-                        <p>
-                          The allocator.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_pre_desc_id4514857">
-                    <tr>
-                      <td valign="top">
-                        <b>Precondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>capacity &gt;= min_capacity</code> and valid range <code>[first, last)</code>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_post_desc_id4514871">
-                    <tr>
-                      <td valign="top">
-                        <b>Postcondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>(*this).capacity() == capacity</code><br>
-                          Allocates at least as much memory as specified by the - TODO change <code>min_capacity</code>
-                          parameter.<br>
-                          If the number of items to copy from the range <code>[first, last)</code> is greater than the
-                          specified <code>capacity</code> then only elements from the range <code>[last - capacity,
-                          last)</code> will be copied.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_exception_desc_id4514911">
-                    <tr>
-                      <td valign="top">
-                        <b>Throws:</b>
-                      </td>
-                      <td>
-                        <i>An allocation error</i>
-                        <p>
-                          if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top"></td>
-                      <td>
-                        <i>Whatever</i>
-                        <p>
-                          T::T(const T&amp;) throws.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4514952">
-                    <tr>
-                      <td valign="top">
-                        <b>Note:</b>
-                      </td>
-                      <td>
-                        <p>
-                          It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt;
-                          min_capacity</code>) and an assertion will be invoked in the debug mode.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <i>capacity</i>
+                  <p>
+                    The capacity of the buffer.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>min_capacity</i>
+                  <p>
+                    The minimal guaranteed amount of allocated memory. (The metrics of the min_capacity is number of
+                    items.)
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>first</i>
+                  <p>
+                    The beginning of the range.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>last</i>
+                  <p>
+                    The end of the range.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>alloc</i>
+                  <p>
+                    The allocator.
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_pre_desc_id4514824">
+              <tr>
+                <td valign="top">
+                  <b>Precondition:</b>
+                </td>
+                <td>
+                  <p>
+                    <code>capacity &gt;= min_capacity</code> and valid range <code>[first, last)</code>.
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_post_desc_id4514838">
+              <tr>
+                <td valign="top">
+                  <b>Postcondition:</b>
+                </td>
+                <td>
+                  <p>
+                    <code>(*this).capacity() == capacity</code><br>
+                    Allocates at least as much memory as specified by the - TODO change <code>min_capacity</code>
+                    parameter.<br>
+                    If the number of items to copy from the range <code>[first, last)</code> is greater than the
+                    specified <code>capacity</code> then only elements from the range <code>[last - capacity,
+                    last)</code> will be copied.
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_exception_desc_id4514878">
+              <tr>
+                <td valign="top">
+                  <b>Throws:</b>
+                </td>
+                <td>
+                  <i>An allocation error</i>
+                  <p>
+                    if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"></td>
+                <td>
+                  <i>Whatever</i>
+                  <p>
+                    T::T(const T&amp;) throws.
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_note_desc_id4514918">
+              <tr>
+                <td valign="top">
+                  <b>Note:</b>
+                </td>
+                <td>
+                  <p>
+                    It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt;
+                    min_capacity</code>) and an assertion will be invoked in the debug mode.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -910,26 +773,61 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917" name=
-            "classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917"></a> <code><b><a href=
+            "classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917"></a><code><b><a href=
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
             min_capacity() const;</b></code><br>
-            <table id="table_function_desc_id4512115">
+            <p>
+              Return the minimal guaranteed amount of allocated memory.
+            </p>
+            <p>
+              The allocated memory will never drop under this value.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer__space__optimized_1b3667b889d9633e88d62adb98c1b1291" name=
+            "classboost_1_1circular__buffer__space__optimized_1b3667b889d9633e88d62adb98c1b1291"></a><code><b>void
+            set_min_capacity(<a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
+            new_min_capacity);</b></code><br>
+            <p>
+              Change the minimal guaranteed amount of allocated memory.
+            </p>
+            <table id="table_pre_desc_id4512281">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Precondition:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4512158">
-                    <tr>
-                      <td>
-                        <p>
-                          Return the minimal guaranteed amount of allocated memory.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
                   <p>
-                    The allocated memory will never drop under this value.
+                    <code>(*this).capacity() &gt;= new_min_capacity</code>
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_post_desc_id4512300">
+              <tr>
+                <td valign="top">
+                  <b>Postcondition:</b>
+                </td>
+                <td>
+                  <p>
+                    <code>(*this).min_capacity() == new_min_capacity</code> Allocates memory specified by the
+                    <code>new_min_capacity</code> parameter.
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_note_desc_id4512324">
+              <tr>
+                <td valign="top">
+                  <b>Note:</b>
+                </td>
+                <td>
+                  <p>
+                    It is considered as a bug if the precondition is not met (i.e. if <code>new_min_capacity &gt;
+                    (*this).capacity()</code>) and an assertion will be invoked in the debug mode.
                   </p>
                 </td>
               </tr>
@@ -938,116 +836,36 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_1b3667b889d9633e88d62adb98c1b1291" name=
-            "classboost_1_1circular__buffer__space__optimized_1b3667b889d9633e88d62adb98c1b1291"></a> <code><b>void
-            set_min_capacity(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
-            new_min_capacity);</b></code><br>
-            <table id="table_function_desc_id4512250">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4512303">
-                    <tr>
-                      <td>
-                        <p>
-                          Change the minimal guaranteed amount of allocated memory.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_pre_desc_id4512314">
-                    <tr>
-                      <td valign="top">
-                        <b>Precondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>(*this).capacity() &gt;= new_min_capacity</code>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_post_desc_id4512333">
-                    <tr>
-                      <td valign="top">
-                        <b>Postcondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>(*this).min_capacity() == new_min_capacity</code> Allocates memory specified by the
-                          <code>new_min_capacity</code> parameter.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4512357">
-                    <tr>
-                      <td valign="top">
-                        <b>Note:</b>
-                      </td>
-                      <td>
-                        <p>
-                          It is considered as a bug if the precondition is not met (i.e. if <code>new_min_capacity &gt;
-                          (*this).capacity()</code>) and an assertion will be invoked in the debug mode.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1c804242b924b93eb3db7f3f4587a096c" name=
-            "classboost_1_1circular__buffer__space__optimized_1c804242b924b93eb3db7f3f4587a096c"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_1c804242b924b93eb3db7f3f4587a096c"></a><code><b>void
             set_capacity(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
             new_capacity);</b></code><br>
-            <table id="table_function_desc_id4512683">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_pre_desc_id4512722">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Precondition:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4512736">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_pre_desc_id4512755">
-                    <tr>
-                      <td valign="top">
-                        <b>Precondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>min_capacity() &lt;= new_capacity</code>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4512773">
-                    <tr>
-                      <td valign="top">
-                        <b>Note:</b>
-                      </td>
-                      <td>
-                        <p>
-                          It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt;
-                          min_capacity()</code>) and an assertion will be invoked in the debug mode.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    <code>min_capacity() &lt;= new_capacity</code>
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_note_desc_id4512740">
+              <tr>
+                <td valign="top">
+                  <b>Note:</b>
+                </td>
+                <td>
+                  <p>
+                    It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt;
+                    min_capacity()</code>) and an assertion will be invoked in the debug mode.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1056,79 +874,49 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1f244ff5576b79f8d60e273c02d71c9f2" name=
-            "classboost_1_1circular__buffer__space__optimized_1f244ff5576b79f8d60e273c02d71c9f2"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_1f244ff5576b79f8d60e273c02d71c9f2"></a><code><b>void
             resize(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
             new_size, <a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item = value_type());</b></code><br>
-            <table id="table_function_desc_id4512842">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4512924">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            <p>
+              See the circular_buffer source documentation.
+            </p>
           </td>
         </tr>
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_16e2c5d77ea32819fd28f8ff2d5ce888a" name=
-            "classboost_1_1circular__buffer__space__optimized_16e2c5d77ea32819fd28f8ff2d5ce888a"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_16e2c5d77ea32819fd28f8ff2d5ce888a"></a><code><b>void
             rset_capacity(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
             new_capacity);</b></code><br>
-            <table id="table_function_desc_id4513033">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_pre_desc_id4513072">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Precondition:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4513086">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_pre_desc_id4513105">
-                    <tr>
-                      <td valign="top">
-                        <b>Precondition:</b>
-                      </td>
-                      <td>
-                        <p>
-                          <code>min_capacity() &lt;= new_capacity</code>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4513122">
-                    <tr>
-                      <td valign="top">
-                        <b>Note:</b>
-                      </td>
-                      <td>
-                        <p>
-                          It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt;
-                          min_capacity()</code>) and an assertion will be invoked in the debug mode.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    <code>min_capacity() &lt;= new_capacity</code>
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <table id="table_note_desc_id4513089">
+              <tr>
+                <td valign="top">
+                  <b>Note:</b>
+                </td>
+                <td>
+                  <p>
+                    It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt;
+                    min_capacity()</code>) and an assertion will be invoked in the debug mode.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1137,65 +925,35 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1d45e2e72d9e3fb42e090ebc47ac8d7ee" name=
-            "classboost_1_1circular__buffer__space__optimized_1d45e2e72d9e3fb42e090ebc47ac8d7ee"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_1d45e2e72d9e3fb42e090ebc47ac8d7ee"></a><code><b>void
             rresize(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
             new_size, <a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item = value_type());</b></code><br>
-            <table id="table_function_desc_id4513192">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4513274">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            <p>
+              See the circular_buffer source documentation.
+            </p>
           </td>
         </tr>
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_17ca4fda9526d0dad99706763c3b2d9f1" name=
-            "classboost_1_1circular__buffer__space__optimized_17ca4fda9526d0dad99706763c3b2d9f1"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_17ca4fda9526d0dad99706763c3b2d9f1"></a><code><b>void
             assign(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n,
             <a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item);</b></code><br>
-            <table id="table_function_desc_id4515087">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4515156">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            <p>
+              See the circular_buffer source documentation.
+            </p>
           </td>
         </tr>
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_10dff40462f19ca6cecd89443ceb8d71f" name=
-            "classboost_1_1circular__buffer__space__optimized_10dff40462f19ca6cecd89443ceb8d71f"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_10dff40462f19ca6cecd89443ceb8d71f"></a><code><b>void
             assign(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_10b8131db04bfa69c99f23aed053ca8a8">capacity_control</a>
             capacity_ctrl, <a href=
@@ -1203,24 +961,9 @@ template &lt;class T, class Alloc&gt;
             <a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item);</b></code><br>
-            <table id="table_function_desc_id4515208">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4515295">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            <p>
+              See the circular_buffer source documentation.
+            </p>
           </td>
         </tr>
         <tr>
@@ -1231,86 +974,41 @@ template &lt;class T, class Alloc&gt;
                 void assign(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_10b8131db04bfa69c99f23aed053ca8a8">capacity_control</a>
             capacity_ctrl, InputIterator first, InputIterator last);</b></code><br>
-            <table id="table_function_desc_id4515479">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4515570">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            <p>
+              See the circular_buffer source documentation.
+            </p>
           </td>
         </tr>
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_14fd3b613f754d529ca250f2563b2f863" name=
-            "classboost_1_1circular__buffer__space__optimized_14fd3b613f754d529ca250f2563b2f863"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_14fd3b613f754d529ca250f2563b2f863"></a><code><b>void
             swap(circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; cb);</b></code><br>
-            <table id="table_function_desc_id4515651">
-              <tr>
-                <td>
-                     
-                </td>
-                <td>
-                  <table id="table_detailed_desc_id4515705">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            <p>
+              See the circular_buffer source documentation.
+            </p>
           </td>
         </tr>
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1cf3ffed54f5fece9315fb96726e5e205" name=
-            "classboost_1_1circular__buffer__space__optimized_1cf3ffed54f5fece9315fb96726e5e205"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_1cf3ffed54f5fece9315fb96726e5e205"></a><code><b>void
             push_back(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item = value_type());</b></code><br>
-            <table id="table_function_desc_id4515783">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4515833">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4515847">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4515866">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1319,38 +1017,23 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1f0484fd492b377ff80c0bcb76183162c" name=
-            "classboost_1_1circular__buffer__space__optimized_1f0484fd492b377ff80c0bcb76183162c"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_1f0484fd492b377ff80c0bcb76183162c"></a><code><b>void
             push_front(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item = value_type());</b></code><br>
-            <table id="table_function_desc_id4515926">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4515977">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4515991">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4516010">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1359,41 +1042,26 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_145877a0d46400f4894a13d25d138c130" name=
-            "classboost_1_1circular__buffer__space__optimized_145877a0d46400f4894a13d25d138c130"></a> <code><b><a href=
+            "classboost_1_1circular__buffer__space__optimized_145877a0d46400f4894a13d25d138c130"></a><code><b><a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             insert(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
             <a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item = value_type());</b></code><br>
-            <table id="table_function_desc_id4516310">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4516384">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4516399">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4516418">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1402,7 +1070,7 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1dc2060ce1105d80429ff3f004ca0691b" name=
-            "classboost_1_1circular__buffer__space__optimized_1dc2060ce1105d80429ff3f004ca0691b"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_1dc2060ce1105d80429ff3f004ca0691b"></a><code><b>void
             insert(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
             <a href=
@@ -1410,34 +1078,19 @@ template &lt;class T, class Alloc&gt;
             <a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item);</b></code><br>
-            <table id="table_function_desc_id4516520">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4516593">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4516607">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4516626">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1451,34 +1104,19 @@ template &lt;class T, class Alloc&gt;
                 void insert(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
             InputIterator first, InputIterator last);</b></code><br>
-            <table id="table_function_desc_id4516700">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4516776">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4516790">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4516809">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1487,41 +1125,26 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de" name=
-            "classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de"></a> <code><b><a href=
+            "classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de"></a><code><b><a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             rinsert(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
             <a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item = value_type());</b></code><br>
-            <table id="table_function_desc_id4516868">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4516943">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4516957">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4516976">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1530,7 +1153,7 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_11eff7ec0eb603d489bd12f8c48928c9d" name=
-            "classboost_1_1circular__buffer__space__optimized_11eff7ec0eb603d489bd12f8c48928c9d"></a> <code><b>void
+            "classboost_1_1circular__buffer__space__optimized_11eff7ec0eb603d489bd12f8c48928c9d"></a><code><b>void
             rinsert(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
             <a href=
@@ -1538,34 +1161,19 @@ template &lt;class T, class Alloc&gt;
             <a href=
             "circular_buffer.html#classboost_1_1circular__buffer__space__optimized_116b928fa9d1df586ce1e4b60837afe9f">value_type</a>
             item);</b></code><br>
-            <table id="table_function_desc_id4517064">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4517136">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4517150">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4517169">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1579,34 +1187,19 @@ template &lt;class T, class Alloc&gt;
                 void rinsert(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
             InputIterator first, InputIterator last);</b></code><br>
-            <table id="table_function_desc_id4517242">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4517318">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4517333">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4517352">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1615,39 +1208,24 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_136feadef225bd8a10962a92c4ffcdfd3" name=
-            "classboost_1_1circular__buffer__space__optimized_136feadef225bd8a10962a92c4ffcdfd3"></a> <code><b><a href=
+            "classboost_1_1circular__buffer__space__optimized_136feadef225bd8a10962a92c4ffcdfd3"></a><code><b><a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             erase(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             pos);</b></code><br>
-            <table id="table_function_desc_id4517411">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4517456">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4517470">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4517489">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1656,41 +1234,26 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_19e9a4e0dfca27329da78e014d97201ca" name=
-            "classboost_1_1circular__buffer__space__optimized_19e9a4e0dfca27329da78e014d97201ca"></a> <code><b><a href=
+            "classboost_1_1circular__buffer__space__optimized_19e9a4e0dfca27329da78e014d97201ca"></a><code><b><a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             erase(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> first,
             <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             last);</b></code><br>
-            <table id="table_function_desc_id4517606">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4517668">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4517683">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4517702">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1699,39 +1262,24 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_16e96800422211d02621526c894b71fa1" name=
-            "classboost_1_1circular__buffer__space__optimized_16e96800422211d02621526c894b71fa1"></a> <code><b><a href=
+            "classboost_1_1circular__buffer__space__optimized_16e96800422211d02621526c894b71fa1"></a><code><b><a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             rerase(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             pos);</b></code><br>
-            <table id="table_function_desc_id4517775">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4517820">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4517834">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4517853">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>
@@ -1740,41 +1288,26 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_154fd4c2a67c7d6de6cbf6c8255729e98" name=
-            "classboost_1_1circular__buffer__space__optimized_154fd4c2a67c7d6de6cbf6c8255729e98"></a> <code><b><a href=
+            "classboost_1_1circular__buffer__space__optimized_154fd4c2a67c7d6de6cbf6c8255729e98"></a><code><b><a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             rerase(<a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> first,
             <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             last);</b></code><br>
-            <table id="table_function_desc_id4517926">
+            <p>
+              See the circular_buffer source documentation.
+            </p>
+            <table id="table_note_desc_id4517988">
               <tr>
-                <td>
-                     
+                <td valign="top">
+                  <b>Warning:</b>
                 </td>
                 <td>
-                  <table id="table_detailed_desc_id4518003">
-                    <tr>
-                      <td>
-                        <p>
-                          See the circular_buffer source documentation.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table id="table_note_desc_id4518022">
-                    <tr>
-                      <td valign="top">
-                        <b>Warning:</b>
-                      </td>
-                      <td>
-                        <p>
-                          The rules for iterator invalidation differ from the original circular_buffer. See the
-                          <a href="../circular_buffer_adaptor.html#invalidation">documentation</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <p>
+                    The rules for iterator invalidation differ from the original circular_buffer. See the <a href=
+                    "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                  </p>
                 </td>
               </tr>
             </table>

@@ -141,9 +141,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   </xsl:template>
 
   <xsl:template match="briefdescription">
-    <table id="table_detailed_desc_{generate-id(.)}">
-      <tr><td><xsl:apply-templates/></td></tr>
-    </table>
+    <xsl:apply-templates/>
   </xsl:template>
 
   <!-- Synopsis mode -->
@@ -303,12 +301,8 @@ public:
     <xsl:value-of select="substring(concat(' = ', defval), 1 div (normalize-space(defval) != ''))"/>
     <xsl:value-of select="substring(', ', 1 div (count(following-sibling::param) != 0))"/>
     </xsl:for-each>)<xsl:value-of select="substring(' const', 1 div (@const = 'yes'))"/>;</b></code><br />
-    <table id="table_function_desc_{generate-id(.)}">
-      <tr><td>&nbsp;&nbsp;&nbsp;</td><td>
-        <xsl:apply-templates select="briefdescription"/>
-        <xsl:apply-templates select="detaileddescription"/>
-      </td></tr>
-    </table>
+    <xsl:apply-templates select="briefdescription"/>
+    <xsl:apply-templates select="detaileddescription"/>
     </td></tr>
   </xsl:template>
 
