@@ -62,8 +62,14 @@ http://www.boost.org/LICENSE_1_0.txt)
           <xsl:value-of select="$link-text"/>
         </xsl:element>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="text() = $container">
         <xsl:value-of select="text()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="a">
+          <xsl:attribute name="href"><xsl:value-of select="concat('#', @refid)"/></xsl:attribute>
+          <xsl:value-of select="text()"/>
+        </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -246,7 +252,7 @@ public:
         <xsl:apply-templates select="parameterdescription"/>
         <xsl:variable name="type-rqmts" select="concat('Type Requirements ', parameternamelist/parametername)"/>
         <xsl:if test="../../simplesect[@kind='par']/title = $type-rqmts">
-            <dl><dt><b>Type Requirements:</b></dt><!-- TODO can be re-done to be generic -->
+            <dl><dt><b>Type Requirements:</b></dt>
             <dd><xsl:apply-templates select="../../simplesect[@kind='par'][title=$type-rqmts]/para"/></dd></dl>
         </xsl:if>
     </td>
