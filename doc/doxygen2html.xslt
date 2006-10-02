@@ -67,7 +67,14 @@ http://www.boost.org/LICENSE_1_0.txt)
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="a">
-          <xsl:attribute name="href"><xsl:value-of select="concat('#', @refid)"/></xsl:attribute>
+          <xsl:choose>
+            <xsl:when test="count(//memberdef[@id=current()/@refid]) &gt; 0">
+              <xsl:attribute name="href"><xsl:value-of select="concat('#', @refid)"/></xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="href"><xsl:value-of select="concat($link-prefix, '#', @refid)"/></xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
           <xsl:value-of select="text()"/>
         </xsl:element>
       </xsl:otherwise>
@@ -148,7 +155,7 @@ class <xsl:value-of select="$container"/>
 public:
 <xsl:call-template name="public-types"/><xsl:text disable-output-escaping="yes">
 </xsl:text>
-<xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="synopsis"/><xsl:text disable-output-escaping="yes">
+<xsl:call-template name="constructors"/><xsl:text disable-output-escaping="yes">
 </xsl:text>
 <xsl:call-template name="member-functions"/><xsl:text disable-output-escaping="yes">};
 
@@ -302,7 +309,17 @@ public:
     <xsl:for-each select="text() | ref">
       <xsl:variable name="item" select="translate(., '&space;', '')"/>
       <xsl:choose>
-        <xsl:when test="$item = 'return_value_type' or $item = 'param_value_type'"><a href="{$link-prefix}#{$class[@kind = 'class']/sectiondef[@kind='public-type']/memberdef[@kind='typedef' and name='value_type']/@id}">value_type</a></xsl:when>
+        <xsl:when test="$item = 'return_value_type' or $item = 'param_value_type'">
+          <xsl:variable name="value-type" select="$class[@kind = 'class']/sectiondef[@kind='public-type']/memberdef[@kind='typedef' and name='value_type']"/>
+          <xsl:choose>
+            <xsl:when test="boolean($value-type/reimplements)">
+              <a href="{$link-prefix}#{$value-type/reimplements/@refid}">value_type</a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="{$link-prefix}#{$value-type/@id}">value_type</a>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
         <xsl:when test="contains($item, 'circular_buffer')"><xsl:value-of select="$item"/></xsl:when>
         <xsl:when test="@refid">
           <xsl:element name="a">

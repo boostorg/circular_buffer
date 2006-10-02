@@ -264,12 +264,14 @@ public:
        \note This section will never be compiled. The default copy constructor
              will be generated instead.
     */
+    //! TODO doc
     circular_buffer_space_optimized(const circular_buffer_space_optimized<T, Alloc>& cb);
 
 #endif // #if defined(BOOST_CB_NEVER_DEFINED)
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-	
+
+	// TODO describe workaround
 	template <class InputIterator>
     circular_buffer_space_optimized(
         InputIterator first,
@@ -277,6 +279,7 @@ public:
     : circular_buffer<T, Alloc>(first, last)
     , m_capacity_ctrl(circular_buffer<T, Alloc>::capacity()) {}
 
+  // TODO describe workaround
 	template <class InputIterator>
     circular_buffer_space_optimized(
         capacity_control capacity_ctrl,
@@ -338,15 +341,19 @@ public:
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
-    // Default destructor
-
 #if defined(BOOST_CB_NEVER_DEFINED)
+
+    // Default destructor
+    //! TODO doc
+    ~circular_buffer_space_optimized();
+
 
     // Assignment operator - declared only for documentation purpose.
     /*
        \note This section will never be compiled. The default assignment
              operator will be generated instead.
     */
+    //! TODO doc
     circular_buffer_space_optimized<T, Alloc>& operator = (const circular_buffer_space_optimized<T, Alloc>& cb);
 
 #endif // #if defined(BOOST_CB_NEVER_DEFINED)

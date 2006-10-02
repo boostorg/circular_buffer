@@ -31,6 +31,10 @@ http://www.boost.org/LICENSE_1_0.txt)
     <xsl:apply-templates select="sectiondef[@kind='public-type']/memberdef" mode="synopsis"/>
   </xsl:template>
 
+  <xsl:template name="constructors">
+    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="synopsis"/>
+  </xsl:template>
+
   <xsl:template name="member-functions">
     <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type != '']" mode="synopsis"/>
   </xsl:template>

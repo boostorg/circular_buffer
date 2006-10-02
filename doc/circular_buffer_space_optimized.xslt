@@ -50,11 +50,31 @@ http://www.boost.org/LICENSE_1_0.txt)
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="constructors">
+    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type = '']">
+      <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
+      <xsl:if test="string-length($briefdescription) &gt; 0">
+        <xsl:apply-templates select="." mode="synopsis"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template name="member-functions">
     <xsl:variable name="current" select="sectiondef[@kind='public-func']/memberdef[type != '']"/>
+    <xsl:for-each select="document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']">
+      <xsl:if test="count($current[name=current()/name and string-length(normalize-space(briefdescription)) &gt; 0]) = 0">
+        <xsl:apply-templates select="." mode="synopsis">
+          <xsl:with-param name="link-prefix" select="$link-prefix"/>
+        </xsl:apply-templates>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select="$current[string-length(normalize-space(briefdescription)) &gt; 0]">
+      <xsl:apply-templates select="." mode="synopsis"/>
+    </xsl:for-each>
+    <!--
     <xsl:for-each select="$current | document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']">
       <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
-      <xsl:if test="string-length($briefdescription) &gt; 0 and count(reimplements) = 0">
+      <xsl:if test="string-length($briefdescription) &gt; 0">
         <xsl:choose>
           <xsl:when test="count($current[name=current()/name]) &gt; 0 and count(param/type[ref='circular_buffer']) &gt; 0">
             <xsl:apply-templates select="$current[name=current()/name]" mode="synopsis">
@@ -66,14 +86,15 @@ http://www.boost.org/LICENSE_1_0.txt)
           <xsl:when test="../../compoundname = 'boost::circular_buffer_space_optimized'">
             <xsl:apply-templates select="." mode="synopsis"/>
           </xsl:when>
-          <xsl:when test="count($current[name=current()/name]) = 0">
+          <xsl:otherwise>
             <xsl:apply-templates select="." mode="synopsis">
               <xsl:with-param name="link-prefix" select="$link-prefix"/>
             </xsl:apply-templates>
-          </xsl:when>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:if>
     </xsl:for-each>
+    -->
   </xsl:template>
 
   <xsl:template name="standalone-functions">
@@ -93,15 +114,14 @@ http://www.boost.org/LICENSE_1_0.txt)
   </xsl:template>
 
   <xsl:template name="constructors-details">
-    <xsl:apply-templates select="sectiondef[@kind='public-func']/memberdef[type = '']" mode="description"/>
+    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type = '' and string-length(normalize-space(briefdescription)) &gt; 0]">
+      <xsl:apply-templates select="." mode="description"/>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="member-functions-details">
-    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != '']">
-      <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
-      <xsl:if test="string-length($briefdescription) &gt; 0 and count(reimplements) = 0">
-        <xsl:apply-templates select="." mode="description"/>
-      </xsl:if>
+    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != '' and string-length(normalize-space(briefdescription)) &gt; 0]">
+      <xsl:apply-templates select="." mode="description"/>
     </xsl:for-each>
   </xsl:template>
 

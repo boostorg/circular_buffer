@@ -753,7 +753,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>capacity() == max_size() &amp;&amp; size() == 0</code>
+                <code><a href="#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> ==
+                <a href="#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a> &amp;&amp;
+                <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == 0</code>
               </dd>
             </dl>
             <dl>
@@ -782,7 +784,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).capacity() == capacity &amp;&amp; (*this).size == 0</code>
+                <code>(*this).<a href=
+                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> == capacity
+                &amp;&amp; (*this).size == 0</code>
               </dd>
             </dl>
             <dl>
@@ -811,8 +815,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>capacity() == n &amp;&amp; size() == n &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this)[n -
-                1] == item</code>
+                <code><a href="#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> == n
+                &amp;&amp; <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n
+                &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this)[n - 1] == item</code>
               </dd>
             </dl>
             <dl>
@@ -934,7 +939,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).capacity() == capacity</code><br>
+                <code>(*this).<a href=
+                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> ==
+                capacity</code><br>
                 If the number of items to copy from the range <code>[first, last)</code> is greater than the specified
                 <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code> will be
                 copied.
@@ -1100,7 +1107,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>*(this).size() &gt; index</code>
+                <code>*(this).<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>
+                &gt; index</code>
               </dd>
             </dl>
           </td>
@@ -1119,7 +1127,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>*(this).size() &gt; index</code>
+                <code>*(this).<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>
+                &gt; index</code>
               </dd>
             </dl>
           </td>
@@ -1173,7 +1182,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>!*(this).empty()</code>
+                <code>!*(this).<a href=
+                "#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty()</a></code>
               </dd>
             </dl>
           </td>
@@ -1190,7 +1200,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>!*(this).empty()</code>
+                <code>!*(this).<a href=
+                "#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty()</a></code>
               </dd>
             </dl>
           </td>
@@ -1208,7 +1219,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>!*(this).empty()</code>
+                <code>!*(this).<a href=
+                "#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty()</a></code>
               </dd>
             </dl>
           </td>
@@ -1226,7 +1238,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>!*(this).empty()</code>
+                <code>!*(this).<a href=
+                "#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty()</a></code>
               </dd>
             </dl>
           </td>
@@ -1288,7 +1301,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>&amp;(*this)[0] &lt; &amp;(*this)[1] &lt; ... &lt; &amp;(*this)[size() - 1]</code>
+                <code>&amp;(*this)[0] &lt; &amp;(*this)[1] &lt; ... &lt; &amp;(*this)[<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - 1]</code>
               </dd>
             </dl>
             <dl>
@@ -1349,8 +1363,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Note:</b>
               </dt>
               <dd>
-                This is not the only way how to pass data into the legacy C API - see array_one() and array_two() for
-                the other option.
+                This is not the only way how to pass data into the legacy C API - see <a href=
+                "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a> and <a href=
+                "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a> for the other
+                option.
               </dd>
             </dl>
           </td>
@@ -1450,10 +1466,13 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).capacity() == new_capacity</code><br>
+                <code>(*this).<a href=
+                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> ==
+                new_capacity</code><br>
                 If the current number of elements stored in the circular buffer is greater than the desired new
-                capacity then <code>((*this).size() - new_capacity)</code> elements will be removed according to the
-                <code>remove_front</code> parameter.
+                capacity then <code>((*this).<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_capacity)</code>
+                elements will be removed according to the <code>remove_front</code> parameter.
               </dd>
             </dl>
             <dl>
@@ -1509,11 +1528,13 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).size() == new_size</code><br>
+                <code>(*this).<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                new_size</code><br>
                 If the new size is greater than the current size, the rest of the circular buffer is filled with copies
                 of <code>item</code>. In case the resulting size exceeds the current capacity the capacity is set to
-                <code>new_size</code>. If the new size is lower than the current size then <code>((*this).size() -
-                new_size)</code> elements will be removed according to the <code>remove_front</code> parameter.
+                <code>new_size</code>. If the new size is lower than the current size then <code>((*this).<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_size)</code>
+                elements will be removed according to the <code>remove_front</code> parameter.
               </dd>
             </dl>
             <dl>
@@ -1611,8 +1632,11 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).capacity() == n &amp;&amp; (*this).size() == n &amp;&amp; (*this)[0] == (*this)[1] == ...
-                == (*this).back() == item</code>
+                <code>(*this).<a href=
+                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> == n &amp;&amp;
+                (*this).<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n
+                &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this).<a href=
+                "#classboost_1_1circular__buffer_1d985d974020f88bb4255d8edbae0a30a">back()</a> == item</code>
               </dd>
             </dl>
             <dl>
@@ -1670,8 +1694,11 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).capacity() == std::distance(first, last) &amp;&amp; (*this).size() ==
-                std::distance(first, last)</code>
+                <code>(*this).<a href=
+                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> ==
+                std::distance(first, last) &amp;&amp; (*this).<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == std::distance(first,
+                last)</code>
               </dd>
             </dl>
             <dl>
@@ -1746,7 +1773,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).back() == item</code><br>
+                <code>(*this).<a href="#classboost_1_1circular__buffer_1d985d974020f88bb4255d8edbae0a30a">back()</a> ==
+                item</code><br>
                 If the circular buffer is full, the first (leftmost) element will be removed.
               </dd>
             </dl>
@@ -1781,7 +1809,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).front() == item</code><br>
+                <code>(*this).<a href="#classboost_1_1circular__buffer_10d5fdeabeb352f47d1f7bb1ea8d9819f">front()</a>
+                == item</code><br>
                 If the circular buffer is full, the last (rightmost) element will be removed.
               </dd>
             </dl>
@@ -1815,7 +1844,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>!*(this).empty()</code> <code>iterator it = ((*this).end() - 1)</code>
+                <code>!*(this).<a href=
+                "#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty()</a></code> <code>iterator
+                it = ((*this).<a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> -
+                1)</code>
               </dd>
             </dl>
             <dl>
@@ -1823,7 +1855,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>((*this).end() - 1) != it</code>
+                <code>((*this).<a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> -
+                1) != it</code>
               </dd>
             </dl>
             <dl>
@@ -1848,7 +1881,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>!*(this).empty()</code> <code>iterator it = (*this).begin()</code>
+                <code>!*(this).<a href=
+                "#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty()</a></code> <code>iterator
+                it = (*this).<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code>
               </dd>
             </dl>
             <dl>
@@ -1856,7 +1892,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).begin() != it</code>
+                <code>(*this).<a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>
+                != it</code>
               </dd>
             </dl>
             <dl>
@@ -2218,7 +2255,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid <code>pos</code> iterator. <code>size_type old_size = (*this).size()</code>
+                Valid <code>pos</code> iterator. <code>size_type old_size = (*this).<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
               </dd>
             </dl>
             <dl>
@@ -2226,7 +2264,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).size() == old_size - 1</code><br>
+                <code>(*this).<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                old_size - 1</code><br>
                 Removes an element at the position <code>pos</code>.
               </dd>
             </dl>
@@ -2235,8 +2274,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                iterator to the first element remaining beyond the removed element or <code>(*this).end()</code> if no
-                such element exists.
+                iterator to the first element remaining beyond the removed element or <code>(*this).<a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code> if no such element
+                exists.
               </dd>
             </dl>
             <dl>
@@ -2263,7 +2303,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid range <code>[first, last)</code>. <code>size_type old_size = (*this).size()</code>
+                Valid range <code>[first, last)</code>. <code>size_type old_size = (*this).<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
               </dd>
             </dl>
             <dl>
@@ -2271,7 +2312,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).size() == old_size - std::distance(first, last)</code><br>
+                <code>(*this).<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                old_size - std::distance(first, last)</code><br>
                 Removes the elements from the range <code>[first, last)</code>.
               </dd>
             </dl>
@@ -2280,8 +2322,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                iterator to the first element remaining beyond the removed element or <code>(*this).end()</code> if no
-                such element exists.
+                iterator to the first element remaining beyond the removed element or <code>(*this).<a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code> if no such element
+                exists.
               </dd>
             </dl>
             <dl>
@@ -2307,7 +2350,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid <code>pos</code> iterator. <code>size_type old_size = (*this).size()</code>
+                Valid <code>pos</code> iterator. <code>size_type old_size = (*this).<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
               </dd>
             </dl>
             <dl>
@@ -2315,7 +2359,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).size() == old_size - 1</code><br>
+                <code>(*this).<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                old_size - 1</code><br>
                 Removes an element at the position <code>pos</code>.
               </dd>
             </dl>
@@ -2324,8 +2369,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                iterator to the first element remaining in front of the removed element or <code>(*this).begin()</code>
-                if no such element exists.
+                iterator to the first element remaining in front of the removed element or <code>(*this).<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code> if no such
+                element exists.
               </dd>
             </dl>
             <dl>
@@ -2352,7 +2398,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid range <code>[first, last)</code>. <code>size_type old_size = (*this).size()</code>
+                Valid range <code>[first, last)</code>. <code>size_type old_size = (*this).<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
               </dd>
             </dl>
             <dl>
@@ -2360,7 +2407,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).size() == old_size - std::distance(first, last)</code><br>
+                <code>(*this).<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                old_size - std::distance(first, last)</code><br>
                 Removes the elements from the range <code>[first, last)</code>.
               </dd>
             </dl>
@@ -2369,8 +2417,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                iterator to the first element remaining in front of the removed element or <code>(*this).begin()</code>
-                if no such element exists.
+                iterator to the first element remaining in front of the removed element or <code>(*this).<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code> if no such
+                element exists.
               </dd>
             </dl>
             <dl>
@@ -2395,7 +2444,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                (*this).size() == 0
+                (*this).<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == 0
               </dd>
             </dl>
             <dl>
