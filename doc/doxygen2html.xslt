@@ -36,7 +36,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <xsl:template match="nonbreakablespace">
     &nbsp;
   </xsl:template>
-  
+
   <xsl:template match="linebreak">
     <br />
   </xsl:template>
@@ -44,7 +44,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <xsl:template match="preformatted">
     <pre><xsl:apply-templates/></pre>
   </xsl:template>
-  
+
   <xsl:template match="computeroutput">
     <code><xsl:apply-templates/></code>
   </xsl:template>
@@ -110,7 +110,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <xsl:template match="simplesect[@kind='post']">
     <dl><dt><b>Postcondition:</b></dt><dd><xsl:apply-templates/></dd></dl>
   </xsl:template>
-  
+
   <xsl:template match="simplesect[@kind='par']">
     <dl><dt><b><xsl:value-of select="title"/>:</b></dt><dd><xsl:apply-templates select="para"/></dd></dl>
   </xsl:template>
@@ -118,7 +118,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <xsl:template match="simplesect[@kind='warning']">
     <dl><dt><b>Warning:</b></dt><dd><xsl:apply-templates/></dd></dl>
   </xsl:template>
-  
+
   <xsl:template match="simplesect[@kind='note']">
     <dl><dt><b>Note:</b></dt><dd><xsl:apply-templates/></dd></dl>
   </xsl:template>

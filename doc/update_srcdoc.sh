@@ -31,7 +31,7 @@ if [ -f $DOCFILE ]; then
 
   echo Correcting and pretty-printing $DOCFILE with HTML Tidy ...
   tidy -ashtml -config Tidy.conf $DOCFILE
-  
+
   echo Removing temporary directory ...
   rm -rf srcdoc
 

@@ -33,7 +33,7 @@ Prerequisites:
 
 
 Updating source code documentation:
-  
+
 The source code documentation of the Circular Buffer library obeys the Doxygen
 syntax. The library documentation is written in HTML (files circular_buffer.html
 and circular_buffer_space_optimized.html). The generation of the source code
