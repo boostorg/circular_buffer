@@ -81,30 +81,30 @@ private:
 // dummy class suitable for iterator referencing test
 class Dummy {
 public:
-	enum DummyEnum {
-		eVar,
-		eFnc,
-		eConst,
-		eVirtual
-	};
-	Dummy() : m_n(eVar) {}
+    enum DummyEnum {
+        eVar,
+        eFnc,
+        eConst,
+        eVirtual
+    };
+    Dummy() : m_n(eVar) {}
     DummyEnum fnc() { return eFnc; }
     DummyEnum const_fnc() const { return eConst; }
-	virtual DummyEnum virtual_fnc() { return eVirtual; }
-	DummyEnum m_n;
+    virtual DummyEnum virtual_fnc() { return eVirtual; }
+    DummyEnum m_n;
 };
 
 // simulator of an input iterator
 struct InputIteratorSimulator
 : boost::iterator<std::input_iterator_tag, int, ptrdiff_t, int*, int&> {
-	typedef std::vector<int>::iterator vector_iterator;
+    typedef std::vector<int>::iterator vector_iterator;
     typedef int value_type;
     typedef int* pointer;
     typedef int& reference;
     typedef size_t size_type;
     typedef ptrdiff_t difference_type;
     explicit InputIteratorSimulator(const vector_iterator& it) : m_it(it) {}
-	InputIteratorSimulator& operator = (const InputIteratorSimulator& it) {
+    InputIteratorSimulator& operator = (const InputIteratorSimulator& it) {
         if (this == &it)
             return *this;
         m_it = it.m_it;
@@ -124,7 +124,7 @@ struct InputIteratorSimulator
     bool operator == (const InputIteratorSimulator& it) const { return m_it == it.m_it; }
     bool operator != (const InputIteratorSimulator& it) const { return m_it != it.m_it; }
 private:
-	vector_iterator m_it;
+    vector_iterator m_it;
 };
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)

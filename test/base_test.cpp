@@ -37,14 +37,14 @@ void iterator_reference_test() {
     circular_buffer<Dummy>::iterator it = cb.begin();
     circular_buffer<Dummy>::const_iterator cit = cb.begin() + 1;
 
-	BOOST_CHECK((*it).m_n == Dummy::eVar);
+    BOOST_CHECK((*it).m_n == Dummy::eVar);
     BOOST_CHECK((*it).fnc() == Dummy::eFnc);
     BOOST_CHECK((*cit).const_fnc() == Dummy::eConst);
-	BOOST_CHECK((*it).virtual_fnc() == Dummy::eVirtual);
-	BOOST_CHECK(it->m_n == Dummy::eVar);
-	BOOST_CHECK(it->fnc() == Dummy::eFnc);
+    BOOST_CHECK((*it).virtual_fnc() == Dummy::eVirtual);
+    BOOST_CHECK(it->m_n == Dummy::eVar);
+    BOOST_CHECK(it->fnc() == Dummy::eFnc);
     BOOST_CHECK(cit->const_fnc() == Dummy::eConst);
-	BOOST_CHECK(it->virtual_fnc() == Dummy::eVirtual);
+    BOOST_CHECK(it->virtual_fnc() == Dummy::eVirtual);
 }
 
 void iterator_difference_test() {

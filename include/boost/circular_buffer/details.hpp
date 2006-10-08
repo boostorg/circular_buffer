@@ -133,22 +133,22 @@ private:
 */
 template <class Size>
 struct capacity_control {
-	
-	//! The capacity of the space optimized circular buffer.
-	Size m_capacity;
 
-	//! The lowest guaranteed capacity of the adapted circular buffer.
-	Size m_min_capacity;
+    //! The capacity of the space optimized circular buffer.
+    Size m_capacity;
 
-	//! Constructor.
-	capacity_control(Size capacity, Size min_capacity = 0)
-	: m_capacity(capacity), m_min_capacity(min_capacity) {
-		BOOST_CB_ASSERT(capacity >= min_capacity); // check for capacity lower than min_capacity
-	}
+    //! The lowest guaranteed capacity of the adapted circular buffer.
+    Size m_min_capacity;
 
-	// Default copy constructor.
+    //! Constructor.
+    capacity_control(Size capacity, Size min_capacity = 0)
+    : m_capacity(capacity), m_min_capacity(min_capacity) {
+        BOOST_CB_ASSERT(capacity >= min_capacity); // check for capacity lower than min_capacity
+    }
 
-	// Default assign operator.
+    // Default copy constructor.
+
+    // Default assign operator.
 };
 
 /*!
@@ -447,14 +447,14 @@ template<class InputIterator, class ForwardIterator, class Alloc>
 inline ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& alloc) {
     ForwardIterator next = dest;
     BOOST_TRY {
-		for (; first != last; ++first, ++dest)
-			alloc.construct(dest, *first);
-	} BOOST_CATCH(...) {
-		for (; next != dest; ++next)
-            alloc.destroy(next);	
-		BOOST_RETHROW
-	}
-	BOOST_CATCH_END
+        for (; first != last; ++first, ++dest)
+            alloc.construct(dest, *first);
+    } BOOST_CATCH(...) {
+        for (; next != dest; ++next)
+            alloc.destroy(next);
+        BOOST_RETHROW
+    }
+    BOOST_CATCH_END
     return dest;
 }
 
@@ -468,12 +468,12 @@ inline void uninitialized_fill_n(ForwardIterator first, Diff n, const T& item, A
     BOOST_TRY {
         for (; n > 0; ++first, --n)
             alloc.construct(first, item);
-	} BOOST_CATCH(...) {
-		for (; next != first; ++next)
+    } BOOST_CATCH(...) {
+        for (; next != first; ++next)
             alloc.destroy(next);
-		BOOST_RETHROW
-	}
-	BOOST_CATCH_END
+        BOOST_RETHROW
+    }
+    BOOST_CATCH_END
 }
 
 } // namespace cb_details
