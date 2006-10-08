@@ -20,7 +20,7 @@ rb circular_buffer_space_optimized.xslt
 rb copy.xslt
 rb Doxyfile
 rb doxygen2html.xslt
-rb HOWTO.txt
+rb HOWTO-srcdoc
 rb html2xhtml.xslt
 rb Tidy.conf
 rb update_srcdoc.sh
