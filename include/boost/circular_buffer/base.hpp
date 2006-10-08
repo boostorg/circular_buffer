@@ -174,11 +174,29 @@ private:
 public:
 // Allocator
 
-    //! Return the allocator.
+    //! Get the allocator.
+    /*!
+        \return The allocator.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+    */
     allocator_type get_allocator() const { return m_alloc; }
 
-    //! Return the allocator.
+    //! Get the allocator reference.
     /*!
+        \return A reference to the allocator.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
         \note This method was added in order to optimize obtaining of the allocator with a state,
               although use of stateful allocators in STL is discouraged.
     */
@@ -310,13 +328,13 @@ public:
         \throws Whatever T::T(const T&) throws.
         \throws Whatever T::operator = (const T&) throws.
         \par Complexity
-             Linear in the size of the circular_buffer; constant if the postcondition is already met.
+             Linear (in the size of the <code>circular_buffer</code>); constant if the postcondition is already met.
         \par Exception Safety
-             Basic.
+             Basic; no-throw if the operations in the <i>Throws</i> do not throw anything.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the circular_buffer; does not invalidate any iterator
+             Invalidates all iterators pointing to the <code>circular_buffer</code>; does not invalidate any iterator
              if the postcondition is already met prior calling this method.
-        \warning In general invoking any method which modifies the internal state of the circular_buffer
+        \warning In general invoking any method which modifies the internal state of the <code>circular_buffer</code>
                  may delinearize the internal buffer and invalidate the returned pointer.
         \note This is not the only way how to pass data into the legacy C API - see array_one()
               and array_two() for the other option.

@@ -71,7 +71,7 @@ public:
         \pre <code>capacity >= min_capacity</code>
         <p>The <code>m_capacity</code> denotes the capacity of the
         <code>circular_buffer_space_optimized</code> and the <code>m_min_capacity</code>
-        deterimines the minimal allocated size of its internal buffer.</p>
+        determines the minimal allocated size of its internal buffer.</p>
         <p>The converting constructor of the <code>capacity_control</code>
         allows implicit conversion from <code>size_type</code> like types
         which ensures compatibility of creating an instance of the

@@ -985,8 +985,47 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a> get_allocator()
             const;</b></code><br>
             <br>
-            Return the allocator.<br>
-            <br>
+            Get the allocator.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                The allocator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -996,7 +1035,47 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             get_allocator();</b></code><br>
             <br>
-            Return the allocator.
+            Get the allocator reference.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A reference to the allocator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
             <dl>
               <dt>
                 <b>Note:</b>
@@ -1329,7 +1408,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear in the size of the circular_buffer; constant if the postcondition is already met.
+                Linear (in the size of the <code>circular_buffer</code>); constant if the postcondition is already met.
               </dd>
             </dl>
             <dl>
@@ -1337,7 +1416,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                Basic.
+                Basic; no-throw if the operations in the Throws do not throw anything.
               </dd>
             </dl>
             <dl>
@@ -1345,8 +1424,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the circular_buffer; does not invalidate any iterator if the
-                postcondition is already met prior calling this method.
+                Invalidates all iterators pointing to the <code>circular_buffer</code>; does not invalidate any
+                iterator if the postcondition is already met prior calling this method.
               </dd>
             </dl>
             <dl>
@@ -1354,8 +1433,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Warning:</b>
               </dt>
               <dd>
-                In general invoking any method which modifies the internal state of the circular_buffer may delinearize
-                the internal buffer and invalidate the returned pointer.
+                In general invoking any method which modifies the internal state of the <code>circular_buffer</code>
+                may delinearize the internal buffer and invalidate the returned pointer.
               </dd>
             </dl>
             <dl>
