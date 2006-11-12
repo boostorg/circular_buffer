@@ -204,19 +204,72 @@ public:
 
 // Element access
 
-    //! Return an iterator pointing to the beginning of the circular buffer.
+    //! Get the iterator pointing to the beginning of the <code>circular_buffer</code>.
+    /*!
+        \return The random access iterator pointing to the beginning of the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+    */
     iterator begin() { return iterator(this, empty() ? 0 : m_first); }
 
-    //! Return an iterator pointing to the end of the circular buffer.
+    //! Get the iterator pointing to the end of the <code>circular_buffer</code>.
+    /*!
+        \return The random access iterator pointing to "one behind" the last element of the <code>circular_buffer
+                </code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+    */
     iterator end() { return iterator(this, 0); }
 
-    //! Return a const iterator pointing to the beginning of the circular buffer.
+    //! Get the const iterator pointing to the beginning of the <code>circular_buffer</code>.
+    /*!
+        \return The const random access iterator pointing to the beginning of the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+    */
     const_iterator begin() const { return const_iterator(this, empty() ? 0 : m_first); }
 
-    //! Return a const iterator pointing to the end of the circular buffer.
+    //! Get the const iterator pointing to the end of the <code>circular_buffer</code>.
+    /*!
+        \return The const random access iterator pointing to the end of the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+    */
     const_iterator end() const { return const_iterator(this, 0); }
 
-    //! Return a reverse iterator pointing to the beginning of the reversed circular buffer.
+    //! Get the iterator pointing to the beginning of the "reversed" <code>circular_buffer</code>.
+    /*!
+        \return The reverse random access iterator pointing to the last element of the <code>circular_buffer</code>.
+                If the <code>circular_buffer</code> is empty it returns iterator equal to one returned by rend().
+        TODO what about if the buffer is empty?
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+    */
     reverse_iterator rbegin() { return reverse_iterator(end()); }
 
     //! Return a reverse iterator pointing to the end of the reversed circular buffer.
@@ -230,7 +283,7 @@ public:
 
     //! Return the element at the <code>index</code> position.
     /*!
-        \pre <code>*(this).size() > index</code>
+        \pre <code>size() > index</code>
     */
     reference operator [] (size_type index) {
         BOOST_CB_ASSERT(index < size()); // check for invalid index
@@ -239,7 +292,7 @@ public:
 
     //! Return the element at the <code>index</code> position.
     /*!
-        \pre <code>*(this).size() > index</code>
+        \pre <code>size() > index</code>
     */
     return_value_type operator [] (size_type index) const {
         BOOST_CB_ASSERT(index < size()); // check for invalid index
@@ -266,7 +319,7 @@ public:
 
     //! Return the first (leftmost) element.
     /*!
-        \pre <code>!*(this).empty()</code>
+        \pre <code>!empty()</code>
     */
     reference front() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (front element not available)
@@ -275,7 +328,7 @@ public:
 
     //! Return the last (rightmost) element.
     /*!
-        \pre <code>!*(this).empty()</code>
+        \pre <code>!empty()</code>
     */
     reference back() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (back element not available)
@@ -284,7 +337,7 @@ public:
 
     //! Return the first (leftmost) element.
     /*!
-        \pre <code>!*(this).empty()</code>
+        \pre <code>!empty()</code>
     */
     return_value_type front() const {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (front element not available)
@@ -293,7 +346,7 @@ public:
 
     //! Return the last (rightmost) element.
     /*!
-        \pre <code>!*(this).empty()</code>
+        \pre <code>!empty()</code>
     */
     return_value_type back() const {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (back element not available)
