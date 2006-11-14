@@ -206,7 +206,8 @@ public:
 
     //! Get the iterator pointing to the beginning of the <code>circular_buffer</code>.
     /*!
-        \return The random access iterator pointing to the beginning of the <code>circular_buffer</code>.
+        \return A random access iterator pointing to the first element of the <code>circular_buffer</code>. If the
+                <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by end().
         \throws Nothing.
         \par Complexity
              Constant.
@@ -219,8 +220,9 @@ public:
 
     //! Get the iterator pointing to the end of the <code>circular_buffer</code>.
     /*!
-        \return The random access iterator pointing to "one behind" the last element of the <code>circular_buffer
-                </code>.
+        \return A random access iterator pointing to the element "one behind" the last element of the <code>
+                circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to
+                the one returned by begin().
         \throws Nothing.
         \par Complexity
              Constant.
@@ -233,7 +235,9 @@ public:
 
     //! Get the const iterator pointing to the beginning of the <code>circular_buffer</code>.
     /*!
-        \return The const random access iterator pointing to the beginning of the <code>circular_buffer</code>.
+        \return A const random access iterator pointing to the first element of the <code>circular_buffer</code>. If
+                the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by
+                end() const.
         \throws Nothing.
         \par Complexity
              Constant.
@@ -246,7 +250,9 @@ public:
 
     //! Get the const iterator pointing to the end of the <code>circular_buffer</code>.
     /*!
-        \return The const random access iterator pointing to the end of the <code>circular_buffer</code>.
+        \return A const random access iterator pointing to the element "one behind" the last element of the <code>
+                circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to
+                the one returned by begin() const.
         \throws Nothing.
         \par Complexity
              Constant.
@@ -259,9 +265,9 @@ public:
 
     //! Get the iterator pointing to the beginning of the "reversed" <code>circular_buffer</code>.
     /*!
-        \return The reverse random access iterator pointing to the last element of the <code>circular_buffer</code>.
-                If the <code>circular_buffer</code> is empty it returns iterator equal to one returned by rend().
-        TODO what about if the buffer is empty?
+        \return A reverse random access iterator pointing to the last element of the <code>circular_buffer</code>.
+                If the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by
+                rend().
         \throws Nothing.
         \par Complexity
              Constant.
@@ -272,13 +278,49 @@ public:
     */
     reverse_iterator rbegin() { return reverse_iterator(end()); }
 
-    //! Return a reverse iterator pointing to the end of the reversed circular buffer.
+    //! Get the iterator pointing to the end of the "reversed" <code>circular_buffer</code>.
+    /*!
+        \return A reverse random access iterator pointing to the element "one before" the first element of the <code>
+                circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to the
+                one returned by rbegin().
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+    */
     reverse_iterator rend() { return reverse_iterator(begin()); }
 
-    //! Return a const reverse iterator pointing to the beginning of the reversed circular buffer.
+    //! Get the const iterator pointing to the beginning of the "reversed" <code>circular_buffer</code>.
+    /*!
+        \return A const reverse random access iterator pointing to the last element of the <code>circular_buffer
+                </code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned
+                by rend() const.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+    */
     const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
 
-    //! Return a const reverse iterator pointing to the end of the reversed circular buffer.
+    //! Get the const iterator pointing to the end of the "reversed" <code>circular_buffer</code>.
+    /*!
+        \return A const reverse random access iterator pointing to the element "one before" the first element of the
+                <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
+                to the one returned by rbegin() const.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+    */
     const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
     //! Return the element at the <code>index</code> position.

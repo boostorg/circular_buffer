@@ -156,45 +156,80 @@ void boundary_capacity_test() {
     generic_test(cb);
 }
 
+void allocator_test() {
+
+    CB_CONTAINER<Integer> cb(10, 0);
+    CB_CONTAINER<Integer>::allocator_type alloc = cb.get_allocator();
+    CB_CONTAINER<Integer>::allocator_type& alloc_ref = cb.get_allocator();
+    
+    generic_test(cb); 
+}
+
 void begin_and_end_test() {
 
-    CB_CONTAINER<Integer> cb1(10);
-    cb1.push_back(1);
-    cb1.push_back(2);
-    cb1.insert(cb1.begin(), 3);
+    vector<int> v;
+    v.push_back(11);
+    v.push_back(12);
+    v.push_back(13);
+    
+    CB_CONTAINER<Integer> cb1(10, v.begin(), v.end());
+    const CB_CONTAINER<Integer> cb2(10, v.begin(), v.end());
+    
+    CB_CONTAINER<Integer> cb3(10);
+    cb3.push_back(1);
+    cb3.push_back(2);
+    cb3.insert(cb3.begin(), 3);
     int i = 0;
-    CB_CONTAINER<Integer>::const_iterator it = cb1.begin();
-    for (; it != cb1.end(); it++) {
+    CB_CONTAINER<Integer>::const_iterator it = cb3.begin();
+    for (; it != cb3.end(); it++) {
         i += *it;
     }
-    CB_CONTAINER<Integer> cb2(20);
+    CB_CONTAINER<Integer> cb4(20);
+    const CB_CONTAINER<Integer> cb5(20);
 
+    BOOST_CHECK(*cb1.begin() == 11);
+    BOOST_CHECK(*cb2.begin() == 11);
     BOOST_CHECK(i == 6);
-    BOOST_CHECK(cb2.begin() == cb2.end());
+    BOOST_CHECK(cb4.begin() == cb4.end());
+    BOOST_CHECK(cb5.begin() == cb5.end());
 
     generic_test(cb1);
-    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void rbegin_and_rend_test() {
 
-    CB_CONTAINER<Integer> cb1(3);
-    cb1.push_back(1);
-    cb1.push_back(2);
-    cb1.insert(cb1.begin(), 3);
-    cb1.push_back(1);
+    vector<int> v;
+    v.push_back(11);
+    v.push_back(12);
+    v.push_back(13);
+    
+    CB_CONTAINER<Integer> cb1(10, v.begin(), v.end());
+    const CB_CONTAINER<Integer> cb2(10, v.begin(), v.end());
+    
+    CB_CONTAINER<Integer> cb3(3);
+    cb3.push_back(1);
+    cb3.push_back(2);
+    cb3.insert(cb3.begin(), 3);
+    cb3.push_back(1);
     int i = 0;
-    CB_CONTAINER<Integer>::reverse_iterator it = cb1.rbegin();
-    for (; it != cb1.rend(); it++) {
+    CB_CONTAINER<Integer>::reverse_iterator it = cb3.rbegin();
+    for (; it != cb3.rend(); it++) {
         i += *it;
     }
-    CB_CONTAINER<Integer> cb2(20);
+    CB_CONTAINER<Integer> cb4(20);
+    const CB_CONTAINER<Integer> cb5(20);
 
+    BOOST_CHECK(*cb1.rbegin() == 13);
+    BOOST_CHECK(*cb2.rbegin() == 13);
     BOOST_CHECK(i == 4);
-    BOOST_CHECK(cb2.rbegin() == cb2.rend());
+    BOOST_CHECK(cb4.rbegin() == cb4.rend());
+    BOOST_CHECK(cb5.rbegin() == cb5.rend());
 
     generic_test(cb1);
-    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void element_access_and_insert_test() {
@@ -1521,6 +1556,7 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&constructor_and_element_access_test));
     tests->add(BOOST_TEST_CASE(&size_test));
     tests->add(BOOST_TEST_CASE(&boundary_capacity_test));
+    tests->add(BOOST_TEST_CASE(&allocator_test));
     tests->add(BOOST_TEST_CASE(&begin_and_end_test));
     tests->add(BOOST_TEST_CASE(&rbegin_and_rend_test));
     tests->add(BOOST_TEST_CASE(&element_access_and_insert_test));

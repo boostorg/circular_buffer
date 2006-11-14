@@ -1099,7 +1099,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                The random access iterator pointing to the beginning of the <code>circular_buffer</code>.
+                A random access iterator pointing to the first element of the <code>circular_buffer</code>. If the
+                <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by <a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>.
               </dd>
             </dl>
             <dl>
@@ -1148,7 +1150,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                The random access iterator pointing to the end of the <code>circular_buffer</code>.
+                A random access iterator pointing to the element "one behind" the last element of the
+                <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
+                to the one returned by <a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>.
               </dd>
             </dl>
             <dl>
@@ -1198,7 +1203,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                The const random access iterator pointing to the beginning of the <code>circular_buffer</code>.
+                A const random access iterator pointing to the first element of the <code>circular_buffer</code>. If
+                the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by <a href=
+                "#classboost_1_1circular__buffer_17890810d07bc595cfb87f9c47cb075ac">end() const</a>.
               </dd>
             </dl>
             <dl>
@@ -1248,7 +1255,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                The const random access iterator pointing to the end of the <code>circular_buffer</code>.
+                A const random access iterator pointing to the element "one behind" the last element of the
+                <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
+                to the one returned by <a href=
+                "#classboost_1_1circular__buffer_10640d3d41c13b6089b6f169224cf1038">begin() const</a>.
               </dd>
             </dl>
             <dl>
@@ -1298,10 +1308,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                The reverse random access iterator pointing to the last element of the <code>circular_buffer</code>. If
-                the <code>circular_buffer</code> is empty it returns iterator equal to one returned be <a href=
-                "#classboost_1_1circular__buffer_1cff9236a50107188b8942847a4dc2697">rend()</a>. TODO what about if the
-                buffer is empty?
+                A reverse random access iterator pointing to the last element of the <code>circular_buffer</code>. If
+                the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by <a href=
+                "#classboost_1_1circular__buffer_1cff9236a50107188b8942847a4dc2697">rend()</a>.
               </dd>
             </dl>
             <dl>
@@ -1345,8 +1354,50 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1e5dbaec472f4b6ab6a8d4d0d6b15cbdb">reverse_iterator</a>
             rend();</b></code><br>
             <br>
-            Return a reverse iterator pointing to the end of the reversed circular buffer.<br>
-            <br>
+            Get the iterator pointing to the end of the "reversed" <code>circular_buffer</code>.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A reverse random access iterator pointing to the element "one before" the first element of the
+                <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
+                to the one returned by <a href=
+                "#classboost_1_1circular__buffer_1db3d6b10b6763549f54d2627228fa7aa">rbegin()</a>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -1356,8 +1407,49 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1ca423a848964c7915629c90fa7c58598">const_reverse_iterator</a> rbegin()
             const;</b></code><br>
             <br>
-            Return a const reverse iterator pointing to the beginning of the reversed circular buffer.<br>
-            <br>
+            Get the const iterator pointing to the beginning of the "reversed" <code>circular_buffer</code>.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A const reverse random access iterator pointing to the last element of the <code>circular_buffer</code>
+                . If the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by
+                <a href="#classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3">rend() const</a>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -1367,8 +1459,50 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1ca423a848964c7915629c90fa7c58598">const_reverse_iterator</a> rend()
             const;</b></code><br>
             <br>
-            Return a const reverse iterator pointing to the end of the reversed circular buffer.<br>
-            <br>
+            Get the const iterator pointing to the end of the "reversed" <code>circular_buffer</code>.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A const reverse random access iterator pointing to the element "one before" the first element of the
+                <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
+                to the one returned by <a href=
+                "#classboost_1_1circular__buffer_1765d91bf48341907418433a1e3aab026">rbegin() const</a>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
