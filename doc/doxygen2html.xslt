@@ -209,7 +209,7 @@ public:
     <xsl:for-each select="text() | ref">
       <xsl:variable name="item" select="translate(., '&space;', '')"/>
       <xsl:choose>
-        <xsl:when test="contains($item, 'return_value_type') or contains($item, 'param_value_type')">value_type</xsl:when>
+        <xsl:when test="contains($item, 'return_value_type') or contains($item, 'param_value_type')">const_reference</xsl:when>
         <xsl:otherwise>
         <xsl:choose>
             <xsl:when test="contains($item, ',')"><xsl:value-of select="concat(substring-before($item, ','), ',&nbsp;', substring-after($item, ','))"/></xsl:when>
@@ -310,13 +310,13 @@ public:
       <xsl:variable name="item" select="translate(., '&space;', '')"/>
       <xsl:choose>
         <xsl:when test="$item = 'return_value_type' or $item = 'param_value_type'">
-          <xsl:variable name="value-type" select="$class[@kind = 'class']/sectiondef[@kind='public-type']/memberdef[@kind='typedef' and name='value_type']"/>
+          <xsl:variable name="const-reference" select="$class[@kind = 'class']/sectiondef[@kind='public-type']/memberdef[@kind='typedef' and name='const_reference']"/>
           <xsl:choose>
-            <xsl:when test="boolean($value-type/reimplements)">
-              <a href="{$link-prefix}#{$value-type/reimplements/@refid}">value_type</a>
+            <xsl:when test="boolean($const-reference/reimplements)">
+              <a href="{$link-prefix}#{$const-reference/reimplements/@refid}">const_reference</a>
             </xsl:when>
             <xsl:otherwise>
-              <a href="{$link-prefix}#{$value-type/@id}">value_type</a>
+              <a href="{$link-prefix}#{$const-reference/@id}">const_reference</a>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>

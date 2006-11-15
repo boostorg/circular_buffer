@@ -158,11 +158,12 @@ void boundary_capacity_test() {
 
 void allocator_test() {
 
-    CB_CONTAINER<Integer> cb(10, 0);
-    CB_CONTAINER<Integer>::allocator_type alloc = cb.get_allocator();
-    CB_CONTAINER<Integer>::allocator_type& alloc_ref = cb.get_allocator();
-    
-    generic_test(cb); 
+    CB_CONTAINER<Integer> cb1(10, 0);
+    const CB_CONTAINER<Integer> cb2(10, 0);
+    CB_CONTAINER<Integer>::allocator_type& alloc_ref = cb1.get_allocator();
+    CB_CONTAINER<Integer>::allocator_type alloc = cb2.get_allocator();
+
+    generic_test(cb1); 
 }
 
 void begin_and_end_test() {

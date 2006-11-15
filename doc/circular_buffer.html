@@ -180,9 +180,9 @@ public:
    explicit <a href=
 "#classboost_1_1circular__buffer_1b12a66eb6cd7cc88e177bba0a66c70c7">circular_buffer</a>(size_type capacity, const allocator_type&amp; alloc = allocator_type());
    <a href=
-"#classboost_1_1circular__buffer_1fdace8f110d5b7a17c02020757f06fe8">circular_buffer</a>(size_type n, value_type item, const allocator_type&amp; alloc = allocator_type());
+"#classboost_1_1circular__buffer_1fdace8f110d5b7a17c02020757f06fe8">circular_buffer</a>(size_type n, const_reference item, const allocator_type&amp; alloc = allocator_type());
    <a href=
-"#classboost_1_1circular__buffer_1862017022c033a2b107a25a0130430d3">circular_buffer</a>(size_type capacity, size_type n, value_type item, const allocator_type&amp; alloc = allocator_type());
+"#classboost_1_1circular__buffer_1862017022c033a2b107a25a0130430d3">circular_buffer</a>(size_type capacity, size_type n, const_reference item, const allocator_type&amp; alloc = allocator_type());
    <a href=
 "#classboost_1_1circular__buffer_1e515d8a951eeb18b8cc930300e7e13bd">circular_buffer</a>(const circular_buffer&lt;T, Alloc&gt;&amp; cb);
    template &lt;class InputIterator&gt;
@@ -213,15 +213,15 @@ public:
    const_reverse_iterator <a href="#classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3">rend</a>() const;
    reference <a href=
 "#classboost_1_1circular__buffer_1d219f0d3203fb43b964a8cf63f1865cd">operator[]</a>(size_type index);
-   value_type <a href=
+   const_reference <a href=
 "#classboost_1_1circular__buffer_1eb0a7fe7f8a56a4dc4c933b93adfcef4">operator[]</a>(size_type index) const;
    reference <a href="#classboost_1_1circular__buffer_1cd84838cb4fffb6c113fd0297e502edc">at</a>(size_type index);
-   value_type <a href=
+   const_reference <a href=
 "#classboost_1_1circular__buffer_1b233a298f5845a0fcf2ecc56f4170810">at</a>(size_type index) const;
    reference <a href="#classboost_1_1circular__buffer_10d5fdeabeb352f47d1f7bb1ea8d9819f">front</a>();
    reference <a href="#classboost_1_1circular__buffer_1d985d974020f88bb4255d8edbae0a30a">back</a>();
-   value_type <a href="#classboost_1_1circular__buffer_10df8595d83bb9d8a7ce50aabc678f90b">front</a>() const;
-   value_type <a href="#classboost_1_1circular__buffer_1027201797868c6274feb6712f670a132">back</a>() const;
+   const_reference <a href="#classboost_1_1circular__buffer_10df8595d83bb9d8a7ce50aabc678f90b">front</a>() const;
+   const_reference <a href="#classboost_1_1circular__buffer_1027201797868c6274feb6712f670a132">back</a>() const;
    array_range <a href="#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one</a>();
    array_range <a href="#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two</a>();
    const_array_range <a href="#classboost_1_1circular__buffer_10f4b157e27b1170a571417986b239945">array_one</a>() const;
@@ -235,17 +235,17 @@ public:
    void <a href=
 "#classboost_1_1circular__buffer_1902a2d89e6bfab28f548cdb21cc42456">set_capacity</a>(size_type new_capacity);
    void <a href=
-"#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize</a>(size_type new_size, value_type item = value_type());
+"#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize</a>(size_type new_size, const_reference item = value_type());
    void <a href=
 "#classboost_1_1circular__buffer_1e5b482668b1ea6c434b7354389bcca89">rset_capacity</a>(size_type new_capacity);
    void <a href=
-"#classboost_1_1circular__buffer_144ecd9ec5f54a2d61c7d132e445d3483">rresize</a>(size_type new_size, value_type item = value_type());
+"#classboost_1_1circular__buffer_144ecd9ec5f54a2d61c7d132e445d3483">rresize</a>(size_type new_size, const_reference item = value_type());
    circular_buffer&lt;T, Alloc&gt;&amp; <a href=
 "#classboost_1_1circular__buffer_1db1558911b2e251a587aeb3d8b3d797d">operator=</a>(const circular_buffer&lt;T, Alloc&gt;&amp; cb);
    void <a href=
-"#classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada">assign</a>(size_type n, value_type item);
+"#classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada">assign</a>(size_type n, const_reference item);
    void <a href=
-"#classboost_1_1circular__buffer_1cfb85121fac69d36d687ee584fb115e3">assign</a>(size_type capacity, size_type n, value_type item);
+"#classboost_1_1circular__buffer_1cfb85121fac69d36d687ee584fb115e3">assign</a>(size_type capacity, size_type n, const_reference item);
    template &lt;class InputIterator&gt;
       void <a href=
 "#classboost_1_1circular__buffer_1253302d9bda5d7efbc4a6c311de3790c">assign</a>(InputIterator first, InputIterator last);
@@ -255,22 +255,22 @@ public:
    void <a href=
 "#classboost_1_1circular__buffer_1270ab7074c365663a6f18808024fd88b">swap</a>(circular_buffer&lt;T, Alloc&gt;&amp; cb);
    void <a href=
-"#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back</a>(value_type item = value_type());
+"#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back</a>(const_reference item = value_type());
    void <a href=
-"#classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce">push_front</a>(value_type item = value_type());
+"#classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce">push_front</a>(const_reference item = value_type());
    void <a href="#classboost_1_1circular__buffer_1df0da00cb501bea75afbbfab9f546a07">pop_back</a>();
    void <a href="#classboost_1_1circular__buffer_18ac972dc24ef7236faa1875de92b9dd8">pop_front</a>();
    iterator <a href=
-"#classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95">insert</a>(iterator pos, value_type item = value_type());
+"#classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95">insert</a>(iterator pos, const_reference item = value_type());
    void <a href=
-"#classboost_1_1circular__buffer_1b2f197c99d47138db777f0a46783b140">insert</a>(iterator pos, size_type n, value_type item);
+"#classboost_1_1circular__buffer_1b2f197c99d47138db777f0a46783b140">insert</a>(iterator pos, size_type n, const_reference item);
    template &lt;class InputIterator&gt;
       void <a href=
 "#classboost_1_1circular__buffer_1d00091d1d794cab3264b3674e99b33f6">insert</a>(iterator pos, InputIterator first, InputIterator last);
    iterator <a href=
-"#classboost_1_1circular__buffer_12c9332f457bf5bb3128463cf528c058c">rinsert</a>(iterator pos, value_type item = value_type());
+"#classboost_1_1circular__buffer_12c9332f457bf5bb3128463cf528c058c">rinsert</a>(iterator pos, const_reference item = value_type());
    void <a href=
-"#classboost_1_1circular__buffer_1a47a5358db1b7d7e4925c16db13d2fc5">rinsert</a>(iterator pos, size_type n, value_type item);
+"#classboost_1_1circular__buffer_1a47a5358db1b7d7e4925c16db13d2fc5">rinsert</a>(iterator pos, size_type n, const_reference item);
    template &lt;class InputIterator&gt;
       void <a href=
 "#classboost_1_1circular__buffer_1d6479cbc43a304bdbf04262f957fa323">rinsert</a>(iterator pos, InputIterator first, InputIterator last);
@@ -805,8 +805,8 @@ template &lt;class T, class Alloc&gt;
             <a id="classboost_1_1circular__buffer_1fdace8f110d5b7a17c02020757f06fe8" name=
             "classboost_1_1circular__buffer_1fdace8f110d5b7a17c02020757f06fe8"></a><code><b>circular_buffer(<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item, const <a href=
-            "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item, const
+            <a href="#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
             Create a full circular buffer with a given capacity and filled with copies of <code>item</code>.
@@ -840,8 +840,8 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1862017022c033a2b107a25a0130430d3"></a><code><b>circular_buffer(<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> capacity, <a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item, const <a href=
-            "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item, const
+            <a href="#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
             TODO doc.<br>
@@ -1512,14 +1512,54 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1f38a9bc64d84757c661c2542ff9a7f65">reference</a> operator[](<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> index);</b></code><br>
             <br>
-            Return the element at the <code>index</code> position.
+            Get the element at the <code>index</code> position.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &gt;
-                index</code>
+                <code>0 &lt;= index &amp;&amp; index &lt; <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A reference to the element at the <code>index</code> position.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
               </dd>
             </dl>
           </td>
@@ -1528,18 +1568,58 @@ template &lt;class T, class Alloc&gt;
           <td>
             <a id="classboost_1_1circular__buffer_1eb0a7fe7f8a56a4dc4c933b93adfcef4" name=
             "classboost_1_1circular__buffer_1eb0a7fe7f8a56a4dc4c933b93adfcef4"></a><code><b><a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> operator[](<a href=
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> operator[](<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> index)
             const;</b></code><br>
             <br>
-            Return the element at the <code>index</code> position.
+            Get the element at the <code>index</code> position.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &gt;
-                index</code>
+                <code>0 &lt;= index &amp;&amp; index &lt; <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A const reference to the element at the <code>index</code> position.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Strong.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
               </dd>
             </dl>
           </td>
@@ -1551,13 +1631,46 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1f38a9bc64d84757c661c2542ff9a7f65">reference</a> at(<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> index);</b></code><br>
             <br>
-            Return the element at the <code>index</code> position.
+            Get the element at the <code>index</code> position.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A const reference to the element at the <code>index</code> position.
+              </dd>
+            </dl>
             <dl>
               <dt>
                 <b>Throws:</b>
               </dt>
               <dd>
-                <i>std::out_of_range</i> thrown when the <code>index</code> is invalid.
+                <i>std::out_of_range</i> when the <code>index</code> is invalid (when <code>index &gt;= <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Strong.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
               </dd>
             </dl>
           </td>
@@ -1566,17 +1679,50 @@ template &lt;class T, class Alloc&gt;
           <td>
             <a id="classboost_1_1circular__buffer_1b233a298f5845a0fcf2ecc56f4170810" name=
             "classboost_1_1circular__buffer_1b233a298f5845a0fcf2ecc56f4170810"></a><code><b><a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> at(<a href=
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> at(<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> index)
             const;</b></code><br>
             <br>
-            Return the element at the <code>index</code> position.
+            Get the element at the <code>index</code> position.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A const reference to the element at the <code>index</code> position.
+              </dd>
+            </dl>
             <dl>
               <dt>
                 <b>Throws:</b>
               </dt>
               <dd>
-                <i>std::out_of_range</i> thrown when the <code>index</code> is invalid.
+                <i>std::out_of_range</i> when the <code>index</code> is invalid (when <code>index &gt;= <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Strong.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
               </dd>
             </dl>
           </td>
@@ -1587,13 +1733,53 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_10d5fdeabeb352f47d1f7bb1ea8d9819f"></a><code><b><a href=
             "#classboost_1_1circular__buffer_1f38a9bc64d84757c661c2542ff9a7f65">reference</a> front();</b></code><br>
             <br>
-            Return the first (leftmost) element.
+            Get the first (leftmost) element.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
                 <code>!empty()</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A reference to the first element of the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
               </dd>
             </dl>
           </td>
@@ -1604,13 +1790,53 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1d985d974020f88bb4255d8edbae0a30a"></a><code><b><a href=
             "#classboost_1_1circular__buffer_1f38a9bc64d84757c661c2542ff9a7f65">reference</a> back();</b></code><br>
             <br>
-            Return the last (rightmost) element.
+            Get the last (rightmost) element.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
                 <code>!empty()</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A reference to the last element of the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
               </dd>
             </dl>
           </td>
@@ -1619,10 +1845,10 @@ template &lt;class T, class Alloc&gt;
           <td>
             <a id="classboost_1_1circular__buffer_10df8595d83bb9d8a7ce50aabc678f90b" name=
             "classboost_1_1circular__buffer_10df8595d83bb9d8a7ce50aabc678f90b"></a><code><b><a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> front()
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> front()
             const;</b></code><br>
             <br>
-            Return the first (leftmost) element.
+            Get the first (leftmost) element.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -1631,22 +1857,102 @@ template &lt;class T, class Alloc&gt;
                 <code>!empty()</code>
               </dd>
             </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A const reference to the first element of the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer_1027201797868c6274feb6712f670a132" name=
             "classboost_1_1circular__buffer_1027201797868c6274feb6712f670a132"></a><code><b><a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> back()
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> back()
             const;</b></code><br>
             <br>
-            Return the last (rightmost) element.
+            Get the last (rightmost) element.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
                 <code>!empty()</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                A const reference to the last element of the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
               </dd>
             </dl>
           </td>
@@ -1909,7 +2215,7 @@ template &lt;class T, class Alloc&gt;
             <a id="classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3" name=
             "classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3"></a><code><b>void resize(<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> new_size, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item =
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
             Change the size of the circular buffer.
@@ -1982,7 +2288,7 @@ template &lt;class T, class Alloc&gt;
             <a id="classboost_1_1circular__buffer_144ecd9ec5f54a2d61c7d132e445d3483" name=
             "classboost_1_1circular__buffer_144ecd9ec5f54a2d61c7d132e445d3483"></a><code><b>void rresize(<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> new_size, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item =
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
             TODO doc.<br>
@@ -2031,7 +2337,8 @@ template &lt;class T, class Alloc&gt;
             <a id="classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada" name=
             "classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada"></a><code><b>void assign(<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item);</b></code><br>
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
+            item);</b></code><br>
             <br>
             Assign <code>n</code> items into the circular buffer.
             <dl>
@@ -2074,7 +2381,8 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1cfb85121fac69d36d687ee584fb115e3"></a><code><b>void assign(<a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> capacity, <a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item);</b></code><br>
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
+            item);</b></code><br>
             <br>
             TODO doc.<br>
             <br>
@@ -2171,7 +2479,7 @@ template &lt;class T, class Alloc&gt;
           <td>
             <a id="classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e" name=
             "classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e"></a><code><b>void push_back(<a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item =
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
             Insert a new element at the end.
@@ -2207,7 +2515,7 @@ template &lt;class T, class Alloc&gt;
           <td>
             <a id="classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce" name=
             "classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce"></a><code><b>void push_front(<a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item =
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
             Insert a new element at the start.
@@ -2319,7 +2627,7 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95"></a><code><b><a href=
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> insert(<a href=
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item =
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
             Insert the <code>item</code> before the given position.
@@ -2375,7 +2683,8 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1b2f197c99d47138db777f0a46783b140"></a><code><b>void insert(<a href=
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos, <a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item);</b></code><br>
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
+            item);</b></code><br>
             <br>
             Insert <code>n</code> copies of the item before the given position.
             <dl>
@@ -2487,7 +2796,7 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_12c9332f457bf5bb3128463cf528c058c"></a><code><b><a href=
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> rinsert(<a href=
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item =
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
             Insert an <code>item</code> before the given position.
@@ -2543,7 +2852,8 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1a47a5358db1b7d7e4925c16db13d2fc5"></a><code><b>void rinsert(<a href=
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos, <a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n, <a href=
-            "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a> item);</b></code><br>
+            "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
+            item);</b></code><br>
             <br>
             Insert <code>n</code> copies of the item before the given position.
             <dl>

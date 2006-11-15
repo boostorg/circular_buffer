@@ -323,72 +323,134 @@ public:
     */
     const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
-    //! Return the element at the <code>index</code> position.
+    //! Get the element at the <code>index</code> position.
     /*!
-        \pre <code>size() > index</code>
+        \pre <code>0 \<= index \&\& index < size()</code>
+        \return A reference to the element at the <code>index</code> position.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
     */
     reference operator [] (size_type index) {
         BOOST_CB_ASSERT(index < size()); // check for invalid index
         return *add(m_first, index);
     }
 
-    //! Return the element at the <code>index</code> position.
+    //! Get the element at the <code>index</code> position.
     /*!
-        \pre <code>size() > index</code>
+        \pre <code>0 \<= index \&\& index < size()</code>
+        \return A const reference to the element at the <code>index</code> position.
+        \throws Nothing.
+        \par Complexity
+             No-throw.
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
     */
     return_value_type operator [] (size_type index) const {
         BOOST_CB_ASSERT(index < size()); // check for invalid index
         return *add(m_first, index);
     }
 
-    //! Return the element at the <code>index</code> position.
+    //! Get the element at the <code>index</code> position.
     /*!
-        \throws std::out_of_range thrown when the <code>index</code> is invalid.
+        \return A const reference to the element at the <code>index</code> position.
+        \throws std::out_of_range when the <code>index</code> is invalid (when <code>index >= size()</code>).
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
     */
     reference at(size_type index) {
         check_position(index);
         return (*this)[index];
     }
 
-    //! Return the element at the <code>index</code> position.
+    //! Get the element at the <code>index</code> position.
     /*!
-        \throws std::out_of_range thrown when the <code>index</code> is invalid.
+        \return A const reference to the element at the <code>index</code> position.
+        \throws std::out_of_range when the <code>index</code> is invalid (when <code>index >= size()</code>).
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
     */
     return_value_type at(size_type index) const {
         check_position(index);
         return (*this)[index];
     }
 
-    //! Return the first (leftmost) element.
+    //! Get the first (leftmost) element.
     /*!
         \pre <code>!empty()</code>
+        \return A reference to the first element of the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
     */
     reference front() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (front element not available)
         return *m_first;
     }
 
-    //! Return the last (rightmost) element.
+    //! Get the last (rightmost) element.
     /*!
         \pre <code>!empty()</code>
+        \return A reference to the last element of the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
     */
     reference back() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (back element not available)
         return *((m_last == m_buff ? m_end : m_last) - 1);
     }
 
-    //! Return the first (leftmost) element.
+    //! Get the first (leftmost) element.
     /*!
         \pre <code>!empty()</code>
+        \return A const reference to the first element of the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
     */
     return_value_type front() const {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (front element not available)
         return *m_first;
     }
 
-    //! Return the last (rightmost) element.
+    //! Get the last (rightmost) element.
     /*!
         \pre <code>!empty()</code>
+        \return A const reference to the last element of the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
     */
     return_value_type back() const {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (back element not available)
