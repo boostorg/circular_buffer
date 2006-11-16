@@ -123,6 +123,10 @@ http://www.boost.org/LICENSE_1_0.txt)
     <dl><dt><b>Note:</b></dt><dd><xsl:apply-templates/></dd></dl>
   </xsl:template>
 
+  <xsl:template match="simplesect[@kind='see']">
+    <dl><dt><b>See Also:</b></dt><dd><xsl:apply-templates/></dd></dl>
+  </xsl:template>
+
   <xsl:template match="parameterlist[@kind='param']">
     <dl><xsl:apply-templates select="parameteritem[1]">
       <xsl:with-param name="desc" select="'Parameters:'"/>

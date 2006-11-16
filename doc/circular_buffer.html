@@ -781,6 +781,15 @@ template &lt;class T, class Alloc&gt;
             Create an empty circular buffer with a given capacity.
             <dl>
               <dt>
+                <b>Parameters:</b>
+              </dt>
+              <dd>
+                <i>capacity</i> - The maximum number of elements which can be stored in the
+                <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Postcondition:</b>
               </dt>
               <dd>
@@ -1136,6 +1145,15 @@ template &lt;class T, class Alloc&gt;
                 Does not invalidate any iterator.
               </dd>
             </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1db3d6b10b6763549f54d2627228fa7aa">rbegin()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -1186,6 +1204,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code>
               </dd>
             </dl>
           </td>
@@ -1240,6 +1266,15 @@ template &lt;class T, class Alloc&gt;
                 Does not invalidate any iterator.
               </dd>
             </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_17890810d07bc595cfb87f9c47cb075ac">end()
+                const</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -1291,6 +1326,15 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_10640d3d41c13b6089b6f169224cf1038">begin()
+                const</a></code>
               </dd>
             </dl>
           </td>
@@ -2091,8 +2135,59 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> size()
             const;</b></code><br>
             <br>
-            Return the number of elements currently stored in the circular buffer.<br>
-            <br>
+            Get the number of elements currently stored in the <code>circular_buffer</code>.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                The number of elements stored in the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -2102,8 +2197,60 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> max_size()
             const;</b></code><br>
             <br>
-            Return the largest possible size (or capacity) of the circular buffer.<br>
-            <br>
+            Get the largest possible size or capacity of the <code>circular_buffer</code>.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                The maximum size/capacity the <code>circular_buffer</code> can be set to.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1902a2d89e6bfab28f548cdb21cc42456">set_capacity()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -2112,13 +2259,54 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583"></a><code><b>bool empty()
             const;</b></code><br>
             <br>
-            Is the circular buffer empty?
+            Is the <code>circular_buffer</code> empty?
             <dl>
               <dt>
                 <b>Returns:</b>
               </dt>
               <dd>
-                <code>true</code> if there are no elements stored in the circular buffer. <code>false</code> otherwise.
+                <code>true</code> if there are no elements stored in the <code>circular_buffer</code>;
+                <code>false</code> otherwise.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a">full()</a></code>
               </dd>
             </dl>
           </td>
@@ -2129,14 +2317,54 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a"></a><code><b>bool full()
             const;</b></code><br>
             <br>
-            Is the circular buffer full?
+            Is the <code>circular_buffer</code> full?
             <dl>
               <dt>
                 <b>Returns:</b>
               </dt>
               <dd>
-                <code>true</code> if the number of elements stored in the circular buffer equals the capacity of the
-                circular buffer. <code>false</code> otherwise.
+                <code>true</code> if the number of elements stored in the <code>circular_buffer</code> equals the
+                capacity of the <code>circular_buffer</code>; <code>false</code> otherwise.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty()</a></code>
               </dd>
             </dl>
           </td>
@@ -2148,8 +2376,60 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> capacity()
             const;</b></code><br>
             <br>
-            Return the capacity of the circular buffer.<br>
-            <br>
+            Get the capacity of the <code>circular_buffer</code>.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                The maximum number of elements which can be stored in the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1902a2d89e6bfab28f548cdb21cc42456">set_capacity()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>

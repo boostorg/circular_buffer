@@ -215,6 +215,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>end()</code>, <code>rbegin()</code>
     */
     iterator begin() { return iterator(this, empty() ? 0 : m_first); }
 
@@ -230,6 +231,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>begin()</code>
     */
     iterator end() { return iterator(this, 0); }
 
@@ -245,6 +247,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>end() const</code>
     */
     const_iterator begin() const { return const_iterator(this, empty() ? 0 : m_first); }
 
@@ -260,6 +263,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>begin() const</code>
     */
     const_iterator end() const { return const_iterator(this, 0); }
 
@@ -541,30 +545,78 @@ public:
 
 // Size and capacity
 
-    //! Return the number of elements currently stored in the circular buffer.
+    //! Get the number of elements currently stored in the <code>circular_buffer</code>.
+    /*!
+        \return The number of elements stored in the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+        \sa <code>capacity()</code>, <code>max_size()</code>, <code>resize()</code>
+    */
     size_type size() const { return m_size; }
 
-    //! Return the largest possible size (or capacity) of the circular buffer.
+    //! Get the largest possible size or capacity of the <code>circular_buffer</code>.
+    /*!
+        \return The maximum size/capacity the <code>circular_buffer</code> can be set to.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+        \sa <code>size()</code>, <code>capacity()</code>, <code>resize()</code>, <code>set_capacity()</code>
+    */
     size_type max_size() const {
         return std::min<size_type>(m_alloc.max_size(), std::numeric_limits<difference_type>::max());
     }
 
-    //! Is the circular buffer empty?
+    //! Is the <code>circular_buffer</code> empty?
     /*!
-        \return <code>true</code> if there are no elements stored in the circular buffer.
-        \return <code>false</code> otherwise.
+        \return <code>true</code> if there are no elements stored in the <code>circular_buffer</code>;
+                <code>false</code> otherwise.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+        \sa <code>full()</code>
     */
     bool empty() const { return size() == 0; }
 
-    //! Is the circular buffer full?
+    //! Is the <code>circular_buffer</code> full?
     /*!
-        \return <code>true</code> if the number of elements stored in the circular buffer
-                equals the capacity of the circular buffer.
-        \return <code>false</code> otherwise.
+        \return <code>true</code> if the number of elements stored in the <code>circular_buffer</code>
+                equals the capacity of the <code>circular_buffer</code>; <code>false</code> otherwise.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+        \sa <code>empty()</code>
     */
     bool full() const { return size() == capacity(); }
 
-    //! Return the capacity of the circular buffer.
+    //! Get the capacity of the <code>circular_buffer</code>.
+    /*!
+        \return The maximum number of elements which can be stored in the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+        \sa <code>capacity()</code>, <code>max_size()</code>, <code>set_capacity()</code>
+    */
     size_type capacity() const { return m_end - m_buff; }
 
     //! Change the capacity of the circular buffer.
@@ -665,6 +717,7 @@ public:
 
     //! Create an empty circular buffer with a given capacity.
     /*!
+        \param capacity The maximum number of elements which can be stored in the <code>circular_buffer</code>.
         \post <code>(*this).capacity() == capacity \&\& (*this).size == 0</code>
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
     */
