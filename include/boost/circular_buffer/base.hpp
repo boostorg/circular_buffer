@@ -461,7 +461,25 @@ public:
         return *((m_last == m_buff ? m_end : m_last) - 1);
     }
 
-    //! TODO doc
+    //! Get the first continuos array of the internal buffer.
+    /*!
+        Suppose there is an old fashion function for writting string of characters into a console (file, socket...)
+        <code>write(const char* str, unsigned int size);</code>
+        <code><br>
+        Typical state of the internal buffer:<br>
+                |5|6|7| | | |1|2|3|4|<br>
+            end -------^     ^------- begin<br>
+        </code>
+        \return The array range of the first continuos array of the internal buffer.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+        \sa <code>array_two()</code>, <code>linearize()</code>
+    */
     array_range array_one() {
         return array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
@@ -497,8 +515,8 @@ public:
              if the postcondition is already met prior calling this method.
         \warning In general invoking any method which modifies the internal state of the <code>circular_buffer</code>
                  may delinearize the internal buffer and invalidate the returned pointer.
-        \note This is not the only way how to pass data into the legacy C API - see array_one()
-              and array_two() for the other option.
+        \sa <code>array_one()</code> and <code>array_two()</code> for the other option.how to pass data into the legacy
+            C API.
     */
     pointer linearize() {
         if (empty())
@@ -892,10 +910,21 @@ public:
         assign(capacity, first, last, is_integral<InputIterator>());
     }
 
-    //! Swap the contents of two circular buffers.
+    //! Swap the contents of two <code>circular_buffer</code>s.
     /*!
+        \param cb The <code>circular_buffer</code> whose content should be swapped.
+        \throws Nothing.
         \post <code>this</code> contains elements of <code>cb</code> and vice versa.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Invalidates all iterators of both <code>circular_buffer</code>s. (On the other hand the iterators still
+             point to the same elements but within another container. If you want to rely on this feature you have to
+             turn the <a href="#debug">Debug Support</a> off otherwise an assertion will report an error if such
+             invalidated iterator is used.)
+        \sa <code>swap(circular_buffer<T, Alloc>&, circular_buffer<T, Alloc>&)</code>
     */
     void swap(circular_buffer<T, Alloc>& cb) {
         swap_allocator(cb, is_stateless<allocator_type>());

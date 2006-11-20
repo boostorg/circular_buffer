@@ -29,6 +29,10 @@
     <a href="#briefexample">Introductory Example</a><br>
     <a href="#synopsis">Synopsis</a><br>
     <a href="#rationale">Rationale</a><br>
+    <a href="#semantics">Semantics</a><br>
+    <a href="#caveats">Caveats</a><br>
+    <a href="#debug">Debug Support</a><br>
+    <a href="#examples">More Examples</a><br>
     <a href="#header">Header Files</a><br>
     <a href="#model">Modeled Concepts</a><br>
     <a href="#parameters">Template Parameters</a><br>
@@ -36,10 +40,6 @@
     <a href="#constructors">Constructors and Destructor</a><br>
     <a href="#methods">Public Member Functions</a><br>
     <a href="#functions">Standalone Functions</a><br>
-    <a href="#semantics">Semantics</a><br>
-    <a href="#caveats">Caveats</a><br>
-    <a href="#debug">Debug Support</a><br>
-    <a href="#examples">More Examples</a><br>
     <a href="#notes">Notes</a><br>
     <a href="#see">See also</a><br>
     <a href="#ack">Acknowledgments</a><br>
@@ -496,6 +496,292 @@ template &lt;class T, class Alloc&gt;
       implementation detail rather than a full-fledged feature. The rules when the iterator is still valid can be
       inferred from the code in <code><a href=
       "../test/soft_iterator_invalidation.cpp">soft_iterator_invalidation.cpp</a></code>.
+    </p>
+    <h2>
+      <a name="semantics" id="semantics">Semantics</a>
+    </h2>
+    <p>
+      TODO remove this section
+    </p>
+    <p>
+      The behaviour of insertion for <code>circular_buffer</code> is as follows:
+    </p>
+    <ul>
+      <li>The capacity of a <code>circular_buffer</code> remains fixed unless adjusted via <code>set_capacity</code> or
+      <code>resize</code> .
+      </li>
+      <li>
+        <code>insert</code> will overwrite front elements as necessary.
+      </li>
+      <li>
+        <code>rinsert</code> will overwrite back elements as necessary.
+      </li>
+    </ul>
+    <p>
+      The behaviour of resizing a <code>circular_buffer</code> is as follows:
+    </p>
+    <ul>
+      <li>The capacity will be adjusted to accommodate a <code>resize</code> . (The capacity can be only increased, not
+      decreased.)
+      </li>
+    </ul>
+    <p>
+      The behaviour of assigning to a <code>circular_buffer</code> is as follows:
+    </p>
+    <ul>
+      <li>The capacity will be adjusted to accommodate an <code>assign</code> . (The capacity can be only increased,
+      not decreased.)
+      </li>
+    </ul>
+    <p>
+      <a name="invalidation" id="invalidation"></a> The rules for iterator (and result of <code>data()</code> )
+      invalidation for <code>circular_buffer</code> are as follows:
+    </p>
+    <ul>
+      <li>
+        <code>insert</code> at the end of the <code>circular_buffer</code> (including <code>push_back</code> ) does not
+        invalidate any iterator except the case the iterator points to the overwritten element.
+      </li>
+      <li>
+        <code>rinsert</code> at the beginning of the <code>circular_buffer</code> (including <code>push_front</code> )
+        does not invalidate any iterator except the case the iterator points to the overwritten element.
+      </li>
+      <li>
+        <code>insert</code> in the middle of the <code>circular_buffer</code> invalidates iterators pointing to the
+        elements at the insertion point and behind the insertion point. It also invalidates iterators pointing to the
+        overwritten element(s).
+      </li>
+      <li>
+        <code>rinsert</code> in the middle of the <code>circular_buffer</code> invalidates iterators pointing to the
+        elements before the insertion point and iterators pointing to the overwritten element(s).
+      </li>
+      <li>
+        <code>erase</code> at the end of the <code>circular_buffer</code> (including <code>pop_back</code> )
+        invalidates only iterators pointing to the erased element(s).
+      </li>
+      <li>
+        <code>pop_front</code> invalidates only iterators pointing to the erased element.
+      </li>
+      <li>
+        <code>erase</code> at the beginning or in the middle of the <code>circular_buffer</code> invalidates iterators
+        pointing to the erased element(s) and iterators pointing to the elements behind the erase point.
+      </li>
+      <li>
+        <code>data</code> , <code>set_capacity</code> , <code>resize</code> , <code>operator=</code> ,
+        <code>assign</code> , <code>swap</code> and <code>clear</code> invalidate all iterators pointing to the
+        <code>circular_buffer</code> .
+      </li>
+    </ul>
+    <p>
+      In addition to the preceding rules the iterators get also invalidated due to overwriting (e.g. iterator pointing
+      to the front-most element gets invalidated when inserting into the full <code>circular_buffer</code> ). They get
+      invalidated in that sense they do not point to the same element as before but they do still point to the same
+      <b>valid</b> place in the memory. If you want to rely on this feature you have to turn of the <a href=
+      "#debug">Debug Support</a> otherwise an assertion will report an error if such invalidated iterator is used.
+    </p><br>
+    <h2>
+      <a name="caveats" id="caveats">Caveats</a>
+    </h2>
+    <p>
+      The <code>circular_buffer</code> should not be used for storing pointers to dynamically allocated objects. When a
+      <code>circular_buffer</code> becomes full, further insertion will overwrite the stored pointers - resulting in a
+      <b>memoryleak</b>. One recommend alternative is the use of smart pointers <a href="#note2">[2]</a>. (Any
+      container of <code>std::auto_ptr</code> is considered particularly hazardous. <a href="#note3">[3]</a> )
+    </p>
+    <p>
+      Elements inserted near the front of a full <code>circular_buffer</code> can be lost. According to the <a href=
+      "#semantics">semantics</a> of <code>insert</code> , insertion overwrites front-most items as necessary - possibly
+      including elements currently being <b>inserted at the front</b> of the buffer. Conversely,
+      <code>push_front</code> to a full <code>circular_buffer</code> is guaranteed to overwrite the back-most element.
+    </p>
+    <p>
+      Elements inserted near the back of a full <code>circular_buffer</code> can be lost. According to the <a href=
+      "#semantics">semantics</a> of <code>rinsert</code> , insertion overwrites back-most items as necessary - possibly
+      including elements currently being <b>inserted at the back</b> of the buffer. Conversely, <code>push_back</code>
+      to a full <code>circular_buffer</code> is guaranteed to overwrite the front-most element.
+    </p>
+    <p>
+      While internals of a <code>circular_buffer</code> are circular, iterators are <b>not</b>. Iterators of a
+      <code>circular_buffer</code> are only valid for the range <code>[begin(), end()]</code> . E.g. iterators
+      <code>(begin() - 1)</code> and <code>(end() + 1)</code> are invalid.
+    </p><br>
+    <h2>
+      <a name="debug" id="debug">Debug Support</a>
+    </h2>
+    <p>
+      In order to help a programmer to avoid and find common bugs, the <code>circular_buffer</code> contains a kind of
+      debug support.
+    </p>
+    <p>
+      The <code>circular_buffer</code> maintains a list of valid iterators. As soon as any element gets destroyed all
+      iterators pointing to this element are removed from this list and explicitly invalidated (an invalidation flag is
+      set). The debug support also consists of many assertions (<a href=
+      "../../utility/assert.html"><code>BOOST_ASSERT</code></a> macros) which ensure the <code>circular_buffer</code>
+      and its iterators are used in the correct manner at runtime. In case an invalid iterator is used the assertion
+      will report an error. The connection of explicit iterator invalidation and assertions makes a very robust debug
+      technique which catches most of the errors.
+    </p>
+    <p>
+      Moreover, the uninitialized memory allocated by <code>circular_buffer</code> is filled with the value
+      <code>0xcc</code> in the debug mode. This can help the programmer when debugging the code to recognize the
+      initialized memory from the uninitialized. For details refer the source code.
+    </p>
+    <p>
+      The debug support is enabled only in the debug mode (when the <code>NDEBUG</code> is not defined). It can also be
+      explicitly disabled by defining <code>BOOST_CB_DISABLE_DEBUG</code> macro.
+    </p><br>
+    <h2>
+      <a name="examples" id="examples">More Examples</a>
+    </h2>
+    <p>
+      The following example includes various usage of the <code>circular_buffer</code> .
+    </p>
+    <pre>
+   #include &lt;boost/circular_buffer.hpp&gt;
+   #include &lt;numeric&gt;
+   #include &lt;assert.h&gt;
+
+   int main(int /*argc*/, char* /*argv*/[])
+   {
+      // create a circular buffer of capacity 3
+      boost::circular_buffer&lt;int&gt; cb(3);
+
+      // insert some elements into the circular buffer
+      cb.push_back(1);
+      cb.push_back(2);
+
+      // assertions
+      assert(cb[0] == 1);
+      assert(cb[1] == 2);
+      assert(!cb.full());
+      assert(cb.size() == 2);
+      assert(cb.capacity() == 3);
+
+      // insert some other elements
+      cb.push_back(3);
+      cb.push_back(4);
+
+      // evaluate the sum
+      int sum = std::accumulate(cb.begin(), cb.end(), 0);
+
+      // assertions
+      assert(cb[0] == 2);
+      assert(cb[1] == 3);
+      assert(cb[2] == 4);
+      assert(*cb.begin() == 2);
+      assert(cb.front() == 2);
+      assert(cb.back() == 4);
+      assert(sum == 9);
+      assert(cb.full());
+      assert(cb.size() == 3);
+      assert(cb.capacity() == 3);
+
+      return 0;
+   }
+</pre>
+    <p>
+      The <code>circular_buffer</code> has a capacity of three <code>int</code>. Therefore, the size of the buffer will
+      not exceed three. The <code><a href="http://www.sgi.com/tech/stl/accumulate.html">accumulate</a></code> algorithm
+      evaluates the sum of the stored elements. The semantics of the <code>circular_buffer</code> can be inferred from
+      the assertions.
+    </p>
+    <h4>
+      <a name="boundedbuffer" id="boundedbuffer">Bounded Buffer Example</a>
+    </h4>
+    <p>
+      The bounded buffer is normally used in a producer-consumer mode when producer threads produce items and store
+      them in the container and consumer threads remove these items and process them. The bounded buffer has to
+      guarantee that producers do not insert items into the container when the container is full, that consumers do not
+      try to remove items when the container is empty, and that each produced item is consumed by exactly one consumer.
+    </p>
+    <p>
+      The example below shows how the <code>circular_buffer</code> can be utilized as an underlying container of the
+      bounded buffer.
+    </p>
+    <pre>
+   #include &lt;boost/circular_buffer.hpp&gt;
+   #include &lt;boost/thread/mutex.hpp&gt;
+   #include &lt;boost/thread/condition.hpp&gt;
+   #include &lt;boost/thread/thread.hpp&gt;
+   #include &lt;boost/progress.hpp&gt;
+   #include &lt;boost/bind.hpp&gt;
+
+   template &lt;class T&gt;
+   class bounded_buffer {
+   public:
+
+      typedef boost::circular_buffer&lt;T&gt; container_type;
+      typedef typename container_type::size_type size_type;
+      typedef typename container_type::value_type value_type;
+
+      explicit bounded_buffer(size_type capacity) : m_unread(0), m_container(capacity) {}
+
+      void push_front(const value_type&amp; item) {
+         boost::mutex::scoped_lock lock(m_mutex);
+         m_not_full.wait(lock, boost::bind(&amp;bounded_buffer&lt;value_type&gt;::is_not_full, this));
+         m_container.push_front(item);
+         ++m_unread;
+         lock.unlock();
+         m_not_empty.notify_one();
+      }
+
+      void pop_back(value_type* pItem) {
+         boost::mutex::scoped_lock lock(m_mutex);
+         m_not_empty.wait(lock, boost::bind(&amp;bounded_buffer&lt;value_type&gt;::is_not_empty, this));
+         *pItem = m_container[--m_unread];
+         lock.unlock();
+         m_not_full.notify_one();
+      }
+
+   private:
+      bounded_buffer(const bounded_buffer&amp;);              // Disabled copy constructor
+      bounded_buffer&amp; operator = (const bounded_buffer&amp;); // Disabled assign operator
+
+      bool is_not_empty() const { return m_unread &gt; 0; }
+      bool is_not_full() const { return m_unread &lt; m_container.capacity(); }
+
+      size_type m_unread;
+      container_type m_container;
+      boost::mutex m_mutex;
+      boost::condition m_not_empty;
+      boost::condition m_not_full;
+   };
+</pre>
+    <p>
+      The <code>bounded_buffer</code> uses <a href="../../thread/doc/">Boost Threads</a> and <a href=
+      "../../bind/bind.html">Boost Bind</a> libraries.
+    </p>
+    <p>
+      The <code>push_front()</code> method is called by the producer thread in order to insert a new item into the
+      buffer. The method locks the mutex and waits until there is a space for the new item. (The mutex is unlocked
+      during the waiting stage and has to be regained when the condition is met.) If there is a space in the buffer
+      available, the execution continues and the method inserts the item at the end of the
+      <code>circular_buffer</code>. Then it increments the number of unread items and unlocks the mutex (in case an
+      exception is thrown before the mutex is unlocked, the mutex is unlocked automatically by the destructor of the
+      <code>scoped_lock</code>). At last the method notifies one of the consumer threads waiting for a new item to be
+      inserted into the buffer.
+    </p>
+    <p>
+      The <code>pop_back()</code> method is called by the consumer thread in order to read the next item from the
+      buffer. The method locks the mutex and waits until there is an unread item in the buffer. If there is at least
+      one unread item, the method decrements the number of unread items and reads the next item from the
+      <code>circular_buffer</code>. Then it unlocks the mutex and notifies one of the producer threads waiting for the
+      buffer to free a space for the next item.
+    </p>
+    <p>
+      The <code>pop_back()</code> method does not remove the item but the item is left in the
+      <code>circular_buffer</code> which then replaces it with a new one (inserted by a producer) when the
+      <code>circular_buffer</code> is full. This technique is more effective than removing the item explicitly by
+      calling the <code>pop_back()</code> method of the <code>circular_buffer</code>. This claim is based on the
+      assumption that an assignment (replacement) of a new item into an old one is more effective than a destruction
+      (removal) of an old item and a consequent inplace construction (insertion) of a new item.
+    </p>
+    <p>
+      For comparison of bounded buffers based on different containers compile and run <a href=
+      "../test/bounded_buffer_comparison.cpp">bounded_buffer_comparison.cpp</a>. The test should reveal the bounded
+      buffer based on the <code>circular_buffer</code> is most effective closely followed by the
+      <code>std::deque</code> based bounded buffer. (In praxis the result may be different because the test is affected
+      by external factors such as immediate CPU load.)
     </p>
     <h2>
       <a name="header" id="header">Header Files</a>
@@ -2008,8 +2294,63 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_126d279f91fef717e25459a0817ff242f">array_range</a>
             array_one();</b></code><br>
             <br>
-            TODO doc.<br>
-            <br>
+            Get the first continuos array of the internal buffer. Suppose there is an old fashion function for writting
+            string of characters into a console (file, socket...) <code>write(const char* str, unsigned int
+            size);</code> <code><br>
+            Typical state of the internal buffer:<br>
+            |5|6|7| | | |1|2|3|4|<br>
+            end -------^ ^------- begin<br></code>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                The array range of the first continuos array of the internal buffer.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -2117,13 +2458,14 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>See Also:</b>
               </dt>
               <dd>
-                This is not the only way how to pass data into the legacy C API - see <a href=
-                "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a> and <a href=
-                "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a> for the other
-                option.
+                <code><a href=
+                "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code> and
+                <code><a href=
+                "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code> for the
+                other option.how to pass data into the legacy C API.
               </dd>
             </dl>
           </td>
@@ -2736,7 +3078,23 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1270ab7074c365663a6f18808024fd88b"></a><code><b>void
             swap(circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
             <br>
-            Swap the contents of two circular buffers.
+            Swap the contents of two <code>circular_buffer</code>s.
+            <dl>
+              <dt>
+                <b>Parameters:</b>
+              </dt>
+              <dd>
+                <i>cb</i> - The <code>circular_buffer</code> whose content should be swapped.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <i>Nothing.</i>
+              </dd>
+            </dl>
             <dl>
               <dt>
                 <b>Postcondition:</b>
@@ -2747,10 +3105,38 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Complexity:</b>
               </dt>
               <dd>
-                For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators of both <code>circular_buffer</code>s. (On the other hand the iterators still
+                point to the same elements but within another container. If you want to rely on this feature you have
+                to turn the <a href="#debug">Debug Support</a> off otherwise an assertion will report an error if such
+                invalidated iterator is used.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#namespaceboost_14aa8f6a2c9640f3f22e266f0fca85777">swap(circular_buffer&lt;T,
+                Alloc&gt;&amp;, circular_buffer&lt;T, Alloc&gt;&amp;)</a></code>
               </dd>
             </dl>
           </td>
@@ -3540,292 +3926,6 @@ template &lt;class T, class Alloc&gt;
         </tr>
       </table>
     </div><br>
-    <h2>
-      <a name="semantics" id="semantics">Semantics</a>
-    </h2>
-    <p>
-      TODO remove this section
-    </p>
-    <p>
-      The behaviour of insertion for <code>circular_buffer</code> is as follows:
-    </p>
-    <ul>
-      <li>The capacity of a <code>circular_buffer</code> remains fixed unless adjusted via <code>set_capacity</code> or
-      <code>resize</code> .
-      </li>
-      <li>
-        <code>insert</code> will overwrite front elements as necessary.
-      </li>
-      <li>
-        <code>rinsert</code> will overwrite back elements as necessary.
-      </li>
-    </ul>
-    <p>
-      The behaviour of resizing a <code>circular_buffer</code> is as follows:
-    </p>
-    <ul>
-      <li>The capacity will be adjusted to accommodate a <code>resize</code> . (The capacity can be only increased, not
-      decreased.)
-      </li>
-    </ul>
-    <p>
-      The behaviour of assigning to a <code>circular_buffer</code> is as follows:
-    </p>
-    <ul>
-      <li>The capacity will be adjusted to accommodate an <code>assign</code> . (The capacity can be only increased,
-      not decreased.)
-      </li>
-    </ul>
-    <p>
-      <a name="invalidation" id="invalidation"></a> The rules for iterator (and result of <code>data()</code> )
-      invalidation for <code>circular_buffer</code> are as follows:
-    </p>
-    <ul>
-      <li>
-        <code>insert</code> at the end of the <code>circular_buffer</code> (including <code>push_back</code> ) does not
-        invalidate any iterator except the case the iterator points to the overwritten element.
-      </li>
-      <li>
-        <code>rinsert</code> at the beginning of the <code>circular_buffer</code> (including <code>push_front</code> )
-        does not invalidate any iterator except the case the iterator points to the overwritten element.
-      </li>
-      <li>
-        <code>insert</code> in the middle of the <code>circular_buffer</code> invalidates iterators pointing to the
-        elements at the insertion point and behind the insertion point. It also invalidates iterators pointing to the
-        overwritten element(s).
-      </li>
-      <li>
-        <code>rinsert</code> in the middle of the <code>circular_buffer</code> invalidates iterators pointing to the
-        elements before the insertion point and iterators pointing to the overwritten element(s).
-      </li>
-      <li>
-        <code>erase</code> at the end of the <code>circular_buffer</code> (including <code>pop_back</code> )
-        invalidates only iterators pointing to the erased element(s).
-      </li>
-      <li>
-        <code>pop_front</code> invalidates only iterators pointing to the erased element.
-      </li>
-      <li>
-        <code>erase</code> at the beginning or in the middle of the <code>circular_buffer</code> invalidates iterators
-        pointing to the erased element(s) and iterators pointing to the elements behind the erase point.
-      </li>
-      <li>
-        <code>data</code> , <code>set_capacity</code> , <code>resize</code> , <code>operator=</code> ,
-        <code>assign</code> , <code>swap</code> and <code>clear</code> invalidate all iterators pointing to the
-        <code>circular_buffer</code> .
-      </li>
-    </ul>
-    <p>
-      In addition to the preceding rules the iterators get also invalidated due to overwriting (e.g. iterator pointing
-      to the front-most element gets invalidated when inserting into the full <code>circular_buffer</code> ). They get
-      invalidated in that sense they do not point to the same element as before but they do still point to the same
-      <b>valid</b> place in the memory. If you want to rely on this feature you have to turn of the <a href=
-      "#debug">Debug Support</a> otherwise an assertion will report an error if such invalidated iterator is used.
-    </p><br>
-    <h2>
-      <a name="caveats" id="caveats">Caveats</a>
-    </h2>
-    <p>
-      The <code>circular_buffer</code> should not be used for storing pointers to dynamically allocated objects. When a
-      <code>circular_buffer</code> becomes full, further insertion will overwrite the stored pointers - resulting in a
-      <b>memoryleak</b>. One recommend alternative is the use of smart pointers <a href="#note2">[2]</a>. (Any
-      container of <code>std::auto_ptr</code> is considered particularly hazardous. <a href="#note3">[3]</a> )
-    </p>
-    <p>
-      Elements inserted near the front of a full <code>circular_buffer</code> can be lost. According to the <a href=
-      "#semantics">semantics</a> of <code>insert</code> , insertion overwrites front-most items as necessary - possibly
-      including elements currently being <b>inserted at the front</b> of the buffer. Conversely,
-      <code>push_front</code> to a full <code>circular_buffer</code> is guaranteed to overwrite the back-most element.
-    </p>
-    <p>
-      Elements inserted near the back of a full <code>circular_buffer</code> can be lost. According to the <a href=
-      "#semantics">semantics</a> of <code>rinsert</code> , insertion overwrites back-most items as necessary - possibly
-      including elements currently being <b>inserted at the back</b> of the buffer. Conversely, <code>push_back</code>
-      to a full <code>circular_buffer</code> is guaranteed to overwrite the front-most element.
-    </p>
-    <p>
-      While internals of a <code>circular_buffer</code> are circular, iterators are <b>not</b>. Iterators of a
-      <code>circular_buffer</code> are only valid for the range <code>[begin(), end()]</code> . E.g. iterators
-      <code>(begin() - 1)</code> and <code>(end() + 1)</code> are invalid.
-    </p><br>
-    <h2>
-      <a name="debug" id="debug">Debug Support</a>
-    </h2>
-    <p>
-      In order to help a programmer to avoid and find common bugs, the <code>circular_buffer</code> contains a kind of
-      debug support.
-    </p>
-    <p>
-      The <code>circular_buffer</code> maintains a list of valid iterators. As soon as any element gets destroyed all
-      iterators pointing to this element are removed from this list and explicitly invalidated (an invalidation flag is
-      set). The debug support also consists of many assertions (<a href=
-      "../../utility/assert.html"><code>BOOST_ASSERT</code></a> macros) which ensure the <code>circular_buffer</code>
-      and its iterators are used in the correct manner at runtime. In case an invalid iterator is used the assertion
-      will report an error. The connection of explicit iterator invalidation and assertions makes a very robust debug
-      technique which catches most of the errors.
-    </p>
-    <p>
-      Moreover, the uninitialized memory allocated by <code>circular_buffer</code> is filled with the value
-      <code>0xcc</code> in the debug mode. This can help the programmer when debugging the code to recognize the
-      initialized memory from the uninitialized. For details refer the source code.
-    </p>
-    <p>
-      The debug support is enabled only in the debug mode (when the <code>NDEBUG</code> is not defined). It can also be
-      explicitly disabled by defining <code>BOOST_CB_DISABLE_DEBUG</code> macro.
-    </p><br>
-    <h2>
-      <a name="examples" id="examples">More Examples</a>
-    </h2>
-    <p>
-      The following example includes various usage of the <code>circular_buffer</code> .
-    </p>
-    <pre>
-   #include &lt;boost/circular_buffer.hpp&gt;
-   #include &lt;numeric&gt;
-   #include &lt;assert.h&gt;
-
-   int main(int /*argc*/, char* /*argv*/[])
-   {
-      // create a circular buffer of capacity 3
-      boost::circular_buffer&lt;int&gt; cb(3);
-
-      // insert some elements into the circular buffer
-      cb.push_back(1);
-      cb.push_back(2);
-
-      // assertions
-      assert(cb[0] == 1);
-      assert(cb[1] == 2);
-      assert(!cb.full());
-      assert(cb.size() == 2);
-      assert(cb.capacity() == 3);
-
-      // insert some other elements
-      cb.push_back(3);
-      cb.push_back(4);
-
-      // evaluate the sum
-      int sum = std::accumulate(cb.begin(), cb.end(), 0);
-
-      // assertions
-      assert(cb[0] == 2);
-      assert(cb[1] == 3);
-      assert(cb[2] == 4);
-      assert(*cb.begin() == 2);
-      assert(cb.front() == 2);
-      assert(cb.back() == 4);
-      assert(sum == 9);
-      assert(cb.full());
-      assert(cb.size() == 3);
-      assert(cb.capacity() == 3);
-
-      return 0;
-   }
-</pre>
-    <p>
-      The <code>circular_buffer</code> has a capacity of three <code>int</code>. Therefore, the size of the buffer will
-      not exceed three. The <code><a href="http://www.sgi.com/tech/stl/accumulate.html">accumulate</a></code> algorithm
-      evaluates the sum of the stored elements. The semantics of the <code>circular_buffer</code> can be inferred from
-      the assertions.
-    </p>
-    <h4>
-      <a name="boundedbuffer" id="boundedbuffer">Bounded Buffer Example</a>
-    </h4>
-    <p>
-      The bounded buffer is normally used in a producer-consumer mode when producer threads produce items and store
-      them in the container and consumer threads remove these items and process them. The bounded buffer has to
-      guarantee that producers do not insert items into the container when the container is full, that consumers do not
-      try to remove items when the container is empty, and that each produced item is consumed by exactly one consumer.
-    </p>
-    <p>
-      The example below shows how the <code>circular_buffer</code> can be utilized as an underlying container of the
-      bounded buffer.
-    </p>
-    <pre>
-   #include &lt;boost/circular_buffer.hpp&gt;
-   #include &lt;boost/thread/mutex.hpp&gt;
-   #include &lt;boost/thread/condition.hpp&gt;
-   #include &lt;boost/thread/thread.hpp&gt;
-   #include &lt;boost/progress.hpp&gt;
-   #include &lt;boost/bind.hpp&gt;
-
-   template &lt;class T&gt;
-   class bounded_buffer {
-   public:
-
-      typedef boost::circular_buffer&lt;T&gt; container_type;
-      typedef typename container_type::size_type size_type;
-      typedef typename container_type::value_type value_type;
-
-      explicit bounded_buffer(size_type capacity) : m_unread(0), m_container(capacity) {}
-
-      void push_front(const value_type&amp; item) {
-         boost::mutex::scoped_lock lock(m_mutex);
-         m_not_full.wait(lock, boost::bind(&amp;bounded_buffer&lt;value_type&gt;::is_not_full, this));
-         m_container.push_front(item);
-         ++m_unread;
-         lock.unlock();
-         m_not_empty.notify_one();
-      }
-
-      void pop_back(value_type* pItem) {
-         boost::mutex::scoped_lock lock(m_mutex);
-         m_not_empty.wait(lock, boost::bind(&amp;bounded_buffer&lt;value_type&gt;::is_not_empty, this));
-         *pItem = m_container[--m_unread];
-         lock.unlock();
-         m_not_full.notify_one();
-      }
-
-   private:
-      bounded_buffer(const bounded_buffer&amp;);              // Disabled copy constructor
-      bounded_buffer&amp; operator = (const bounded_buffer&amp;); // Disabled assign operator
-
-      bool is_not_empty() const { return m_unread &gt; 0; }
-      bool is_not_full() const { return m_unread &lt; m_container.capacity(); }
-
-      size_type m_unread;
-      container_type m_container;
-      boost::mutex m_mutex;
-      boost::condition m_not_empty;
-      boost::condition m_not_full;
-   };
-</pre>
-    <p>
-      The <code>bounded_buffer</code> uses <a href="../../thread/doc/">Boost Threads</a> and <a href=
-      "../../bind/bind.html">Boost Bind</a> libraries.
-    </p>
-    <p>
-      The <code>push_front()</code> method is called by the producer thread in order to insert a new item into the
-      buffer. The method locks the mutex and waits until there is a space for the new item. (The mutex is unlocked
-      during the waiting stage and has to be regained when the condition is met.) If there is a space in the buffer
-      available, the execution continues and the method inserts the item at the end of the
-      <code>circular_buffer</code>. Then it increments the number of unread items and unlocks the mutex (in case an
-      exception is thrown before the mutex is unlocked, the mutex is unlocked automatically by the destructor of the
-      <code>scoped_lock</code>). At last the method notifies one of the consumer threads waiting for a new item to be
-      inserted into the buffer.
-    </p>
-    <p>
-      The <code>pop_back()</code> method is called by the consumer thread in order to read the next item from the
-      buffer. The method locks the mutex and waits until there is an unread item in the buffer. If there is at least
-      one unread item, the method decrements the number of unread items and reads the next item from the
-      <code>circular_buffer</code>. Then it unlocks the mutex and notifies one of the producer threads waiting for the
-      buffer to free a space for the next item.
-    </p>
-    <p>
-      The <code>pop_back()</code> method does not remove the item but the item is left in the
-      <code>circular_buffer</code> which then replaces it with a new one (inserted by a producer) when the
-      <code>circular_buffer</code> is full. This technique is more effective than removing the item explicitly by
-      calling the <code>pop_back()</code> method of the <code>circular_buffer</code>. This claim is based on the
-      assumption that an assignment (replacement) of a new item into an old one is more effective than a destruction
-      (removal) of an old item and a consequent inplace construction (insertion) of a new item.
-    </p>
-    <p>
-      For comparison of bounded buffers based on different containers compile and run <a href=
-      "../test/bounded_buffer_comparison.cpp">bounded_buffer_comparison.cpp</a>. The test should reveal the bounded
-      buffer based on the <code>circular_buffer</code> is most effective closely followed by the
-      <code>std::deque</code> based bounded buffer. (In praxis the result may be different because the test is affected
-      by external factors such as immediate CPU load.)
-    </p>
     <h2>
       <a name="notes" id="notes">Notes</a>
     </h2>
