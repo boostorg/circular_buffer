@@ -305,7 +305,7 @@ public:
     <xsl:if test="normalize-space(detaileddescription) = ''">
       <br /><br />
     </xsl:if>
-    <xsl:apply-templates select="detaileddescription"/>
+    <p><xsl:apply-templates select="detaileddescription"/></p>
     </td></tr>
   </xsl:template>
 

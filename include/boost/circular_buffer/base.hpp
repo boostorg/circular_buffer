@@ -463,13 +463,32 @@ public:
 
     //! Get the first continuos array of the internal buffer.
     /*!
-        Suppose there is an old fashion function for writting string of characters into a console (file, socket...)
-        <code>write(const char* str, unsigned int size);</code>
-        <code><br>
-        Typical state of the internal buffer:<br>
-                |5|6|7| | | |1|2|3|4|<br>
-            end -------^     ^------- begin<br>
-        </code>
+        This method in combination with <code>array_two()</code> can be useful when passing the stored data into the
+        legacy C API as an array. Suppose there is a <code>circular_buffer</code> of capacity 10, containing 7
+        characters <code>'a', 'b', ..., 'g'</code> where <code>cbuff[0] == 'a'</code>, <code>cbuff[1] == 'b'</code>,
+        ... and <code>cbuff[6] == 'g'</code>:<br><br>
+        <code>circular_buffer<char> cbuff(10);</code><br><br>
+        The internal representation is often not linear and the state of the internal buffer may look like this:<br>
+        <br><code>
+        |e|f|g| | | |a|b|c|d|<br>
+        end ---^<br>
+        begin -------^</code><br><br>
+        where <code>|a|b|c|d|</code> represents the 'array one', <code>|e|f|g|</code> represents the 'array two' and
+        <code>| | | |</code> is a free space.<br>
+        Now consider a typical C style function for writting data into a file:<br><br>
+        <code>int write(int file_desc, char* buff, int num_bytes);</code><br><br>
+        There are two ways how to write the content of the <code>circular_buffer</code> into a file. Either relying
+        on <code>array_one()</code> and <code>array_two()</code> methods and calling the write function twice:<br><br>
+        <code>array_range ar = cbuff.array_one();<br>
+        write(file_desc, ar.first, ar.second);<br>
+        ar = cbuff.array_two();<br>
+        write(file_desc, ar.first, ar.second);<code><br><br>
+        Or relying on the <code>linearize()</code> method:<br><br><code>
+        write(file_desc, cbuff.linearize(), cbuff.size());</code><br><br>
+        As the complexity of <code>array_one()</code> and <code>array_two()</code> methods is constant the first option
+        is suitable when calling the write method is 'cheap'. On the other hand the second option is more suitable when
+        calling the write method is more 'expensive' than calling the <code>linearize()</code> method whose complexity
+        is linear.
         \return The array range of the first continuos array of the internal buffer.
         \throws Nothing.
         \par Complexity
@@ -478,7 +497,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>array_two()</code>, <code>linearize()</code>
+        \sa <code>array_two()</code>, <code>linearize()</code>, <code>array_one() const</code>
     */
     array_range array_one() {
         return array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
@@ -633,7 +652,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>capacity()</code>, <code>max_size()</code>, <code>set_capacity()</code>
+        \sa <code>size()</code>, <code>max_size()</code>, <code>set_capacity()</code>
     */
     size_type capacity() const { return m_end - m_buff; }
 

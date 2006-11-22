@@ -2294,12 +2294,55 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_126d279f91fef717e25459a0817ff242f">array_range</a>
             array_one();</b></code><br>
             <br>
-            Get the first continuos array of the internal buffer. Suppose there is an old fashion function for writting
-            string of characters into a console (file, socket...) <code>write(const char* str, unsigned int
-            size);</code> <code><br>
-            Typical state of the internal buffer:<br>
-            |5|6|7| | | |1|2|3|4|<br>
-            end -------^ ^------- begin<br></code>
+            Get the first continuos array of the internal buffer.
+            <p>
+              This method in combination with <code><a href=
+              "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code> can be useful
+              when passing the stored data into the legacy C API as an array. Suppose there is a
+              <code>circular_buffer</code> of capacity 10, containing 7 characters <code>'a', 'b', ..., 'g'</code>
+              where <code>cbuff[0] == 'a'</code>, <code>cbuff[1] == 'b'</code>, ... and <code>cbuff[6] ==
+              'g'</code>:<br>
+              <br>
+              <code>circular_buffer&lt;char&gt; cbuff(10);</code><br>
+              <br>
+              The internal representation is often not linear and the state of the internal buffer may look like
+              this:<br>
+              <br>
+              <code>|e|f|g| | | |a|b|c|d|<br>
+              end ---^<br>
+              begin -------^</code><br>
+              <br>
+              where <code>|a|b|c|d|</code> represents the 'array one', <code>|e|f|g|</code> represents the 'array two'
+              and <code>| | | |</code> is a free space.<br>
+              Now consider a typical C style function for writting data into a file:<br>
+              <br>
+              <code>int write(int file_desc, char* buff, int num_bytes);</code><br>
+              <br>
+              There are two ways how to write the content of the <code>circular_buffer</code> into a file. Either
+              relying on <code><a href=
+              "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code> and
+              <code><a href="#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code>
+              methods and calling the write function twice:<br>
+              <br>
+              <code>array_range ar = cbuff.array_one();<br>
+              write(file_desc, ar.first, ar.second);<br>
+              ar = cbuff.array_two();<br>
+              write(file_desc, ar.first, ar.second);</code><br>
+              <br>
+              Or relying on the <code><a href=
+              "#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize()</a></code> method:<br>
+              <br>
+              <code>write(file_desc, cbuff.linearize(), cbuff.size());</code><br>
+              <br>
+              As the complexity of <code><a href=
+              "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code> and
+              <code><a href="#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code>
+              methods is constant the first option is suitable when calling the write method is 'cheap'. On the other
+              hand the second option is more suitable when calling the write method is more 'expensive' than calling
+              the <code><a href=
+              "#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize()</a></code> method whose
+              complexity is linear.
+            </p>
             <dl>
               <dt>
                 <b>Returns:</b>
@@ -2348,7 +2391,9 @@ template &lt;class T, class Alloc&gt;
                 <code><a href=
                 "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code>,
                 <code><a href=
-                "#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize()</a></code>
+                "#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_10f4b157e27b1170a571417986b239945">array_one()
+                const</a></code>
               </dd>
             </dl>
           </td>
@@ -2392,8 +2437,10 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e"></a><code><b><a href=
             "#classboost_1_1circular__buffer_14ff917f8a6131ec18e91606727592a9c">pointer</a> linearize();</b></code><br>
             <br>
-            Linearize the internal buffer into a continuous array. This method can be useful when passing the stored
-            data into the legacy C API as an array.
+            Linearize the internal buffer into a continuous array.
+            <p>
+              This method can be useful when passing the stored data into the legacy C API as an array.
+            </p>
             <dl>
               <dt>
                 <b>Postcondition:</b>
@@ -2764,8 +2811,7 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href=
-                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>,
                 <code><a href=
                 "#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a></code>,
                 <code><a href=
