@@ -184,6 +184,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>get_allocator()</code>
     */
     allocator_type get_allocator() const { return m_alloc; }
 
@@ -199,6 +200,7 @@ public:
              Does not invalidate any iterator.
         \note This method was added in order to optimize obtaining of the allocator with a state,
               although use of stateful allocators in STL is discouraged.
+        \sa <code>get_allocator() const</code>
     */
     allocator_type& get_allocator() { return m_alloc; }
 
@@ -279,6 +281,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>rend()</code>, <code>begin()</code>
     */
     reverse_iterator rbegin() { return reverse_iterator(end()); }
 
@@ -294,6 +297,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>rbegin()</code>
     */
     reverse_iterator rend() { return reverse_iterator(begin()); }
 
@@ -309,6 +313,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>rend() const</code>
     */
     const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
 
@@ -324,6 +329,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>rbegin() const</code>
     */
     const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
@@ -338,6 +344,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>at(size_type)</code>
     */
     reference operator [] (size_type index) {
         BOOST_CB_ASSERT(index < size()); // check for invalid index
@@ -355,6 +362,7 @@ public:
              Strong.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>at(size_type) const</code>
     */
     return_value_type operator [] (size_type index) const {
         BOOST_CB_ASSERT(index < size()); // check for invalid index
@@ -371,6 +379,7 @@ public:
              Strong.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>operator[](size_type)</code>
     */
     reference at(size_type index) {
         check_position(index);
@@ -387,6 +396,7 @@ public:
              Strong.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>operator[](size_type) const</code>
     */
     return_value_type at(size_type index) const {
         check_position(index);
@@ -404,6 +414,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>back()</code>
     */
     reference front() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (front element not available)
@@ -421,6 +432,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>front()</code>
     */
     reference back() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (back element not available)
@@ -438,6 +450,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>back() const</code>
     */
     return_value_type front() const {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (front element not available)
@@ -455,6 +468,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \sa <code>front() const</code>
     */
     return_value_type back() const {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (back element not available)
@@ -473,7 +487,7 @@ public:
         |e|f|g| | | |a|b|c|d|<br>
         end ---^<br>
         begin -------^</code><br><br>
-        where <code>|a|b|c|d|</code> represents the 'array one', <code>|e|f|g|</code> represents the 'array two' and
+        where <code>|a|b|c|d|</code> represents the "array one", <code>|e|f|g|</code> represents the "array two" and
         <code>| | | |</code> is a free space.<br>
         Now consider a typical C style function for writting data into a file:<br><br>
         <code>int write(int file_desc, char* buff, int num_bytes);</code><br><br>
@@ -482,14 +496,15 @@ public:
         <code>array_range ar = cbuff.array_one();<br>
         write(file_desc, ar.first, ar.second);<br>
         ar = cbuff.array_two();<br>
-        write(file_desc, ar.first, ar.second);<code><br><br>
+        write(file_desc, ar.first, ar.second);</code><br><br>
         Or relying on the <code>linearize()</code> method:<br><br><code>
         write(file_desc, cbuff.linearize(), cbuff.size());</code><br><br>
         As the complexity of <code>array_one()</code> and <code>array_two()</code> methods is constant the first option
-        is suitable when calling the write method is 'cheap'. On the other hand the second option is more suitable when
-        calling the write method is more 'expensive' than calling the <code>linearize()</code> method whose complexity
+        is suitable when calling the write method is "cheap". On the other hand the second option is more suitable when
+        calling the write method is more "expensive" than calling the <code>linearize()</code> method whose complexity
         is linear.
-        \return The array range of the first continuos array of the internal buffer.
+        \return The array range of the first continuos array of the internal buffer. In the case the
+                <code>circular_buffer</code> is empty the size of the returned array is <code>0</code>.
         \throws Nothing.
         \par Complexity
              Constant.
@@ -497,23 +512,70 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>array_two()</code>, <code>linearize()</code>, <code>array_one() const</code>
+        \note In the case the internal buffer is linear e.g. <code>|a|b|c|d|e|f|g| | | |</code> the "array one" is
+              represented by <code>|a|b|c|d|e|f|g|</code> and the "array two" does not exist (the
+              <code>array_two()</code> method returns an array with the size <code>0</code>).
+        \sa <code>array_two()</code>, <code>linearize()</code>
     */
     array_range array_one() {
         return array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
 
-    //! TODO doc
+    //! Get the second continuos array of the internal buffer.
+    /*!
+        This method in combination with <code>array_one()</code> can be useful when passing the stored data into the
+        legacy C API as an array.
+        \return The array range of the second continuos array of the internal buffer. In the case the internal buffer
+                is linear or the <code>circular_buffer</code> is empty the size of the returned array is
+                <code>0</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+        \sa <code>array_one()</code>
+    */
     array_range array_two() {
         return array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
 
-    //! TODO doc
+    //! Get the first continuos array of the internal buffer.
+    /*!
+        This method in combination with <code>array_two() const</code> can be useful when passing the stored data into
+        the legacy C API as an array.
+        \return The array range of the first continuos array of the internal buffer. In the case the
+                <code>circular_buffer</code> is empty the size of the returned array is <code>0</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+        \sa <code>array_one()</code> for more details.how to pass data into the legacy C API.
+    */
     const_array_range array_one() const {
         return const_array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
 
-    //! TODO doc
+    //! Get the second continuos array of the internal buffer.
+    /*!
+        This method in combination with <code>array_one() const</code> can be useful when passing the stored data into
+        the legacy C API as an array.
+        \return The array range of the second continuos array of the internal buffer. In the case the internal buffer
+                is linear or the <code>circular_buffer</code> is empty the size of the returned array is
+                <code>0</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterator.
+        \sa <code>array_one() const</code>
+    */
     const_array_range array_two() const {
         return const_array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
