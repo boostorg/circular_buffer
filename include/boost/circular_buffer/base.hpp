@@ -179,12 +179,12 @@ public:
         \return The allocator.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>get_allocator()</code>
+        \sa <code>get_allocator()</code> for obtaining an allocator %reference.
     */
     allocator_type get_allocator() const { return m_alloc; }
 
@@ -193,7 +193,7 @@ public:
         \return A reference to the allocator.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -209,15 +209,16 @@ public:
     //! Get the iterator pointing to the beginning of the <code>circular_buffer</code>.
     /*!
         \return A random access iterator pointing to the first element of the <code>circular_buffer</code>. If the
-                <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by end().
+                <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by <code>end()
+                </code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>end()</code>, <code>rbegin()</code>
+        \sa <code>end()</code>, <code>rbegin()</code>, <code>rend()</code>
     */
     iterator begin() { return iterator(this, empty() ? 0 : m_first); }
 
@@ -225,15 +226,15 @@ public:
     /*!
         \return A random access iterator pointing to the element "one behind" the last element of the <code>
                 circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to
-                the one returned by begin().
+                the one returned by <code>begin()</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>begin()</code>
+        \sa <code>begin()</code>, <code>rbegin()</code>, <code>rend()</code>
     */
     iterator end() { return iterator(this, 0); }
 
@@ -241,15 +242,15 @@ public:
     /*!
         \return A const random access iterator pointing to the first element of the <code>circular_buffer</code>. If
                 the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by
-                end() const.
+                <code>end() const</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>end() const</code>
+        \sa <code>end() const</code>, <code>rbegin() const</code>, <code>rend() const</code>
     */
     const_iterator begin() const { return const_iterator(this, empty() ? 0 : m_first); }
 
@@ -257,15 +258,15 @@ public:
     /*!
         \return A const random access iterator pointing to the element "one behind" the last element of the <code>
                 circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to
-                the one returned by begin() const.
+                the one returned by <code>begin() const</code> const.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>begin() const</code>
+        \sa <code>begin() const</code>, <code>rbegin() const</code>, <code>rend() const</code>
     */
     const_iterator end() const { return const_iterator(this, 0); }
 
@@ -273,15 +274,15 @@ public:
     /*!
         \return A reverse random access iterator pointing to the last element of the <code>circular_buffer</code>.
                 If the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by
-                rend().
+                <code>rend()</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>rend()</code>, <code>begin()</code>
+        \sa <code>rend()</code>, <code>begin()</code>, <code>end()</code>
     */
     reverse_iterator rbegin() { return reverse_iterator(end()); }
 
@@ -289,15 +290,15 @@ public:
     /*!
         \return A reverse random access iterator pointing to the element "one before" the first element of the <code>
                 circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to the
-                one returned by rbegin().
+                one returned by <code>rbegin()</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>rbegin()</code>
+        \sa <code>rbegin()</code>, <code>begin()</code>, <code>end()</code>
     */
     reverse_iterator rend() { return reverse_iterator(begin()); }
 
@@ -305,15 +306,15 @@ public:
     /*!
         \return A const reverse random access iterator pointing to the last element of the <code>circular_buffer
                 </code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned
-                by rend() const.
+                by <code>rend() const</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>rend() const</code>
+        \sa <code>rend() const</code>, <code>begin() const</code>, <code>end() const</code>
     */
     const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
 
@@ -321,30 +322,31 @@ public:
     /*!
         \return A const reverse random access iterator pointing to the element "one before" the first element of the
                 <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
-                to the one returned by rbegin() const.
+                to the one returned by <code>rbegin() const</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>rbegin() const</code>
+        \sa <code>rbegin() const</code>, <code>begin() const</code>, <code>end() const</code>
     */
     const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
     //! Get the element at the <code>index</code> position.
     /*!
         \pre <code>0 \<= index \&\& index < size()</code>
+        \param index The position of the element.
         \return A reference to the element at the <code>index</code> position.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>at(size_type)</code>
+        \sa <code>at()</code>
     */
     reference operator [] (size_type index) {
         BOOST_CB_ASSERT(index < size()); // check for invalid index
@@ -354,6 +356,7 @@ public:
     //! Get the element at the <code>index</code> position.
     /*!
         \pre <code>0 \<= index \&\& index < size()</code>
+        \param index The position of the element.
         \return A const reference to the element at the <code>index</code> position.
         \throws Nothing.
         \par Complexity
@@ -362,7 +365,7 @@ public:
              Strong.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>at(size_type) const</code>
+        \sa <code>\link at(size_type)const at() const \endlink</code>
     */
     return_value_type operator [] (size_type index) const {
         BOOST_CB_ASSERT(index < size()); // check for invalid index
@@ -371,15 +374,16 @@ public:
 
     //! Get the element at the <code>index</code> position.
     /*!
+        \param index The position of the element.
         \return A const reference to the element at the <code>index</code> position.
         \throws std::out_of_range when the <code>index</code> is invalid (when <code>index >= size()</code>).
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>operator[](size_type)</code>
+        \sa <code>operator[]</code>
     */
     reference at(size_type index) {
         check_position(index);
@@ -388,15 +392,16 @@ public:
 
     //! Get the element at the <code>index</code> position.
     /*!
+        \param index The position of the element.
         \return A const reference to the element at the <code>index</code> position.
         \throws std::out_of_range when the <code>index</code> is invalid (when <code>index >= size()</code>).
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>operator[](size_type) const</code>
+        \sa <code>\link operator[](size_type)const operator[] const \endlink</code>
     */
     return_value_type at(size_type index) const {
         check_position(index);
@@ -409,7 +414,7 @@ public:
         \return A reference to the first element of the <code>circular_buffer</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -427,7 +432,7 @@ public:
         \return A reference to the last element of the <code>circular_buffer</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -445,7 +450,7 @@ public:
         \return A const reference to the first element of the <code>circular_buffer</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -463,7 +468,7 @@ public:
         \return A const reference to the last element of the <code>circular_buffer</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -477,8 +482,8 @@ public:
 
     //! Get the first continuos array of the internal buffer.
     /*!
-        This method in combination with <code>array_two()</code> can be useful when passing the stored data into the
-        legacy C API as an array. Suppose there is a <code>circular_buffer</code> of capacity 10, containing 7
+        This method in combination with <code>array_two()</code> can be useful when passing the stored data into
+        a legacy C API as an array. Suppose there is a <code>circular_buffer</code> of capacity 10, containing 7
         characters <code>'a', 'b', ..., 'g'</code> where <code>cbuff[0] == 'a'</code>, <code>cbuff[1] == 'b'</code>,
         ... and <code>cbuff[6] == 'g'</code>:<br><br>
         <code>circular_buffer<char> cbuff(10);</code><br><br>
@@ -507,7 +512,7 @@ public:
                 <code>circular_buffer</code> is empty the size of the returned array is <code>0</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -523,14 +528,14 @@ public:
 
     //! Get the second continuos array of the internal buffer.
     /*!
-        This method in combination with <code>array_one()</code> can be useful when passing the stored data into the
-        legacy C API as an array.
+        This method in combination with <code>array_one()</code> can be useful when passing the stored data into
+        a legacy C API as an array.
         \return The array range of the second continuos array of the internal buffer. In the case the internal buffer
                 is linear or the <code>circular_buffer</code> is empty the size of the returned array is
                 <code>0</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -544,17 +549,17 @@ public:
     //! Get the first continuos array of the internal buffer.
     /*!
         This method in combination with <code>array_two() const</code> can be useful when passing the stored data into
-        the legacy C API as an array.
+        a legacy C API as an array.
         \return The array range of the first continuos array of the internal buffer. In the case the
                 <code>circular_buffer</code> is empty the size of the returned array is <code>0</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>array_one()</code> for more details.how to pass data into the legacy C API.
+        \sa <code>array_two() const</code>; <code>array_one()</code> for more details.how to pass data into a legacy C API.
     */
     const_array_range array_one() const {
         return const_array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
@@ -563,13 +568,13 @@ public:
     //! Get the second continuos array of the internal buffer.
     /*!
         This method in combination with <code>array_one() const</code> can be useful when passing the stored data into
-        the legacy C API as an array.
+        a legacy C API as an array.
         \return The array range of the second continuos array of the internal buffer. In the case the internal buffer
                 is linear or the <code>circular_buffer</code> is empty the size of the returned array is
                 <code>0</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -582,9 +587,9 @@ public:
 
     //! Linearize the internal buffer into a continuous array.
     /*!
-        This method can be useful when passing the stored data into the legacy C API as an array.
+        This method can be useful when passing the stored data into a legacy C API as an array.
         \post <code>\&(*this)[0] \< \&(*this)[1] \< ... \< \&(*this)[size() - 1]</code>
-        \return A pointer to the beginning of the array or 0 if empty.
+        \return A pointer to the beginning of the array or <code>0</code> if empty.
         \throws Whatever T::T(const T&) throws.
         \throws Whatever T::operator = (const T&) throws.
         \par Complexity
@@ -596,7 +601,7 @@ public:
              if the postcondition is already met prior calling this method.
         \warning In general invoking any method which modifies the internal state of the <code>circular_buffer</code>
                  may delinearize the internal buffer and invalidate the returned pointer.
-        \sa <code>array_one()</code> and <code>array_two()</code> for the other option.how to pass data into the legacy
+        \sa <code>array_one()</code> and <code>array_two()</code> for the other option.how to pass data into a legacy
             C API.
     */
     pointer linearize() {
@@ -649,7 +654,7 @@ public:
         \return The number of elements stored in the <code>circular_buffer</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -663,12 +668,12 @@ public:
         \return The maximum size/capacity the <code>circular_buffer</code> can be set to.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>size()</code>, <code>capacity()</code>, <code>resize()</code>, <code>set_capacity()</code>
+        \sa <code>size()</code>, <code>capacity()</code>
     */
     size_type max_size() const {
         return std::min<size_type>(m_alloc.max_size(), std::numeric_limits<difference_type>::max());
@@ -680,7 +685,7 @@ public:
                 <code>false</code> otherwise.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -695,7 +700,7 @@ public:
                 equals the capacity of the <code>circular_buffer</code>; <code>false</code> otherwise.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -709,7 +714,7 @@ public:
         \return The maximum number of elements which can be stored in the <code>circular_buffer</code>.
         \throws Nothing.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -718,24 +723,25 @@ public:
     */
     size_type capacity() const { return m_end - m_buff; }
 
-    //! Change the capacity of the circular buffer.
+    //! Change the capacity of the <code>circular_buffer</code>.
     /*!
+        \post <code>capacity() == new_capacity</code><br><br>
+              If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
+              new capacity then number of <code>[size() - new_capacity]</code> <b>first (leftmost)</b> elements will be
+              removed.
         \param new_capacity The new capacity.
-        \param remove_front This parameter plays its role only if the
-               current number of elements stored in the circular buffer
-               is greater than the desired new capacity. If set to
-               <code>true</code> then the first (leftmost) elements
-               will be removed. If set to <code>false</code> then the
-               last (leftmost) elements will be removed.
-        \post <code>(*this).capacity() == new_capacity</code><br>
-              If the current number of elements stored in the circular
-              buffer is greater than the desired new capacity then
-              <code>((*this).size() - new_capacity)</code> elements
-              will be removed according to the <code>remove_front</code>
-              parameter.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
         \throws Whatever T::T(const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Complexity
+             Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the allocator's
+             <code>%allocate()</code> and <code>%deallocate()</code> methods which are used in <code>set_capacity()
+             </code> is not considered.
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>rset_capacity()</code>, <code>resize()</code>
     */
     void set_capacity(size_type new_capacity) {
         if (new_capacity == capacity())
@@ -750,36 +756,60 @@ public:
         BOOST_CATCH_END
     }
 
-    //! Change the size of the circular buffer.
+    //! Change the size of the <code>circular_buffer</code>.
     /*!
+        \post <code>size() == new_size \&\& capacity() >= new_size</code><br><br>
+              If the new size is greater than the current size, copies of <code>item</code> will be inserted at the
+              <b>back</b> of the of the <code>circular_buffer</code> in order to achieve the desired size. In the case
+              the resulting size exceeds the current capacity the capacity will be set to <code>new_size</code>.<br>
+              If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
+              new size then number of <code>[size() - new_size]</code> <b>last (rightmost)</b> elements will be
+              removed. (The capacity will remain unchanged.)
         \param new_size The new size.
-        \param item See the postcondition.
-        \param remove_front This parameter plays its role only if the
-               current number of elements stored in the circular buffer
-               is greater than the desired new capacity. If set to
-               <code>true</code> then the first (leftmost) elements
-               will be removed. If set to <code>false</code> then the
-               last (rightmost) elements will be removed.
-        \post <code>(*this).size() == new_size</code><br>
-              If the new size is greater than the current size, the rest
-              of the circular buffer is filled with copies of <code>item</code>.
-              In case the resulting size exceeds the current capacity
-              the capacity is set to <code>new_size</code>.
-              If the new size is lower than the current size then
-              <code>((*this).size() - new_size)</code> elements will be removed
-              according to the <code>remove_front</code> parameter.
+        \param item The element the <code>circular_buffer</code> will be filled with in order to gain the requested
+                    size. (See the postcondition.)
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Complexity
+             Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the allocator's
+             <code>%allocate()</code> and <code>%deallocate()</code> methods which are used in <code>set_capacity()
+             </code> is not considered.
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>rresize()</code>, <code>set_capacity()</code>
     */
     void resize(size_type new_size, param_value_type item = value_type()) {
-        if (new_size > size())
-            increase_size(new_size, item);
-        else
-            erase(begin(), end() - new_size);
+        if (new_size > size()) {
+            if (new_size > capacity())
+                set_capacity(new_size);
+            insert(end(), new_size - size(), item);
+        } else {
+            erase(end() - (size() - new_size), end());
+        }
     }
 
-    //! TODO doc
+    //! Change the capacity of the <code>circular_buffer</code>.
+    /*!
+        \post <code>capacity() == new_capacity</code><br><br>
+              If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
+              new capacity then number of <code>[size() - new_capacity]</code> <b>last (rightmost)</b> elements will be
+              removed.
+        \param new_capacity The new capacity.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever T::T(const T&) throws.
+        \par Complexity
+             Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the allocator's
+             <code>%allocate()</code> and <code>%deallocate()</code> methods which are used in <code>rset_capacity()
+             </code> is not considered.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>set_capacity()</code>, <code>rresize()</code>
+    */
     void rset_capacity(size_type new_capacity) {
         if (new_capacity == capacity())
             return;
@@ -793,12 +823,38 @@ public:
         BOOST_CATCH_END
     }
 
-    //! TODO doc
+    //! Change the size of the <code>circular_buffer</code>.
+    /*!
+        \post <code>size() == new_size \&\& capacity() >= new_size</code><br><br>
+              If the new size is greater than the current size, copies of <code>item</code> will be inserted at the
+              <b>front</b> of the of the <code>circular_buffer</code> in order to achieve the desired size. In the case
+              the resulting size exceeds the current capacity the capacity will be set to <code>new_size</code>.<br>
+              If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
+              new size then number of <code>[size() - new_size]</code> <b>first (leftmost)</b> elements will be
+              removed. (The capacity will remain unchanged.)
+        \param new_size The new size.
+        \param item The element the <code>circular_buffer</code> will be filled with in order to gain the requested
+                    size. (See the postcondition.)
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        \throws Whatever T::T(const T&) throws.
+        \par Complexity
+             Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the allocator's
+             <code>%allocate()</code> and <code>%deallocate()</code> methods which are used in <code>set_capacity()
+             </code> is not considered.
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>rresize()</code>, <code>set_capacity()</code>
+    */
     void rresize(size_type new_size, param_value_type item = value_type()) {
-        if (new_size > size())
-            increase_size(new_size, item);
-        else
-            erase(begin() + new_size, end());
+        if (new_size > size()) {
+            if (new_size > capacity())
+                set_capacity(new_size);
+            insert(begin(), new_size - size(), item);
+        } else {
+            erase(begin(), end() - new_size);
+        }
     }
 
 // Construction/Destruction
@@ -997,7 +1053,7 @@ public:
         \throws Nothing.
         \post <code>this</code> contains elements of <code>cb</code> and vice versa.
         \par Complexity
-             Constant.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
@@ -1648,13 +1704,6 @@ private:
             BOOST_RETHROW
         }
         BOOST_CATCH_END
-    }
-
-    //! Increase the size of the circular buffer.
-    void increase_size(size_type new_size, param_value_type item) {
-        if (new_size > capacity())
-            set_capacity(new_size);
-        insert(end(), new_size - size(), item);
     }
 
     //! Reset the circular buffer.

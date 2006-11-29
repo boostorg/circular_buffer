@@ -169,10 +169,13 @@ public:
 
     //! See the circular_buffer source documentation.
     void resize(size_type new_size, param_value_type item = value_type()) {
-        if (new_size > size())
-            increase_size(new_size, item);
-        else
-            erase(begin(), end() - new_size);
+        if (new_size > size()) {
+            if (new_size > capacity())
+                m_capacity_ctrl.m_capacity = new_size;
+            insert(end(), new_size - size(), item);
+        } else {
+            erase(end() - (size() - new_size), end());
+        }
     }
 
     //! See the circular_buffer source documentation.
@@ -191,10 +194,13 @@ public:
 
     //! See the circular_buffer source documentation.
     void rresize(size_type new_size, param_value_type item = value_type()) {
-        if (new_size > size())
-            increase_size(new_size, item);
-        else
-            erase(begin() + new_size, end());
+        if (new_size > size()) {
+            if (new_size > capacity())
+                m_capacity_ctrl.m_capacity = new_size;
+            insert(begin(), new_size - size(), item);
+        } else {
+            erase(begin(), end() - new_size);
+        }
     }
 
     //! Create an empty space optimized circular buffer with a maximum capacity.
@@ -646,13 +652,6 @@ private:
     static size_type init_capacity(const capacity_control& capacity_ctrl, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         return std::min(capacity_ctrl.m_capacity, std::max(capacity_ctrl.m_min_capacity, static_cast<size_type>(std::distance(first, last))));
-    }
-
-    //! Increase the size of the space optimized circular buffer.
-    void increase_size(size_type new_size, param_value_type item) {
-        if (new_size > capacity())
-            m_capacity_ctrl.m_capacity = new_size;
-        insert(end(), new_size - size(), item);
     }
 
     //! Specialized insert method.

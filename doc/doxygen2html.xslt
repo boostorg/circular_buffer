@@ -37,6 +37,10 @@ http://www.boost.org/LICENSE_1_0.txt)
     &nbsp;
   </xsl:template>
 
+  <xsl:template match="bold">
+    <b><xsl:apply-templates/></b>
+  </xsl:template>
+
   <xsl:template match="linebreak">
     <br />
   </xsl:template>
@@ -87,16 +91,12 @@ http://www.boost.org/LICENSE_1_0.txt)
 
   <xsl:template match="parameteritem">
     <xsl:param name="desc" select="''"/>
-    <xsl:param name="separator" select="''"/>
     <xsl:if test="$desc != ''">
       <dt><b><xsl:value-of select="$desc"/></b></dt>
     </xsl:if>
-    <dd><i><xsl:apply-templates select="parameternamelist/parametername"/></i>
-    <xsl:value-of select="$separator"/>
+    <dd><code><xsl:apply-templates select="parameternamelist/parametername"/></code>
     <xsl:apply-templates select="parameterdescription"/></dd>
-    <xsl:apply-templates select="following-sibling::parameteritem[1]">
-      <xsl:with-param name="separator" select="$separator"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="following-sibling::parameteritem[1]"/>
   </xsl:template>
 
   <xsl:template match="simplesect[@kind='return']">
@@ -129,8 +129,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 
   <xsl:template match="parameterlist[@kind='param']">
     <dl><xsl:apply-templates select="parameteritem[1]">
-      <xsl:with-param name="desc" select="'Parameters:'"/>
-      <xsl:with-param name="separator" select="' - '"/>
+      <xsl:with-param name="desc" select="'Parameter(s):'"/>
     </xsl:apply-templates></dl>
   </xsl:template>
 

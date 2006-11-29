@@ -549,8 +549,8 @@ void resize_test() {
     BOOST_CHECK(cb1[19] == 5);
     BOOST_CHECK(cb2.size() == 2);
     BOOST_CHECK(cb2.capacity() == 10);
-    BOOST_CHECK(cb2[0] == 3);
-    BOOST_CHECK(cb2[1] == 4);
+    BOOST_CHECK(cb2[0] == 1);
+    BOOST_CHECK(cb2[1] == 2);
     BOOST_CHECK(cb3.size() == 0);
     BOOST_CHECK(cb3.capacity() == 10);
     BOOST_CHECK(cb4.size() == 10);
@@ -575,8 +575,8 @@ void rresize_test() {
 
     BOOST_CHECK(cb.size() == 2);
     BOOST_CHECK(cb.capacity() == 10);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 2);
+    BOOST_CHECK(cb[0] == 3);
+    BOOST_CHECK(cb[1] == 4);
 
     generic_test(cb);
 }
