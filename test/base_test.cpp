@@ -488,6 +488,101 @@ void exception_safety_test() {
 #endif // #if !defined(BOOST_NO_EXCEPTIONS)
 }
 
+void array_range_test() {
+
+    CB_CONTAINER<Integer> cb(7);
+    CB_CONTAINER<Integer>::array_range a1 = cb.array_one();
+    CB_CONTAINER<Integer>::array_range a2 = cb.array_two();
+    CB_CONTAINER<Integer>::const_array_range ca1 = cb.array_one();
+    CB_CONTAINER<Integer>::const_array_range ca2 = cb.array_two();
+
+    BOOST_CHECK(a1.second == 0);
+    BOOST_CHECK(a2.second == 0);
+    BOOST_CHECK(ca1.second == 0);
+    BOOST_CHECK(ca2.second == 0);
+
+    cb.push_back(1);
+    cb.push_back(2);
+    cb.push_back(3);
+    a1 = cb.array_one();
+    a2 = cb.array_two();
+    ca1 = cb.array_one();
+    ca2 = cb.array_two();
+
+    BOOST_CHECK(a1.first[0] == 1);
+    BOOST_CHECK(a1.first[2] == 3);
+    BOOST_CHECK(ca1.first[0] == 1);
+    BOOST_CHECK(ca1.first[2] == 3);
+    BOOST_CHECK(a1.second == 3);
+    BOOST_CHECK(a2.second == 0);
+    BOOST_CHECK(ca1.second == 3);
+    BOOST_CHECK(ca2.second == 0);
+
+    cb.push_back(4);
+    cb.push_back(5);
+    cb.push_back(6);
+    cb.push_back(7);
+    cb.push_back(8);
+    cb.push_back(9);
+    cb.push_back(10);
+    a1 = cb.array_one();
+    a2 = cb.array_two();
+    ca1 = cb.array_one();
+    ca2 = cb.array_two();
+
+    BOOST_CHECK(a1.first[0] == 4);
+    BOOST_CHECK(a1.first[3] == 7);
+    BOOST_CHECK(a2.first[0] == 8);
+    BOOST_CHECK(a2.first[2] == 10);
+    BOOST_CHECK(ca1.first[0] == 4);
+    BOOST_CHECK(ca1.first[3] == 7);
+    BOOST_CHECK(ca2.first[0] == 8);
+    BOOST_CHECK(ca2.first[2] == 10);
+    BOOST_CHECK(a1.second == 4);
+    BOOST_CHECK(a2.second == 3);
+    BOOST_CHECK(ca1.second == 4);
+    BOOST_CHECK(ca2.second == 3);
+
+    cb.pop_front();
+    cb.pop_back();
+    a1 = cb.array_one();
+    a2 = cb.array_two();
+    ca1 = cb.array_one();
+    ca2 = cb.array_two();
+
+    BOOST_CHECK(a1.first[0] == 5);
+    BOOST_CHECK(a1.first[2] == 7);
+    BOOST_CHECK(a2.first[0] == 8);
+    BOOST_CHECK(a2.first[1] == 9);
+    BOOST_CHECK(ca1.first[0] == 5);
+    BOOST_CHECK(ca1.first[2] == 7);
+    BOOST_CHECK(ca2.first[0] == 8);
+    BOOST_CHECK(ca2.first[1] == 9);
+    BOOST_CHECK(a1.second == 3);
+    BOOST_CHECK(a2.second == 2);
+    BOOST_CHECK(ca1.second == 3);
+    BOOST_CHECK(ca2.second == 2);
+
+    cb.pop_back();
+    cb.pop_back();
+    cb.pop_back();
+    a1 = cb.array_one();
+    a2 = cb.array_two();
+    ca1 = cb.array_one();
+    ca2 = cb.array_two();
+
+    BOOST_CHECK(a1.first[0] == 5);
+    BOOST_CHECK(a1.first[1] == 6);
+    BOOST_CHECK(ca1.first[0] == 5);
+    BOOST_CHECK(ca1.first[1] == 6);
+    BOOST_CHECK(a1.second == 2);
+    BOOST_CHECK(a2.second == 0);
+    BOOST_CHECK(ca1.second == 2);
+    BOOST_CHECK(ca2.second == 0);
+
+    generic_test(cb);
+}
+
 // test main
 test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
 
@@ -505,6 +600,7 @@ test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
     tests->add(BOOST_TEST_CASE(&iterator_comparison_test));
     tests->add(BOOST_TEST_CASE(&iterator_invalidation_test));
     tests->add(BOOST_TEST_CASE(&exception_safety_test));
+    tests->add(BOOST_TEST_CASE(&array_range_test));
 
     return tests;
 }

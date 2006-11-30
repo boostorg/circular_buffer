@@ -2473,10 +2473,9 @@ template &lt;class T, class Alloc&gt;
               "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code> can be useful
               when passing the stored data into a legacy C API as an array. Suppose there is a
               <code>circular_buffer</code> of capacity 10, containing 7 characters <code>'a', 'b', ..., 'g'</code>
-              where <code>cbuff[0] == 'a'</code>, <code>cbuff[1] == 'b'</code>, ... and <code>cbuff[6] ==
-              'g'</code>:<br>
+              where <code>buff[0] == 'a'</code>, <code>buff[1] == 'b'</code>, ... and <code>buff[6] == 'g'</code>:<br>
               <br>
-              <code>circular_buffer&lt;char&gt; cbuff(10);</code><br>
+              <code>circular_buffer&lt;char&gt; buff(10);</code><br>
               <br>
               The internal representation is often not linear and the state of the internal buffer may look like
               this:<br>
@@ -2497,17 +2496,17 @@ template &lt;class T, class Alloc&gt;
               <code><a href="#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code>
               methods and calling the write function twice:<br>
               <br>
-              <code>array_range ar = cbuff.array_one();<br>
+              <code>array_range ar = buff.array_one();<br>
               write(file_desc, ar.first, ar.second);<br>
-              ar = cbuff.array_two();<br>
+              ar = buff.array_two();<br>
               write(file_desc, ar.first, ar.second);</code><br>
               <br>
               Or relying on the <code><a href=
               "#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize()</a></code> method:<br>
               <br>
-              <code>write(file_desc, cbuff.linearize(), cbuff.size());</code><br>
+              <code>write(file_desc, buff.linearize(), buff.size());</code><br>
               <br>
-              As the complexity of <code><a href=
+              Since the complexity of <code><a href=
               "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code> and
               <code><a href="#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code>
               methods is constant the first option is suitable when calling the write method is "cheap". On the other
@@ -2555,6 +2554,19 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Warning:</b>
+              </dt>
+              <dd>
+                In general invoking any method which modifies the internal state of the circular_buffer may delinearize
+                the internal buffer and invalidate the array ranges returned by <code><a href=
+                "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code> and
+                <code><a href=
+                "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code> (and their
+                const versions).
               </dd>
             </dl>
             <dl>
@@ -3184,7 +3196,7 @@ template &lt;class T, class Alloc&gt;
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new capacity then number of <code>[<a href=
                 "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_capacity]</code>
-                <b>first (leftmost)</b> elements will be removed.
+                <b>last (rightmost)</b> elements will be removed.
               </dd>
             </dl>
             <dl>
@@ -3359,7 +3371,7 @@ template &lt;class T, class Alloc&gt;
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new capacity then number of <code>[<a href=
                 "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_capacity]</code>
-                <b>last (rightmost)</b> elements will be removed.
+                <b>first (leftmost)</b> elements will be removed.
               </dd>
             </dl>
             <dl>

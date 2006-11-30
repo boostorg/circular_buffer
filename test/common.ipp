@@ -283,18 +283,6 @@ void front_and_back_test() {
     generic_test(cb);
 }
 
-void array_test() {
-    // TODO
-    CB_CONTAINER<Integer> cb(1);
-    CB_CONTAINER<Integer>::array_range a1 = cb.array_one();
-    CB_CONTAINER<Integer>::const_array_range a2 = cb.array_two();
-
-    BOOST_CHECK(a1.second == 0);
-    BOOST_CHECK(a2.second == 0);
-
-    generic_test(cb);
-}
-
 void linearize_test() {
 
     vector<int> v;
@@ -490,16 +478,25 @@ void set_capacity_test() {
     cb3.push_back(3);
     cb3.push_back(1);
     cb3.set_capacity(2);
-    cb3.set_capacity(2);
 
     BOOST_CHECK(cb1.size() == 3);
     BOOST_CHECK(cb1[0] == 2);
+    BOOST_CHECK(cb1[2] == 1);
     BOOST_CHECK(cb1.capacity() == 5);
     BOOST_CHECK(cb2.size() == 3);
     BOOST_CHECK(cb2[0] == 2);
+    BOOST_CHECK(cb2[2] == 1);
     BOOST_CHECK(cb2.capacity() == 10);
     BOOST_CHECK(cb3.size() == 2);
-    BOOST_CHECK(cb3[0] == 3);
+    BOOST_CHECK(cb3[0] == 2);
+    BOOST_CHECK(cb3[1] == 3);
+    BOOST_CHECK(cb3.capacity() == 2);
+
+    cb3.set_capacity(2);
+
+    BOOST_CHECK(cb3.size() == 2);
+    BOOST_CHECK(cb3[0] == 2);
+    BOOST_CHECK(cb3[1] == 3);
     BOOST_CHECK(cb3.capacity() == 2);
 
     generic_test(cb1);
@@ -509,17 +506,45 @@ void set_capacity_test() {
 
 void rset_capacity_test() {
 
-    CB_CONTAINER<Integer> cb(10);
-    cb.push_back(2);
-    cb.push_back(3);
-    cb.push_back(1);
-    cb.rset_capacity(2);
+    CB_CONTAINER<Integer> cb1(10);
+    cb1.push_back(2);
+    cb1.push_back(3);
+    cb1.push_back(1);
+    cb1.rset_capacity(5);
+    CB_CONTAINER<Integer> cb2(3);
+    cb2.push_back(2);
+    cb2.push_back(3);
+    cb2.push_back(1);
+    cb2.rset_capacity(10);
+    CB_CONTAINER<Integer> cb3(5);
+    cb3.push_back(2);
+    cb3.push_back(3);
+    cb3.push_back(1);
+    cb3.rset_capacity(2);
 
-    BOOST_CHECK(cb.size() == 2);
-    BOOST_CHECK(cb[0] == 2);
-    BOOST_CHECK(cb.capacity() == 2);
+    BOOST_CHECK(cb1.size() == 3);
+    BOOST_CHECK(cb1[0] == 2);
+    BOOST_CHECK(cb1[2] == 1);
+    BOOST_CHECK(cb1.capacity() == 5);
+    BOOST_CHECK(cb2.size() == 3);
+    BOOST_CHECK(cb2[0] == 2);
+    BOOST_CHECK(cb2[2] == 1);
+    BOOST_CHECK(cb2.capacity() == 10);
+    BOOST_CHECK(cb3.size() == 2);
+    BOOST_CHECK(cb3[0] == 3);
+    BOOST_CHECK(cb3[1] == 1);
+    BOOST_CHECK(cb3.capacity() == 2);
 
-    generic_test(cb);
+    cb3.rset_capacity(2);
+
+    BOOST_CHECK(cb3.size() == 2);
+    BOOST_CHECK(cb3[0] == 3);
+    BOOST_CHECK(cb3[1] == 1);
+    BOOST_CHECK(cb3.capacity() == 2);
+
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
 }
 
 void resize_test() {
@@ -1563,7 +1588,6 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&element_access_and_insert_test));
     tests->add(BOOST_TEST_CASE(&at_test));
     tests->add(BOOST_TEST_CASE(&front_and_back_test));
-    tests->add(BOOST_TEST_CASE(&array_test));
     tests->add(BOOST_TEST_CASE(&linearize_test));
     tests->add(BOOST_TEST_CASE(&capacity_test));
     tests->add(BOOST_TEST_CASE(&full_and_empty_test));

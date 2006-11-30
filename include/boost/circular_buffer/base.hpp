@@ -484,9 +484,9 @@ public:
     /*!
         This method in combination with <code>array_two()</code> can be useful when passing the stored data into
         a legacy C API as an array. Suppose there is a <code>circular_buffer</code> of capacity 10, containing 7
-        characters <code>'a', 'b', ..., 'g'</code> where <code>cbuff[0] == 'a'</code>, <code>cbuff[1] == 'b'</code>,
-        ... and <code>cbuff[6] == 'g'</code>:<br><br>
-        <code>circular_buffer<char> cbuff(10);</code><br><br>
+        characters <code>'a', 'b', ..., 'g'</code> where <code>buff[0] == 'a'</code>, <code>buff[1] == 'b'</code>,
+        ... and <code>buff[6] == 'g'</code>:<br><br>
+        <code>circular_buffer<char> buff(10);</code><br><br>
         The internal representation is often not linear and the state of the internal buffer may look like this:<br>
         <br><code>
         |e|f|g| | | |a|b|c|d|<br>
@@ -498,16 +498,16 @@ public:
         <code>int write(int file_desc, char* buff, int num_bytes);</code><br><br>
         There are two ways how to write the content of the <code>circular_buffer</code> into a file. Either relying
         on <code>array_one()</code> and <code>array_two()</code> methods and calling the write function twice:<br><br>
-        <code>array_range ar = cbuff.array_one();<br>
+        <code>array_range ar = buff.array_one();<br>
         write(file_desc, ar.first, ar.second);<br>
-        ar = cbuff.array_two();<br>
+        ar = buff.array_two();<br>
         write(file_desc, ar.first, ar.second);</code><br><br>
         Or relying on the <code>linearize()</code> method:<br><br><code>
-        write(file_desc, cbuff.linearize(), cbuff.size());</code><br><br>
-        As the complexity of <code>array_one()</code> and <code>array_two()</code> methods is constant the first option
-        is suitable when calling the write method is "cheap". On the other hand the second option is more suitable when
-        calling the write method is more "expensive" than calling the <code>linearize()</code> method whose complexity
-        is linear.
+        write(file_desc, buff.linearize(), buff.size());</code><br><br>
+        Since the complexity of <code>array_one()</code> and <code>array_two()</code> methods is constant the first
+        option is suitable when calling the write method is "cheap". On the other hand the second option is more
+        suitable when calling the write method is more "expensive" than calling the <code>linearize()</code> method
+        whose complexity is linear.
         \return The array range of the first continuos array of the internal buffer. In the case the
                 <code>circular_buffer</code> is empty the size of the returned array is <code>0</code>.
         \throws Nothing.
@@ -517,6 +517,9 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
+        \warning In general invoking any method which modifies the internal state of the circular_buffer  may
+                 delinearize the internal buffer and invalidate the array ranges returned by <code>array_one()</code>
+                 and <code>array_two()</code> (and their const versions).
         \note In the case the internal buffer is linear e.g. <code>|a|b|c|d|e|f|g| | | |</code> the "array one" is
               represented by <code>|a|b|c|d|e|f|g|</code> and the "array two" does not exist (the
               <code>array_two()</code> method returns an array with the size <code>0</code>).
@@ -727,7 +730,7 @@ public:
     /*!
         \post <code>capacity() == new_capacity</code><br><br>
               If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
-              new capacity then number of <code>[size() - new_capacity]</code> <b>first (leftmost)</b> elements will be
+              new capacity then number of <code>[size() - new_capacity]</code> <b>last (rightmost)</b> elements will be
               removed.
         \param new_capacity The new capacity.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
@@ -748,7 +751,7 @@ public:
             return;
         pointer buff = allocate(new_capacity);
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy(end() - std::min(new_capacity, size()), end(), buff, m_alloc), new_capacity);
+            reset(buff, cb_details::uninitialized_copy(begin(), begin() + std::min(new_capacity, size()), buff, m_alloc), new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -794,7 +797,7 @@ public:
     /*!
         \post <code>capacity() == new_capacity</code><br><br>
               If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
-              new capacity then number of <code>[size() - new_capacity]</code> <b>last (rightmost)</b> elements will be
+              new capacity then number of <code>[size() - new_capacity]</code> <b>first (leftmost)</b> elements will be
               removed.
         \param new_capacity The new capacity.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
@@ -815,7 +818,7 @@ public:
             return;
         pointer buff = allocate(new_capacity);
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy(begin(), begin() + std::min(new_capacity, size()), buff, m_alloc), new_capacity);
+            reset(buff, cb_details::uninitialized_copy(end() - std::min(new_capacity, size()), end(), buff, m_alloc), new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
