@@ -499,6 +499,12 @@ void set_capacity_test() {
     BOOST_CHECK(cb3[1] == 3);
     BOOST_CHECK(cb3.capacity() == 2);
 
+    cb3.set_capacity(0);
+
+    BOOST_CHECK(cb3.size() == 0);
+    BOOST_CHECK(cb3.capacity() == 0);
+
+
     generic_test(cb1);
     generic_test(cb2);
     generic_test(cb3);
@@ -541,6 +547,11 @@ void rset_capacity_test() {
     BOOST_CHECK(cb3[0] == 3);
     BOOST_CHECK(cb3[1] == 1);
     BOOST_CHECK(cb3.capacity() == 2);
+
+    cb3.rset_capacity(0);
+
+    BOOST_CHECK(cb3.size() == 0);
+    BOOST_CHECK(cb3.capacity() == 0);
 
     generic_test(cb1);
     generic_test(cb2);
@@ -591,19 +602,44 @@ void resize_test() {
 
 void rresize_test() {
 
-    CB_CONTAINER<Integer> cb(10);
-    cb.push_back(1);
-    cb.push_back(2);
-    cb.push_back(3);
-    cb.push_back(4);
-    cb.rresize(2);
+    CB_CONTAINER<Integer> cb1(10);
+    cb1.push_back(1);
+    cb1.push_back(2);
+    cb1.push_back(3);
+    cb1.push_back(4);
+    cb1.rresize(20, 5);
+    CB_CONTAINER<Integer> cb2(10);
+    cb2.push_back(1);
+    cb2.push_back(2);
+    cb2.push_back(3);
+    cb2.push_back(4);
+    cb2.rresize(2);
+    CB_CONTAINER<Integer> cb3(10, 1);
+    cb3.rresize(0);
+    CB_CONTAINER<Integer> cb4(10, 1);
+    cb4.rresize(10);
 
-    BOOST_CHECK(cb.size() == 2);
-    BOOST_CHECK(cb.capacity() == 10);
-    BOOST_CHECK(cb[0] == 3);
-    BOOST_CHECK(cb[1] == 4);
+    BOOST_CHECK(cb1.size() == 20);
+    BOOST_CHECK(cb1.capacity() == 20);
+    BOOST_CHECK(cb1[0] == 5);
+    BOOST_CHECK(cb1[15] == 5);
+    BOOST_CHECK(cb1[16] == 1);
+    BOOST_CHECK(cb1[19] == 4);
+    BOOST_CHECK(cb2.size() == 2);
+    BOOST_CHECK(cb2.capacity() == 10);
+    BOOST_CHECK(cb2[0] == 3);
+    BOOST_CHECK(cb2[1] == 4);
+    BOOST_CHECK(cb3.size() == 0);
+    BOOST_CHECK(cb3.capacity() == 10);
+    BOOST_CHECK(cb4.size() == 10);
+    BOOST_CHECK(cb4.capacity() == 10);
+    BOOST_CHECK(cb4[0] == 1);
+    BOOST_CHECK(cb4[9] == 1);
 
-    generic_test(cb);
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
 }
 
 void constructor_test() {
