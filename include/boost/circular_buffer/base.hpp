@@ -289,8 +289,8 @@ public:
     //! Get the iterator pointing to the end of the "reversed" <code>circular_buffer</code>.
     /*!
         \return A reverse random access iterator pointing to the element "one before" the first element of the <code>
-                circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to the
-                one returned by <code>rbegin()</code>.
+                circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to
+                the one returned by <code>rbegin()</code>.
         \throws Nothing.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
@@ -360,9 +360,9 @@ public:
         \return A const reference to the element at the <code>index</code> position.
         \throws Nothing.
         \par Complexity
-             No-throw.
+             Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
-             Strong.
+             No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
         \sa <code>\link at(size_type)const at() const \endlink</code>
@@ -562,7 +562,8 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterator.
-        \sa <code>array_two() const</code>; <code>array_one()</code> for more details.how to pass data into a legacy C API.
+        \sa <code>array_two() const</code>; <code>array_one()</code> for more details.how to pass data into a legacy C
+            API.
     */
     const_array_range array_one() const {
         return const_array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
@@ -737,9 +738,7 @@ public:
                 used).
         \throws Whatever T::T(const T&) throws.
         \par Complexity
-             Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the allocator's
-             <code>%allocate()</code> and <code>%deallocate()</code> methods which are used in <code>set_capacity()
-             </code> is not considered.
+             Linear (in the size/new capacity of the <code>circular_buffer</code>).
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
@@ -771,12 +770,11 @@ public:
         \param new_size The new size.
         \param item The element the <code>circular_buffer</code> will be filled with in order to gain the requested
                     size. (See the postcondition.)
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
         \throws Whatever T::T(const T&) throws.
         \par Complexity
-             Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the allocator's
-             <code>%allocate()</code> and <code>%deallocate()</code> methods which are used in <code>set_capacity()
-             </code> is not considered.
+             Linear (in the new size of the <code>circular_buffer</code>).
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
@@ -804,9 +802,7 @@ public:
                 used).
         \throws Whatever T::T(const T&) throws.
         \par Complexity
-             Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the allocator's
-             <code>%allocate()</code> and <code>%deallocate()</code> methods which are used in <code>rset_capacity()
-             </code> is not considered.
+             Linear (in the size/new capacity of the <code>circular_buffer</code>).
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
@@ -841,9 +837,7 @@ public:
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
         \throws Whatever T::T(const T&) throws.
         \par Complexity
-             Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the allocator's
-             <code>%allocate()</code> and <code>%deallocate()</code> methods which are used in <code>set_capacity()
-             </code> is not considered.
+             Linear (in the new size of the <code>circular_buffer</code>).
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
@@ -862,10 +856,16 @@ public:
 
 // Construction/Destruction
 
-    //! Create an empty circular buffer with a maximum capacity.
+    //! Create an empty <code>circular_buffer</code> with a maximum capacity.
     /*!
         \post <code>capacity() == max_size() \&\& size() == 0</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        \param alloc The allocator.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \par Complexity
+             Constant.
+        \note This constructor has been defined only due to compatibility with the STL container definition. Avoid
+              using it because it allocates very large amount of memory.
     */
     explicit circular_buffer(
         const allocator_type& alloc = allocator_type())
@@ -873,11 +873,15 @@ public:
         initialize(max_size());
     }
 
-    //! Create an empty circular buffer with a given capacity.
+    //! Create an empty <code>circular_buffer</code> with the specified capacity.
     /*!
         \param capacity The maximum number of elements which can be stored in the <code>circular_buffer</code>.
-        \post <code>(*this).capacity() == capacity \&\& (*this).size == 0</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        \param alloc The allocator.
+        \post <code>capacity() == capacity \&\& size() == 0</code>
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \par Complexity
+             Constant.
     */
     explicit circular_buffer(
         size_type capacity,
@@ -886,11 +890,18 @@ public:
         initialize(capacity);
     }
 
-    //! Create a full circular buffer with a given capacity and filled with copies of <code>item</code>.
-    /*!
-        \post <code>capacity() == n \&\& size() == n \&\& (*this)[0] == (*this)[1] == ... == (*this)[n - 1] == item</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+    /*! \brief Create a full <code>circular_buffer</code> with the specified capacity and filled with <code>n</code>
+               copies of <code>item</code>.
+        \post <code>capacity() == n \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ... \&\&
+              (*this) [n - 1] == item </code>
+        \param n The capacity/size of the created <code>circular_buffer</code>.
+        \param item The element the <code>circular_buffer</code> to be filled with.
+        \param alloc The allocator.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
         \throws Whatever T::T(const T&) throws.
+        \par Complexity
+             Linear (in the <code>n</code>).
     */
     circular_buffer(
         size_type n,
@@ -900,7 +911,20 @@ public:
         initialize(n, item);
     }
 
-    //! TODO doc
+    /*! \brief Create a <code>circular_buffer</code> with the specified capacity and filled with <code>n</code>
+               copies of <code>item</code>.
+        \post <code>capacity() == capacity \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ...
+              \&\& (*this)[n - 1] == item</code>
+        \param capacity The capacity of the created <code>circular_buffer</code>.
+        \param n The size of the created <code>circular_buffer</code>.
+        \param item The element the <code>circular_buffer</code> to be filled with.
+        \param alloc The allocator.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever T::T(const T&) throws.
+        \par Complexity
+             Linear (in the <code>n</code>).
+    */
     circular_buffer(
         size_type capacity,
         size_type n,
@@ -911,11 +935,15 @@ public:
         initialize(capacity, item);
     }
 
-    //! Copy constructor.
+    //! The copy constructor. Creates a copy of the specified <code>circular_buffer</code>.
     /*!
         \post <code>*this == cb</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        \param cb The <code>circular_buffer</code> to be copied.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
         \throws Whatever T::T(const T&) throws.
+        \par Complexity
+             Linear (in the size of <code>cb</code>).
     */
     circular_buffer(const circular_buffer<T, Alloc>& cb)
     : m_size(cb.size()), m_alloc(cb.get_allocator()) {
@@ -931,7 +959,7 @@ public:
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
-    // TODO doc
+    /*! \cond */
     template <class InputIterator>
     circular_buffer(
         InputIterator first,
@@ -940,7 +968,6 @@ public:
         initialize(first, last, is_integral<InputIterator>());
     }
 
-    // TODO doc
     template <class InputIterator>
     circular_buffer(
         size_type capacity,
@@ -949,10 +976,27 @@ public:
     : m_alloc(allocator_type()) {
         initialize(capacity, first, last, is_integral<InputIterator>());
     }
+    /*! \endcond */
 
 #else
 
-    //! TODO doc
+    //! Create a <code>circular_buffer</code> filled with a copy of the range.
+    /*!
+        \pre Valid range <code>[first, last)</code>.<br>
+             <code>first</code> and <code>last</code> have to meet the requirements of
+             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+        \post <code>capacity() == std::distance(first, last) \&\& size() == std::distance(first, last) \&\&
+             (*this)[0]== *first \&\& (*this)[1] == *(first + 1) \&\& ... \&\& (*this)[std::distance(first, last) - 1]
+             == *(last - 1)</code>
+        \param first The beginning of the range to be copied.
+        \param last The end of the range to be copied.
+        \param alloc The allocator.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever T::T(const T&) throws.
+        \par Complexity
+             Linear (in the <code>std::distance(first, last)</code>).
+    */
     template <class InputIterator>
     circular_buffer(
         InputIterator first,
@@ -962,16 +1006,26 @@ public:
         initialize(first, last, is_integral<InputIterator>());
     }
 
-    //! Create a circular buffer with a copy of a range.
+    //! Create a <code>circular_buffer</code> with the specified capacity and filled with a copy of the range.
     /*!
-        \pre Valid range <code>[first, last)</code>.
-        \post <code>(*this).capacity() == capacity</code><br>
-              If the number of items to copy from the range
-              <code>[first, last)</code> is greater than the specified
-              <code>capacity</code> then only elements from the range
-              <code>[last - capacity, last)</code> will be copied.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        \pre Valid range <code>[first, last)</code>.<br>
+             <code>first</code> and <code>last</code> have to meet the requirements of
+             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+        \post <code>capacity() == capacity \&\& size() \<= std::distance(first, last) \&\&
+             (*this)[0]== *(last - capacity) \&\& (*this)[1] == *(last - capacity + 1) \&\& ... \&\&
+             (*this)[capacity - 1] == *(last - 1)</code><br><br>
+             If the number of items to be copied from the range <code>[first, last)</code> is greater than the
+             specified <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code>
+             will be copied.
+        \param capacity The capacity of the created <code>circular_buffer</code>.
+        \param first The beginning of the range to be copied.
+        \param last The end of the range to be copied.
+        \param alloc The allocator.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
         \throws Whatever T::T(const T&) throws.
+        \par Complexity
+             Linear (in the <code>capacity</code>/<code>std::distance(first, last)</code>).
     */
     template <class InputIterator>
     circular_buffer(
@@ -985,7 +1039,16 @@ public:
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
-    //! Destructor.
+    //! The destructor. Destroys the <code>circular_buffer</code>.
+    /*!
+        \throws Nothing.
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+    */
     ~circular_buffer() { destroy(); }
 
 public:
@@ -1160,7 +1223,7 @@ public:
 public:
 // Insert
 
-    //! Insert the <code>item</code> before the given position.
+    //! Insert the <code>item</code> before the specified position.
     /*!
         \pre Valid <code>pos</code> iterator.
         \post The <code>item</code> will be inserted at the position <code>pos</code>.<br>
@@ -1177,7 +1240,7 @@ public:
         return insert_item(pos, item);
     }
 
-    //! Insert <code>n</code> copies of the item before the given position.
+    //! Insert <code>n</code> copies of the item before the specified position.
     /*!
         \pre Valid <code>pos</code> iterator.
         \post This operation preserves the capacity of the circular buffer.
@@ -1208,7 +1271,7 @@ public:
         insert_n(pos, n, cb_details::item_wrapper<const_pointer, param_value_type>(item));
     }
 
-    //! Insert the range <code>[first, last)</code> before the given position.
+    //! Insert the range <code>[first, last)</code> before the specified position.
     /*!
         \pre Valid <code>pos</code> iterator and valid range <code>[first, last)</code>.
         \post This operation preserves the capacity of the circular buffer.
@@ -1236,7 +1299,7 @@ public:
         insert(pos, first, last, is_integral<InputIterator>());
     }
 
-    //! Insert an <code>item</code> before the given position.
+    //! Insert an <code>item</code> before the specified position.
     /*!
         \pre Valid <code>pos</code> iterator.
         \post The <code>item</code> will be inserted before the position <code>pos</code>.<br>
@@ -1292,7 +1355,7 @@ public:
         return iterator(this, pos.m_it);
     }
 
-    //! Insert <code>n</code> copies of the item before the given position.
+    //! Insert <code>n</code> copies of the item before the specified position.
     /*!
         \pre Valid <code>pos</code> iterator.
         \post This operation preserves the capacity of the circular buffer.
@@ -1316,7 +1379,7 @@ public:
         rinsert_n(pos, n, cb_details::item_wrapper<const_pointer, param_value_type>(item));
     }
 
-    //! Insert the range <code>[first, last)</code> before the given position.
+    //! Insert the range <code>[first, last)</code> before the specified position.
     /*!
         \pre Valid <code>pos</code> iterator and valid range <code>[first, last)</code>.
         \post This operation preserves the capacity of the circular buffer.
@@ -1346,7 +1409,7 @@ public:
 
 // Erase
 
-    //! Erase the element at the given position.
+    //! Erase the element at the specified position.
     /*!
         \pre Valid <code>pos</code> iterator.
         \pre <code>size_type old_size = (*this).size()</code>
@@ -1401,7 +1464,7 @@ public:
         return m_last == p ? end() : iterator(this, p);
     }
 
-    //! Erase the element at the given position.
+    //! Erase the element at the specified position.
     /*!
         \pre Valid <code>pos</code> iterator.
         \pre <code>size_type old_size = (*this).size()</code>

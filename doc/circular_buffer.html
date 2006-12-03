@@ -187,12 +187,6 @@ public:
 "#classboost_1_1circular__buffer_1e515d8a951eeb18b8cc930300e7e13bd">circular_buffer</a>(const circular_buffer&lt;T, Alloc&gt;&amp; cb);
    template &lt;class InputIterator&gt;
       <a href=
-"#classboost_1_1circular__buffer_1434667d007d3009971550546d30c5c2e">circular_buffer</a>(InputIterator first, InputIterator last);
-   template &lt;class InputIterator&gt;
-      <a href=
-"#classboost_1_1circular__buffer_1083b77ee1d5b4f12699a141756ae9fff">circular_buffer</a>(size_type capacity, InputIterator first, InputIterator last);
-   template &lt;class InputIterator&gt;
-      <a href=
 "#classboost_1_1circular__buffer_1744ec06b06a5a723386b645a29cb8ed2">circular_buffer</a>(InputIterator first, InputIterator last, const allocator_type&amp; alloc = allocator_type());
    template &lt;class InputIterator&gt;
       <a href=
@@ -1033,7 +1027,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
-            Create an empty circular buffer with a maximum capacity.
+            Create an empty <code>circular_buffer</code> with a maximum capacity.
             <dl>
               <dt>
                 <b>Postcondition:</b>
@@ -1046,11 +1040,36 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>alloc</code> The allocator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Throws:</b>
               </dt>
               <dd>
                 <code>An allocation error</code> if memory is exhausted (<code>std::bad_alloc</code> if the standard
                 allocator is used).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Note:</b>
+              </dt>
+              <dd>
+                This constructor has been defined only due to compatibility with the STL container definition. Avoid
+                using it because it allocates very large amount of memory.
               </dd>
             </dl>
           </td>
@@ -1064,7 +1083,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
-            Create an empty circular buffer with a given capacity.
+            Create an empty <code>circular_buffer</code> with the specified capacity.
             <dl>
               <dt>
                 <b>Parameter(s):</b>
@@ -1073,15 +1092,18 @@ template &lt;class T, class Alloc&gt;
                 <code>capacity</code> The maximum number of elements which can be stored in the
                 <code>circular_buffer</code>.
               </dd>
+              <dd>
+                <code>alloc</code> The allocator.
+              </dd>
             </dl>
             <dl>
               <dt>
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).<a href=
-                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> == capacity
-                &amp;&amp; (*this).size == 0</code>
+                <code><a href="#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> ==
+                capacity &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == 0</code>
               </dd>
             </dl>
             <dl>
@@ -1091,6 +1113,14 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 <code>An allocation error</code> if memory is exhausted (<code>std::bad_alloc</code> if the standard
                 allocator is used).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
               </dd>
             </dl>
           </td>
@@ -1104,7 +1134,8 @@ template &lt;class T, class Alloc&gt;
             <a href="#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
-            Create a full circular buffer with a given capacity and filled with copies of <code>item</code>.
+            Create a full <code>circular_buffer</code> with the specified capacity and filled with <code>n</code>
+            copies of <code>item</code>.
             <dl>
               <dt>
                 <b>Postcondition:</b>
@@ -1112,7 +1143,22 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 <code><a href="#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> == n
                 &amp;&amp; <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n
-                &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this)[n - 1] == item</code>
+                &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this) [n - 1]
+                == item</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>n</code> The capacity/size of the created <code>circular_buffer</code>.
+              </dd>
+              <dd>
+                <code>item</code> The element the <code>circular_buffer</code> to be filled with.
+              </dd>
+              <dd>
+                <code>alloc</code> The allocator.
               </dd>
             </dl>
             <dl>
@@ -1125,6 +1171,14 @@ template &lt;class T, class Alloc&gt;
               </dd>
               <dd>
                 <code>Whatever</code> T::T(const T&amp;) throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>n</code>).
               </dd>
             </dl>
           </td>
@@ -1139,23 +1193,35 @@ template &lt;class T, class Alloc&gt;
             <a href="#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
-            TODO doc.<br>
-            <br>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a id="classboost_1_1circular__buffer_1e515d8a951eeb18b8cc930300e7e13bd" name=
-            "classboost_1_1circular__buffer_1e515d8a951eeb18b8cc930300e7e13bd"></a><code><b>circular_buffer(const
-            circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
-            <br>
-            Copy constructor.
+            Create a <code>circular_buffer</code> with the specified capacity and filled with <code>n</code> copies of
+            <code>item</code>.
             <dl>
               <dt>
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>*this == cb</code>
+                <code><a href="#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> ==
+                capacity &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n &amp;&amp;
+                (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this)[n - 1] ==
+                item</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>capacity</code> The capacity of the created <code>circular_buffer</code>.
+              </dd>
+              <dd>
+                <code>n</code> The size of the created <code>circular_buffer</code>.
+              </dd>
+              <dd>
+                <code>item</code> The element the <code>circular_buffer</code> to be filled with.
+              </dd>
+              <dd>
+                <code>alloc</code> The allocator.
               </dd>
             </dl>
             <dl>
@@ -1170,30 +1236,59 @@ template &lt;class T, class Alloc&gt;
                 <code>Whatever</code> T::T(const T&amp;) throws.
               </dd>
             </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>n</code>).
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_1434667d007d3009971550546d30c5c2e" name=
-            "classboost_1_1circular__buffer_1434667d007d3009971550546d30c5c2e"></a> <code><b>template &lt;class
-            InputIterator&gt;<br>
-                circular_buffer(InputIterator first, InputIterator last);</b></code><br>
+            <a id="classboost_1_1circular__buffer_1e515d8a951eeb18b8cc930300e7e13bd" name=
+            "classboost_1_1circular__buffer_1e515d8a951eeb18b8cc930300e7e13bd"></a><code><b>circular_buffer(const
+            circular_buffer&lt;T,Alloc&gt;&amp; cb);</b></code><br>
             <br>
-            <br>
-            <br>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a id="classboost_1_1circular__buffer_1083b77ee1d5b4f12699a141756ae9fff" name=
-            "classboost_1_1circular__buffer_1083b77ee1d5b4f12699a141756ae9fff"></a> <code><b>template &lt;class
-            InputIterator&gt;<br>
-                circular_buffer(<a href=
-            "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> capacity, InputIterator
-            first, InputIterator last);</b></code><br>
-            <br>
-            <br>
-            <br>
+            The copy constructor. Creates a copy of the specified <code>circular_buffer</code>.
+            <dl>
+              <dt>
+                <b>Postcondition:</b>
+              </dt>
+              <dd>
+                <code>*this == cb</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>cb</code> The <code>circular_buffer</code> to be copied.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <code>An allocation error</code> if memory is exhausted (<code>std::bad_alloc</code> if the standard
+                allocator is used).
+              </dd>
+              <dd>
+                <code>Whatever</code> T::T(const T&amp;) throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of <code>cb</code>).
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -1205,8 +1300,63 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
-            TODO doc.<br>
-            <br>
+            Create a <code>circular_buffer</code> filled with a copy of the range.
+            <dl>
+              <dt>
+                <b>Precondition:</b>
+              </dt>
+              <dd>
+                Valid range <code>[first, last)</code>.<br>
+                <code>first</code> and <code>last</code> have to meet the requirements of <a href=
+                "http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Postcondition:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> ==
+                std::distance(first, last) &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == std::distance(first,
+                last) &amp;&amp; (*this)[0]== *first &amp;&amp; (*this)[1] == *(first + 1) &amp;&amp; ... &amp;&amp;
+                (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>first</code> The beginning of the range to be copied.
+              </dd>
+              <dd>
+                <code>last</code> The end of the range to be copied.
+              </dd>
+              <dd>
+                <code>alloc</code> The allocator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <code>An allocation error</code> if memory is exhausted (<code>std::bad_alloc</code> if the standard
+                allocator is used).
+              </dd>
+              <dd>
+                <code>Whatever</code> T::T(const T&amp;) throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>std::distance(first, last)</code>).
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -1220,13 +1370,15 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
-            Create a circular buffer with a copy of a range.
+            Create a <code>circular_buffer</code> with the specified capacity and filled with a copy of the range.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid range <code>[first, last)</code>.
+                Valid range <code>[first, last)</code>.<br>
+                <code>first</code> and <code>last</code> have to meet the requirements of <a href=
+                "http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
               </dd>
             </dl>
             <dl>
@@ -1234,12 +1386,32 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                <code>(*this).<a href=
-                "#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> ==
-                capacity</code><br>
-                If the number of items to copy from the range <code>[first, last)</code> is greater than the specified
-                <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code> will be
-                copied.
+                <code><a href="#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a> ==
+                capacity &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &lt;=
+                std::distance(first, last) &amp;&amp; (*this)[0]== *(last - capacity) &amp;&amp; (*this)[1] == *(last -
+                capacity + 1) &amp;&amp; ... &amp;&amp; (*this)[capacity - 1] == *(last - 1)</code><br>
+                <br>
+                If the number of items to be copied from the range <code>[first, last)</code> is greater than the
+                specified <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code>
+                will be copied.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>capacity</code> The capacity of the created <code>circular_buffer</code>.
+              </dd>
+              <dd>
+                <code>first</code> The beginning of the range to be copied.
+              </dd>
+              <dd>
+                <code>last</code> The end of the range to be copied.
+              </dd>
+              <dd>
+                <code>alloc</code> The allocator.
               </dd>
             </dl>
             <dl>
@@ -1254,6 +1426,14 @@ template &lt;class T, class Alloc&gt;
                 <code>Whatever</code> T::T(const T&amp;) throws.
               </dd>
             </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>capacity</code>/<code>std::distance(first, last)</code>).
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -1262,8 +1442,39 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_164250ffbbbdbc62b99e8301fc195b80c"></a><code><b>~circular_buffer();</b></code><br>
 
             <br>
-            Destructor.<br>
-            <br>
+            The destructor. Destroys the <code>circular_buffer</code>.
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                <code>Nothing.</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+              </dd>
+            </dl>
           </td>
         </tr>
       </table>
@@ -2031,7 +2242,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                No-throw.
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2039,7 +2250,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                Strong.
+                No-throw.
               </dd>
             </dl>
             <dl>
@@ -3224,11 +3435,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the
-                allocator's <code>allocate()</code> and <code>deallocate()</code> methods which are used in
-                <code><a href=
-                "#classboost_1_1circular__buffer_1902a2d89e6bfab28f548cdb21cc42456">set_capacity()</a></code> is not
-                considered.
+                Linear (in the size/new capacity of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3317,11 +3524,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the
-                allocator's <code>allocate()</code> and <code>deallocate()</code> methods which are used in
-                <code><a href=
-                "#classboost_1_1circular__buffer_1902a2d89e6bfab28f548cdb21cc42456">set_capacity()</a></code> is not
-                considered.
+                Linear (in the new size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3399,11 +3602,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the
-                allocator's <code>allocate()</code> and <code>deallocate()</code> methods which are used in
-                <code><a href=
-                "#classboost_1_1circular__buffer_1e5b482668b1ea6c434b7354389bcca89">rset_capacity()</a></code> is not
-                considered.
+                Linear (in the size/new capacity of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3492,11 +3691,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer</code>). The complexity of the
-                allocator's <code>allocate()</code> and <code>deallocate()</code> methods which are used in
-                <code><a href=
-                "#classboost_1_1circular__buffer_1902a2d89e6bfab28f548cdb21cc42456">set_capacity()</a></code> is not
-                considered.
+                Linear (in the new size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3906,7 +4101,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
-            Insert the <code>item</code> before the given position.
+            Insert the <code>item</code> before the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -3962,7 +4157,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item);</b></code><br>
             <br>
-            Insert <code>n</code> copies of the item before the given position.
+            Insert <code>n</code> copies of the item before the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -4017,7 +4212,7 @@ template &lt;class T, class Alloc&gt;
                 void insert(<a href="#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             pos, InputIterator first, InputIterator last);</b></code><br>
             <br>
-            Insert the range <code>[first, last)</code> before the given position.
+            Insert the range <code>[first, last)</code> before the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -4075,7 +4270,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
-            Insert an <code>item</code> before the given position.
+            Insert an <code>item</code> before the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -4131,7 +4326,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item);</b></code><br>
             <br>
-            Insert <code>n</code> copies of the item before the given position.
+            Insert <code>n</code> copies of the item before the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -4186,7 +4381,7 @@ template &lt;class T, class Alloc&gt;
                 void rinsert(<a href="#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             pos, InputIterator first, InputIterator last);</b></code><br>
             <br>
-            Insert the range <code>[first, last)</code> before the given position.
+            Insert the range <code>[first, last)</code> before the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -4242,7 +4437,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> erase(<a href=
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos);</b></code><br>
             <br>
-            Erase the element at the given position.
+            Erase the element at the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -4337,7 +4532,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> rerase(<a href=
             "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos);</b></code><br>
             <br>
-            Erase the element at the given position.
+            Erase the element at the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>

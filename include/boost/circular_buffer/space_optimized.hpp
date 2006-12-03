@@ -212,10 +212,10 @@ public:
     : circular_buffer<T, Alloc>(0, alloc)
     , m_capacity_ctrl(max_size()) {}
 
-    //! Create an empty space optimized circular buffer with a given capacity.
+    //! Create an empty space optimized circular buffer with the specified capacity.
     /*!
-        \param capacity The capacity of the buffer.
-        \param min_capacity The minimal guaranteed amount of allocated memory.
+        \param capacity_ctrl The capacity of the buffer.
+        (param min_capacity The minimal guaranteed amount of allocated memory.)
                (The metrics of the min_capacity is number of items.)
         \param alloc The allocator.
         \pre <code>capacity >= min_capacity</code>
@@ -234,8 +234,8 @@ public:
 
     //! Create a full space optimized circular buffer filled with copies of <code>item</code>.
     /*!
-        \param capacity The capacity of the buffer.
-        \param min_capacity The minimal guaranteed amount of allocated memory.
+        \param capacity_ctrl The capacity of the buffer.
+        (param min_capacity The minimal guaranteed amount of allocated memory.)
                (The metrics of the min_capacity is number of items.)
         \param item The item to be filled with.
         \param alloc The allocator.
@@ -312,8 +312,8 @@ public:
 
     //! Create a space optimized circular buffer with a copy of a range.
     /*!
-        \param capacity The capacity of the buffer.
-        \param min_capacity The minimal guaranteed amount of allocated memory.
+        \param capacity_ctrl The capacity of the buffer.
+        (param min_capacity The minimal guaranteed amount of allocated memory.)
               (The metrics of the min_capacity is number of items.)
         \param first The beginning of the range.
         \param last The end of the range.
