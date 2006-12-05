@@ -599,7 +599,7 @@ public:
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>); constant if the postcondition is already met.
         \par Exception Safety
-             Basic; no-throw if the operations in the <i>Throws</i> do not throw anything.
+             Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer</code>; does not invalidate any iterator
              if the postcondition is already met prior calling this method.
@@ -776,7 +776,7 @@ public:
         \par Complexity
              Linear (in the new size of the <code>circular_buffer</code>).
         \par Exception Safety
-             Strong.
+             Basic.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
         \sa <code>rresize()</code>, <code>set_capacity()</code>
@@ -804,7 +804,7 @@ public:
         \par Complexity
              Linear (in the size/new capacity of the <code>circular_buffer</code>).
         \par Exception Safety
-             Basic.
+             Strong.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
         \sa <code>set_capacity()</code>, <code>rresize()</code>
@@ -839,7 +839,7 @@ public:
         \par Complexity
              Linear (in the new size of the <code>circular_buffer</code>).
         \par Exception Safety
-             Strong.
+             Basic.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
         \sa <code>rresize()</code>, <code>set_capacity()</code>
@@ -894,8 +894,8 @@ public:
                copies of <code>item</code>.
         \post <code>capacity() == n \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ... \&\&
               (*this) [n - 1] == item </code>
-        \param n The capacity/size of the created <code>circular_buffer</code>.
-        \param item The element the <code>circular_buffer</code> to be filled with.
+        \param n The number of elements the created <code>circular_buffer</code> will be filled with.
+        \param item The element the created <code>circular_buffer</code> will be filled with.
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
@@ -913,11 +913,12 @@ public:
 
     /*! \brief Create a <code>circular_buffer</code> with the specified capacity and filled with <code>n</code>
                copies of <code>item</code>.
+        \pre <code>capacity >= n</code>
         \post <code>capacity() == capacity \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ...
               \&\& (*this)[n - 1] == item</code>
         \param capacity The capacity of the created <code>circular_buffer</code>.
-        \param n The size of the created <code>circular_buffer</code>.
-        \param item The element the <code>circular_buffer</code> to be filled with.
+        \param n The number of elements the created <code>circular_buffer</code> will be filled with.
+        \param item The element the created <code>circular_buffer</code> will be filled with.
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
@@ -935,8 +936,9 @@ public:
         initialize(capacity, item);
     }
 
-    //! The copy constructor. Creates a copy of the specified <code>circular_buffer</code>.
+    //! The copy constructor.
     /*!
+        Creates a copy of the specified <code>circular_buffer</code>.
         \post <code>*this == cb</code>
         \param cb The <code>circular_buffer</code> to be copied.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
@@ -1039,8 +1041,9 @@ public:
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
-    //! The destructor. Destroys the <code>circular_buffer</code>.
+    //! The destructor.
     /*!
+        Destroys the <code>circular_buffer</code>.
         \throws Nothing.
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>).
@@ -1054,12 +1057,25 @@ public:
 public:
 // Assign methods
 
-    //! Assignment operator.
+    //! The assign operator.
     /*!
+        Makes this <code>circular_buffer</code> to become a copy of the specified <code>circular_buffer</code>.
         \post <code>*this == cb</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        \param cb The <code>circular_buffer</code> to be copied.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
         \throws Whatever T::T(const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Complexity
+             Linear (in the size of <code>cb</code>).
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to this <code>circular_buffer</code>.
+        \sa <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
+            <code>\link assign(size_type, size_type, param_value_type)
+            assign(size_type, size_type, const_reference)\endlink</code>,
+            <code>assign(InputIterator, InputIterator)</code>,
+            <code>assign(size_type, InputIterator, InputIterator)</code>
     */
     circular_buffer<T, Alloc>& operator = (const circular_buffer<T, Alloc>& cb) {
         if (this == &cb)
@@ -1075,39 +1091,124 @@ public:
         return *this;
     }
 
-    //! Assign <code>n</code> items into the circular buffer.
+    //! Assign <code>n</code> items into the <code>circular_buffer</code>.
     /*!
-        \post <code>(*this).capacity() == n \&\& (*this).size() == n \&\&
-              (*this)[0] == (*this)[1] == ... == (*this).back() == item</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        The content of the <code>circular_buffer</code> will be removed and replaced with <code>n</code> copies of the
+        <code>item</code>.
+        \post <code>capacity() == n \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ... \&\&
+              (*this) [n - 1] == item </code>
+        \param n The number of elements the <code>circular_buffer</code> will be filled with.
+        \param item The element the <code>circular_buffer</code> will be filled with.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
         \throws Whatever T::T(const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Complexity
+             Linear (in the <code>n</code>).
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>operator=</code>, <code>\link assign(size_type, size_type, param_value_type)
+            assign(size_type, size_type, const_reference)\endlink</code>,
+            <code>assign(InputIterator, InputIterator)</code>,
+            <code>assign(size_type, InputIterator, InputIterator)</code>
     */
     void assign(size_type n, param_value_type item) {
         assign_n(n, n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
     }
 
-    //! TODO doc
+    //! Assign <code>n</code> items into the <code>circular_buffer</code> with the specified capacity.
+    /*!
+        The capacity of the <code>circular_buffer</code> will be set to the specified value and the content of the
+        <code>circular_buffer</code> will be removed and replaced with <code>n</code> copies of the <code>item</code>.
+        \pre <code>capacity >= n</code>
+        \post <code>capacity() == capacity \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ... \&\&
+              (*this) [n - 1] == item </code>
+        \param capacity The new capacity of the <code>circular_buffer</code>.
+        \param n The number of elements the <code>circular_buffer</code> will be filled with.
+        \param item The element the <code>circular_buffer</code> will be filled with.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever T::T(const T&) throws.
+        \par Complexity
+             Linear (in the <code>n</code>).
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
+            assign(size_type, const_reference)\endlink</code>, <code>assign(InputIterator, InputIterator)</code>,
+            <code>assign(size_type, InputIterator, InputIterator)</code>
+    */
     void assign(size_type capacity, size_type n, param_value_type item) {
         BOOST_CB_ASSERT(capacity >= n); // check for new capacity lower than n
         assign_n(capacity, n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
     }
 
-    //! Assign a copy of range.
+    //! Assign a copy of the range into the <code>circular_buffer</code>.
     /*!
-        \pre Valid range <code>[first, last)</code>.
-        \post <code>(*this).capacity() == std::distance(first, last) \&\&
-              (*this).size() == std::distance(first, last)</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        The content of the <code>circular_buffer</code> will be removed and replaced with copies of elements from the
+        specified range.
+        \pre Valid range <code>[first, last)</code>.<br>
+             <code>first</code> and <code>last</code> have to meet the requirements of
+             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+        \post <code>capacity() == std::distance(first, last) \&\& size() == std::distance(first, last) \&\&
+             (*this)[0]== *first \&\& (*this)[1] == *(first + 1) \&\& ... \&\& (*this)[std::distance(first, last) - 1]
+             == *(last - 1)</code>
+        \param first The beginning of the range to be copied.
+        \param last The end of the range to be copied.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
         \throws Whatever T::T(const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Complexity
+             Linear (in the <code>std::distance(first, last)</code>).
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
+            assign(size_type, const_reference)\endlink</code>,
+            <code>\link assign(size_type, size_type, param_value_type)
+            assign(size_type, size_type, const_reference)\endlink</code>,
+            <code>assign(size_type, InputIterator, InputIterator)</code>
     */
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
         assign(first, last, is_integral<InputIterator>());
     }
 
-    //! TODO doc
+    //! Assign a copy of the range into the <code>circular_buffer</code> with the specified capacity.
+    /*!
+        The capacity of the <code>circular_buffer</code> will be set to the specified value and the content of the
+        <code>circular_buffer</code> will be removed and replaced with copies of elements from the specified range.
+        (See the postcondition.)
+        \pre Valid range <code>[first, last)</code>.<br>
+             <code>first</code> and <code>last</code> have to meet the requirements of
+             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+        \post <code>capacity() == capacity \&\& size() \<= std::distance(first, last) \&\&
+             (*this)[0]== *(last - capacity) \&\& (*this)[1] == *(last - capacity + 1) \&\& ... \&\&
+             (*this)[capacity - 1] == *(last - 1)</code><br><br>
+             If the number of items to be copied from the range <code>[first, last)</code> is greater than the
+             specified <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code>
+             will be copied.
+        \param capacity The new capacity of the <code>circular_buffer</code>.
+        \param first The beginning of the range to be copied.
+        \param last The end of the range to be copied.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever T::T(const T&) throws.
+        \par Complexity
+             Linear (in the <code>std::distance(first, last)</code>).
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
+            assign(size_type, const_reference)\endlink</code>,
+            <code>\link assign(size_type, size_type, param_value_type)
+            assign(size_type, size_type, const_reference)\endlink</code>,
+            <code>assign(InputIterator, InputIterator)</code>
+    */
     template <class InputIterator>
     void assign(size_type capacity, InputIterator first, InputIterator last) {
         assign(capacity, first, last, is_integral<InputIterator>());

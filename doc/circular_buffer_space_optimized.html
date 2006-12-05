@@ -364,7 +364,10 @@ template &lt;class T, class Alloc&gt;
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
             <br>
-            Create an empty space optimized circular buffer with a maximum capacity. TODO - doc
+            Create an empty space optimized circular buffer with a maximum capacity.
+            <p>
+              TODO - doc
+            </p>
           </td>
         </tr>
         <tr>
@@ -377,20 +380,17 @@ template &lt;class T, class Alloc&gt;
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
             <br>
-            Create an empty space optimized circular buffer with a given capacity.
+            Create an empty space optimized circular buffer with the specified capacity.
             <dl>
               <dt>
-                <b>Parameters:</b>
+                <b>Parameter(s):</b>
               </dt>
               <dd>
-                <i>capacity</i> - The capacity of the buffer.
+                <code>capacity_ctrl</code> The capacity of the buffer. (param min_capacity The minimal guaranteed
+                amount of allocated memory.) (The metrics of the min_capacity is number of items.)
               </dd>
               <dd>
-                <i>min_capacity</i> - The minimal guaranteed amount of allocated memory. (The metrics of the
-                min_capacity is number of items.)
-              </dd>
-              <dd>
-                <i>alloc</i> - The allocator.
+                <code>alloc</code> The allocator.
               </dd>
             </dl>
             <dl>
@@ -417,8 +417,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                <i>An allocation error</i> if memory is exhausted (<code>std::bad_alloc</code> if the standard
-                allocator is used).
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
               </dd>
             </dl>
             <dl>
@@ -445,20 +445,17 @@ template &lt;class T, class Alloc&gt;
             Create a full space optimized circular buffer filled with copies of <code>item</code>.
             <dl>
               <dt>
-                <b>Parameters:</b>
+                <b>Parameter(s):</b>
               </dt>
               <dd>
-                <i>capacity</i> - The capacity of the buffer.
+                <code>capacity_ctrl</code> The capacity of the buffer. (param min_capacity The minimal guaranteed
+                amount of allocated memory.) (The metrics of the min_capacity is number of items.)
               </dd>
               <dd>
-                <i>min_capacity</i> - The minimal guaranteed amount of allocated memory. (The metrics of the
-                min_capacity is number of items.)
+                <code>item</code> The item to be filled with.
               </dd>
               <dd>
-                <i>item</i> - The item to be filled with.
-              </dd>
-              <dd>
-                <i>alloc</i> - The allocator.
+                <code>alloc</code> The allocator.
               </dd>
             </dl>
             <dl>
@@ -486,11 +483,11 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                <i>An allocation error</i> if memory is exhausted (<code>std::bad_alloc</code> if the standard
-                allocator is used).
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
               </dd>
               <dd>
-                <i>Whatever</i> T::T(const T&amp;) throws.
+                Whatever T::T(const T&amp;) throws.
               </dd>
             </dl>
             <dl>
@@ -557,23 +554,20 @@ template &lt;class T, class Alloc&gt;
             Create a space optimized circular buffer with a copy of a range.
             <dl>
               <dt>
-                <b>Parameters:</b>
+                <b>Parameter(s):</b>
               </dt>
               <dd>
-                <i>capacity</i> - The capacity of the buffer.
+                <code>capacity_ctrl</code> The capacity of the buffer. (param min_capacity The minimal guaranteed
+                amount of allocated memory.) (The metrics of the min_capacity is number of items.)
               </dd>
               <dd>
-                <i>min_capacity</i> - The minimal guaranteed amount of allocated memory. (The metrics of the
-                min_capacity is number of items.)
+                <code>first</code> The beginning of the range.
               </dd>
               <dd>
-                <i>first</i> - The beginning of the range.
+                <code>last</code> The end of the range.
               </dd>
               <dd>
-                <i>last</i> - The end of the range.
-              </dd>
-              <dd>
-                <i>alloc</i> - The allocator.
+                <code>alloc</code> The allocator.
               </dd>
             </dl>
             <dl>
@@ -604,11 +598,11 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                <i>An allocation error</i> if memory is exhausted (<code>std::bad_alloc</code> if the standard
-                allocator is used).
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
               </dd>
               <dd>
-                <i>Whatever</i> T::T(const T&amp;) throws.
+                Whatever T::T(const T&amp;) throws.
               </dd>
             </dl>
             <dl>
@@ -657,8 +651,10 @@ template &lt;class T, class Alloc&gt;
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
             min_capacity() const;</b></code><br>
             <br>
-            Return the minimal guaranteed amount of allocated memory. The allocated memory will never drop under this
-            value.
+            Return the minimal guaranteed amount of allocated memory.
+            <p>
+              The allocated memory will never drop under this value.
+            </p>
           </td>
         </tr>
         <tr>

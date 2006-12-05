@@ -91,12 +91,20 @@ http://www.boost.org/LICENSE_1_0.txt)
 
   <xsl:template match="parameteritem">
     <xsl:param name="desc" select="''"/>
+    <xsl:param name="style" select="'code'"/>
     <xsl:if test="$desc != ''">
       <dt><b><xsl:value-of select="$desc"/></b></dt>
     </xsl:if>
-    <dd><code><xsl:apply-templates select="parameternamelist/parametername"/></code>
-    <xsl:apply-templates select="parameterdescription"/></dd>
-    <xsl:apply-templates select="following-sibling::parameteritem[1]"/>
+    <dd>
+      <xsl:choose>
+        <xsl:when test="$style = 'code'"><code><xsl:apply-templates select="parameternamelist/parametername"/></code></xsl:when>
+        <xsl:otherwise><xsl:apply-templates select="parameternamelist/parametername"/></xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="parameterdescription"/>
+    </dd>
+    <xsl:apply-templates select="following-sibling::parameteritem[1]">
+        <xsl:with-param name="style" select="$style"/>
+    </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="simplesect[@kind='return']">
@@ -136,6 +144,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <xsl:template match="parameterlist[@kind='exception']">
     <dl><xsl:apply-templates select="parameteritem[1]">
       <xsl:with-param name="desc" select="'Throws:'"/>
+      <xsl:with-param name="style" select="'plain'"/>
     </xsl:apply-templates></dl>
   </xsl:template>
 
