@@ -183,7 +183,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>get_allocator()</code> for obtaining an allocator %reference.
     */
     allocator_type get_allocator() const { return m_alloc; }
@@ -197,7 +197,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \note This method was added in order to optimize obtaining of the allocator with a state,
               although use of stateful allocators in STL is discouraged.
         \sa <code>get_allocator() const</code>
@@ -217,7 +217,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>end()</code>, <code>rbegin()</code>, <code>rend()</code>
     */
     iterator begin() { return iterator(this, empty() ? 0 : m_first); }
@@ -233,7 +233,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>begin()</code>, <code>rbegin()</code>, <code>rend()</code>
     */
     iterator end() { return iterator(this, 0); }
@@ -249,7 +249,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>end() const</code>, <code>rbegin() const</code>, <code>rend() const</code>
     */
     const_iterator begin() const { return const_iterator(this, empty() ? 0 : m_first); }
@@ -265,7 +265,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>begin() const</code>, <code>rbegin() const</code>, <code>rend() const</code>
     */
     const_iterator end() const { return const_iterator(this, 0); }
@@ -281,7 +281,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>rend()</code>, <code>begin()</code>, <code>end()</code>
     */
     reverse_iterator rbegin() { return reverse_iterator(end()); }
@@ -297,7 +297,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>rbegin()</code>, <code>begin()</code>, <code>end()</code>
     */
     reverse_iterator rend() { return reverse_iterator(begin()); }
@@ -313,7 +313,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>rend() const</code>, <code>begin() const</code>, <code>end() const</code>
     */
     const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
@@ -329,7 +329,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>rbegin() const</code>, <code>begin() const</code>, <code>end() const</code>
     */
     const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
@@ -345,7 +345,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>at()</code>
     */
     reference operator [] (size_type index) {
@@ -364,7 +364,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>\link at(size_type)const at() const \endlink</code>
     */
     return_value_type operator [] (size_type index) const {
@@ -382,7 +382,7 @@ public:
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>operator[]</code>
     */
     reference at(size_type index) {
@@ -400,7 +400,7 @@ public:
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>\link operator[](size_type)const operator[] const \endlink</code>
     */
     return_value_type at(size_type index) const {
@@ -418,7 +418,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>back()</code>
     */
     reference front() {
@@ -436,7 +436,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>front()</code>
     */
     reference back() {
@@ -454,7 +454,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>back() const</code>
     */
     return_value_type front() const {
@@ -472,7 +472,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>front() const</code>
     */
     return_value_type back() const {
@@ -516,7 +516,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \warning In general invoking any method which modifies the internal state of the circular_buffer  may
                  delinearize the internal buffer and invalidate the array ranges returned by <code>array_one()</code>
                  and <code>array_two()</code> (and their const versions).
@@ -542,7 +542,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>array_one()</code>
     */
     array_range array_two() {
@@ -561,7 +561,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>array_two() const</code>; <code>array_one()</code> for more details.how to pass data into a legacy C
             API.
     */
@@ -582,7 +582,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>array_one() const</code>
     */
     const_array_range array_two() const {
@@ -601,7 +601,7 @@ public:
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code>; does not invalidate any iterator
+             Invalidates all iterators pointing to the <code>circular_buffer</code>; does not invalidate any iterators
              if the postcondition is already met prior calling this method.
         \warning In general invoking any method which modifies the internal state of the <code>circular_buffer</code>
                  may delinearize the internal buffer and invalidate the returned pointer.
@@ -662,7 +662,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>capacity()</code>, <code>max_size()</code>, <code>resize()</code>
     */
     size_type size() const { return m_size; }
@@ -676,7 +676,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>size()</code>, <code>capacity()</code>
     */
     size_type max_size() const {
@@ -693,7 +693,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>full()</code>
     */
     bool empty() const { return size() == 0; }
@@ -708,7 +708,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>empty()</code>
     */
     bool full() const { return size() == capacity(); }
@@ -722,7 +722,7 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Does not invalidate any iterator.
+             Does not invalidate any iterators.
         \sa <code>size()</code>, <code>max_size()</code>, <code>set_capacity()</code>
     */
     size_type capacity() const { return m_end - m_buff; }
@@ -1051,6 +1051,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>clear()</code>
     */
     ~circular_buffer() { destroy(); }
 
@@ -1216,9 +1217,9 @@ public:
 
     //! Swap the contents of two <code>circular_buffer</code>s.
     /*!
-        \param cb The <code>circular_buffer</code> whose content should be swapped.
-        \throws Nothing.
         \post <code>this</code> contains elements of <code>cb</code> and vice versa.
+        \param cb The <code>circular_buffer</code> whose content will be swapped.
+        \throws Nothing.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
@@ -1245,12 +1246,20 @@ public:
 
 // push and pop
 
-    //! Insert a new element at the end.
+    //! Insert a new element at the end of the <code>circular_buffer</code>.
     /*!
-        \post <code>(*this).back() == item</code><br>
-              If the circular buffer is full, the first (leftmost) element will be removed.
+        \post if <code>capacity() > 0</code> then <code>back() == item</code><br>
+              If the <code>circular_buffer</code> is full, the first (leftmost) element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.
+        \param item The element to be inserted.
         \throws Whatever T::T(const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section do not throw anything.
+        \par Iterator Invalidation
+             Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+        \sa <code>push_front()</code>, <code>pop_back()</code>, <code>pop_front()</code>
     */
     void push_back(param_value_type item = value_type()) {
         if (full()) {
@@ -1266,12 +1275,20 @@ public:
         }
     }
 
-    //! Insert a new element at the start.
+    //! Insert a new element at the beginning of the <code>circular_buffer</code>.
     /*!
-        \post <code>(*this).front() == item</code><br>
-              If the circular buffer is full, the last (rightmost) element will be removed.
+        \post if <code>capacity() > 0</code> then <code>front() == item</code><br>
+              If the <code>circular_buffer</code> is full, the last (rightmost) element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.
+        \param item The element to be inserted.
         \throws Whatever T::T(const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section do not throw anything.
+        \par Iterator Invalidation
+             Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+        \sa <code>push_back()</code>, <code>pop_back()</code>, <code>pop_front()</code>
     */
     void push_front(param_value_type item = value_type()) {
         BOOST_TRY {
@@ -1293,12 +1310,18 @@ public:
         BOOST_CATCH_END
     }
 
-    //! Remove the last (rightmost) element.
+    //! Remove the last (rightmost) element from the <code>circular_buffer</code>.
     /*!
-        \pre <code>!*(this).empty()</code>
-        \pre <code>iterator it = ((*this).end() - 1)</code>
-        \post <code>((*this).end() - 1) != it</code>
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \pre <code>!empty()</code>
+        \post The last (rightmost) element is removed from the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Invalidates only iterators pointing to the removed element.
+        \sa <code>pop_front()</code>, <code>push_back()</code>, <code>push_front()</code>
     */
     void pop_back() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (back element not available)
@@ -1307,12 +1330,18 @@ public:
         --m_size;
     }
 
-    //! Remove the first (leftmost) element.
+    //! Remove the first (leftmost) element from the <code>circular_buffer</code>.
     /*!
-        \pre <code>!*(this).empty()</code>
-        \pre <code>iterator it = (*this).begin()</code>
-        \post <code>(*this).begin() != it</code>
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \pre <code>!empty()</code>
+        \post The first (leftmost) element is removed from the <code>circular_buffer</code>.
+        \throws Nothing.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Invalidates only iterators pointing to the removed element.
+        \sa <code>pop_back()</code>, <code>push_back()</code>, <code>push_front()</code>
     */
     void pop_front() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (front element not available)
@@ -1510,15 +1539,22 @@ public:
 
 // Erase
 
-    //! Erase the element at the specified position.
+    //! Remove an element at the specified position.
     /*!
-        \pre Valid <code>pos</code> iterator.
-        \pre <code>size_type old_size = (*this).size()</code>
-        \post <code>(*this).size() == old_size - 1</code><br>
-              Removes an element at the position <code>pos</code>.
-        \return iterator to the first element remaining beyond the removed
-                element or <code>(*this).end()</code> if no such element exists.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \pre <code>pos</code> is a valid iterator.
+        \post The element at the position <code>pos</code> is removed.
+        \return Iterator to the first element remaining beyond the removed element or <code>end()</code> if no such
+                element exists.
+        \throws Whatever T::operator = (const T&) throws.
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the erased element and iterators pointing to the elements behind (to
+             the right from) the erased element.
+        \sa <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
+            <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
     iterator erase(iterator pos) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
@@ -1540,12 +1576,19 @@ public:
     //! Erase the range <code>[first, last)</code>.
     /*!
         \pre Valid range <code>[first, last)</code>.
-        \pre <code>size_type old_size = (*this).size()</code>
-        \post <code>(*this).size() == old_size - std::distance(first, last)</code><br>
-              Removes the elements from the range <code>[first, last)</code>.
-        \return iterator to the first element remaining beyond the removed
-                element or <code>(*this).end()</code> if no such element exists.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \post The elements from the range <code>[first, last)</code> are removed.
+        \return Iterator to the first element remaining beyond the removed elements or <code>end()</code> if no such
+                element exists.
+        \throws Whatever T::operator = (const T&) throws.
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the erased elements and iterators pointing to the elements behind (to
+             the right from) the erased range.
+        \sa <code>erase(iterator)</code>, <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>,
+            <code>clear()</code>
     */
     iterator erase(iterator first, iterator last) {
         BOOST_CB_ASSERT(first.is_valid());            // check for uninitialized or invalidated iterator
@@ -1565,15 +1608,22 @@ public:
         return m_last == p ? end() : iterator(this, p);
     }
 
-    //! Erase the element at the specified position.
+    //! Remove an element at the specified position.
     /*!
-        \pre Valid <code>pos</code> iterator.
-        \pre <code>size_type old_size = (*this).size()</code>
-        \post <code>(*this).size() == old_size - 1</code><br>
-              Removes an element at the position <code>pos</code>.
-        \return iterator to the first element remaining in front of the removed
-                element or <code>(*this).begin()</code> if no such element exists.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \pre <code>pos</code> is a valid iterator.
+        \post The element at the position <code>pos</code> is removed.
+        \return Iterator to the first element remaining in front of the removed element or <code>begin()</code> if no
+                such element exists.
+        \throws Whatever T::operator = (const T&) throws.
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the erased element and iterators pointing to the elements in front of
+             (to the left from) the erased element.
+        \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
+            <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
     iterator rerase(iterator pos) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
@@ -1595,12 +1645,19 @@ public:
     //! Erase the range <code>[first, last)</code>.
     /*!
         \pre Valid range <code>[first, last)</code>.
-        \pre <code>size_type old_size = (*this).size()</code>
-        \post <code>(*this).size() == old_size - std::distance(first, last)</code><br>
-              Removes the elements from the range <code>[first, last)</code>.
-        \return iterator to the first element remaining in front of the removed
-                element or <code>(*this).begin()</code> if no such element exists.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \post The elements from the range <code>[first, last)</code> are removed.
+        \return Iterator to the first element remaining in front of the removed elements or <code>begin()</code> if no
+                such element exists.
+        \throws Whatever T::operator = (const T&) throws.
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the erased elements and iterators pointing to the elements in front of
+             (to the left from) the erased range.
+        \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
+            <code>clear()</code>
     */
     iterator rerase(iterator first, iterator last) {
         BOOST_CB_ASSERT(first.is_valid());            // check for uninitialized or invalidated iterator
@@ -1627,10 +1684,18 @@ public:
         return iterator(this, last.m_it);
     }
 
-    //! Erase all stored elements.
+    //! Remove all stored elements from the <code>circular_buffer</code>.
     /*!
-        \post (*this).size() == 0
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \post <code>size() == 0</code>
+        \throws Nothing.
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer</code>).
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+        \sa <code>~circular_buffer()</code>, <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
+            <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>
     */
     void clear() {
         destroy_content();
