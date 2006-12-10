@@ -42,8 +42,7 @@ namespace boost {
          Assignable</a> and <a href="../../utility/CopyConstructible.html">CopyConstructible</a>).
          Moreover <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">
          DefaultConstructible</a> if supplied as a default parameter when invoking some of the circular
-         buffer's methods e.g. <code>circular_buffer::insert(circular_buffer::iterator pos, const
-         circular_buffer::value_type& item = %value_type())</code>.
+         buffer's methods e.g. <code>insert(iterator pos, const value_type& item = %value_type())</code>.
     \param Alloc The allocator type used for all internal memory management.
     \par Type Requirements Alloc
          The <code>Alloc</code> has to meet the allocator requirements imposed by STL.
@@ -1353,15 +1352,28 @@ public:
 public:
 // Insert
 
-    //! Insert the <code>item</code> before the specified position.
+    //! Insert an element at the specified position.
     /*!
-        \pre Valid <code>pos</code> iterator.
+        \pre <code>pos</code> is a valid iterator.
         \post The <code>item</code> will be inserted at the position <code>pos</code>.<br>
-              If the circular buffer is full, the first (leftmost) element will be removed.
-        \return iterator to the inserted element.
+              If the <code>circular_buffer</code> is full, the first (leftmost) element will be overwritten. If the
+              <code>circular_buffer</code> is full and the <code>pos</code> points to <code>begin()</code>, then the
+              <code>item</code> will not be inserted.
+        \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
+                the postcondition.)
         \throws Whatever T::T(const T&) throws.
         \throws Whatever T::operator = (const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
+             iterators behind (to the right from) the insertion point. It also invalidates iterators pointing to the
+             overwritten element.
+        \sa <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>
     */
     iterator insert(iterator pos, param_value_type item = value_type()) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
@@ -2265,51 +2277,57 @@ private:
 
 //! Test two circular buffers for equality.
 template <class T, class Alloc>
-inline bool operator == (const circular_buffer<T, Alloc>& lhs,
-                         const circular_buffer<T, Alloc>& rhs) {
-    return lhs.size() == rhs.size() &&
-        std::equal(lhs.begin(), lhs.end(), rhs.begin());
+inline bool operator == (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
+    return lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
 //! Lexicographical comparison.
 template <class T, class Alloc>
-inline bool operator < (const circular_buffer<T, Alloc>& lhs,
-                        const circular_buffer<T, Alloc>& rhs) {
-    return std::lexicographical_compare(
-        lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+inline bool operator < (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
+    return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) || defined(BOOST_MSVC)
 
 //! Test two circular buffers for non-equality.
 template <class T, class Alloc>
-inline bool operator != (const circular_buffer<T, Alloc>& lhs,
-                         const circular_buffer<T, Alloc>& rhs) {
+inline bool operator != (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return !(lhs == rhs);
 }
 
 //! Lexicographical comparison.
 template <class T, class Alloc>
-inline bool operator > (const circular_buffer<T, Alloc>& lhs,
-                        const circular_buffer<T, Alloc>& rhs) {
+inline bool operator > (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return rhs < lhs;
 }
 
 //! Lexicographical comparison.
 template <class T, class Alloc>
-inline bool operator <= (const circular_buffer<T, Alloc>& lhs,
-                         const circular_buffer<T, Alloc>& rhs) {
+inline bool operator <= (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return !(rhs < lhs);
 }
 
 //! Lexicographical comparison.
 template <class T, class Alloc>
-inline bool operator >= (const circular_buffer<T, Alloc>& lhs,
-                         const circular_buffer<T, Alloc>& rhs) {
+inline bool operator >= (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return !(lhs < rhs);
 }
 
-//! Swap the contents of two circular buffers.
+//! Swap the contents of two <code>circular_buffer</code>s.
+/*!
+    \post <code>lhs</code> contains elements of <code>rhs</code> and vice versa.
+    \param lhs The <code>circular_buffer</code> whose content will be swapped with <code>rhs</code>.
+    \param rhs The <code>circular_buffer</code> whose content will be swapped with <code>lhs</code>.
+    \throws Nothing.
+    \par Complexity
+         Constant (in the size of the <code>circular_buffer</code>s).
+    \par Iterator Invalidation
+         Invalidates all iterators of both <code>circular_buffer</code>s. (On the other hand the iterators still
+         point to the same elements but within another container. If you want to rely on this feature you have to
+         turn the <a href="#debug">Debug Support</a> off otherwise an assertion will report an error if such
+         invalidated iterator is used.)
+    \sa <code>\link circular_buffer::swap(circular_buffer<T, Alloc>&) swap(circular_buffer<T, Alloc>&)\endlink</code>
+*/
 template <class T, class Alloc>
 inline void swap(circular_buffer<T, Alloc>& lhs, circular_buffer<T, Alloc>& rhs) {
     lhs.swap(rhs);

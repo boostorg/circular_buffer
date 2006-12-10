@@ -825,11 +825,8 @@ template &lt;class T, class Alloc&gt;
                 (SGI STL defined combination of <a href="../../utility/Assignable.html">Assignable</a> and <a href=
                 "../../utility/CopyConstructible.html">CopyConstructible</a>). Moreover <code>T</code> has to be
                 <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">DefaultConstructible</a> if supplied as
-                a default parameter when invoking some of the circular buffer's methods e.g. <code><a href=
-                "#classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95">insert</a>(<a href=
-                "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos, const <a href=
-                "#classboost_1_1circular__buffer_1cbdd7ca87e147c08cd2be267eefd6540">value_type</a>&amp; item =
-                value_type())</code>.
+                a default parameter when invoking some of the circular buffer's methods e.g. <code>insert(iterator pos,
+                const value_type&amp; item = value_type())</code>.
               </dd>
             </dl>
           </td>
@@ -4582,13 +4579,13 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
-            Insert the <code>item</code> before the specified position.
+            Insert an element at the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid <code>pos</code> iterator.
+                <code>pos</code> is a valid iterator.
               </dd>
             </dl>
             <dl>
@@ -4597,7 +4594,10 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 The <code>item</code> will be inserted at the position <code>pos</code>.<br>
-                If the circular buffer is full, the first (leftmost) element will be removed.
+                If the <code>circular_buffer</code> is full, the first (leftmost) element will be overwritten. If the
+                <code>circular_buffer</code> is full and the <code>pos</code> points to <code><a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code>, then the
+                <code>item</code> will not be inserted.
               </dd>
             </dl>
             <dl>
@@ -4605,7 +4605,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                iterator to the inserted element.
+                Iterator to the inserted element or <code><a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code> if the
+                <code>item</code> is not inserted. (See the postcondition.)
               </dd>
             </dl>
             <dl>
@@ -4621,10 +4623,29 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+                Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
+                iterators behind (to the right from) the insertion point. It also invalidates iterators pointing to the
+                overwritten element.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_1b2f197c99d47138db777f0a46783b140">insert(iterator,
+                size_type, value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1d00091d1d794cab3264b3674e99b33f6">insert(iterator, InputIterator,
+                InputIterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_12c9332f457bf5bb3128463cf528c058c">rinsert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1a47a5358db1b7d7e4925c16db13d2fc5">rinsert(iterator, size_type,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1d6479cbc43a304bdbf04262f957fa323">rinsert(iterator, InputIterator,
+                InputIterator)</a></code>
               </dd>
             </dl>
           </td>
@@ -5389,8 +5410,63 @@ template &lt;class T, class Alloc&gt;
                 void swap(circular_buffer&lt;T,Alloc&gt;&amp; lhs, circular_buffer&lt;T,Alloc&gt;&amp;
             rhs);</b></code><br>
             <br>
-            Swap the contents of two circular buffers.<br>
-            <br>
+            Swap the contents of two <code>circular_buffer</code>s.
+            <dl>
+              <dt>
+                <b>Postcondition:</b>
+              </dt>
+              <dd>
+                <code>lhs</code> contains elements of <code>rhs</code> and vice versa.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>lhs</code> The <code>circular_buffer</code> whose content will be swapped with <code>rhs</code>.
+              </dd>
+              <dd>
+                <code>rhs</code> The <code>circular_buffer</code> whose content will be swapped with <code>lhs</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>s).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators of both <code>circular_buffer</code>s. (On the other hand the iterators still
+                point to the same elements but within another container. If you want to rely on this feature you have
+                to turn the <a href="#debug">Debug Support</a> off otherwise an assertion will report an error if such
+                invalidated iterator is used.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_1270ab7074c365663a6f18808024fd88b">swap(circular_buffer&lt;T,
+                Alloc&gt;&amp;)</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
       </table>
