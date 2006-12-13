@@ -73,12 +73,13 @@
       <a href="#note1">[1]</a> (Also see the Figure.)
     </p>
     <p>
-      The <code>circular_buffer</code> is a STL compliant container. It is a kind of sequence similar to
-      <code>std::vector</code> or <code>std::deque</code>. It supports random access iterators, constant time insert
-      and erase operations at the beginning or the end of the buffer and interoperability with <code>std</code>
-      algorithms. The <code>circular_buffer</code> is especially designed to provide fixed capacity storage. When its
-      capacity is exhausted, newly inserted elements will cause elements either at the beginning or end of the buffer
-      (depending on what insert operation is used) to be overwritten.
+      The <code>circular_buffer</code> is a STL compliant container. It is a kind of sequence similar to <code><a href=
+      "http://www.sgi.com/tech/stl/List.html">std::list</a></code> or <code><a href=
+      "http://www.sgi.com/tech/stl/Deque.html">std::deque</a></code>. It supports random access iterators, constant
+      time insert and erase operations at the beginning or the end of the buffer and interoperability with
+      <code>std</code> algorithms. The <code>circular_buffer</code> is especially designed to provide fixed capacity
+      storage. When its capacity is exhausted, newly inserted elements will cause elements either at the beginning or
+      end of the buffer (depending on what insert operation is used) to be overwritten.
     </p>
     <p>
       The <code>circular_buffer</code> only allocates memory when created, when the capacity is adjusted explicitly, or
@@ -502,7 +503,7 @@ template &lt;class T, class Alloc&gt;
     </p>
     <ul>
       <li>The capacity of a <code>circular_buffer</code> remains fixed unless adjusted via <code>set_capacity</code> or
-      <code>resize</code> .
+      <code>resize</code>.
       </li>
       <li>
         <code>insert</code> will overwrite front elements as necessary.
@@ -515,7 +516,7 @@ template &lt;class T, class Alloc&gt;
       The behaviour of resizing a <code>circular_buffer</code> is as follows:
     </p>
     <ul>
-      <li>The capacity will be adjusted to accommodate a <code>resize</code> . (The capacity can be only increased, not
+      <li>The capacity will be adjusted to accommodate a <code>resize</code>. (The capacity can be only increased, not
       decreased.)
       </li>
     </ul>
@@ -523,8 +524,8 @@ template &lt;class T, class Alloc&gt;
       The behaviour of assigning to a <code>circular_buffer</code> is as follows:
     </p>
     <ul>
-      <li>The capacity will be adjusted to accommodate an <code>assign</code> . (The capacity can be only increased,
-      not decreased.)
+      <li>The capacity will be adjusted to accommodate an <code>assign</code>. (The capacity can be only increased, not
+      decreased.)
       </li>
     </ul>
     <p>
@@ -563,7 +564,7 @@ template &lt;class T, class Alloc&gt;
       <li>
         <code>data</code> , <code>set_capacity</code> , <code>resize</code> , <code>operator=</code> ,
         <code>assign</code> , <code>swap</code> and <code>clear</code> invalidate all iterators pointing to the
-        <code>circular_buffer</code> .
+        <code>circular_buffer</code>.
       </li>
     </ul>
     <p>
@@ -596,7 +597,7 @@ template &lt;class T, class Alloc&gt;
     </p>
     <p>
       While internals of a <code>circular_buffer</code> are circular, iterators are <b>not</b>. Iterators of a
-      <code>circular_buffer</code> are only valid for the range <code>[begin(), end()]</code> . E.g. iterators
+      <code>circular_buffer</code> are only valid for the range <code>[begin(), end()]</code>. E.g. iterators
       <code>(begin() - 1)</code> and <code>(end() + 1)</code> are invalid.
     </p><br>
     <h2>
@@ -628,7 +629,7 @@ template &lt;class T, class Alloc&gt;
       <a name="examples" id="examples">More Examples</a>
     </h2>
     <p>
-      The following example includes various usage of the <code>circular_buffer</code> .
+      The following example includes various usage of the <code>circular_buffer</code>.
     </p>
     <pre>
    #include &lt;boost/circular_buffer.hpp&gt;
@@ -1167,7 +1168,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -1238,7 +1239,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -1286,7 +1287,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -1354,7 +1355,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -1431,7 +1432,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -1645,7 +1646,7 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 A random access iterator pointing to the first element of the <code>circular_buffer</code>. If the
                 <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by
-                <code><a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code> .
+                <code><a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>.
               </dd>
             </dl>
             <dl>
@@ -2022,10 +2023,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                A const reverse random access iterator pointing to the last element of the <code>circular_buffer</code>
-                . If the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by
-                <code><a href="#classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3">rend()
-                const</a></code>.
+                A const reverse random access iterator pointing to the last element of the
+                <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
+                to the one returned by <code><a href=
+                "#classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3">rend() const</a></code>.
               </dd>
             </dl>
             <dl>
@@ -2432,7 +2433,7 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_10d5fdeabeb352f47d1f7bb1ea8d9819f"></a><code><b><a href=
             "#classboost_1_1circular__buffer_1f38a9bc64d84757c661c2542ff9a7f65">reference</a> front();</b></code><br>
             <br>
-            Get the first (leftmost) element.
+            Get the first element.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -2497,7 +2498,7 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1d985d974020f88bb4255d8edbae0a30a"></a><code><b><a href=
             "#classboost_1_1circular__buffer_1f38a9bc64d84757c661c2542ff9a7f65">reference</a> back();</b></code><br>
             <br>
-            Get the last (rightmost) element.
+            Get the last element.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -2563,7 +2564,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> front()
             const;</b></code><br>
             <br>
-            Get the first (leftmost) element.
+            Get the first element.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -2630,7 +2631,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> back()
             const;</b></code><br>
             <br>
-            Get the last (rightmost) element.
+            Get the last element.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -3054,10 +3055,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -3426,7 +3427,7 @@ template &lt;class T, class Alloc&gt;
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new capacity then number of <code>[<a href=
                 "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_capacity]</code>
-                <b>last (rightmost)</b> elements will be removed.
+                <b>last</b> elements will be removed.
               </dd>
             </dl>
             <dl>
@@ -3446,7 +3447,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -3511,7 +3512,7 @@ template &lt;class T, class Alloc&gt;
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new size then number of <code>[<a href=
                 "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_size]</code>
-                <b>last (rightmost)</b> elements will be removed. (The capacity will remain unchanged.)
+                <b>last</b> elements will be removed. (The capacity will remain unchanged.)
               </dd>
             </dl>
             <dl>
@@ -3535,7 +3536,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -3593,7 +3594,7 @@ template &lt;class T, class Alloc&gt;
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new capacity then number of <code>[<a href=
                 "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_capacity]</code>
-                <b>first (leftmost)</b> elements will be removed.
+                <b>first</b> elements will be removed.
               </dd>
             </dl>
             <dl>
@@ -3613,7 +3614,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -3678,7 +3679,7 @@ template &lt;class T, class Alloc&gt;
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new size then number of <code>[<a href=
                 "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_size]</code>
-                <b>first (leftmost)</b> elements will be removed. (The capacity will remain unchanged.)
+                <b>first</b> elements will be removed. (The capacity will remain unchanged.)
               </dd>
             </dl>
             <dl>
@@ -3702,7 +3703,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -3776,7 +3777,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -3864,7 +3865,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -3965,7 +3966,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4062,7 +4063,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4168,7 +4169,7 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4296,8 +4297,8 @@ template &lt;class T, class Alloc&gt;
                 if <code><a href="#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a>
                 &gt; 0</code> then <code><a href=
                 "#classboost_1_1circular__buffer_1d985d974020f88bb4255d8edbae0a30a">back()</a> == item</code><br>
-                If the <code>circular_buffer</code> is full, the first (leftmost) element will be removed. If the
-                capacity is <code>0</code>, nothing will be inserted.
+                If the <code>circular_buffer</code> is full, the first element will be removed. If the capacity is
+                <code>0</code>, nothing will be inserted.
               </dd>
             </dl>
             <dl>
@@ -4313,7 +4314,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4371,8 +4372,8 @@ template &lt;class T, class Alloc&gt;
                 if <code><a href="#classboost_1_1circular__buffer_1de901b1737217f2c8140fc1691bf2d98">capacity()</a>
                 &gt; 0</code> then <code><a href=
                 "#classboost_1_1circular__buffer_10d5fdeabeb352f47d1f7bb1ea8d9819f">front()</a> == item</code><br>
-                If the <code>circular_buffer</code> is full, the last (rightmost) element will be removed. If the
-                capacity is <code>0</code>, nothing will be inserted.
+                If the <code>circular_buffer</code> is full, the last element will be removed. If the capacity is
+                <code>0</code>, nothing will be inserted.
               </dd>
             </dl>
             <dl>
@@ -4388,7 +4389,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4436,7 +4437,7 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_1df0da00cb501bea75afbbfab9f546a07"></a><code><b>void
             pop_back();</b></code><br>
             <br>
-            Remove the last (rightmost) element from the <code>circular_buffer</code>.
+            Remove the last element from the <code>circular_buffer</code>.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -4450,7 +4451,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                The last (rightmost) element is removed from the <code>circular_buffer</code>.
+                The last element is removed from the <code>circular_buffer</code>.
               </dd>
             </dl>
             <dl>
@@ -4506,7 +4507,7 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer_18ac972dc24ef7236faa1875de92b9dd8"></a><code><b>void
             pop_front();</b></code><br>
             <br>
-            Remove the first (leftmost) element from the <code>circular_buffer</code>.
+            Remove the first element from the <code>circular_buffer</code>.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -4520,7 +4521,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                The first (leftmost) element is removed from the <code>circular_buffer</code>.
+                The first element is removed from the <code>circular_buffer</code>.
               </dd>
             </dl>
             <dl>
@@ -4585,7 +4586,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>pos</code> is a valid iterator.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
               </dd>
             </dl>
             <dl>
@@ -4594,10 +4595,21 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 The <code>item</code> will be inserted at the position <code>pos</code>.<br>
-                If the <code>circular_buffer</code> is full, the first (leftmost) element will be overwritten. If the
+                If the <code>circular_buffer</code> is full, the first element will be overwritten. If the
                 <code>circular_buffer</code> is full and the <code>pos</code> points to <code><a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code>, then the
                 <code>item</code> will not be inserted.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>pos</code> An iterator specifying the position where the <code>item</code> will be inserted.
+              </dd>
+              <dd>
+                <code>item</code> The element to be inserted.
               </dd>
             </dl>
             <dl>
@@ -4615,10 +4627,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4627,7 +4639,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-                iterators behind (to the right from) the insertion point. It also invalidates iterators pointing to the
+                iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
                 overwritten element.
               </dd>
             </dl>
@@ -4659,13 +4671,13 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item);</b></code><br>
             <br>
-            Insert <code>n</code> copies of the item before the specified position.
+            Insert <code>n</code> copies of the <code>item</code> at the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid <code>pos</code> iterator.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
               </dd>
             </dl>
             <dl>
@@ -4673,16 +4685,31 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                This operation preserves the capacity of the circular buffer. If the insertion would result in
-                exceeding the capacity of the circular buffer then the necessary number of elements from the beginning
-                (left) of the circular buffer will be removed or not all <code>n</code> elements will be inserted or
-                both.<code><br>
+                This operation preserves the capacity of the <code>circular_buffer</code>. If the insertion would
+                result in exceeding the capacity of the <code>circular_buffer</code> then the necessary number of
+                elements from the beginning of the <code>circular_buffer</code> will be removed or not all
+                <code>n</code> elements will be inserted or both.<br>
                 Example:<br>
-                original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
+                <code>original circular_buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
                 position ---------------------^<br>
-                insert(position, (size_t)5, 6);<br>
-                (If the operation won't preserve capacity, the buffer would look like this |1|2|6|6|6|6|6|3|4|)<br>
-                RESULTING circular buffer |6|6|6|6|3|4| - capacity: 6, size: 6</code>
+                insert(position, (size_t)5, 6);</code><br>
+                (If the operation would not preserve the capacity, the buffer would look like this
+                <code>|1|2|6|6|6|6|6|3|4|</code>)<br>
+                RESULTING <code>circular_buffer</code> <code>|6|6|6|6|3|4|</code> with capacity of 6 and size of 6
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>pos</code> An iterator specifying the position where the <code>item</code> will be inserted.
+              </dd>
+              <dd>
+                <code>n</code> The number of <code>item</code>s the to be inserted.
+              </dd>
+              <dd>
+                <code>item</code> The element whose copies be inserted.
               </dd>
             </dl>
             <dl>
@@ -4690,18 +4717,37 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+                Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
+                iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
+                overwritten elements.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95">insert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1d00091d1d794cab3264b3674e99b33f6">insert(iterator, InputIterator,
+                InputIterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_12c9332f457bf5bb3128463cf528c058c">rinsert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1a47a5358db1b7d7e4925c16db13d2fc5">rinsert(iterator, size_type,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1d6479cbc43a304bdbf04262f957fa323">rinsert(iterator, InputIterator,
+                InputIterator)</a></code>
               </dd>
             </dl>
           </td>
@@ -4730,9 +4776,9 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 This operation preserves the capacity of the circular buffer. If the insertion would result in
                 exceeding the capacity of the circular buffer then the necessary number of elements from the beginning
-                (left) of the circular buffer will be removed or not the whole range will be inserted or both. In case
-                the whole range cannot be inserted it will be inserted just some elements from the end (right) of the
-                range (see the example).<code><br>
+                of the circular buffer will be removed or not the whole range will be inserted or both. In case the
+                whole range cannot be inserted it will be inserted just some elements from the end of the range (see
+                the example).<code><br>
                 Example:<br>
                 array to insert: int array[] = { 5, 6, 7, 8, 9 };<br>
                 original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
@@ -4747,10 +4793,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4772,13 +4818,13 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> item =
             value_type());</b></code><br>
             <br>
-            Insert an <code>item</code> before the specified position.
+            Insert an element before the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid <code>pos</code> iterator.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
               </dd>
             </dl>
             <dl>
@@ -4787,7 +4833,22 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 The <code>item</code> will be inserted before the position <code>pos</code>.<br>
-                If the circular buffer is full, the last element (rightmost) will be removed.
+                If the <code>circular_buffer</code> is full, the last element will be overwritten. If the
+                <code>circular_buffer</code> is full and the <code>pos</code> points to <code><a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>, then the
+                <code>item</code> will not be inserted.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>pos</code> An iterator specifying the position before which the <code>item</code> will be
+                inserted.
+              </dd>
+              <dd>
+                <code>item</code> The element to be inserted.
               </dd>
             </dl>
             <dl>
@@ -4795,7 +4856,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                iterator to the inserted element.
+                Iterator to the inserted element or <code><a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code> if the
+                <code>item</code> is not inserted. (See the postcondition.)
               </dd>
             </dl>
             <dl>
@@ -4803,18 +4866,36 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+                Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+                excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten element.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_1a47a5358db1b7d7e4925c16db13d2fc5">rinsert(iterator,
+                size_type, value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1d6479cbc43a304bdbf04262f957fa323">rinsert(iterator, InputIterator,
+                InputIterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95">insert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1b2f197c99d47138db777f0a46783b140">insert(iterator, size_type,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1d00091d1d794cab3264b3674e99b33f6">insert(iterator, InputIterator,
+                InputIterator)</a></code>
               </dd>
             </dl>
           </td>
@@ -4843,9 +4924,8 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 This operation preserves the capacity of the circular buffer. If the insertion would result in
-                exceeding the capacity of the circular buffer then the necessary number of elements from the end
-                (right) of the circular buffer will be removed or not all <code>n</code> elements will be inserted or
-                both.<code><br>
+                exceeding the capacity of the circular buffer then the necessary number of elements from the end of the
+                circular buffer will be removed or not all <code>n</code> elements will be inserted or both.<code><br>
                 Example:<br>
                 original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
                 position ---------------------^<br>
@@ -4859,10 +4939,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4898,10 +4978,10 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 This operation preserves the capacity of the circular buffer. If the insertion would result in
-                exceeding the capacity of the circular buffer then the necessary number of elements from the end
-                (right) of the circular buffer will be removed or not the whole range will be inserted or both. In case
-                the whole range cannot be inserted it will be inserted just some elements from the beginning (left) of
-                the range (see the example).<code><br>
+                exceeding the capacity of the circular buffer then the necessary number of elements from the end of the
+                circular buffer will be removed or not the whole range will be inserted or both. In case the whole
+                range cannot be inserted it will be inserted just some elements from the beginning of the range (see
+                the example).<code><br>
                 Example:<br>
                 array to insert: int array[] = { 5, 6, 7, 8, 9 };<br>
                 original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
@@ -4916,10 +4996,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4945,7 +5025,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>pos</code> is a valid iterator.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
               </dd>
             </dl>
             <dl>
@@ -4971,7 +5051,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4995,8 +5075,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates iterators pointing to the erased element and iterators pointing to the elements behind (to
-                the right from) the erased element.
+                Invalidates iterators pointing to the erased element and iterators pointing to the elements behind the
+                erased element (towards the end).
               </dd>
             </dl>
             <dl>
@@ -5054,7 +5134,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -5078,8 +5158,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates iterators pointing to the erased elements and iterators pointing to the elements behind (to
-                the right from) the erased range.
+                Invalidates iterators pointing to the erased elements and iterators pointing to the elements behind the
+                erased range (towards the end).
               </dd>
             </dl>
             <dl>
@@ -5111,7 +5191,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>pos</code> is a valid iterator.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
               </dd>
             </dl>
             <dl>
@@ -5137,7 +5217,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -5162,7 +5242,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates iterators pointing to the erased element and iterators pointing to the elements in front of
-                (to the left from) the erased element.
+                the erased element (towards the beginning).
               </dd>
             </dl>
             <dl>
@@ -5221,7 +5301,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                Whatever T::operator = (const T&amp;) throws.
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -5246,7 +5326,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates iterators pointing to the erased elements and iterators pointing to the elements in front
-                of (to the left from) the erased range.
+                of the erased range (towards the beginning).
               </dd>
             </dl>
             <dl>
@@ -5491,7 +5571,7 @@ template &lt;class T, class Alloc&gt;
       <li>
         <a name="note3" id="note3"></a>
         <p>
-          Never create a circular buffer of <code>std::auto_ptr</code> . Refer to <a href=
+          Never create a circular buffer of <code>std::auto_ptr</code>. Refer to <a href=
           "http://www.aristeia.com">Scott Meyers</a> ' excellent book <em>Effective STL</em> for a detailed discussion.
           (Meyers S., <i>Effective STL: 50 Specific Ways to Improve Your Use of the Standard Template Library</i>.
           Addison-Wesley, 2001.)

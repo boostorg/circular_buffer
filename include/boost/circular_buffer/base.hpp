@@ -150,10 +150,10 @@ private:
     //! The internal buffer's end (end of the storage space).
     pointer m_end;
 
-    //! The virtual beginning of the circular buffer (the leftmost element).
+    //! The virtual beginning of the circular buffer.
     pointer m_first;
 
-    //! The virtual end of the circular buffer (one behind the rightmost element).
+    //! The virtual end of the circular buffer (one behind the last element).
     pointer m_last;
 
     //! The number of items currently stored in the circular buffer.
@@ -208,8 +208,8 @@ public:
     //! Get the iterator pointing to the beginning of the <code>circular_buffer</code>.
     /*!
         \return A random access iterator pointing to the first element of the <code>circular_buffer</code>. If the
-                <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by <code>end()
-                </code>.
+                <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by
+                <code>end()</code>.
         \throws Nothing.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
@@ -303,9 +303,9 @@ public:
 
     //! Get the const iterator pointing to the beginning of the "reversed" <code>circular_buffer</code>.
     /*!
-        \return A const reverse random access iterator pointing to the last element of the <code>circular_buffer
-                </code>. If the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned
-                by <code>rend() const</code>.
+        \return A const reverse random access iterator pointing to the last element of the
+                <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
+                to the one returned by <code>rend() const</code>.
         \throws Nothing.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
@@ -407,7 +407,7 @@ public:
         return (*this)[index];
     }
 
-    //! Get the first (leftmost) element.
+    //! Get the first element.
     /*!
         \pre <code>!empty()</code>
         \return A reference to the first element of the <code>circular_buffer</code>.
@@ -425,7 +425,7 @@ public:
         return *m_first;
     }
 
-    //! Get the last (rightmost) element.
+    //! Get the last element.
     /*!
         \pre <code>!empty()</code>
         \return A reference to the last element of the <code>circular_buffer</code>.
@@ -443,7 +443,7 @@ public:
         return *((m_last == m_buff ? m_end : m_last) - 1);
     }
 
-    //! Get the first (leftmost) element.
+    //! Get the first element.
     /*!
         \pre <code>!empty()</code>
         \return A const reference to the first element of the <code>circular_buffer</code>.
@@ -461,7 +461,7 @@ public:
         return *m_first;
     }
 
-    //! Get the last (rightmost) element.
+    //! Get the last element.
     /*!
         \pre <code>!empty()</code>
         \return A const reference to the last element of the <code>circular_buffer</code>.
@@ -593,8 +593,8 @@ public:
         This method can be useful when passing the stored data into a legacy C API as an array.
         \post <code>\&(*this)[0] \< \&(*this)[1] \< ... \< \&(*this)[size() - 1]</code>
         \return A pointer to the beginning of the array or <code>0</code> if empty.
-        \throws Whatever T::T(const T&) throws.
-        \throws Whatever T::operator = (const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>); constant if the postcondition is already met.
         \par Exception Safety
@@ -730,12 +730,11 @@ public:
     /*!
         \post <code>capacity() == new_capacity</code><br><br>
               If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
-              new capacity then number of <code>[size() - new_capacity]</code> <b>last (rightmost)</b> elements will be
-              removed.
+              new capacity then number of <code>[size() - new_capacity]</code> <b>last</b> elements will be removed.
         \param new_capacity The new capacity.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the size/new capacity of the <code>circular_buffer</code>).
         \par Exception Safety
@@ -764,14 +763,14 @@ public:
               <b>back</b> of the of the <code>circular_buffer</code> in order to achieve the desired size. In the case
               the resulting size exceeds the current capacity the capacity will be set to <code>new_size</code>.<br>
               If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
-              new size then number of <code>[size() - new_size]</code> <b>last (rightmost)</b> elements will be
-              removed. (The capacity will remain unchanged.)
+              new size then number of <code>[size() - new_size]</code> <b>last</b> elements will be removed. (The
+              capacity will remain unchanged.)
         \param new_size The new size.
         \param item The element the <code>circular_buffer</code> will be filled with in order to gain the requested
                     size. (See the postcondition.)
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the new size of the <code>circular_buffer</code>).
         \par Exception Safety
@@ -794,12 +793,11 @@ public:
     /*!
         \post <code>capacity() == new_capacity</code><br><br>
               If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
-              new capacity then number of <code>[size() - new_capacity]</code> <b>first (leftmost)</b> elements will be
-              removed.
+              new capacity then number of <code>[size() - new_capacity]</code> <b>first</b> elements will be removed.
         \param new_capacity The new capacity.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the size/new capacity of the <code>circular_buffer</code>).
         \par Exception Safety
@@ -828,13 +826,13 @@ public:
               <b>front</b> of the of the <code>circular_buffer</code> in order to achieve the desired size. In the case
               the resulting size exceeds the current capacity the capacity will be set to <code>new_size</code>.<br>
               If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
-              new size then number of <code>[size() - new_size]</code> <b>first (leftmost)</b> elements will be
-              removed. (The capacity will remain unchanged.)
+              new size then number of <code>[size() - new_size]</code> <b>first</b> elements will be removed. (The
+              capacity will remain unchanged.)
         \param new_size The new size.
         \param item The element the <code>circular_buffer</code> will be filled with in order to gain the requested
                     size. (See the postcondition.)
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the new size of the <code>circular_buffer</code>).
         \par Exception Safety
@@ -898,7 +896,7 @@ public:
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>n</code>).
     */
@@ -921,7 +919,7 @@ public:
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>n</code>).
     */
@@ -942,7 +940,7 @@ public:
         \param cb The <code>circular_buffer</code> to be copied.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the size of <code>cb</code>).
     */
@@ -994,7 +992,7 @@ public:
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
     */
@@ -1024,7 +1022,7 @@ public:
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>capacity</code>/<code>std::distance(first, last)</code>).
     */
@@ -1064,7 +1062,7 @@ public:
         \param cb The <code>circular_buffer</code> to be copied.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the size of <code>cb</code>).
         \par Exception Safety
@@ -1101,7 +1099,7 @@ public:
         \param item The element the <code>circular_buffer</code> will be filled with.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>n</code>).
         \par Exception Safety
@@ -1129,7 +1127,7 @@ public:
         \param item The element the <code>circular_buffer</code> will be filled with.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>n</code>).
         \par Exception Safety
@@ -1159,7 +1157,7 @@ public:
         \param last The end of the range to be copied.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
         \par Exception Safety
@@ -1196,7 +1194,7 @@ public:
         \param last The end of the range to be copied.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
         \par Exception Safety
@@ -1248,10 +1246,10 @@ public:
     //! Insert a new element at the end of the <code>circular_buffer</code>.
     /*!
         \post if <code>capacity() > 0</code> then <code>back() == item</code><br>
-              If the <code>circular_buffer</code> is full, the first (leftmost) element will be removed. If the
-              capacity is <code>0</code>, nothing will be inserted.
+              If the <code>circular_buffer</code> is full, the first element will be removed. If the capacity is
+              <code>0</code>, nothing will be inserted.
         \param item The element to be inserted.
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
@@ -1277,10 +1275,10 @@ public:
     //! Insert a new element at the beginning of the <code>circular_buffer</code>.
     /*!
         \post if <code>capacity() > 0</code> then <code>front() == item</code><br>
-              If the <code>circular_buffer</code> is full, the last (rightmost) element will be removed. If the
-              capacity is <code>0</code>, nothing will be inserted.
+              If the <code>circular_buffer</code> is full, the last element will be removed. If the capacity is
+              <code>0</code>, nothing will be inserted.
         \param item The element to be inserted.
-        \throws Whatever T::T(const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
@@ -1309,10 +1307,10 @@ public:
         BOOST_CATCH_END
     }
 
-    //! Remove the last (rightmost) element from the <code>circular_buffer</code>.
+    //! Remove the last element from the <code>circular_buffer</code>.
     /*!
         \pre <code>!empty()</code>
-        \post The last (rightmost) element is removed from the <code>circular_buffer</code>.
+        \post The last element is removed from the <code>circular_buffer</code>.
         \throws Nothing.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
@@ -1329,10 +1327,10 @@ public:
         --m_size;
     }
 
-    //! Remove the first (leftmost) element from the <code>circular_buffer</code>.
+    //! Remove the first element from the <code>circular_buffer</code>.
     /*!
         \pre <code>!empty()</code>
-        \post The first (leftmost) element is removed from the <code>circular_buffer</code>.
+        \post The first element is removed from the <code>circular_buffer</code>.
         \throws Nothing.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
@@ -1354,18 +1352,20 @@ public:
 
     //! Insert an element at the specified position.
     /*!
-        \pre <code>pos</code> is a valid iterator.
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
         \post The <code>item</code> will be inserted at the position <code>pos</code>.<br>
-              If the <code>circular_buffer</code> is full, the first (leftmost) element will be overwritten. If the
+              If the <code>circular_buffer</code> is full, the first element will be overwritten. If the
               <code>circular_buffer</code> is full and the <code>pos</code> points to <code>begin()</code>, then the
               <code>item</code> will not be inserted.
+        \param pos An iterator specifying the position where the <code>item</code> will be inserted.
+        \param item The element to be inserted.
         \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
                 the postcondition.)
-        \throws Whatever T::T(const T&) throws.
-        \throws Whatever T::operator = (const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \par Iterator Invalidation
              Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-             iterators behind (to the right from) the insertion point. It also invalidates iterators pointing to the
+             iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
              overwritten element.
         \sa <code>\link insert(iterator, size_type, param_value_type)
             insert(iterator, size_type, value_type)\endlink</code>,
@@ -1382,24 +1382,35 @@ public:
         return insert_item(pos, item);
     }
 
-    //! Insert <code>n</code> copies of the item before the specified position.
+    //! Insert <code>n</code> copies of the <code>item</code> at the specified position.
     /*!
-        \pre Valid <code>pos</code> iterator.
-        \post This operation preserves the capacity of the circular buffer.
-              If the insertion would result in exceeding the capacity
-              of the circular buffer then the necessary number of elements
-              from the beginning (left) of the circular buffer will be removed
-              or not all <code>n</code> elements will be inserted or both.<code><br>
-              Example:<br>
-                original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
-                position ---------------------^<br>
-                insert(position, (size_t)5, 6);<br>
-                (If the operation won't preserve capacity, the buffer
-                would look like this |1|2|6|6|6|6|6|3|4|)<br>
-                RESULTING circular buffer |6|6|6|6|3|4| - capacity: 6, size: 6</code>
-        \throws Whatever T::T(const T&) throws.
-        \throws Whatever T::operator = (const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
+        \post This operation preserves the capacity of the <code>circular_buffer</code>. If the insertion would result
+              in exceeding the capacity of the <code>circular_buffer</code> then the necessary number of elements from
+              the beginning of the <code>circular_buffer</code> will be removed or not all <code>n</code>
+              elements will be inserted or both.<br>
+              Example:<br><code>
+              original circular_buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
+              position ---------------------^<br>
+              insert(position, (size_t)5, 6);</code><br>
+              (If the operation would not preserve the capacity, the buffer  would look like this
+              <code>|1|2|6|6|6|6|6|3|4|</code>)<br>
+              RESULTING <code>circular_buffer</code> <code>|6|6|6|6|3|4|</code> with capacity of 6 and size of 6
+        \param pos An iterator specifying the position where the <code>item</code> will be inserted.
+        \param n The number of <code>item</code>s the to be inserted.
+        \param item The element whose copies be inserted.
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
+             iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
+             overwritten elements.
+        \sa <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>
     */
     void insert(iterator pos, size_type n, param_value_type item) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
@@ -1419,10 +1430,10 @@ public:
         \post This operation preserves the capacity of the circular buffer.
               If the insertion would result in exceeding the capacity
               of the circular buffer then the necessary number of elements
-              from the beginning (left) of the circular buffer will be removed
+              from the beginning of the circular buffer will be removed
               or not the whole range will be inserted or both.
               In case the whole range cannot be inserted it will be inserted just
-              some elements from the end (right) of the range (see the example).<code><br>
+              some elements from the end of the range (see the example).<code><br>
               Example:<br>
                 array to insert: int array[] = { 5, 6, 7, 8, 9 };<br>
                 original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
@@ -1431,8 +1442,8 @@ public:
                 (If the operation won't preserve capacity, the buffer
                 would look like this |1|2|5|6|7|8|9|3|4|)<br>
                 RESULTING circular buffer |6|7|8|9|3|4| - capacity: 6, size: 6</code>
-        \throws Whatever T::T(const T&) throws.
-        \throws Whatever T::operator = (const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     template <class InputIterator>
@@ -1441,15 +1452,29 @@ public:
         insert(pos, first, last, is_integral<InputIterator>());
     }
 
-    //! Insert an <code>item</code> before the specified position.
+    //! Insert an element before the specified position.
     /*!
-        \pre Valid <code>pos</code> iterator.
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
         \post The <code>item</code> will be inserted before the position <code>pos</code>.<br>
-              If the circular buffer is full, the last element (rightmost) will be removed.
-        \return iterator to the inserted element.
-        \throws Whatever T::T(const T&) throws.
-        \throws Whatever T::operator = (const T&) throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+              If the <code>circular_buffer</code> is full, the last element will be overwritten. If the
+              <code>circular_buffer</code> is full and the <code>pos</code> points to <code>end()</code>, then the
+              <code>item</code> will not be inserted.
+        \param pos An iterator specifying the position before which the <code>item</code> will be inserted.
+        \param item The element to be inserted.
+        \return Iterator to the inserted element or <code>end()</code> if the <code>item</code> is not inserted. (See
+                the postcondition.)
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+             excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten element.
+        \sa <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>,
+            <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>
     */
     iterator rinsert(iterator pos, param_value_type item = value_type()) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
@@ -1503,7 +1528,7 @@ public:
         \post This operation preserves the capacity of the circular buffer.
               If the insertion would result in exceeding the capacity
               of the circular buffer then the necessary number of elements
-              from the end (right) of the circular buffer will be removed
+              from the end of the circular buffer will be removed
               or not all <code>n</code> elements will be inserted or both.<code><br>
               Example:<br>
                 original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
@@ -1512,8 +1537,8 @@ public:
                 (If the operation won't preserve capacity, the buffer
                 would look like this |1|2|6|6|6|6|6|3|4|)<br>
                 RESULTING circular buffer |1|2|6|6|6|6| - capacity: 6, size: 6</code>
-        \throws Whatever T::T(const T&) throws.
-        \throws Whatever T::operator = (const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     void rinsert(iterator pos, size_type n, param_value_type item) {
@@ -1527,10 +1552,10 @@ public:
         \post This operation preserves the capacity of the circular buffer.
               If the insertion would result in exceeding the capacity
               of the circular buffer then the necessary number of elements
-              from the end (right) of the circular buffer will be removed
+              from the end of the circular buffer will be removed
               or not the whole range will be inserted or both.
               In case the whole range cannot be inserted it will be inserted just
-              some elements from the beginning (left) of the range (see the example).<code><br>
+              some elements from the beginning of the range (see the example).<code><br>
               Example:<br>
                 array to insert: int array[] = { 5, 6, 7, 8, 9 };<br>
                 original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
@@ -1539,8 +1564,8 @@ public:
                 (If the operation won't preserve capacity, the buffer
                 would look like this |1|2|5|6|7|8|9|3|4|)<br>
                 RESULTING circular buffer |1|2|5|6|7|8| - capacity: 6, size: 6</code>
-        \throws Whatever T::T(const T&) throws.
-        \throws Whatever T::operator = (const T&) throws.
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
     */
     template <class InputIterator>
@@ -1553,18 +1578,18 @@ public:
 
     //! Remove an element at the specified position.
     /*!
-        \pre <code>pos</code> is a valid iterator.
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
         \post The element at the position <code>pos</code> is removed.
         \return Iterator to the first element remaining beyond the removed element or <code>end()</code> if no such
                 element exists.
-        \throws Whatever T::operator = (const T&) throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
-             Invalidates iterators pointing to the erased element and iterators pointing to the elements behind (to
-             the right from) the erased element.
+             Invalidates iterators pointing to the erased element and iterators pointing to the elements behind
+             the erased element (towards the end).
         \sa <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
@@ -1591,14 +1616,14 @@ public:
         \post The elements from the range <code>[first, last)</code> are removed.
         \return Iterator to the first element remaining beyond the removed elements or <code>end()</code> if no such
                 element exists.
-        \throws Whatever T::operator = (const T&) throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
-             Invalidates iterators pointing to the erased elements and iterators pointing to the elements behind (to
-             the right from) the erased range.
+             Invalidates iterators pointing to the erased elements and iterators pointing to the elements behind
+             the erased range (towards the end).
         \sa <code>erase(iterator)</code>, <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>,
             <code>clear()</code>
     */
@@ -1622,18 +1647,18 @@ public:
 
     //! Remove an element at the specified position.
     /*!
-        \pre <code>pos</code> is a valid iterator.
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
         \post The element at the position <code>pos</code> is removed.
         \return Iterator to the first element remaining in front of the removed element or <code>begin()</code> if no
                 such element exists.
-        \throws Whatever T::operator = (const T&) throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
              Invalidates iterators pointing to the erased element and iterators pointing to the elements in front of
-             (to the left from) the erased element.
+             the erased element (towards the beginning).
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
@@ -1660,14 +1685,14 @@ public:
         \post The elements from the range <code>[first, last)</code> are removed.
         \return Iterator to the first element remaining in front of the removed elements or <code>begin()</code> if no
                 such element exists.
-        \throws Whatever T::operator = (const T&) throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
              Invalidates iterators pointing to the erased elements and iterators pointing to the elements in front of
-             (to the left from) the erased range.
+             the erased range (towards the beginning).
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
             <code>clear()</code>
     */
