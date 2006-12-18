@@ -187,7 +187,7 @@ void validity_insert_range_test() {
     circular_buffer<int>::iterator it22 = cb2.begin() + 1;
     circular_buffer<int>::iterator it23 = cb2.begin() + 2;
 
-    cb2.insert(cb2.begin() + 1, InputIteratorSimulator(v1.begin()), InputIteratorSimulator(v1.end()));
+    cb2.insert(cb2.begin() + 1, MyInputIterator(v1.begin()), MyInputIterator(v1.end()));
 
     // memory placement: { 1, 4, 5, 2, 3 }
     // circular buffer:  { 1, 4, 5, 2, 3 }
@@ -204,7 +204,7 @@ void validity_insert_range_test() {
     circular_buffer<int>::iterator it24 = it21 + 3;
     circular_buffer<int>::iterator it25 = it21 + 4;
 
-    cb2.insert(cb2.begin() + 1, InputIteratorSimulator(v2.begin()), InputIteratorSimulator(v2.end()));
+    cb2.insert(cb2.begin() + 1, MyInputIterator(v2.begin()), MyInputIterator(v2.end()));
 
     // memory placement: { 2, 3, 7, 4, 5 } - using input iterator inserts all items even if they are later replaced
     // circular buffer:  { 7, 4, 5, 2, 3 }
@@ -376,7 +376,7 @@ void validity_rinsert_range_test() {
     circular_buffer<int>::iterator it22 = cb2.begin() + 1;
     circular_buffer<int>::iterator it23 = cb2.begin() + 2;
 
-    cb2.rinsert(cb2.begin() + 2, InputIteratorSimulator(v1.begin()), InputIteratorSimulator(v1.end()));
+    cb2.rinsert(cb2.begin() + 2, MyInputIterator(v1.begin()), MyInputIterator(v1.end()));
 
     // memory placement: { 4, 5, 3, 1, 2 }
     // circular buffer:  { 1, 2, 4, 5, 3 }
@@ -393,7 +393,7 @@ void validity_rinsert_range_test() {
     circular_buffer<int>::iterator it24 = it21 - 2;
     circular_buffer<int>::iterator it25 = it21 - 1;
 
-    cb2.rinsert(cb2.begin() + 4, InputIteratorSimulator(v2.begin()), InputIteratorSimulator(v2.end()));
+    cb2.rinsert(cb2.begin() + 4, MyInputIterator(v2.begin()), MyInputIterator(v2.end()));
 
     // memory placement: { 5, 6, 1, 2, 4 }
     // circular buffer:  { 1, 2, 4, 5, 6 }

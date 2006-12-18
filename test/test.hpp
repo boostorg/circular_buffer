@@ -24,7 +24,7 @@
 #endif
 
 // Integer (substitute for int) - more appropriate for testing
-class Integer {
+class MyInteger {
 private:
     int* m_pValue;
     static int ms_exception_trigger;
@@ -40,11 +40,11 @@ private:
         }
     }
 public:
-    Integer() : m_pValue(new int(0)) { check_exception(); }
-    Integer(int i) : m_pValue(new int(i)) { check_exception(); }
-    Integer(const Integer& src) : m_pValue(new int(src)) { check_exception(); }
-    ~Integer() { delete m_pValue; }
-    Integer& operator = (const Integer& src) {
+    MyInteger() : m_pValue(new int(0)) { check_exception(); }
+    MyInteger(int i) : m_pValue(new int(i)) { check_exception(); }
+    MyInteger(const MyInteger& src) : m_pValue(new int(src)) { check_exception(); }
+    ~MyInteger() { delete m_pValue; }
+    MyInteger& operator = (const MyInteger& src) {
         if (this == &src)
             return *this;
         check_exception();
@@ -57,11 +57,11 @@ public:
 };
 
 // default constructible class
-class DefaultConstructible
+class MyDefaultConstructible
 {
 public:
-    DefaultConstructible() : m_n(1) {}
-    DefaultConstructible(int n) : m_n(n) {}
+    MyDefaultConstructible() : m_n(1) {}
+    MyDefaultConstructible(int n) : m_n(n) {}
     int m_n;
 };
 
@@ -95,7 +95,7 @@ public:
 };
 
 // simulator of an input iterator
-struct InputIteratorSimulator
+struct MyInputIterator
 : boost::iterator<std::input_iterator_tag, int, ptrdiff_t, int*, int&> {
     typedef std::vector<int>::iterator vector_iterator;
     typedef int value_type;
@@ -103,8 +103,8 @@ struct InputIteratorSimulator
     typedef int& reference;
     typedef size_t size_type;
     typedef ptrdiff_t difference_type;
-    explicit InputIteratorSimulator(const vector_iterator& it) : m_it(it) {}
-    InputIteratorSimulator& operator = (const InputIteratorSimulator& it) {
+    explicit MyInputIterator(const vector_iterator& it) : m_it(it) {}
+    MyInputIterator& operator = (const MyInputIterator& it) {
         if (this == &it)
             return *this;
         m_it = it.m_it;
@@ -112,28 +112,28 @@ struct InputIteratorSimulator
     }
     reference operator * () const { return *m_it; }
     pointer operator -> () const { return &(operator*()); }
-    InputIteratorSimulator& operator ++ () {
+    MyInputIterator& operator ++ () {
         ++m_it;
         return *this;
     }
-    InputIteratorSimulator operator ++ (int) {
-        InputIteratorSimulator tmp = *this;
+    MyInputIterator operator ++ (int) {
+        MyInputIterator tmp = *this;
         ++*this;
         return tmp;
     }
-    bool operator == (const InputIteratorSimulator& it) const { return m_it == it.m_it; }
-    bool operator != (const InputIteratorSimulator& it) const { return m_it != it.m_it; }
+    bool operator == (const MyInputIterator& it) const { return m_it == it.m_it; }
+    bool operator != (const MyInputIterator& it) const { return m_it != it.m_it; }
 private:
     vector_iterator m_it;
 };
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
 
-inline std::input_iterator_tag iterator_category(const InputIteratorSimulator&) {
+inline std::input_iterator_tag iterator_category(const MyInputIterator&) {
     return std::input_iterator_tag();
 }
-inline int* value_type(const InputIteratorSimulator&) { return 0; }
-inline ptrdiff_t* distance_type(const InputIteratorSimulator&) { return 0; }
+inline int* value_type(const MyInputIterator&) { return 0; }
+inline ptrdiff_t* distance_type(const MyInputIterator&) { return 0; }
 
 #endif // #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
 
