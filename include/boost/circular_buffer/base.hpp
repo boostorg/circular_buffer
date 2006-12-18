@@ -679,7 +679,7 @@ public:
         \sa <code>size()</code>, <code>capacity()</code>
     */
     size_type max_size() const {
-        return std::min<size_type>(m_alloc.max_size(), std::numeric_limits<difference_type>::max());
+        return std::min<size_type>(m_alloc.max_size(), (std::numeric_limits<difference_type>::max)());
     }
 
     //! Is the <code>circular_buffer</code> empty?
