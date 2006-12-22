@@ -144,18 +144,6 @@ void size_test() {
     generic_test(cb2);
 }
 
-void boundary_capacity_test() {
-
-    CB_CONTAINER<MyInteger> cb(0);
-    cb.push_back(1);
-
-    BOOST_CHECK(cb.size() == 0);
-    BOOST_CHECK(cb.full());
-    BOOST_CHECK(cb.empty());
-
-    generic_test(cb);
-}
-
 void allocator_test() {
 
     CB_CONTAINER<MyInteger> cb1(10, 0);
@@ -422,13 +410,33 @@ void linearize_test() {
     generic_test(cb6);
 }
 
-void capacity_test() {
+void capacity_and_reserve_test() {
 
     CB_CONTAINER<MyInteger> cb1(0);
-    CB_CONTAINER<MyInteger> cb2(1);
+    CB_CONTAINER<MyInteger> cb2(10);
 
     BOOST_CHECK(cb1.capacity() == 0);
-    BOOST_CHECK(cb2.capacity() == 1);
+    BOOST_CHECK(cb1.size() == 0);
+    BOOST_CHECK(cb1.reserve() == 0);
+    BOOST_CHECK(cb1.full());
+    BOOST_CHECK(cb1.empty());
+    BOOST_CHECK(cb2.capacity() == 10);
+    BOOST_CHECK(cb2.size() == 0);
+    BOOST_CHECK(cb2.reserve() == 10);
+
+    cb1.push_back(1);
+    cb2.push_back(2);
+    cb2.push_back(2);
+    cb2.push_back(2);
+
+    BOOST_CHECK(cb1.capacity() == 0);
+    BOOST_CHECK(cb1.size() == 0);
+    BOOST_CHECK(cb1.reserve() == 0);
+    BOOST_CHECK(cb1.full());
+    BOOST_CHECK(cb1.empty());
+    BOOST_CHECK(cb2.capacity() == 10);
+    BOOST_CHECK(cb2.size() == 3);
+    BOOST_CHECK(cb2.reserve() == 7);
 
     generic_test(cb1);
     generic_test(cb2);
@@ -1617,7 +1625,6 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&basic_test));
     tests->add(BOOST_TEST_CASE(&constructor_and_element_access_test));
     tests->add(BOOST_TEST_CASE(&size_test));
-    tests->add(BOOST_TEST_CASE(&boundary_capacity_test));
     tests->add(BOOST_TEST_CASE(&allocator_test));
     tests->add(BOOST_TEST_CASE(&begin_and_end_test));
     tests->add(BOOST_TEST_CASE(&rbegin_and_rend_test));
@@ -1625,7 +1632,7 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&at_test));
     tests->add(BOOST_TEST_CASE(&front_and_back_test));
     tests->add(BOOST_TEST_CASE(&linearize_test));
-    tests->add(BOOST_TEST_CASE(&capacity_test));
+    tests->add(BOOST_TEST_CASE(&capacity_and_reserve_test));
     tests->add(BOOST_TEST_CASE(&full_and_empty_test));
     tests->add(BOOST_TEST_CASE(&set_capacity_test));
     tests->add(BOOST_TEST_CASE(&rset_capacity_test));

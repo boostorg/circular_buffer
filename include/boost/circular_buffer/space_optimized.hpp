@@ -113,7 +113,10 @@ public:
 // Overridden
 
     //! See the circular_buffer source documentation.
-    bool full() const { return size() == capacity(); }
+    bool full() const { return capacity() == size(); }
+
+    //! See the circular_buffer source documentation.
+    size_type reserve() const { return capacity() - size(); }
 
     //! Return the minimal guaranteed amount of allocated memory.
     /*!
