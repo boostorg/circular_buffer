@@ -35,14 +35,18 @@ namespace boost {
 /*!
     \class circular_buffer
     \brief Circular buffer - a STL compliant container.
-    \param T The type of the elements stored in the circular buffer.
+    \param T The type of the elements stored in the <code>circular_buffer</code>.
     \par Type Requirements T
          The <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/Assignable.html">
          SGIAssignable</a> (SGI STL defined combination of <a href="../../utility/Assignable.html">
          Assignable</a> and <a href="../../utility/CopyConstructible.html">CopyConstructible</a>).
          Moreover <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">
-         DefaultConstructible</a> if supplied as a default parameter when invoking some of the circular
-         buffer's methods e.g. <code>insert(iterator pos, const value_type& item = %value_type())</code>.
+         DefaultConstructible</a> if supplied as a default parameter when invoking some of the
+         <code>circular_buffer</code>'s methods e.g.
+         <code>insert(iterator pos, const value_type& item = %value_type())</code>. And
+         <a href="http://www.sgi.com/tech/stl/EqualityComparable.html">EqualityComparable</a> and/or
+         <a href="../../utility/LessThanComparable.html">LessThanComparable</a> if the <code>circular_buffer</code>
+         will be compared with another container.
     \param Alloc The allocator type used for all internal memory management.
     \par Type Requirements Alloc
          The <code>Alloc</code> has to meet the allocator requirements imposed by STL.
@@ -561,7 +565,7 @@ public:
              No-throw.
         \par Iterator Invalidation
              Does not invalidate any iterators.
-        \sa <code>array_two() const</code>; <code>array_one()</code> for more details.how to pass data into a legacy C
+        \sa <code>array_two() const</code>; <code>array_one()</code> for more details how to pass data into a legacy C
             API.
     */
     const_array_range array_one() const {
@@ -2318,13 +2322,40 @@ private:
 
 // Non-member functions
 
-//! Test two circular buffers for equality.
+//! Compare two <code>circular_buffer</code>s element-by-element to determine if they are equal.
+/*!
+    \param lhs The <code>circular_buffer</code> to compare.
+    \param rhs The <code>circular_buffer</code> to compare.
+    \return <code>lhs.\link circular_buffer::size() size()\endlink == rhs.\link circular_buffer::size() size()\endlink
+            && <a href="http://www.sgi.com/tech/stl/equal.html">std::equal</a>(lhs.\link circular_buffer::begin()
+            begin()\endlink, lhs.\link circular_buffer::end() end()\endlink,
+            rhs.\link circular_buffer::begin() begin()\endlink)</code>
+    \throws Nothing.
+    \par Complexity
+         Linear (in the size of the <code>circular_buffer</code>s).
+    \par Iterator Invalidation
+         Does not invalidate any iterators.
+*/
 template <class T, class Alloc>
 inline bool operator == (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
-//! Lexicographical comparison.
+/*!
+    \brief Compare two <code>circular_buffer</code>s element-by-element to determine if the left one is lesser than the
+           right one.
+    \param lhs The <code>circular_buffer</code> to compare.
+    \param rhs The <code>circular_buffer</code> to compare.
+    \return <code><a href="http://www.sgi.com/tech/stl/lexicographical_compare.html">
+            std::lexicographical_compare</a>(lhs.\link circular_buffer::begin() begin()\endlink,
+            lhs.\link circular_buffer::end() end()\endlink, rhs.\link circular_buffer::begin() begin()\endlink,
+            rhs.\link circular_buffer::end() end()\endlink)</code>
+    \throws Nothing.
+    \par Complexity
+         Linear (in the size of the <code>circular_buffer</code>s).
+    \par Iterator Invalidation
+         Does not invalidate any iterators.
+*/
 template <class T, class Alloc>
 inline bool operator < (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
@@ -2332,25 +2363,72 @@ inline bool operator < (const circular_buffer<T, Alloc>& lhs, const circular_buf
 
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) || defined(BOOST_MSVC)
 
-//! Test two circular buffers for non-equality.
+//! Compare two <code>circular_buffer</code>s element-by-element to determine if they are non-equal.
+/*!
+    \param lhs The <code>circular_buffer</code> to compare.
+    \param rhs The <code>circular_buffer</code> to compare.
+    \return <code>!(lhs == rhs)</code>
+    \throws Nothing.
+    \par Complexity
+         Linear (in the size of the <code>circular_buffer</code>s).
+    \par Iterator Invalidation
+         Does not invalidate any iterators.
+    \sa <code>operator==(const circular_buffer<T,Alloc>&, const circular_buffer<T,Alloc>&)</code>
+*/
 template <class T, class Alloc>
 inline bool operator != (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return !(lhs == rhs);
 }
 
-//! Lexicographical comparison.
+/*!
+    \brief Compare two <code>circular_buffer</code>s element-by-element to determine if the left one is greater than
+           the right one.
+    \param lhs The <code>circular_buffer</code> to compare.
+    \param rhs The <code>circular_buffer</code> to compare.
+    \return <code>rhs \< lhs</code>
+    \throws Nothing.
+    \par Complexity
+         Linear (in the size of the <code>circular_buffer</code>s).
+    \par Iterator Invalidation
+         Does not invalidate any iterators.
+    \sa <code>operator<(const circular_buffer<T,Alloc>&, const circular_buffer<T,Alloc>&)</code>
+*/
 template <class T, class Alloc>
 inline bool operator > (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return rhs < lhs;
 }
 
-//! Lexicographical comparison.
+/*!
+    \brief Compare two <code>circular_buffer</code>s element-by-element to determine if the left one is lesser or equal
+           to the right one.
+    \param lhs The <code>circular_buffer</code> to compare.
+    \param rhs The <code>circular_buffer</code> to compare.
+    \return <code>!(rhs \< lhs)</code>
+    \throws Nothing.
+    \par Complexity
+         Linear (in the size of the <code>circular_buffer</code>s).
+    \par Iterator Invalidation
+         Does not invalidate any iterators.
+    \sa <code>operator<(const circular_buffer<T,Alloc>&, const circular_buffer<T,Alloc>&)</code>
+*/
 template <class T, class Alloc>
 inline bool operator <= (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return !(rhs < lhs);
 }
 
-//! Lexicographical comparison.
+/*!
+    \brief Compare two <code>circular_buffer</code>s element-by-element to determine if the left one is greater or
+           equal to the right one.
+    \param lhs The <code>circular_buffer</code> to compare.
+    \param rhs The <code>circular_buffer</code> to compare.
+    \return <code>!(lhs < rhs)</code>
+    \throws Nothing.
+    \par Complexity
+         Linear (in the size of the <code>circular_buffer</code>s).
+    \par Iterator Invalidation
+         Does not invalidate any iterators.
+    \sa <code>operator<(const circular_buffer<T,Alloc>&, const circular_buffer<T,Alloc>&)</code>
+*/
 template <class T, class Alloc>
 inline bool operator >= (const circular_buffer<T, Alloc>& lhs, const circular_buffer<T, Alloc>& rhs) {
     return !(lhs < rhs);

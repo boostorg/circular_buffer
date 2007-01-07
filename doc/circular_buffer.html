@@ -817,7 +817,7 @@ template &lt;class T, class Alloc&gt;
             <a id="templateparam_T" name="templateparam_T"><code>T</code></a>
           </td>
           <td>
-            The type of the elements stored in the circular buffer.
+            The type of the elements stored in the <code>circular_buffer</code>.
             <dl>
               <dt>
                 <b>Type Requirements:</b>
@@ -827,8 +827,11 @@ template &lt;class T, class Alloc&gt;
                 (SGI STL defined combination of <a href="../../utility/Assignable.html">Assignable</a> and <a href=
                 "../../utility/CopyConstructible.html">CopyConstructible</a>). Moreover <code>T</code> has to be
                 <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">DefaultConstructible</a> if supplied as
-                a default parameter when invoking some of the circular buffer's methods e.g. <code>insert(iterator pos,
-                const value_type&amp; item = value_type())</code>.
+                a default parameter when invoking some of the <code>circular_buffer</code>'s methods e.g.
+                <code>insert(iterator pos, const value_type&amp; item = value_type())</code>. And <a href=
+                "http://www.sgi.com/tech/stl/EqualityComparable.html">EqualityComparable</a> and/or <a href=
+                "../../utility/LessThanComparable.html">LessThanComparable</a> if the <code>circular_buffer</code> will
+                be compared with another container.
               </dd>
             </dl>
           </td>
@@ -2953,7 +2956,7 @@ template &lt;class T, class Alloc&gt;
                 <code><a href="#classboost_1_1circular__buffer_1bb8eb0f298ad2012c55c5303e1f174d5">array_two()
                 const</a></code>; <code><a href=
                 "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code> for more
-                details.how to pass data into a legacy C API.
+                details how to pass data into a legacy C API.
               </dd>
             </dl>
           </td>
@@ -5513,8 +5516,55 @@ template &lt;class T, class Alloc&gt;
                 bool operator==(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const
             circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
             <br>
-            Test two circular buffers for equality.<br>
-            <br>
+            Compare two <code>circular_buffer</code>s element-by-element to determine if they are equal.
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>lhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+              <dd>
+                <code>rhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code>lhs.<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                rhs.<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &amp;&amp;
+                <a href="http://www.sgi.com/tech/stl/equal.html">std::equal</a>(lhs.<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, lhs.<a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>, rhs.<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>)</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>s).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -5524,8 +5574,55 @@ template &lt;class T, class Alloc&gt;
                 bool operator&lt;(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const
             circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
             <br>
-            Lexicographical comparison.<br>
-            <br>
+            Compare two <code>circular_buffer</code>s element-by-element to determine if the left one is lesser than
+            the right one.
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>lhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+              <dd>
+                <code>rhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "http://www.sgi.com/tech/stl/lexicographical_compare.html">std::lexicographical_compare</a>(lhs.<a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>,
+                lhs.<a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>, rhs.<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, rhs.<a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>)</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>s).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -5535,8 +5632,59 @@ template &lt;class T, class Alloc&gt;
                 bool operator!=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const
             circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
             <br>
-            Test two circular buffers for non-equality.<br>
-            <br>
+            Compare two <code>circular_buffer</code>s element-by-element to determine if they are non-equal.
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>lhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+              <dd>
+                <code>rhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code>!(lhs == rhs)</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>s).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#namespaceboost_1d35871e838359b5215e1cbb353663207">operator==(const
+                circular_buffer&lt;T,Alloc&gt;&amp;, const circular_buffer&lt;T,Alloc&gt;&amp;)</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -5546,8 +5694,60 @@ template &lt;class T, class Alloc&gt;
                 bool operator&gt;(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const
             circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
             <br>
-            Lexicographical comparison.<br>
-            <br>
+            Compare two <code>circular_buffer</code>s element-by-element to determine if the left one is greater than
+            the right one.
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>lhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+              <dd>
+                <code>rhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code>rhs &lt; lhs</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>s).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#namespaceboost_195b08213f201c2067d8acb024756329d">operator&lt;(const
+                circular_buffer&lt;T,Alloc&gt;&amp;, const circular_buffer&lt;T,Alloc&gt;&amp;)</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -5557,8 +5757,60 @@ template &lt;class T, class Alloc&gt;
                 bool operator&lt;=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const
             circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
             <br>
-            Lexicographical comparison.<br>
-            <br>
+            Compare two <code>circular_buffer</code>s element-by-element to determine if the left one is lesser or
+            equal to the right one.
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>lhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+              <dd>
+                <code>rhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code>!(rhs &lt; lhs)</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>s).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#namespaceboost_195b08213f201c2067d8acb024756329d">operator&lt;(const
+                circular_buffer&lt;T,Alloc&gt;&amp;, const circular_buffer&lt;T,Alloc&gt;&amp;)</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -5568,8 +5820,60 @@ template &lt;class T, class Alloc&gt;
                 bool operator&gt;=(const circular_buffer&lt;T,Alloc&gt;&amp; lhs, const
             circular_buffer&lt;T,Alloc&gt;&amp; rhs);</b></code><br>
             <br>
-            Lexicographical comparison.<br>
-            <br>
+            Compare two <code>circular_buffer</code>s element-by-element to determine if the left one is greater or
+            equal to the right one.
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <code>lhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+              <dd>
+                <code>rhs</code> The <code>circular_buffer</code> to compare.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code>!(lhs &lt; rhs)</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>s).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#namespaceboost_195b08213f201c2067d8acb024756329d">operator&lt;(const
+                circular_buffer&lt;T,Alloc&gt;&amp;, const circular_buffer&lt;T,Alloc&gt;&amp;)</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
