@@ -97,7 +97,7 @@ http://www.boost.org/LICENSE_1_0.txt)
     </xsl:if>
     <dd>
       <xsl:choose>
-        <xsl:when test="$style = 'code'"><code><xsl:apply-templates select="parameternamelist/parametername"/></code></xsl:when>
+        <xsl:when test="$style = 'code'"><code><xsl:apply-templates select="parameternamelist/parametername"/></code> - </xsl:when>
         <xsl:otherwise><xsl:apply-templates select="parameternamelist/parametername"/></xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="parameterdescription"/>
