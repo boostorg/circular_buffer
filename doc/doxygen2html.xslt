@@ -97,10 +97,17 @@ http://www.boost.org/LICENSE_1_0.txt)
     </xsl:if>
     <dd>
       <xsl:choose>
-        <xsl:when test="$style = 'code'"><code><xsl:apply-templates select="parameternamelist/parametername"/></code> - </xsl:when>
-        <xsl:otherwise><xsl:apply-templates select="parameternamelist/parametername"/></xsl:otherwise>
+        <xsl:when test="$style = 'code'">
+          <dl compact="yes">
+            <dt><code><xsl:apply-templates select="parameternamelist/parametername"/></code></dt>
+            <dd><xsl:apply-templates select="parameterdescription"/></dd>
+          </dl>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="parameternamelist/parametername"/>
+          <xsl:apply-templates select="parameterdescription"/>
+        </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="parameterdescription"/>
     </dd>
     <xsl:apply-templates select="following-sibling::parameteritem[1]">
         <xsl:with-param name="style" select="$style"/>

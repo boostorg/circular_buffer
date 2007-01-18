@@ -29,7 +29,6 @@
     <a href="#briefexample">Introductory Example</a><br>
     <a href="#synopsis">Synopsis</a><br>
     <a href="#rationale">Rationale</a><br>
-    <a href="#semantics">Semantics</a><br>
     <a href="#caveats">Caveats</a><br>
     <a href="#debug">Debug Support</a><br>
     <a href="#examples">More Examples</a><br>
@@ -42,7 +41,7 @@
     <a href="#functions">Standalone Functions</a><br>
     <a href="#notes">Notes</a><br>
     <a href="#see">See also</a><br>
-    <a href="#ack">Acknowledgments</a><br>
+    <a href="#ack">Acknowledgments</a>
     <table id="table_figure" align="right" border="0">
       <tr>
         <td>
@@ -63,7 +62,7 @@
           </table>
         </td>
       </tr>
-    </table><br>
+    </table>
     <h2>
       <a name="description" id="description">Description</a>
     </h2>
@@ -87,7 +86,7 @@
       "circular_buffer_space_optimized.html">circular_buffer_space_optimized</a></code> available. It is an adaptor of
       the <code>circular_buffer</code> which does not allocate memory at once when created, rather it allocates memory
       as needed.
-    </p><br>
+    </p>
     <h2>
       <a name="briefexample" id="briefexample">Introductory Example</a>
     </h2>
@@ -132,7 +131,7 @@
 
       return 0;
    }
-</pre><br>
+</pre>
     <h2>
       <a name="synopsis" id="synopsis">Synopsis</a>
     </h2>
@@ -306,7 +305,7 @@ template &lt;class T, class Alloc&gt;
           </td>
         </tr>
       </table>
-    </div><br>
+    </div>
     <h2>
       <a name="rationale" id="rationale">Rationale</a>
     </h2>
@@ -494,88 +493,6 @@ template &lt;class T, class Alloc&gt;
       "../test/soft_iterator_invalidation.cpp">soft_iterator_invalidation.cpp</a></code>.
     </p>
     <h2>
-      <a name="semantics" id="semantics">Semantics</a>
-    </h2>
-    <p>
-      TODO remove this section
-    </p>
-    <p>
-      The behaviour of insertion for <code>circular_buffer</code> is as follows:
-    </p>
-    <ul>
-      <li>The capacity of a <code>circular_buffer</code> remains fixed unless adjusted via <code>set_capacity</code> or
-      <code>resize</code>.
-      </li>
-      <li>
-        <code>insert</code> will overwrite front elements as necessary.
-      </li>
-      <li>
-        <code>rinsert</code> will overwrite back elements as necessary.
-      </li>
-    </ul>
-    <p>
-      The behaviour of resizing a <code>circular_buffer</code> is as follows:
-    </p>
-    <ul>
-      <li>The capacity will be adjusted to accommodate a <code>resize</code>. (The capacity can be only increased, not
-      decreased.)
-      </li>
-    </ul>
-    <p>
-      The behaviour of assigning to a <code>circular_buffer</code> is as follows:
-    </p>
-    <ul>
-      <li>The capacity will be adjusted to accommodate an <code>assign</code>. (The capacity can be only increased, not
-      decreased.)
-      </li>
-    </ul>
-    <p>
-      <a name="invalidation" id="invalidation"></a> The rules for iterator (and result of <code>data()</code> )
-      invalidation for <code>circular_buffer</code> are as follows:
-    </p>
-    <ul>
-      <li>
-        <code>insert</code> at the end of the <code>circular_buffer</code> (including <code>push_back</code> ) does not
-        invalidate any iterator except the case the iterator points to the overwritten element.
-      </li>
-      <li>
-        <code>rinsert</code> at the beginning of the <code>circular_buffer</code> (including <code>push_front</code> )
-        does not invalidate any iterator except the case the iterator points to the overwritten element.
-      </li>
-      <li>
-        <code>insert</code> in the middle of the <code>circular_buffer</code> invalidates iterators pointing to the
-        elements at the insertion point and behind the insertion point. It also invalidates iterators pointing to the
-        overwritten element(s).
-      </li>
-      <li>
-        <code>rinsert</code> in the middle of the <code>circular_buffer</code> invalidates iterators pointing to the
-        elements before the insertion point and iterators pointing to the overwritten element(s).
-      </li>
-      <li>
-        <code>erase</code> at the end of the <code>circular_buffer</code> (including <code>pop_back</code> )
-        invalidates only iterators pointing to the erased element(s).
-      </li>
-      <li>
-        <code>pop_front</code> invalidates only iterators pointing to the erased element.
-      </li>
-      <li>
-        <code>erase</code> at the beginning or in the middle of the <code>circular_buffer</code> invalidates iterators
-        pointing to the erased element(s) and iterators pointing to the elements behind the erase point.
-      </li>
-      <li>
-        <code>data</code> , <code>set_capacity</code> , <code>resize</code> , <code>operator=</code> ,
-        <code>assign</code> , <code>swap</code> and <code>clear</code> invalidate all iterators pointing to the
-        <code>circular_buffer</code>.
-      </li>
-    </ul>
-    <p>
-      In addition to the preceding rules the iterators get also invalidated due to overwriting (e.g. iterator pointing
-      to the front-most element gets invalidated when inserting into the full <code>circular_buffer</code> ). They get
-      invalidated in that sense they do not point to the same element as before but they do still point to the same
-      <b>valid</b> place in the memory. If you want to rely on this feature you have to turn of the <a href=
-      "#debug">Debug Support</a> otherwise an assertion will report an error if such invalidated iterator is used.
-    </p><br>
-    <h2>
       <a name="caveats" id="caveats">Caveats</a>
     </h2>
     <p>
@@ -585,22 +502,10 @@ template &lt;class T, class Alloc&gt;
       container of <code>std::auto_ptr</code> is considered particularly hazardous. <a href="#note3">[3]</a> )
     </p>
     <p>
-      Elements inserted near the front of a full <code>circular_buffer</code> can be lost. According to the <a href=
-      "#semantics">semantics</a> of <code>insert</code> , insertion overwrites front-most items as necessary - possibly
-      including elements currently being <b>inserted at the front</b> of the buffer. Conversely,
-      <code>push_front</code> to a full <code>circular_buffer</code> is guaranteed to overwrite the back-most element.
-    </p>
-    <p>
-      Elements inserted near the back of a full <code>circular_buffer</code> can be lost. According to the <a href=
-      "#semantics">semantics</a> of <code>rinsert</code> , insertion overwrites back-most items as necessary - possibly
-      including elements currently being <b>inserted at the back</b> of the buffer. Conversely, <code>push_back</code>
-      to a full <code>circular_buffer</code> is guaranteed to overwrite the front-most element.
-    </p>
-    <p>
       While internals of a <code>circular_buffer</code> are circular, iterators are <b>not</b>. Iterators of a
       <code>circular_buffer</code> are only valid for the range <code>[begin(), end()]</code>. E.g. iterators
       <code>(begin() - 1)</code> and <code>(end() + 1)</code> are invalid.
-    </p><br>
+    </p>
     <h2>
       <a name="debug" id="debug">Debug Support</a>
     </h2>
@@ -625,7 +530,7 @@ template &lt;class T, class Alloc&gt;
     <p>
       The debug support is enabled only in the debug mode (when the <code>NDEBUG</code> is not defined). It can also be
       explicitly disabled by defining <code>BOOST_CB_DISABLE_DEBUG</code> macro.
-    </p><br>
+    </p>
     <h2>
       <a name="examples" id="examples">More Examples</a>
     </h2>
@@ -787,7 +692,7 @@ template &lt;class T, class Alloc&gt;
       "../../../boost/circular_buffer.hpp">boost/circular_buffer.hpp</a></code>. There is also a forward declaration
       for the <code>circular_buffer</code> in the header file <code><a href=
       "../../../boost/circular_buffer_fwd.hpp">boost/circular_buffer_fwd.hpp</a></code>.
-    </p><br>
+    </p>
     <h2>
       <a name="model" id="model">Modeled Concepts</a>
     </h2>
@@ -795,7 +700,7 @@ template &lt;class T, class Alloc&gt;
       <a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">Random AccessContainer</a>, <a href=
       "http://www.sgi.com/tech/stl/FrontInsertionSequence.html">Front Insertion Sequence</a> and <a href=
       "http://www.sgi.com/tech/stl/BackInsertionSequence.html">Back Insertion Sequence</a>.
-    </p><br>
+    </p>
     <h2>
       <a name="parameters" id="parameters">Template Parameters</a>
     </h2>
@@ -859,7 +764,7 @@ template &lt;class T, class Alloc&gt;
           </td>
         </tr>
       </table>
-    </div><br>
+    </div>
     <h2>
       <a name="types" id="types">Public Types</a>
     </h2>
@@ -1015,7 +920,7 @@ template &lt;class T, class Alloc&gt;
           </td>
         </tr>
       </table>
-    </div><br>
+    </div>
     <h2>
       <a name="constructors" id="constructors">Constructors and Destructor</a>
     </h2>
@@ -1045,7 +950,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>alloc</code> - The allocator.
+                <dl compact>
+                  <dt>
+                    <code>alloc</code>
+                  </dt>
+                  <dd>
+                    The allocator.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -1091,11 +1003,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>capacity</code> - The maximum number of elements which can be stored in the
-                <code>circular_buffer</code>.
+                <dl compact>
+                  <dt>
+                    <code>capacity</code>
+                  </dt>
+                  <dd>
+                    The maximum number of elements which can be stored in the <code>circular_buffer</code>.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>alloc</code> - The allocator.
+                <dl compact>
+                  <dt>
+                    <code>alloc</code>
+                  </dt>
+                  <dd>
+                    The allocator.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -1154,13 +1079,34 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>n</code> - The number of elements the created <code>circular_buffer</code> will be filled with.
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of elements the created <code>circular_buffer</code> will be filled with.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>item</code> - The element the created <code>circular_buffer</code> will be filled with.
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the created <code>circular_buffer</code> will be filled with.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>alloc</code> - The allocator.
+                <dl compact>
+                  <dt>
+                    <code>alloc</code>
+                  </dt>
+                  <dd>
+                    The allocator.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -1222,16 +1168,44 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>capacity</code> - The capacity of the created <code>circular_buffer</code>.
+                <dl compact>
+                  <dt>
+                    <code>capacity</code>
+                  </dt>
+                  <dd>
+                    The capacity of the created <code>circular_buffer</code>.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>n</code> - The number of elements the created <code>circular_buffer</code> will be filled with.
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of elements the created <code>circular_buffer</code> will be filled with.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>item</code> - The element the created <code>circular_buffer</code> will be filled with.
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the created <code>circular_buffer</code> will be filled with.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>alloc</code> - The allocator.
+                <dl compact>
+                  <dt>
+                    <code>alloc</code>
+                  </dt>
+                  <dd>
+                    The allocator.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -1279,7 +1253,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>cb</code> - The <code>circular_buffer</code> to be copied.
+                <dl compact>
+                  <dt>
+                    <code>cb</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to be copied.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -1341,13 +1322,34 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>first</code> - The beginning of the range to be copied.
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be copied.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>last</code> - The end of the range to be copied.
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be copied.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>alloc</code> - The allocator.
+                <dl compact>
+                  <dt>
+                    <code>alloc</code>
+                  </dt>
+                  <dd>
+                    The allocator.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -1415,16 +1417,44 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>capacity</code> - The capacity of the created <code>circular_buffer</code>.
+                <dl compact>
+                  <dt>
+                    <code>capacity</code>
+                  </dt>
+                  <dd>
+                    The capacity of the created <code>circular_buffer</code>.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>first</code> - The beginning of the range to be copied.
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be copied.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>last</code> - The end of the range to be copied.
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be copied.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>alloc</code> - The allocator.
+                <dl compact>
+                  <dt>
+                    <code>alloc</code>
+                  </dt>
+                  <dd>
+                    The allocator.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -1502,7 +1532,7 @@ template &lt;class T, class Alloc&gt;
           </td>
         </tr>
       </table>
-    </div><br>
+    </div>
     <h2>
       <a name="methods" id="methods">Public Member Functions</a>
     </h2>
@@ -2166,7 +2196,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>index</code> - The position of the element.
+                <dl compact>
+                  <dt>
+                    <code>index</code>
+                  </dt>
+                  <dd>
+                    The position of the element.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -2242,7 +2279,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>index</code> - The position of the element.
+                <dl compact>
+                  <dt>
+                    <code>index</code>
+                  </dt>
+                  <dd>
+                    The position of the element.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -2308,7 +2352,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>index</code> - The position of the element.
+                <dl compact>
+                  <dt>
+                    <code>index</code>
+                  </dt>
+                  <dd>
+                    The position of the element.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -2376,7 +2427,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>index</code> - The position of the element.
+                <dl compact>
+                  <dt>
+                    <code>index</code>
+                  </dt>
+                  <dd>
+                    The position of the element.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -3506,7 +3564,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>new_capacity</code> - The new capacity.
+                <dl compact>
+                  <dt>
+                    <code>new_capacity</code>
+                  </dt>
+                  <dd>
+                    The new capacity.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -3591,11 +3656,25 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>new_size</code> - The new size.
+                <dl compact>
+                  <dt>
+                    <code>new_size</code>
+                  </dt>
+                  <dd>
+                    The new size.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>item</code> - The element the <code>circular_buffer</code> will be filled with in order to gain
-                the requested size. (See the postcondition.)
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the <code>circular_buffer</code> will be filled with in order to gain the requested
+                    size. (See the postcondition.)
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -3673,7 +3752,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>new_capacity</code> - The new capacity.
+                <dl compact>
+                  <dt>
+                    <code>new_capacity</code>
+                  </dt>
+                  <dd>
+                    The new capacity.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -3758,11 +3844,25 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>new_size</code> - The new size.
+                <dl compact>
+                  <dt>
+                    <code>new_size</code>
+                  </dt>
+                  <dd>
+                    The new size.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>item</code> - The element the <code>circular_buffer</code> will be filled with in order to gain
-                the requested size. (See the postcondition.)
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the <code>circular_buffer</code> will be filled with in order to gain the requested
+                    size. (See the postcondition.)
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -3836,7 +3936,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>cb</code> - The <code>circular_buffer</code> to be copied.
+                <dl compact>
+                  <dt>
+                    <code>cb</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to be copied.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -3921,10 +4028,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>n</code> - The number of elements the <code>circular_buffer</code> will be filled with.
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of elements the <code>circular_buffer</code> will be filled with.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>item</code> - The element the <code>circular_buffer</code> will be filled with.
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the <code>circular_buffer</code> will be filled with.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4019,13 +4140,34 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>capacity</code> - The new capacity of the <code>circular_buffer</code>.
+                <dl compact>
+                  <dt>
+                    <code>capacity</code>
+                  </dt>
+                  <dd>
+                    The new capacity of the <code>circular_buffer</code>.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>n</code> - The number of elements the <code>circular_buffer</code> will be filled with.
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of elements the <code>circular_buffer</code> will be filled with.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>item</code> - The element the <code>circular_buffer</code> will be filled with.
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the <code>circular_buffer</code> will be filled with.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4119,10 +4261,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>first</code> - The beginning of the range to be copied.
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be copied.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>last</code> - The end of the range to be copied.
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be copied.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4222,13 +4378,34 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>capacity</code> - The new capacity of the <code>circular_buffer</code>.
+                <dl compact>
+                  <dt>
+                    <code>capacity</code>
+                  </dt>
+                  <dd>
+                    The new capacity of the <code>circular_buffer</code>.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>first</code> - The beginning of the range to be copied.
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be copied.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>last</code> - The end of the range to be copied.
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be copied.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4303,7 +4480,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>cb</code> - The <code>circular_buffer</code> whose content will be swapped.
+                <dl compact>
+                  <dt>
+                    <code>cb</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> whose content will be swapped.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4377,7 +4561,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>item</code> - The element to be inserted.
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element to be inserted.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4452,7 +4643,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>item</code> - The element to be inserted.
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element to be inserted.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4677,10 +4875,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>pos</code> - An iterator specifying the position where the <code>item</code> will be inserted.
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator specifying the position where the <code>item</code> will be inserted.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>item</code> - The element to be inserted.
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element to be inserted.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4772,13 +4984,34 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>pos</code> - An iterator specifying the position where the <code>item</code> will be inserted.
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator specifying the position where the <code>item</code>s will be inserted.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>n</code> - The number of <code>item</code>s the to be inserted.
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of <code>item</code>s the to be inserted.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>item</code> - The element whose copies will be inserted.
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element whose copies will be inserted.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4887,13 +5120,34 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>pos</code> - An iterator specifying the position where the range will be inserted.
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator specifying the position where the range will be inserted.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>first</code> - The beginning of the range to be inserted.
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be inserted.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>last</code> - The end of the range to be inserted.
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be inserted.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -4998,11 +5252,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>pos</code> - An iterator specifying the position before which the <code>item</code> will be
-                inserted.
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator specifying the position before which the <code>item</code> will be inserted.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>item</code> - The element to be inserted.
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element to be inserted.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -5063,13 +5330,13 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item);</b></code><br>
             <br>
-            Insert <code>n</code> copies of the item before the specified position.
+            Insert <code>n</code> copies of the <code>item</code> before the specified position.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid <code>pos</code> iterator.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
               </dd>
             </dl>
             <dl>
@@ -5077,15 +5344,50 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                This operation preserves the capacity of the circular buffer. If the insertion would result in
-                exceeding the capacity of the circular buffer then the necessary number of elements from the end of the
-                circular buffer will be removed or not all <code>n</code> elements will be inserted or both.<code><br>
-                Example:<br>
-                original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
-                position ---------------------^<br>
-                insert(position, (size_t)5, 6);<br>
-                (If the operation won't preserve capacity, the buffer would look like this |1|2|6|6|6|6|6|3|4|)<br>
-                RESULTING circular buffer |1|2|6|6|6|6| - capacity: 6, size: 6</code>
+                TODO The number of <code>min(n, (pos - <a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>) + <a href=
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>)</code> elements will
+                inserted starting at the position <code>pos</code>.<br>
+                The number of <code>min(pos - <a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, max(0, n - <a href=
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>))</code> elements
+                will be overwritten starting at the beginning of the <code>circular_buffer</code>.<br>
+                (See Example for the explanation.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator specifying the position where the <code>item</code>s will be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of <code>item</code>s the to be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element whose copies will be inserted.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -5101,10 +5403,53 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Example:</b>
               </dt>
               <dd>
-                For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+                Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer
+                may look like the one below.<br>
+                <br>
+                <code>|1|2|3|4| | |</code><br>
+                <code>p ---^</code><br>
+                <br>
+                After inserting 5 elements before the position <code>p</code>:<br>
+                <br>
+                <code>rinsert(p, (size_t)5, 0);</code><br>
+                <br>
+                actually only 4 elements get inserted and elements <code>3</code> and <code>4</code> are overwritten.
+                This is due to the fact the rinsert operation preserves the capacity. After insertion the internal
+                buffer looks like this:<br>
+                <br>
+                <code>|1|2|0|0|0|0|</code><br>
+                <br>
+                For comparison if the capacity would not be preserved the internal buffer would then result in
+                <code>|1|2|0|0|0|0|0|3|4|</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+                excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_12c9332f457bf5bb3128463cf528c058c">rinsert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1d6479cbc43a304bdbf04262f957fa323">rinsert(iterator, InputIterator,
+                InputIterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95">insert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1b2f197c99d47138db777f0a46783b140">insert(iterator, size_type,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1d00091d1d794cab3264b3674e99b33f6">insert(iterator, InputIterator,
+                InputIterator)</a></code>
               </dd>
             </dl>
           </td>
@@ -5566,7 +5911,7 @@ template &lt;class T, class Alloc&gt;
           </td>
         </tr>
       </table>
-    </div><br>
+    </div>
     <h2>
       <a name="functions" id="functions">Standalone Functions</a>
     </h2>
@@ -5585,10 +5930,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>lhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>lhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>rhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>rhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -5644,10 +6003,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>lhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>lhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>rhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>rhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -5701,10 +6074,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>lhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>lhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>rhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>rhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -5764,10 +6151,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>lhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>lhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>rhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>rhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -5827,10 +6228,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>lhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>lhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>rhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>rhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -5890,10 +6305,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>lhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>lhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>rhs</code> - The <code>circular_buffer</code> to compare.
+                <dl compact>
+                  <dt>
+                    <code>rhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> to compare.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -5960,12 +6389,24 @@ template &lt;class T, class Alloc&gt;
                 <b>Parameter(s):</b>
               </dt>
               <dd>
-                <code>lhs</code> - The <code>circular_buffer</code> whose content will be swapped with
-                <code>rhs</code>.
+                <dl compact>
+                  <dt>
+                    <code>lhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> whose content will be swapped with <code>rhs</code>.
+                  </dd>
+                </dl>
               </dd>
               <dd>
-                <code>rhs</code> - The <code>circular_buffer</code> whose content will be swapped with
-                <code>lhs</code>.
+                <dl compact>
+                  <dt>
+                    <code>rhs</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer</code> whose content will be swapped with <code>lhs</code>.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -6008,7 +6449,7 @@ template &lt;class T, class Alloc&gt;
           </td>
         </tr>
       </table>
-    </div><br>
+    </div>
     <h2>
       <a name="notes" id="notes">Notes</a>
     </h2>
@@ -6035,7 +6476,7 @@ template &lt;class T, class Alloc&gt;
           Addison-Wesley, 2001.)
         </p>
       </li>
-    </ol><br>
+    </ol>
     <h2>
       <a name="see" id="see">See also</a>
     </h2>
@@ -6044,7 +6485,7 @@ template &lt;class T, class Alloc&gt;
       "http://www.sgi.com/tech/stl/Vector.html">std::vector</a>, <a href=
       "http://www.sgi.com/tech/stl/List.html">std::list</a>, <a href=
       "http://www.sgi.com/tech/stl/Deque.html">std::deque</a></code>
-    </p><br>
+    </p>
     <h2>
       <a name="ack" id="ack">Acknowledgments</a>
     </h2>

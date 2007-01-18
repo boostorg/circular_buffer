@@ -1407,7 +1407,7 @@ public:
               position <code>pos</code>.<br>The number of <code>min(pos - begin(), max(0, n - reserve()))</code>
               elements will be overwritten starting at the beginning of the <code>circular_buffer</code>.<br>(See
               Example for the explanation.)
-        \param pos An iterator specifying the position where the <code>item</code> will be inserted.
+        \param pos An iterator specifying the position where the <code>item</code>s will be inserted.
         \param n The number of <code>item</code>s the to be inserted.
         \param item The element whose copies will be inserted.
         \throws Whatever <code>T::T(const T&)</code> throws.
@@ -1557,24 +1557,37 @@ public:
         return iterator(this, pos.m_it);
     }
 
-    //! Insert <code>n</code> copies of the item before the specified position.
+    //! Insert <code>n</code> copies of the <code>item</code> before the specified position.
     /*!
-        \pre Valid <code>pos</code> iterator.
-        \post This operation preserves the capacity of the circular buffer.
-              If the insertion would result in exceeding the capacity
-              of the circular buffer then the necessary number of elements
-              from the end of the circular buffer will be removed
-              or not all <code>n</code> elements will be inserted or both.<code><br>
-              Example:<br>
-                original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
-                position ---------------------^<br>
-                insert(position, (size_t)5, 6);<br>
-                (If the operation won't preserve capacity, the buffer
-                would look like this |1|2|6|6|6|6|6|3|4|)<br>
-                RESULTING circular buffer |1|2|6|6|6|6| - capacity: 6, size: 6</code>
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
+        \post TODO The number of <code>min(n, (pos - begin()) + reserve())</code> elements will inserted starting at the
+              position <code>pos</code>.<br>The number of <code>min(pos - begin(), max(0, n - reserve()))</code>
+              elements will be overwritten starting at the beginning of the <code>circular_buffer</code>.<br>(See
+              Example for the explanation.)
+        \param pos An iterator specifying the position where the <code>item</code>s will be inserted.
+        \param n The number of <code>item</code>s the to be inserted.
+        \param item The element whose copies will be inserted.
         \throws Whatever <code>T::T(const T&)</code> throws.
         \throws Whatever <code>T::operator = (const T&)</code> throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Example
+             Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
+             look like the one below.<br><br>
+             <code>|1|2|3|4| | |</code><br>
+             <code>p ---^</code><br><br>After inserting 5 elements before the position <code>p</code>:<br><br>
+             <code>rinsert(p, (size_t)5, 0);</code><br><br>actually only 4 elements get inserted and elements
+             <code>3</code> and <code>4</code> are overwritten. This is due to the fact the rinsert operation preserves
+             the capacity. After insertion the internal buffer looks like this:<br><br><code>|1|2|0|0|0|0|</code><br>
+             <br>For comparison if the capacity would not be preserved the internal buffer would then result in
+             <code>|1|2|0|0|0|0|0|3|4|</code>.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+             excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
+        \sa <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>,
+            <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>
     */
     void rinsert(iterator pos, size_type n, param_value_type item) {
         BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
