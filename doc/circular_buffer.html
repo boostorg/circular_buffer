@@ -4971,11 +4971,11 @@ template &lt;class T, class Alloc&gt;
                 The number of <code>min(n, (pos - <a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>) + <a href=
                 "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>)</code> elements will
-                inserted starting at the position <code>pos</code>.<br>
+                be inserted at the position <code>pos</code>.<br>
                 The number of <code>min(pos - <a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, max(0, n - <a href=
                 "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>))</code> elements
-                will be overwritten starting at the beginning of the <code>circular_buffer</code>.<br>
+                will be overwritten at the beginning of the <code>circular_buffer</code>.<br>
                 (See Example for the explanation.)
               </dd>
             </dl>
@@ -5103,15 +5103,15 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                Elements from the range <code>[first + max(0, last - (pos - <a href=
-                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>) + <a href=
+                Elements from the range <code>[first + max(0, distance(first, last) - (pos - <a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>) - <a href=
                 "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>), last)</code> will
-                inserted starting at the position <code>pos</code>.<br>
+                be inserted at the position <code>pos</code>.<br>
                 The number of <code>min(pos - <a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, max(0, distance(first,
                 last) - <a href=
                 "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>))</code> elements
-                will be overwritten starting at the beginning of the <code>circular_buffer</code>.<br>
+                will be overwritten at the beginning of the <code>circular_buffer</code>.<br>
                 (See Example for the explanation.)
               </dd>
             </dl>
@@ -5344,14 +5344,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                TODO The number of <code>min(n, (pos - <a href=
-                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>) + <a href=
+                The number of <code>min(n, (<a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> - pos) + <a href=
                 "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>)</code> elements will
-                inserted starting at the position <code>pos</code>.<br>
-                The number of <code>min(pos - <a href=
-                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, max(0, n - <a href=
-                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>))</code> elements
-                will be overwritten starting at the beginning of the <code>circular_buffer</code>.<br>
+                be inserted before the position <code>pos</code>.<br>
+                The number of <code>min(<a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> - pos, max(0, n -
+                <a href="#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>))</code>
+                elements will be overwritten at the end of the <code>circular_buffer</code>.<br>
                 (See Example for the explanation.)
               </dd>
             </dl>
@@ -5468,7 +5468,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                Valid <code>pos</code> iterator and valid range <code>[first, last)</code>.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.<br>
+                Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
+                requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
               </dd>
             </dl>
             <dl>
@@ -5476,18 +5478,78 @@ template &lt;class T, class Alloc&gt;
                 <b>Postcondition:</b>
               </dt>
               <dd>
-                This operation preserves the capacity of the circular buffer. If the insertion would result in
-                exceeding the capacity of the circular buffer then the necessary number of elements from the end of the
-                circular buffer will be removed or not the whole range will be inserted or both. In case the whole
-                range cannot be inserted it will be inserted just some elements from the beginning of the range (see
-                the example).<code><br>
-                Example:<br>
-                array to insert: int array[] = { 5, 6, 7, 8, 9 };<br>
-                original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
-                position ---------------------^<br>
-                insert(position, array, array + 5);<br>
-                (If the operation won't preserve capacity, the buffer would look like this |1|2|5|6|7|8|9|3|4|)<br>
-                RESULTING circular buffer |1|2|5|6|7|8| - capacity: 6, size: 6</code>
+                Elements from the range <code>[first, last - max(0, distance(first, last) - (<a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> - pos) - <a href=
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>))</code> will be
+                inserted before the position <code>pos</code>.<br>
+                The number of <code>min(<a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> - pos, max(0,
+                distance(first, last) - <a href=
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>))</code> elements
+                will be overwritten at the end of the <code>circular_buffer</code>.<br>
+                (See Example for the explanation.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator specifying the position where the range will be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be inserted.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Example:</b>
+              </dt>
+              <dd>
+                Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer
+                may look like the one below.<br>
+                <br>
+                <code>|1|2|3|4| | |</code><br>
+                <code>p ---^</code><br>
+                <br>
+                After inserting a range of elements before the position <code>p</code>:<br>
+                <br>
+                <code>int array[] = { 5, 6, 7, 8, 9 };</code><br>
+                <code>insert(p, array, array + 5);</code><br>
+                <br>
+                actually only elements <code>5</code>, <code>6</code>, <code>7</code> and <code>8</code> from the
+                specified range get inserted and elements <code>3</code> and <code>4</code> are overwritten. This is
+                due to the fact the insert operation preserves the capacity. After insertion the internal buffer looks
+                like this:<br>
+                <br>
+                <code>|1|2|5|6|7|8|</code><br>
+                <br>
+                For comparison if the capacity would not be preserved the internal buffer would then result in
+                <code>|1|2|5|6|7|8|9|3|4|</code>.
               </dd>
             </dl>
             <dl>
@@ -5503,10 +5565,28 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+                Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+                excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_12c9332f457bf5bb3128463cf528c058c">rinsert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1a47a5358db1b7d7e4925c16db13d2fc5">rinsert(iterator, size_type,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95">insert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1b2f197c99d47138db777f0a46783b140">insert(iterator, size_type,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1d00091d1d794cab3264b3674e99b33f6">insert(iterator, InputIterator,
+                InputIterator)</a></code>
               </dd>
             </dl>
           </td>

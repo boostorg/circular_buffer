@@ -1403,10 +1403,10 @@ public:
     //! Insert <code>n</code> copies of the <code>item</code> at the specified position.
     /*!
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
-        \post The number of <code>min(n, (pos - begin()) + reserve())</code> elements will inserted starting at the
-              position <code>pos</code>.<br>The number of <code>min(pos - begin(), max(0, n - reserve()))</code>
-              elements will be overwritten starting at the beginning of the <code>circular_buffer</code>.<br>(See
-              Example for the explanation.)
+        \post The number of <code>min(n, (pos - begin()) + reserve())</code> elements will be inserted at the position
+              <code>pos</code>.<br>The number of <code>min(pos - begin(), max(0, n - reserve()))</code> elements will
+              be overwritten at the beginning of the <code>circular_buffer</code>.<br>(See Example for the
+              explanation.)
         \param pos An iterator specifying the position where the <code>item</code>s will be inserted.
         \param n The number of <code>item</code>s the to be inserted.
         \param item The element whose copies will be inserted.
@@ -1450,9 +1450,10 @@ public:
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.<br>
              Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
              requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
-        \post Elements from the range <code>[first + max(0, last - (pos - begin()) + reserve()), last)</code> will
-              inserted starting at the position <code>pos</code>.<br>The number of <code>min(pos - begin(), max(0,
-              distance(first, last) - reserve()))</code> elements will be overwritten starting at the beginning of the
+        \post Elements from the range
+              <code>[first + max(0, distance(first, last) - (pos - begin()) - reserve()), last)</code> will be
+              inserted at the position <code>pos</code>.<br>The number of <code>min(pos - begin(), max(0,
+              distance(first, last) - reserve()))</code> elements will be overwritten at the beginning of the
               <code>circular_buffer</code>.<br>(See Example for the explanation.)
         \param pos An iterator specifying the position where the range will be inserted.
         \param first The beginning of the range to be inserted.
@@ -1560,10 +1561,9 @@ public:
     //! Insert <code>n</code> copies of the <code>item</code> before the specified position.
     /*!
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
-        \post TODO The number of <code>min(n, (pos - begin()) + reserve())</code> elements will inserted starting at the
-              position <code>pos</code>.<br>The number of <code>min(pos - begin(), max(0, n - reserve()))</code>
-              elements will be overwritten starting at the beginning of the <code>circular_buffer</code>.<br>(See
-              Example for the explanation.)
+        \post The number of <code>min(n, (end() - pos) + reserve())</code> elements will be inserted before the
+              position <code>pos</code>.<br>The number of <code>min(end() - pos, max(0, n - reserve()))</code> elements
+              will be overwritten at the end of the <code>circular_buffer</code>.<br>(See Example for the explanation.)
         \param pos An iterator specifying the position where the <code>item</code>s will be inserted.
         \param n The number of <code>item</code>s the to be inserted.
         \param item The element whose copies will be inserted.
@@ -1596,25 +1596,39 @@ public:
 
     //! Insert the range <code>[first, last)</code> before the specified position.
     /*!
-        \pre Valid <code>pos</code> iterator and valid range <code>[first, last)</code>.
-        \post This operation preserves the capacity of the circular buffer.
-              If the insertion would result in exceeding the capacity
-              of the circular buffer then the necessary number of elements
-              from the end of the circular buffer will be removed
-              or not the whole range will be inserted or both.
-              In case the whole range cannot be inserted it will be inserted just
-              some elements from the beginning of the range (see the example).<code><br>
-              Example:<br>
-                array to insert: int array[] = { 5, 6, 7, 8, 9 };<br>
-                original circular buffer |1|2|3|4| | | - capacity: 6, size: 4<br>
-                position ---------------------^<br>
-                insert(position, array, array + 5);<br>
-                (If the operation won't preserve capacity, the buffer
-                would look like this |1|2|5|6|7|8|9|3|4|)<br>
-                RESULTING circular buffer |1|2|5|6|7|8| - capacity: 6, size: 6</code>
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.<br>
+             Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
+             requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+        \post Elements from the range
+              <code>[first, last - max(0, distance(first, last) - (end() - pos) - reserve()))</code> will be inserted
+              before the position <code>pos</code>.<br>The number of <code>min(end() - pos, max(0,
+              distance(first, last) - reserve()))</code> elements will be overwritten at the end of the
+              <code>circular_buffer</code>.<br>(See Example for the explanation.)
+        \param pos An iterator specifying the position where the range will be inserted.
+        \param first The beginning of the range to be inserted.
+        \param last The end of the range to be inserted.
+        \par Example
+             Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
+             look like the one below.<br><br>
+             <code>|1|2|3|4| | |</code><br>
+             <code>p ---^</code><br><br>After inserting a range of elements before the position <code>p</code>:<br><br>
+             <code>int array[] = { 5, 6, 7, 8, 9 };</code><br><code>insert(p, array, array + 5);</code><br><br>
+             actually only elements <code>5</code>, <code>6</code>, <code>7</code> and <code>8</code> from the
+             specified range get inserted and elements <code>3</code> and <code>4</code> are overwritten. This is due
+             to the fact the insert operation preserves the capacity. After insertion the internal buffer looks like
+             this:<br><br><code>|1|2|5|6|7|8|</code><br><br>For comparison if the capacity would not be preserved the
+             internal buffer would then result in <code>|1|2|5|6|7|8|9|3|4|</code>.
         \throws Whatever <code>T::T(const T&)</code> throws.
         \throws Whatever <code>T::operator = (const T&)</code> throws.
-        \note For iterator invalidation see the <a href="../circular_buffer.html#invalidation">documentation</a>.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+             excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
+        \sa <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>, <code>\link insert(iterator, param_value_type)
+            insert(iterator, value_type)\endlink</code>, <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>
     */
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
