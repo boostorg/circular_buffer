@@ -123,7 +123,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   </xsl:template>
 
   <xsl:template match="simplesect[@kind='post']">
-    <dl><dt><b>Postcondition:</b></dt><dd><xsl:apply-templates/></dd></dl>
+    <dl><dt><b>Effect:</b></dt><dd><xsl:apply-templates/></dd></dl>
   </xsl:template>
 
   <xsl:template match="simplesect[@kind='par']">

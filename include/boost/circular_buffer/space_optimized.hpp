@@ -77,7 +77,7 @@ public:
         which ensures compatibility of creating an instance of the
         <code>circular_buffer_space_optimized</code> with other STL containers.</p>
     */
-    typedef cb_details::capacity_control<size_type> capacity_control;
+    typedef cb_details::capacity_control<size_type> capacity_type;
 
 // Inherited
 
@@ -107,7 +107,7 @@ private:
 // Member variables
 
     //! The capacity controller of the space optimized circular buffer.
-    capacity_control m_capacity_ctrl;
+    capacity_type m_capacity_ctrl;
 
 public:
 // Overridden
@@ -230,7 +230,7 @@ public:
               in the debug mode.
     */
     explicit circular_buffer_space_optimized(
-        capacity_control capacity_ctrl,
+        capacity_type capacity_ctrl,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(capacity_ctrl.m_min_capacity, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
@@ -251,7 +251,7 @@ public:
               in the debug mode.
     */
     circular_buffer_space_optimized(
-        capacity_control capacity_ctrl,
+        capacity_type capacity_ctrl,
         param_value_type item,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, item, alloc)
@@ -259,7 +259,7 @@ public:
 
     //! TODO doc
     circular_buffer_space_optimized(
-        capacity_control capacity_ctrl,
+        capacity_type capacity_ctrl,
         size_type n,
         param_value_type item,
         const allocator_type& alloc = allocator_type())
@@ -291,7 +291,7 @@ public:
   // TODO describe workaround
     template <class InputIterator>
     circular_buffer_space_optimized(
-        capacity_control capacity_ctrl,
+        capacity_type capacity_ctrl,
         InputIterator first,
         InputIterator last)
     : circular_buffer<T, Alloc>(
@@ -337,7 +337,7 @@ public:
     */
     template <class InputIterator>
     circular_buffer_space_optimized(
-        capacity_control capacity_ctrl,
+        capacity_type capacity_ctrl,
         InputIterator first,
         InputIterator last,
         const allocator_type& alloc = allocator_type())
@@ -375,7 +375,7 @@ public:
     }
 
     //! See the circular_buffer source documentation.
-    void assign(capacity_control capacity_ctrl, size_type n, param_value_type item) {
+    void assign(capacity_type capacity_ctrl, size_type n, param_value_type item) {
        BOOST_CB_ASSERT(capacity_ctrl.m_capacity >= n); // check for new capacity lower than n
        circular_buffer<T, Alloc>::assign(std::max(capacity_ctrl.m_min_capacity, n), n, item);
        m_capacity_ctrl = capacity_ctrl;
@@ -391,7 +391,7 @@ public:
 
     //! See the circular_buffer source documentation.
     template <class InputIterator>
-    void assign(capacity_control capacity_ctrl, InputIterator first, InputIterator last) {
+    void assign(capacity_type capacity_ctrl, InputIterator first, InputIterator last) {
        m_capacity_ctrl = capacity_ctrl;
        circular_buffer<T, Alloc>::assign(capacity(), first, last);
        check_high_capacity();
@@ -626,33 +626,33 @@ private:
     }
 
     //! TODO doc
-    static size_type init_capacity(const capacity_control& capacity_ctrl, size_type n) {
+    static size_type init_capacity(const capacity_type& capacity_ctrl, size_type n) {
         BOOST_CB_ASSERT(capacity_ctrl.m_capacity >= n); // check for capacity lower than n
         return std::max(capacity_ctrl.m_min_capacity, n);
     }
 
     //! Specialized method for determining the initial capacity.
     template <class IntegralType>
-    static size_type init_capacity(const capacity_control& capacity_ctrl, IntegralType n, IntegralType item, const true_type&) {
+    static size_type init_capacity(const capacity_type& capacity_ctrl, IntegralType n, IntegralType item, const true_type&) {
         return init_capacity(capacity_ctrl, static_cast<size_type>(n));
     }
 
     //! Specialized method for determining the initial capacity.
     template <class Iterator>
-    static size_type init_capacity(const capacity_control& capacity_ctrl, Iterator first, Iterator last, const false_type&) {
+    static size_type init_capacity(const capacity_type& capacity_ctrl, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         return init_capacity(capacity_ctrl, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
 
     //! Specialized method for determining the initial capacity.
     template <class InputIterator>
-    static size_type init_capacity(const capacity_control& capacity_ctrl, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
+    static size_type init_capacity(const capacity_type& capacity_ctrl, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
         return capacity_ctrl.m_capacity;
     }
 
     //! Specialized method for determining the initial capacity.
     template <class ForwardIterator>
-    static size_type init_capacity(const capacity_control& capacity_ctrl, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
+    static size_type init_capacity(const capacity_type& capacity_ctrl, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         return std::min(capacity_ctrl.m_capacity, std::max(capacity_ctrl.m_min_capacity, static_cast<size_type>(std::distance(first, last))));
     }

@@ -19,7 +19,8 @@ t05  DONE
      and will be taken from the source doc.
      (was: change "Type Requirements" to "Element Type Requirements")
 
-t06  docs: define the element type requirements (as a precondition) for every
+t06  DONE
+     docs: define the element type requirements (as a precondition) for every
      method
 
 t07  DONE - verify
@@ -31,7 +32,8 @@ t08  DONE
 t09  DONE
      fix needed to compile the tests with GCC 3.4
 
-t10  docs: define exception safety for every method
+t10  DONE
+     docs: define exception safety for every method
      "Guarantee of basic exception safety" as a design criteria for the whole
      container should be removed or amended.
      Plus add some 'generic_test's if the method does't guarantee only a basic
@@ -46,21 +48,25 @@ t12  DONE
      provide default arguments for push_back()/push_front() and
      insert()/rinsert() methods and remove the non-argument versions
 
-t13  docs: fix precondition "*(this).size() > index" to "(*this).size()"
+t13  DONE
+     docs: fix precondition "*(this).size() > index" to "(*this).size()"
      or remove (*this) entirely (in the whole docs)
 
-t14  docs: explicitly document methods which do not throw any exception,
+t14  DONE
+     docs: explicitly document methods which do not throw any exception,
      e.g. "Exceptions: none"
 
 t15  DONE
      rename the data() method to something meaningful concerning its mutation
      status (e.g to_array); mention its linear complexity in the docs
 
-t16  docs: document that push_back() or other methods that they can choose NOT
+t16  DONE
+     docs: document that push_back() or other methods that they can choose NOT
      to insert something -> in general document the boundary conditions
      in greater details
 
-t17  docs: delete the "Semantics" paragraph and move its content directly
+t17  DONE
+     docs: delete the "Semantics" paragraph and move its content directly
      into the documentation of the particular methods
 
 t18  DONE
@@ -102,7 +108,8 @@ t26  DONE
 t27  REJECTED
      docs: apply the DefaultConstructible and Assignable type requirements
 
-t28  docs: the difference between resize() and set_capacity() should be 
+t28  DONE
+     docs: the difference between resize() and set_capacity() should be 
      mentioned more explicitly
 
 t29  DONE

@@ -68,7 +68,7 @@ class circular_buffer : cb_details::iterator_registry {
 public:
 // Basic types
 
-    //! The type of elements stored in the circular buffer.
+    //! The type of elements stored in the <code>circular_buffer</code>.
     typedef typename Alloc::value_type value_type;
 
     //! A pointer to an element.
@@ -91,25 +91,25 @@ public:
 
     //! The size type.
     /*!
-        (An unsigned integral type that can represent any nonnegative value of the container's distance type.)
+        (An unsigned integral type that can represent any non-negative value of the container's distance type.)
     */
     typedef typename Alloc::size_type size_type;
 
-    //! The type of an allocator used in the circular buffer.
+    //! The type of an allocator used in the <code>circular_buffer</code>.
     typedef Alloc allocator_type;
 
 // Iterators
 
-    //! A const (random access) iterator used to iterate through the circular buffer.
+    //! A const (random access) iterator used to iterate through the <code>circular_buffer</code>.
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::const_traits<Alloc> > const_iterator;
 
-    //! A (random access) iterator used to iterate through the circular buffer.
+    //! A (random access) iterator used to iterate through the <code>circular_buffer</code>.
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::nonconst_traits<Alloc> > iterator;
 
-    //! A const iterator used to iterate backwards through a circular buffer.
+    //! A const iterator used to iterate backwards through a <code>circular_buffer</code>.
     typedef reverse_iterator<const_iterator> const_reverse_iterator;
 
-    //! An iterator used to iterate backwards through a circular buffer.
+    //! An iterator used to iterate backwards through a <code>circular_buffer</code>.
     typedef reverse_iterator<iterator> reverse_iterator;
 
 // Container specific types
@@ -132,10 +132,10 @@ public:
 
     //! The capacity type.
     /*!
-        (Defined just for consistency with the <a href="circular_buffer_space_optimized.html">
-        <code>circular_buffer_space_optimized</code></a>.)
+        (Same as <code>size_type</code> - defined for consistency with the
+        <a href="circular_buffer_space_optimized.html"><code>circular_buffer_space_optimized</code></a>.)
     */
-    typedef size_type capacity_control;
+    typedef size_type capacity_type;
 
 // Helper types
 
@@ -483,7 +483,7 @@ public:
         return *((m_last == m_buff ? m_end : m_last) - 1);
     }
 
-    //! Get the first continuos array of the internal buffer.
+    //! Get the first continuous array of the internal buffer.
     /*!
         This method in combination with <code>array_two()</code> can be useful when passing the stored data into
         a legacy C API as an array. Suppose there is a <code>circular_buffer</code> of capacity 10, containing 7
@@ -497,7 +497,7 @@ public:
         begin -------^</code><br><br>
         where <code>|a|b|c|d|</code> represents the "array one", <code>|e|f|g|</code> represents the "array two" and
         <code>| | | |</code> is a free space.<br>
-        Now consider a typical C style function for writting data into a file:<br><br>
+        Now consider a typical C style function for writing data into a file:<br><br>
         <code>int write(int file_desc, char* buff, int num_bytes);</code><br><br>
         There are two ways how to write the content of the <code>circular_buffer</code> into a file. Either relying
         on <code>array_one()</code> and <code>array_two()</code> methods and calling the write function twice:<br><br>
@@ -511,7 +511,7 @@ public:
         option is suitable when calling the write method is "cheap". On the other hand the second option is more
         suitable when calling the write method is more "expensive" than calling the <code>linearize()</code> method
         whose complexity is linear.
-        \return The array range of the first continuos array of the internal buffer. In the case the
+        \return The array range of the first continuous array of the internal buffer. In the case the
                 <code>circular_buffer</code> is empty the size of the returned array is <code>0</code>.
         \throws Nothing.
         \par Complexity
@@ -532,11 +532,11 @@ public:
         return array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
 
-    //! Get the second continuos array of the internal buffer.
+    //! Get the second continuous array of the internal buffer.
     /*!
         This method in combination with <code>array_one()</code> can be useful when passing the stored data into
         a legacy C API as an array.
-        \return The array range of the second continuos array of the internal buffer. In the case the internal buffer
+        \return The array range of the second continuous array of the internal buffer. In the case the internal buffer
                 is linear or the <code>circular_buffer</code> is empty the size of the returned array is
                 <code>0</code>.
         \throws Nothing.
@@ -552,11 +552,11 @@ public:
         return array_range(m_buff, m_last <= m_first && !empty() ? m_last - m_buff : 0);
     }
 
-    //! Get the first continuos array of the internal buffer.
+    //! Get the first continuous array of the internal buffer.
     /*!
         This method in combination with <code>array_two() const</code> can be useful when passing the stored data into
         a legacy C API as an array.
-        \return The array range of the first continuos array of the internal buffer. In the case the
+        \return The array range of the first continuous array of the internal buffer. In the case the
                 <code>circular_buffer</code> is empty the size of the returned array is <code>0</code>.
         \throws Nothing.
         \par Complexity
@@ -572,11 +572,11 @@ public:
         return const_array_range(m_first, (m_last <= m_first && !empty() ? m_end : m_last) - m_first);
     }
 
-    //! Get the second continuos array of the internal buffer.
+    //! Get the second continuous array of the internal buffer.
     /*!
         This method in combination with <code>array_one() const</code> can be useful when passing the stored data into
         a legacy C API as an array.
-        \return The array range of the second continuos array of the internal buffer. In the case the internal buffer
+        \return The array range of the second continuous array of the internal buffer. In the case the internal buffer
                 is linear or the <code>circular_buffer</code> is empty the size of the returned array is
                 <code>0</code>.
         \throws Nothing.
@@ -608,7 +608,7 @@ public:
              if the postcondition is already met prior calling this method.
         \warning In general invoking any method which modifies the internal state of the <code>circular_buffer</code>
                  may delinearize the internal buffer and invalidate the returned pointer.
-        \sa <code>array_one()</code> and <code>array_two()</code> for the other option.how to pass data into a legacy
+        \sa <code>array_one()</code> and <code>array_two()</code> for the other option how to pass data into a legacy
             C API.
     */
     pointer linearize() {
@@ -899,7 +899,7 @@ public:
              Constant.
     */
     explicit circular_buffer(
-        size_type capacity,
+        capacity_type capacity,
         const allocator_type& alloc = allocator_type())
     : m_size(0), m_alloc(alloc) {
         initialize(capacity);
@@ -942,7 +942,7 @@ public:
              Linear (in the <code>n</code>).
     */
     circular_buffer(
-        size_type capacity,
+        capacity_type capacity,
         size_type n,
         param_value_type item,
         const allocator_type& alloc = allocator_type())
@@ -987,7 +987,7 @@ public:
 
     template <class InputIterator>
     circular_buffer(
-        size_type capacity,
+        capacity_type capacity,
         InputIterator first,
         InputIterator last)
     : m_alloc(allocator_type()) {
@@ -1046,7 +1046,7 @@ public:
     */
     template <class InputIterator>
     circular_buffer(
-        size_type capacity,
+        capacity_type capacity,
         InputIterator first,
         InputIterator last,
         const allocator_type& alloc = allocator_type())
@@ -1088,10 +1088,10 @@ public:
         \par Iterator Invalidation
              Invalidates all iterators pointing to this <code>circular_buffer</code>.
         \sa <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
-            <code>\link assign(size_type, size_type, param_value_type)
-            assign(size_type, size_type, const_reference)\endlink</code>,
+            <code>\link assign(capacity_type, size_type, param_value_type)
+            assign(capacity_type, size_type, const_reference)\endlink</code>,
             <code>assign(InputIterator, InputIterator)</code>,
-            <code>assign(size_type, InputIterator, InputIterator)</code>
+            <code>assign(capacity_type, InputIterator, InputIterator)</code>
     */
     circular_buffer<T, Alloc>& operator = (const circular_buffer<T, Alloc>& cb) {
         if (this == &cb)
@@ -1124,10 +1124,10 @@ public:
              Basic.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
-        \sa <code>operator=</code>, <code>\link assign(size_type, size_type, param_value_type)
-            assign(size_type, size_type, const_reference)\endlink</code>,
+        \sa <code>operator=</code>, <code>\link assign(capacity_type, size_type, param_value_type)
+            assign(capacity_type, size_type, const_reference)\endlink</code>,
             <code>assign(InputIterator, InputIterator)</code>,
-            <code>assign(size_type, InputIterator, InputIterator)</code>
+            <code>assign(capacity_type, InputIterator, InputIterator)</code>
     */
     void assign(size_type n, param_value_type item) {
         assign_n(n, n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
@@ -1154,9 +1154,9 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
             assign(size_type, const_reference)\endlink</code>, <code>assign(InputIterator, InputIterator)</code>,
-            <code>assign(size_type, InputIterator, InputIterator)</code>
+            <code>assign(capacity_type, InputIterator, InputIterator)</code>
     */
-    void assign(size_type capacity, size_type n, param_value_type item) {
+    void assign(capacity_type capacity, size_type n, param_value_type item) {
         BOOST_CB_ASSERT(capacity >= n); // check for new capacity lower than n
         assign_n(capacity, n, cb_details::assign_n<param_value_type, allocator_type>(n, item, m_alloc));
     }
@@ -1184,9 +1184,9 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
             assign(size_type, const_reference)\endlink</code>,
-            <code>\link assign(size_type, size_type, param_value_type)
-            assign(size_type, size_type, const_reference)\endlink</code>,
-            <code>assign(size_type, InputIterator, InputIterator)</code>
+            <code>\link assign(capacity_type, size_type, param_value_type)
+            assign(capacity_type, size_type, const_reference)\endlink</code>,
+            <code>assign(capacity_type, InputIterator, InputIterator)</code>
     */
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
@@ -1221,12 +1221,12 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
             assign(size_type, const_reference)\endlink</code>,
-            <code>\link assign(size_type, size_type, param_value_type)
-            assign(size_type, size_type, const_reference)\endlink</code>,
+            <code>\link assign(capacity_type, size_type, param_value_type)
+            assign(capacity_type, size_type, const_reference)\endlink</code>,
             <code>assign(InputIterator, InputIterator)</code>
     */
     template <class InputIterator>
-    void assign(size_type capacity, InputIterator first, InputIterator last) {
+    void assign(capacity_type capacity, InputIterator first, InputIterator last) {
         assign(capacity, first, last, is_integral<InputIterator>());
     }
 
@@ -1919,13 +1919,13 @@ private:
     }
 
     //! Initialize the circular buffer.
-    void initialize(size_type capacity) {
+    void initialize(capacity_type capacity) {
         m_first = m_last = m_buff = allocate(capacity);
         m_end = m_buff + capacity;
     }
 
     //! Initialize the circular buffer.
-    void initialize(size_type capacity, param_value_type item) {
+    void initialize(capacity_type capacity, param_value_type item) {
         initialize(capacity);
         BOOST_TRY {
             cb_details::uninitialized_fill_n(m_buff, size(), item, m_alloc);
@@ -1969,7 +1969,7 @@ private:
 
     //! Specialized initialize method.
     template <class IntegralType>
-    void initialize(size_type capacity, IntegralType n, IntegralType item, const true_type&) {
+    void initialize(capacity_type capacity, IntegralType n, IntegralType item, const true_type&) {
         BOOST_CB_ASSERT(capacity >= static_cast<size_type>(n)); // check for capacity lower than n
         m_size = static_cast<size_type>(n);
         initialize(capacity, item);
@@ -1977,14 +1977,14 @@ private:
 
     //! Specialized initialize method.
     template <class Iterator>
-    void initialize(size_type capacity, Iterator first, Iterator last, const false_type&) {
+    void initialize(capacity_type capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
 
     //! Specialized initialize method.
     template <class InputIterator>
-    void initialize(size_type capacity,
+    void initialize(capacity_type capacity,
         InputIterator first,
         InputIterator last,
         const std::input_iterator_tag&) {
@@ -2006,7 +2006,7 @@ private:
 
     //! Specialized initialize method.
     template <class ForwardIterator>
-    void initialize(size_type capacity,
+    void initialize(capacity_type capacity,
         ForwardIterator first,
         ForwardIterator last,
         const std::forward_iterator_tag&) {
@@ -2016,7 +2016,7 @@ private:
 
     //! Helper initialize method.
     template <class ForwardIterator>
-    void initialize(size_type capacity,
+    void initialize(capacity_type capacity,
         ForwardIterator first,
         ForwardIterator last,
         size_type distance) {
@@ -2039,7 +2039,7 @@ private:
     }
 
     //! Reset the circular buffer.
-    void reset(pointer buff, pointer last, size_type new_capacity) {
+    void reset(pointer buff, pointer last, capacity_type new_capacity) {
         destroy();
         m_size = last - buff;
         m_first = m_buff = buff;
@@ -2089,20 +2089,20 @@ private:
 
     //! Specialized assign method.
     template <class IntegralType>
-    void assign(size_type new_capacity, IntegralType n, IntegralType item, const true_type&) {
+    void assign(capacity_type new_capacity, IntegralType n, IntegralType item, const true_type&) {
         assign(new_capacity, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
     //! Specialized assign method.
     template <class Iterator>
-    void assign(size_type new_capacity, Iterator first, Iterator last, const false_type&) {
+    void assign(capacity_type new_capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
         assign(new_capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
     }
 
     //! Specialized assign method.
     template <class InputIterator>
-    void assign(size_type new_capacity, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
+    void assign(capacity_type new_capacity, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
         if (new_capacity == capacity()) {
             clear();
             insert(begin(), first, last);
@@ -2114,7 +2114,7 @@ private:
 
     //! Specialized assign method.
     template <class ForwardIterator>
-    void assign(size_type new_capacity, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
+    void assign(capacity_type new_capacity, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         size_type distance = std::distance(first, last);
         if (distance > new_capacity) {
@@ -2126,7 +2126,7 @@ private:
 
     //! Helper assign method.
     template <class Functor>
-    void assign_n(size_type new_capacity, size_type n, const Functor& fnc) {
+    void assign_n(capacity_type new_capacity, size_type n, const Functor& fnc) {
         if (new_capacity == capacity()) {
             destroy_content();
             BOOST_TRY {

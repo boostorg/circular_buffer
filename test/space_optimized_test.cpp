@@ -15,7 +15,7 @@
 #include "common.ipp"
 
 typedef circular_buffer_space_optimized<MyInteger> cb_space_optimized;
-typedef cb_space_optimized::capacity_control capacity_ctrl;
+typedef cb_space_optimized::capacity_type capacity_ctrl;
 
 // min_capacity test (it is useful to use a debug tool)
 void min_capacity_test() {
