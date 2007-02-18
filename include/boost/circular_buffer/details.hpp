@@ -77,6 +77,9 @@ struct iterator_wrapper {
     mutable Iterator m_it;
     explicit iterator_wrapper(Iterator it) : m_it(it) {}
     Iterator operator () () const { return m_it++; }
+private:
+	iterator_wrapper(const iterator_wrapper<Iterator>&); // do not generate
+    iterator_wrapper<Iterator>& operator = (const iterator_wrapper<Iterator>&); // do not generate
 };
 
 /*!
@@ -88,6 +91,9 @@ struct item_wrapper {
     Value m_item;
     explicit item_wrapper(Value item) : m_item(item) {}
     Pointer operator () () const { return &m_item; }
+private:
+    item_wrapper(const item_wrapper<Pointer, Value>&); // do not generate
+    item_wrapper<Pointer, Value>& operator = (const item_wrapper<Pointer, Value>&); // do not generate
 };
 
 /*!
@@ -106,7 +112,8 @@ struct assign_n {
         uninitialized_fill_n(p, m_n, m_item, m_alloc);
     }
 private:
-    assign_n& operator = (const assign_n&); // do not generate
+    assign_n(const assign_n<Value, Alloc>&); // do not generate
+    assign_n<Value, Alloc>& operator = (const assign_n<Value, Alloc>&); // do not generate
 };
 
 /*!
@@ -124,21 +131,34 @@ struct assign_range {
         uninitialized_copy(m_first, m_last, p, m_alloc);
     }
 private:
-    assign_range& operator = (const assign_range&); // do not generate
+    assign_range(const assign_range<Iterator, Alloc>&); // do not generate
+    assign_range<Iterator, Alloc>& operator = (const assign_range<Iterator, Alloc>&); // do not generate
 };
 
 /*!
     \struct capacity_control
     \brief Capacity controller of the space optimized circular buffer.
 */
+#if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+template <class Size, class T, class Alloc>
+#else
 template <class Size>
-struct capacity_control {
+#endif
+class capacity_control {
 
     //! The capacity of the space optimized circular buffer.
     Size m_capacity;
 
     //! The lowest guaranteed capacity of the adapted circular buffer.
     Size m_min_capacity;
+
+#if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+    friend circular_buffer_space_optimized<T, Alloc>;
+#else
+    template <class T, class Alloc> friend class circular_buffer_space_optimized;
+#endif
+
+public:
 
     //! Constructor.
     capacity_control(Size capacity, Size min_capacity = 0)
@@ -149,6 +169,15 @@ struct capacity_control {
     // Default copy constructor.
 
     // Default assign operator.
+
+    // Get the capacity of the space optimized circular buffer.
+    Size capacity() const { return m_capacity; }
+
+    // Get the minimal capacity of the space optimized circular buffer.
+    Size min_capacity() const { return m_min_capacity; }
+
+    //! Size operator - returns the capacity of the space optimized circular buffer.
+    operator Size() const { return m_capacity; }
 };
 
 /*!
@@ -393,8 +422,6 @@ private:
                 return lhs.m_it < rhs.m_it;
             else if (rdiff == 0)
                 return rhs.m_end;
-            else
-                return false;
         } else if (ldiff == 0) {
             if (rdiff < 0)
                 return !lhs.m_end;

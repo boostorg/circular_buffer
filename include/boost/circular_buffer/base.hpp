@@ -379,7 +379,8 @@ public:
     /*!
         \param index The position of the element.
         \return A const reference to the element at the <code>index</code> position.
-        \throws std::out_of_range when the <code>index</code> is invalid (when <code>index >= size()</code>).
+        \throws <code>std::out_of_range</code> when the <code>index</code> is invalid (when
+                <code>index >= size()</code>).
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
@@ -397,7 +398,8 @@ public:
     /*!
         \param index The position of the element.
         \return A const reference to the element at the <code>index</code> position.
-        \throws std::out_of_range when the <code>index</code> is invalid (when <code>index >= size()</code>).
+        \throws <code>std::out_of_range</code> when the <code>index</code> is invalid (when
+                <code>index >= size()</code>).
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
         \par Exception Safety
@@ -742,7 +744,7 @@ public:
              Does not invalidate any iterators.
         \sa <code>reserve()</code>, <code>size()</code>, <code>max_size()</code>, <code>set_capacity()</code>
     */
-    size_type capacity() const { return m_end - m_buff; }
+    capacity_type capacity() const { return m_end - m_buff; }
 
     //! Change the capacity of the <code>circular_buffer</code>.
     /*!
@@ -761,7 +763,7 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
         \sa <code>rset_capacity()</code>, <code>resize()</code>
     */
-    void set_capacity(size_type new_capacity) {
+    void set_capacity(capacity_type new_capacity) {
         if (new_capacity == capacity())
             return;
         pointer buff = allocate(new_capacity);
@@ -824,7 +826,7 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
         \sa <code>set_capacity()</code>, <code>rresize()</code>
     */
-    void rset_capacity(size_type new_capacity) {
+    void rset_capacity(capacity_type new_capacity) {
         if (new_capacity == capacity())
             return;
         pointer buff = allocate(new_capacity);
@@ -1403,8 +1405,8 @@ public:
     //! Insert <code>n</code> copies of the <code>item</code> at the specified position.
     /*!
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
-        \post The number of <code>min(n, (pos - begin()) + reserve())</code> elements will be inserted at the position
-              <code>pos</code>.<br>The number of <code>min(pos - begin(), max(0, n - reserve()))</code> elements will
+        \post The number of <code>min[n, (pos - begin()) + reserve()]</code> elements will be inserted at the position
+              <code>pos</code>.<br>The number of <code>min[pos - begin(), max[0, n - reserve()]]</code> elements will
               be overwritten at the beginning of the <code>circular_buffer</code>.<br>(See Example for the
               explanation.)
         \param pos An iterator specifying the position where the <code>item</code>s will be inserted.
@@ -1451,9 +1453,9 @@ public:
              Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
              requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
         \post Elements from the range
-              <code>[first + max(0, distance(first, last) - (pos - begin()) - reserve()), last)</code> will be
-              inserted at the position <code>pos</code>.<br>The number of <code>min(pos - begin(), max(0,
-              distance(first, last) - reserve()))</code> elements will be overwritten at the beginning of the
+              <code>[first + max[0, distance(first, last) - (pos - begin()) - reserve()], last)</code> will be
+              inserted at the position <code>pos</code>.<br>The number of <code>min[pos - begin(), max[0,
+              distance(first, last) - reserve()]]</code> elements will be overwritten at the beginning of the
               <code>circular_buffer</code>.<br>(See Example for the explanation.)
         \param pos An iterator specifying the position where the range will be inserted.
         \param first The beginning of the range to be inserted.
@@ -1561,8 +1563,8 @@ public:
     //! Insert <code>n</code> copies of the <code>item</code> before the specified position.
     /*!
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
-        \post The number of <code>min(n, (end() - pos) + reserve())</code> elements will be inserted before the
-              position <code>pos</code>.<br>The number of <code>min(end() - pos, max(0, n - reserve()))</code> elements
+        \post The number of <code>min[n, (end() - pos) + reserve()]</code> elements will be inserted before the
+              position <code>pos</code>.<br>The number of <code>min[end() - pos, max[0, n - reserve()]]</code> elements
               will be overwritten at the end of the <code>circular_buffer</code>.<br>(See Example for the explanation.)
         \param pos An iterator specifying the position where the <code>item</code>s will be inserted.
         \param n The number of <code>item</code>s the to be inserted.
@@ -1600,9 +1602,9 @@ public:
              Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
              requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
         \post Elements from the range
-              <code>[first, last - max(0, distance(first, last) - (end() - pos) - reserve()))</code> will be inserted
-              before the position <code>pos</code>.<br>The number of <code>min(end() - pos, max(0,
-              distance(first, last) - reserve()))</code> elements will be overwritten at the end of the
+              <code>[first, last - max[0, distance(first, last) - (end() - pos) - reserve()])</code> will be inserted
+              before the position <code>pos</code>.<br>The number of <code>min[end() - pos, max[0,
+              distance(first, last) - reserve()]]</code> elements will be overwritten at the end of the
               <code>circular_buffer</code>.<br>(See Example for the explanation.)
         \param pos An iterator specifying the position where the range will be inserted.
         \param first The beginning of the range to be inserted.
@@ -2215,10 +2217,10 @@ private:
     template <class ForwardIterator>
     void insert(const iterator& pos, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
-        difference_type n = std::distance(first, last);
+        size_type n = std::distance(first, last);
         if (n == 0)
             return;
-        difference_type copy = capacity() - (end() - pos);
+        size_type copy = capacity() - (end() - pos);
         if (copy == 0)
             return;
         if (n > copy) {

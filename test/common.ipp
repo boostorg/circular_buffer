@@ -150,6 +150,8 @@ void allocator_test() {
     const CB_CONTAINER<MyInteger> cb2(10, 0);
     CB_CONTAINER<MyInteger>::allocator_type& alloc_ref = cb1.get_allocator();
     CB_CONTAINER<MyInteger>::allocator_type alloc = cb2.get_allocator();
+    alloc_ref.max_size();
+    alloc.max_size();
 
     generic_test(cb1); 
 }

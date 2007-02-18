@@ -37,7 +37,7 @@ namespace boost {
     For detailed documentation of the space_optimized_circular_buffer visit:
     http://www.boost.org/libs/circular_buffer/doc/circular_buffer_adaptor.html
 */
-template<class T, class Alloc>
+template <class T, class Alloc>
 class circular_buffer_space_optimized : private circular_buffer<T, Alloc> {
 public:
 // Typedefs
@@ -59,6 +59,7 @@ public:
     typedef typename circular_buffer<T, Alloc>::param_value_type param_value_type;
     typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
 
+#if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
     //! Capacity controller of the space optimized circular buffer.
     /*!
         <p><pre>
@@ -77,7 +78,12 @@ public:
         which ensures compatibility of creating an instance of the
         <code>circular_buffer_space_optimized</code> with other STL containers.</p>
     */
+    typedef cb_details::capacity_control<size_type, T, Alloc> capacity_type;
+#else
+    /*! \cond */
     typedef cb_details::capacity_control<size_type> capacity_type;
+    /*! \endcond */
+#endif
 
 // Inherited
 
@@ -118,32 +124,8 @@ public:
     //! See the circular_buffer source documentation.
     size_type reserve() const { return capacity() - size(); }
 
-    //! Return the minimal guaranteed amount of allocated memory.
-    /*!
-        The allocated memory will never drop under this value.
-    */
-    size_type min_capacity() const { return m_capacity_ctrl.m_min_capacity; }
-
-    //! Change the minimal guaranteed amount of allocated memory.
-    /*!
-        \pre <code>(*this).capacity() >= new_min_capacity</code>
-        \post <code>(*this).min_capacity() == new_min_capacity</code>
-              Allocates memory specified by the <code>new_min_capacity</code> parameter.
-        \note It is considered as a bug if the precondition is not met (i.e. if
-              <code>new_min_capacity > (*this).capacity()</code>) and an assertion
-              will be invoked in the debug mode.
-    */
-    void set_min_capacity(size_type new_min_capacity) {
-        BOOST_CB_ASSERT(capacity() >= new_min_capacity); // check for too large new min_capacity
-        m_capacity_ctrl.m_min_capacity = new_min_capacity;
-        if (new_min_capacity > circular_buffer<T, Alloc>::capacity())
-            circular_buffer<T, Alloc>::set_capacity(new_min_capacity);
-        else
-            check_high_capacity();
-    }
-
     //! See the circular_buffer source documentation.
-    size_type capacity() const { return m_capacity_ctrl.m_capacity; }
+    const capacity_type& capacity() const { return m_capacity_ctrl; }
 
 #if defined(BOOST_CB_TEST)
 
@@ -156,18 +138,25 @@ public:
 
 #endif // #if defined(BOOST_CB_TEST)
 
-    //! See the circular_buffer source documentation.
+    //! TODO Change the minimal guaranteed amount of allocated memory.
     /*!
+        \pre <code>(*this).capacity() >= new_min_capacity</code>
+        \post <code>(*this).min_capacity() == new_min_capacity</code>
+              Allocates memory specified by the <code>new_min_capacity</code> parameter.
+        \note It is considered as a bug if the precondition is not met (i.e. if
+              <code>new_min_capacity > (*this).capacity()</code>) and an assertion
+              will be invoked in the debug mode.
+
          \pre <code>min_capacity() <= new_capacity</code>
          \note It is considered as a bug if the precondition is not met (i.e. if
                <code>new_capacity > min_capacity()</code>) and an assertion
                will be invoked in the debug mode.
     */
-    void set_capacity(size_type new_capacity) {
-        BOOST_CB_ASSERT(new_capacity >= min_capacity()); // check for too low new capacity
-        if (new_capacity < circular_buffer<T, Alloc>::capacity())
-            circular_buffer<T, Alloc>::set_capacity(new_capacity);
-        m_capacity_ctrl.m_capacity = new_capacity;
+    void set_capacity(const capacity_type& new_capacity) {
+        m_capacity_ctrl = new_capacity;
+        if (new_capacity.capacity() < circular_buffer<T, Alloc>::capacity())
+            circular_buffer<T, Alloc>::set_capacity(new_capacity.capacity());
+        set_min_capacity(new_capacity.min_capacity());
     }
 
     //! See the circular_buffer source documentation.
@@ -188,11 +177,11 @@ public:
                <code>new_capacity > min_capacity()</code>) and an assertion
                will be invoked in the debug mode.
     */
-    void rset_capacity(size_type new_capacity) {
-        BOOST_CB_ASSERT(new_capacity >= min_capacity()); // check for too low new capacity
-        if (new_capacity < circular_buffer<T, Alloc>::capacity())
-            circular_buffer<T, Alloc>::rset_capacity(new_capacity);
-        m_capacity_ctrl.m_capacity = new_capacity;
+    void rset_capacity(const capacity_type& new_capacity) {
+        m_capacity_ctrl = new_capacity;
+        if (new_capacity.capacity() < circular_buffer<T, Alloc>::capacity())
+            circular_buffer<T, Alloc>::rset_capacity(new_capacity.capacity());
+        set_min_capacity(new_capacity.min_capacity());
     }
 
     //! See the circular_buffer source documentation.
@@ -575,6 +564,14 @@ public:
 private:
 // Helper methods
 
+    //! Change the minimal guaranteed amount of allocated memory.
+    void set_min_capacity(size_type new_min_capacity) {
+        if (new_min_capacity > circular_buffer<T, Alloc>::capacity())
+            circular_buffer<T, Alloc>::set_capacity(new_min_capacity);
+        else
+            check_high_capacity();
+    }
+
     //! Ensure the reserve for possible growth up.
     size_type ensure_reserve(size_type new_capacity, size_type size) const {
         if (size + new_capacity / 5 >= new_capacity)
@@ -608,8 +605,8 @@ private:
         size_type new_capacity = circular_buffer<T, Alloc>::capacity();
         while (new_capacity / 3 >= size()) { // (new_capacity / 3) -> avoid oscillations
             new_capacity /= 2;
-            if (new_capacity <= min_capacity()) {
-                new_capacity = min_capacity();
+            if (new_capacity <= m_capacity_ctrl.m_min_capacity) {
+                new_capacity = m_capacity_ctrl.m_min_capacity;
                 break;
             }
         }

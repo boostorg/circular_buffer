@@ -112,7 +112,7 @@ public:
    typedef std::pair&lt;const_pointer, size_type&gt; <a href=
 "circular_buffer.html#classboost_1_1circular__buffer_11885d7f475b7e7a74c95b2448d243025">const_array_range</a>;
    typedef <i>implementation-defined</i> <a href=
-"#classboost_1_1circular__buffer__space__optimized_1051350e031c50c8b4a7ca1e1902e92f0">capacity_type</a>;
+"#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>;
 
    explicit <a href=
 "#classboost_1_1circular__buffer__space__optimized_1a05f824b31cd93d7695f4039edc7597f">circular_buffer_space_optimized</a>(const allocator_type&amp; alloc = allocator_type());
@@ -187,14 +187,10 @@ public:
    bool <a href="#classboost_1_1circular__buffer__space__optimized_142f4a13c50904a4ac0bf746c88451954">full</a>() const;
    size_type <a href=
 "#classboost_1_1circular__buffer__space__optimized_170eec72a6e8d088b58e26ac7e2dd7c9f">reserve</a>() const;
-   size_type <a href=
-"#classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917">min_capacity</a>() const;
+   const capacity_type&amp; <a href=
+"#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity</a>() const;
    void <a href=
-"#classboost_1_1circular__buffer__space__optimized_1b3667b889d9633e88d62adb98c1b1291">set_min_capacity</a>(size_type new_min_capacity);
-   size_type <a href=
-"#classboost_1_1circular__buffer__space__optimized_1f15db4d5579775966e300c91b3fef33a">capacity</a>() const;
-   void <a href=
-"#classboost_1_1circular__buffer__space__optimized_1c804242b924b93eb3db7f3f4587a096c">set_capacity</a>(size_type new_capacity);
+"#classboost_1_1circular__buffer__space__optimized_143fa35280fc3cad2a6510065a065d67c">set_capacity</a>(const capacity_type&amp; new_capacity);
    void <a href=
 "#classboost_1_1circular__buffer__space__optimized_1f244ff5576b79f8d60e273c02d71c9f2">resize</a>(size_type new_size, const_reference item = value_type());
    void <a href=
@@ -321,8 +317,8 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_1051350e031c50c8b4a7ca1e1902e92f0" name=
-            "classboost_1_1circular__buffer__space__optimized_1051350e031c50c8b4a7ca1e1902e92f0"><code>capacity_type</code></a>
+            <a id="classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3" name=
+            "classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3"><code>capacity_type</code></a>
           </td>
           <td>
             Capacity controller of the space optimized circular buffer.
@@ -423,7 +419,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code>(*this).<a href=
-                "#classboost_1_1circular__buffer__space__optimized_1f15db4d5579775966e300c91b3fef33a">capacity()</a> ==
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
                 capacity &amp;&amp; (*this).size == 0</code><br>
                 Allocates memory specified by the <code>min_capacity</code> parameter.
               </dd>
@@ -649,7 +645,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code>(*this).<a href=
-                "#classboost_1_1circular__buffer__space__optimized_1f15db4d5579775966e300c91b3fef33a">capacity()</a> ==
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
                 capacity</code><br>
                 Allocates at least as much memory as specified by the - TODO change <code>min_capacity</code>
                 parameter.<br>
@@ -723,64 +719,10 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917" name=
-            "classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917"></a><code><b><a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
-            min_capacity() const;</b></code><br>
-            <br>
-            Return the minimal guaranteed amount of allocated memory.
-            <p>
-              The allocated memory will never drop under this value.
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_1b3667b889d9633e88d62adb98c1b1291" name=
-            "classboost_1_1circular__buffer__space__optimized_1b3667b889d9633e88d62adb98c1b1291"></a><code><b>void
-            set_min_capacity(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
-            new_min_capacity);</b></code><br>
-            <br>
-            Change the minimal guaranteed amount of allocated memory.
-            <dl>
-              <dt>
-                <b>Precondition:</b>
-              </dt>
-              <dd>
-                <code>(*this).<a href=
-                "#classboost_1_1circular__buffer__space__optimized_1f15db4d5579775966e300c91b3fef33a">capacity()</a>
-                &gt;= new_min_capacity</code>
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Effect:</b>
-              </dt>
-              <dd>
-                <code>(*this).<a href=
-                "#classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917">min_capacity()</a>
-                == new_min_capacity</code> Allocates memory specified by the <code>new_min_capacity</code> parameter.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Note:</b>
-              </dt>
-              <dd>
-                It is considered as a bug if the precondition is not met (i.e. if <code>new_min_capacity &gt;
-                (*this).<a href=
-                "#classboost_1_1circular__buffer__space__optimized_1f15db4d5579775966e300c91b3fef33a">capacity()</a></code>)
-                and an assertion will be invoked in the debug mode.
-              </dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_1f15db4d5579775966e300c91b3fef33a" name=
-            "classboost_1_1circular__buffer__space__optimized_1f15db4d5579775966e300c91b3fef33a"></a><code><b><a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
+            <a id="classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa" name=
+            "classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa"></a><code><b>const
+            <a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>&amp;
             capacity() const;</b></code><br>
             <br>
             See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
@@ -790,22 +732,30 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_1c804242b924b93eb3db7f3f4587a096c" name=
-            "classboost_1_1circular__buffer__space__optimized_1c804242b924b93eb3db7f3f4587a096c"></a><code><b>void
-            set_capacity(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
+            <a id="classboost_1_1circular__buffer__space__optimized_143fa35280fc3cad2a6510065a065d67c" name=
+            "classboost_1_1circular__buffer__space__optimized_143fa35280fc3cad2a6510065a065d67c"></a><code><b>void
+            set_capacity(const <a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>&amp;
             new_capacity);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.
+            TODO Change the minimal guaranteed amount of allocated memory.
             <dl>
               <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code><a href=
-                "#classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917">min_capacity()</a>
-                &lt;= new_capacity</code>
+                <code>(*this).<a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>
+                &gt;= new_min_capacity</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code>(*this).min_capacity() == new_min_capacity</code> Allocates memory specified by the
+                <code>new_min_capacity</code> parameter.
               </dd>
             </dl>
             <dl>
@@ -813,9 +763,27 @@ template &lt;class T, class Alloc&gt;
                 <b>Note:</b>
               </dt>
               <dd>
-                It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt; <a href=
-                "#classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917">min_capacity()</a></code>)
+                It is considered as a bug if the precondition is not met (i.e. if <code>new_min_capacity &gt;
+                (*this).<a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a></code>)
                 and an assertion will be invoked in the debug mode.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Precondition:</b>
+              </dt>
+              <dd>
+                <code>min_capacity() &lt;= new_capacity</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Note:</b>
+              </dt>
+              <dd>
+                It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt;
+                min_capacity()</code>) and an assertion will be invoked in the debug mode.
               </dd>
             </dl>
           </td>
@@ -850,9 +818,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code><a href=
-                "#classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917">min_capacity()</a>
-                &lt;= new_capacity</code>
+                <code>min_capacity() &lt;= new_capacity</code>
               </dd>
             </dl>
             <dl>
@@ -860,9 +826,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Note:</b>
               </dt>
               <dd>
-                It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt; <a href=
-                "#classboost_1_1circular__buffer__space__optimized_1f3e4b9caed10cf7383682c6dea794917">min_capacity()</a></code>)
-                and an assertion will be invoked in the debug mode.
+                It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt;
+                min_capacity()</code>) and an assertion will be invoked in the debug mode.
               </dd>
             </dl>
           </td>

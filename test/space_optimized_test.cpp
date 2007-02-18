@@ -32,32 +32,32 @@ void min_capacity_test() {
     cb_space_optimized cb3(capacity_ctrl(20, 10), v.begin(), v.end());
 
     BOOST_CHECK(cb1.size() == 0);
-    BOOST_CHECK(cb1.capacity() == 10);
-    BOOST_CHECK(cb1.min_capacity() == 10);
+    BOOST_CHECK(cb1.capacity().capacity() == 10);
+    BOOST_CHECK(cb1.capacity().min_capacity() == 10);
     BOOST_CHECK(cb2[0] == 1);
     BOOST_CHECK(cb2.size() == 10);
     BOOST_CHECK(cb2.capacity() == 10);
-    BOOST_CHECK(cb2.min_capacity() == 5);
+    BOOST_CHECK(cb2.capacity().min_capacity() == 5);
     BOOST_CHECK(cb3[0] == 1);
     BOOST_CHECK(cb3.size() == 5);
     BOOST_CHECK(cb3.capacity() == 20);
-    BOOST_CHECK(cb3.min_capacity() == 10);
-    BOOST_CHECK(cb1.min_capacity() <= cb1.internal_capacity());
-    BOOST_CHECK(cb2.min_capacity() <= cb2.internal_capacity());
-    BOOST_CHECK(cb3.min_capacity() <= cb3.internal_capacity());
+    BOOST_CHECK(cb3.capacity().min_capacity() == 10);
+    BOOST_CHECK(cb1.capacity().min_capacity() <= cb1.internal_capacity());
+    BOOST_CHECK(cb2.capacity().min_capacity() <= cb2.internal_capacity());
+    BOOST_CHECK(cb3.capacity().min_capacity() <= cb3.internal_capacity());
 
     cb2.erase(cb2.begin() + 2, cb2.end());
 
     BOOST_CHECK(cb2.size() == 2);
-    BOOST_CHECK(cb2.min_capacity() <= cb2.internal_capacity());
+    BOOST_CHECK(cb2.capacity().min_capacity() <= cb2.internal_capacity());
 
     cb2.clear();
     cb3.clear();
 
     BOOST_CHECK(cb2.empty());
     BOOST_CHECK(cb3.empty());
-    BOOST_CHECK(cb2.min_capacity() <= cb2.internal_capacity());
-    BOOST_CHECK(cb3.min_capacity() <= cb3.internal_capacity());
+    BOOST_CHECK(cb2.capacity().min_capacity() <= cb2.internal_capacity());
+    BOOST_CHECK(cb3.capacity().min_capacity() <= cb3.internal_capacity());
 }
 
 // test main
