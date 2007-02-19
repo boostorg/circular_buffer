@@ -2109,7 +2109,12 @@ private:
             clear();
             insert(begin(), first, last);
         } else {
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+            circular_buffer<value_type, allocator_type> tmp(new_capacity, m_alloc);
+            tmp.insert(begin(), first, last);
+#else
             circular_buffer<value_type, allocator_type> tmp(new_capacity, first, last, m_alloc);
+#endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
             tmp.swap(*this);
         }
     }

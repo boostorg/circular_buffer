@@ -78,7 +78,6 @@ struct iterator_wrapper {
     explicit iterator_wrapper(Iterator it) : m_it(it) {}
     Iterator operator () () const { return m_it++; }
 private:
-	iterator_wrapper(const iterator_wrapper<Iterator>&); // do not generate
     iterator_wrapper<Iterator>& operator = (const iterator_wrapper<Iterator>&); // do not generate
 };
 
@@ -92,7 +91,6 @@ struct item_wrapper {
     explicit item_wrapper(Value item) : m_item(item) {}
     Pointer operator () () const { return &m_item; }
 private:
-    item_wrapper(const item_wrapper<Pointer, Value>&); // do not generate
     item_wrapper<Pointer, Value>& operator = (const item_wrapper<Pointer, Value>&); // do not generate
 };
 
@@ -106,13 +104,12 @@ struct assign_n {
     size_type m_n;
     Value m_item;
     Alloc& m_alloc;
-    explicit assign_n(size_type n, Value item, Alloc& alloc) : m_n(n), m_item(item), m_alloc(alloc) {}
+    assign_n(size_type n, Value item, Alloc& alloc) : m_n(n), m_item(item), m_alloc(alloc) {}
     template <class Pointer>
     void operator () (Pointer p) const {
         uninitialized_fill_n(p, m_n, m_item, m_alloc);
     }
 private:
-    assign_n(const assign_n<Value, Alloc>&); // do not generate
     assign_n<Value, Alloc>& operator = (const assign_n<Value, Alloc>&); // do not generate
 };
 
@@ -125,13 +122,12 @@ struct assign_range {
     const Iterator& m_first;
     const Iterator& m_last;
     Alloc& m_alloc;
-    explicit assign_range(const Iterator& first, const Iterator& last, Alloc& alloc) : m_first(first), m_last(last), m_alloc(alloc) {}
+    assign_range(const Iterator& first, const Iterator& last, Alloc& alloc) : m_first(first), m_last(last), m_alloc(alloc) {}
     template <class Pointer>
     void operator () (Pointer p) const {
         uninitialized_copy(m_first, m_last, p, m_alloc);
     }
 private:
-    assign_range(const assign_range<Iterator, Alloc>&); // do not generate
     assign_range<Iterator, Alloc>& operator = (const assign_range<Iterator, Alloc>&); // do not generate
 };
 
