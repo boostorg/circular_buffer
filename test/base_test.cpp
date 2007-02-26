@@ -192,59 +192,64 @@ void iterator_comparison_test() {
 // TODO add insert, linearize etc.
 void iterator_invalidation_test() {
 
-#if BOOST_CB_ENABLE_DEBUG
+#if !defined(NDEBUG) && !defined(BOOST_CB_DISABLE_DEBUG)
 
     circular_buffer<MyInteger>::iterator it1;
     circular_buffer<MyInteger>::const_iterator it2;
     circular_buffer<MyInteger>::iterator it3;
     circular_buffer<MyInteger>::const_iterator it4;
     circular_buffer<MyInteger>::const_iterator it5;
+    circular_buffer<MyInteger>::const_iterator it6;
 
-    BOOST_CHECK(!it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
-    BOOST_CHECK(!it3.is_valid());
-    BOOST_CHECK(!it4.is_valid());
-    BOOST_CHECK(!it5.is_valid());
+    BOOST_CHECK(it1.is_valid(0));
+    BOOST_CHECK(it2.is_valid(0));
+    BOOST_CHECK(it3.is_valid(0));
+    BOOST_CHECK(it4.is_valid(0));
+    BOOST_CHECK(it5.is_valid(0));
+    BOOST_CHECK(it6.is_valid(0));
 
     {
         circular_buffer<MyInteger> cb(5, 0);
         const circular_buffer<MyInteger> ccb(5, 0);
 
         it1 = cb.begin();
-        it2 = ccb.end();
-        it3 = it1;
+        it2 = ccb.begin();
+        it3 = cb.end();
         it4 = it1;
         it5 = it2;
+        it6 = it1;
 
-        BOOST_CHECK(it1.is_valid());
-        BOOST_CHECK(it2.is_valid());
-        BOOST_CHECK(it3.is_valid());
-        BOOST_CHECK(it4.is_valid());
-        BOOST_CHECK(it5.is_valid());
+        BOOST_CHECK(it1.is_valid(&cb));
+        BOOST_CHECK(it2.is_valid(&ccb));
+        BOOST_CHECK(it3.is_valid(&cb));
+        BOOST_CHECK(it4.is_valid(&cb));
+        BOOST_CHECK(it5.is_valid(&ccb));
+        BOOST_CHECK(it6.is_valid(&cb));
     }
 
-    BOOST_CHECK(!it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
-    BOOST_CHECK(!it3.is_valid());
-    BOOST_CHECK(!it4.is_valid());
-    BOOST_CHECK(!it5.is_valid());
+    BOOST_CHECK(it1.is_valid(0));
+    BOOST_CHECK(it2.is_valid(0));
+    BOOST_CHECK(it3.is_valid(0));
+    BOOST_CHECK(it4.is_valid(0));
+    BOOST_CHECK(it5.is_valid(0));
+    BOOST_CHECK(it6.is_valid(0));
 
     circular_buffer<MyInteger> cb1(10, 0);
     circular_buffer<MyInteger> cb2(20, 0);
     it1 = cb1.end();
     it2 = cb2.begin();
-    BOOST_CHECK(it1.is_valid());
-    BOOST_CHECK(it2.is_valid());
+    BOOST_CHECK(it1.is_valid(&cb1));
+    BOOST_CHECK(it2.is_valid(&cb2));
 
     cb1.swap(cb2);
-    BOOST_CHECK(!it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(!it1.is_valid(&cb1));
+    BOOST_CHECK(!it2.is_valid(&cb2));
 
     it1 = cb1.begin() + 3;
     it2 = cb1.begin();
     cb1.push_back(1);
-    BOOST_CHECK(it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(it1.is_valid(&cb1));
+    BOOST_CHECK(!it2.is_valid(&cb1));
     BOOST_CHECK(*it2.m_it == 1);
 
     circular_buffer<MyInteger> cb3(5);
@@ -256,15 +261,15 @@ void iterator_invalidation_test() {
     it1 = cb3.begin() + 2;
     it2 = cb3.begin();
     cb3.insert(cb3.begin() + 3, 6);
-    BOOST_CHECK(it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(it1.is_valid(&cb3));
+    BOOST_CHECK(!it2.is_valid(&cb3));
     BOOST_CHECK(*it2.m_it == 5);
 
     it1 = cb3.begin() + 3;
     it2 = cb3.end() - 1;
     cb3.push_front(7);
-    BOOST_CHECK(it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(it1.is_valid(&cb3));
+    BOOST_CHECK(!it2.is_valid(&cb3));
     BOOST_CHECK(*it2.m_it == 7);
 
     circular_buffer<MyInteger> cb4(5);
@@ -276,53 +281,53 @@ void iterator_invalidation_test() {
     it1 = cb4.begin() + 3;
     it2 = cb4.begin();
     cb4.rinsert(cb4.begin() + 2, 6);
-    BOOST_CHECK(it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(it1.is_valid(&cb4));
+    BOOST_CHECK(!it2.is_valid(&cb4));
     BOOST_CHECK(*it2.m_it == 2);
 
     it1 = cb1.begin() + 5;
     it2 = cb1.end() - 1;
     cb1.pop_back();
-    BOOST_CHECK(it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(it1.is_valid(&cb1));
+    BOOST_CHECK(!it2.is_valid(&cb1));
 
     it1 = cb1.begin() + 5;
     it2 = cb1.begin();
     cb1.pop_front();
-    BOOST_CHECK(it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
+    BOOST_CHECK(it1.is_valid(&cb1));
+    BOOST_CHECK(!it2.is_valid(&cb1));
 
     circular_buffer<MyInteger> cb5(20, 0);
     it1 = cb5.begin() + 5;
     it2 = it3 = cb5.begin() + 15;
     cb5.erase(cb5.begin() + 10);
-    BOOST_CHECK(it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
-    BOOST_CHECK(!it3.is_valid());
+    BOOST_CHECK(it1.is_valid(&cb5));
+    BOOST_CHECK(!it2.is_valid(&cb5));
+    BOOST_CHECK(!it3.is_valid(&cb5));
 
     it1 = cb5.begin() + 1;
     it2 = it3 = cb5.begin() + 8;
     cb5.erase(cb5.begin() + 3, cb5.begin() + 7);
-    BOOST_CHECK(it1.is_valid());
-    BOOST_CHECK(!it2.is_valid());
-    BOOST_CHECK(!it3.is_valid());
+    BOOST_CHECK(it1.is_valid(&cb5));
+    BOOST_CHECK(!it2.is_valid(&cb5));
+    BOOST_CHECK(!it3.is_valid(&cb5));
 
     circular_buffer<MyInteger> cb6(20, 0);
     it4 = it1 = cb6.begin() + 5;
     it2 = cb6.begin() + 15;
     cb6.rerase(cb6.begin() + 10);
-    BOOST_CHECK(!it1.is_valid());
-    BOOST_CHECK(!it4.is_valid());
-    BOOST_CHECK(it2.is_valid());
+    BOOST_CHECK(!it1.is_valid(&cb6));
+    BOOST_CHECK(!it4.is_valid(&cb6));
+    BOOST_CHECK(it2.is_valid(&cb6));
 
     it4 = it1 = cb6.begin() + 1;
     it2 = cb6.begin() + 8;
     cb6.rerase(cb6.begin() + 3, cb6.begin() + 7);
-    BOOST_CHECK(!it1.is_valid());
-    BOOST_CHECK(!it4.is_valid());
-    BOOST_CHECK(it2.is_valid());
+    BOOST_CHECK(!it1.is_valid(&cb6));
+    BOOST_CHECK(!it4.is_valid(&cb6));
+    BOOST_CHECK(it2.is_valid(&cb6));
 
-#endif // #if BOOST_CB_ENABLE_DEBUG
+#endif // #if !defined(NDEBUG) && !defined(BOOST_CB_DISABLE_DEBUG)
 }
 
 // basic exception safety test (it is useful to use any memory-leak detection tool)

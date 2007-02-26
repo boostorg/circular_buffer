@@ -230,12 +230,12 @@ void element_access_and_insert_test() {
     cb.push_back(2);
     cb.insert(cb.begin(), 3);
     cb.push_back(4);
-    const CB_CONTAINER<MyInteger> ccb(3, 2);
+    const CB_CONTAINER<MyInteger> ccb = cb;
 
     BOOST_CHECK(cb[0] == 1);
     BOOST_CHECK(cb[1] == 2);
     BOOST_CHECK(cb[2] == 4);
-    BOOST_CHECK(ccb[2] == 2);
+    BOOST_CHECK(ccb[2] == 4);
 
     generic_test(cb);
 }

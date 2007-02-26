@@ -60,7 +60,7 @@ namespace boost {
     http://www.boost.org/libs/circular_buffer/doc/circular_buffer.html
 */
 template <class T, class Alloc>
-class circular_buffer : cb_details::iterator_registry {
+class circular_buffer : public cb_details::iterator_registry {
 
 // Requirements
     BOOST_CLASS_REQUIRE(T, boost, SGIAssignableConcept);
@@ -378,7 +378,7 @@ public:
     //! Get the element at the <code>index</code> position.
     /*!
         \param index The position of the element.
-        \return A const reference to the element at the <code>index</code> position.
+        \return A reference to the element at the <code>index</code> position.
         \throws <code>std::out_of_range</code> when the <code>index</code> is invalid (when
                 <code>index >= size()</code>).
         \par Complexity
@@ -653,6 +653,9 @@ public:
             destroy_item(src);
         m_first = m_buff;
         m_last = add(m_buff, size());
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_all_iterators();
+#endif
         return m_buff;
     }
 
@@ -760,7 +763,8 @@ public:
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> if the new capacity is different
+             from the original.
         \sa <code>rset_capacity()</code>, <code>resize()</code>
     */
     void set_capacity(capacity_type new_capacity) {
@@ -768,7 +772,9 @@ public:
             return;
         pointer buff = allocate(new_capacity);
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy(begin(), begin() + std::min(new_capacity, size()), buff, m_alloc), new_capacity);
+            reset(buff,
+                cb_details::uninitialized_copy(begin(), begin() + std::min(new_capacity, size()), buff, m_alloc),
+                new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -796,7 +802,8 @@ public:
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> if the new size is different from
+             the original.
         \sa <code>rresize()</code>, <code>set_capacity()</code>
     */
     void resize(size_type new_size, param_value_type item = value_type()) {
@@ -823,7 +830,8 @@ public:
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> if the new capacity is different
+             from the original.
         \sa <code>set_capacity()</code>, <code>rresize()</code>
     */
     void rset_capacity(capacity_type new_capacity) {
@@ -831,7 +839,8 @@ public:
             return;
         pointer buff = allocate(new_capacity);
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy(end() - std::min(new_capacity, size()), end(), buff, m_alloc), new_capacity);
+            reset(buff, cb_details::uninitialized_copy(end() - std::min(new_capacity, size()), end(), buff, m_alloc),
+                new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -851,14 +860,16 @@ public:
         \param new_size The new size.
         \param item The element the <code>circular_buffer</code> will be filled with in order to gain the requested
                     size. (See the postcondition.)
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
         \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the new size of the <code>circular_buffer</code>).
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> if the new size is different from
+             the original.
         \sa <code>rresize()</code>, <code>set_capacity()</code>
     */
     void rresize(size_type new_size, param_value_type item = value_type()) {
@@ -884,8 +895,7 @@ public:
         \note This constructor has been defined only due to compatibility with the STL container definition. Avoid
               using it because it allocates very large amount of memory.
     */
-    explicit circular_buffer(
-        const allocator_type& alloc = allocator_type())
+    explicit circular_buffer(const allocator_type& alloc = allocator_type())
     : m_size(0), m_alloc(alloc) {
         initialize(max_size());
     }
@@ -900,9 +910,7 @@ public:
         \par Complexity
              Constant.
     */
-    explicit circular_buffer(
-        capacity_type capacity,
-        const allocator_type& alloc = allocator_type())
+    explicit circular_buffer(capacity_type capacity, const allocator_type& alloc = allocator_type())
     : m_size(0), m_alloc(alloc) {
         initialize(capacity);
     }
@@ -920,10 +928,7 @@ public:
         \par Complexity
              Linear (in the <code>n</code>).
     */
-    circular_buffer(
-        size_type n,
-        param_value_type item,
-        const allocator_type& alloc = allocator_type())
+    circular_buffer(size_type n, param_value_type item, const allocator_type& alloc = allocator_type())
     : m_size(n), m_alloc(alloc) {
         initialize(n, item);
     }
@@ -943,10 +948,7 @@ public:
         \par Complexity
              Linear (in the <code>n</code>).
     */
-    circular_buffer(
-        capacity_type capacity,
-        size_type n,
-        param_value_type item,
+    circular_buffer(capacity_type capacity, size_type n, param_value_type item,
         const allocator_type& alloc = allocator_type())
     : m_size(n), m_alloc(alloc) {
         BOOST_CB_ASSERT(capacity >= size()); // check for capacity lower than size
@@ -980,18 +982,13 @@ public:
 
     /*! \cond */
     template <class InputIterator>
-    circular_buffer(
-        InputIterator first,
-        InputIterator last)
+    circular_buffer(InputIterator first, InputIterator last)
     : m_alloc(allocator_type()) {
         initialize(first, last, is_integral<InputIterator>());
     }
 
     template <class InputIterator>
-    circular_buffer(
-        capacity_type capacity,
-        InputIterator first,
-        InputIterator last)
+    circular_buffer(capacity_type capacity, InputIterator first, InputIterator last)
     : m_alloc(allocator_type()) {
         initialize(capacity, first, last, is_integral<InputIterator>());
     }
@@ -1017,10 +1014,7 @@ public:
              Linear (in the <code>std::distance(first, last)</code>).
     */
     template <class InputIterator>
-    circular_buffer(
-        InputIterator first,
-        InputIterator last,
-        const allocator_type& alloc = allocator_type())
+    circular_buffer(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
         initialize(first, last, is_integral<InputIterator>());
     }
@@ -1047,10 +1041,7 @@ public:
              Linear (in the <code>capacity</code>/<code>std::distance(first, last)</code>).
     */
     template <class InputIterator>
-    circular_buffer(
-        capacity_type capacity,
-        InputIterator first,
-        InputIterator last,
+    circular_buffer(capacity_type capacity, InputIterator first, InputIterator last,
         const allocator_type& alloc = allocator_type())
     : m_alloc(alloc) {
         initialize(capacity, first, last, is_integral<InputIterator>());
@@ -1140,8 +1131,8 @@ public:
         The capacity of the <code>circular_buffer</code> will be set to the specified value and the content of the
         <code>circular_buffer</code> will be removed and replaced with <code>n</code> copies of the <code>item</code>.
         \pre <code>capacity >= n</code>
-        \post <code>capacity() == capacity \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ... \&\&
-              (*this) [n - 1] == item </code>
+        \post <code>capacity() == capacity \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item
+              \&\& ... \&\& (*this) [n - 1] == item </code>
         \param capacity The new capacity of the <code>circular_buffer</code>.
         \param n The number of elements the <code>circular_buffer</code> will be filled with.
         \param item The element the <code>circular_buffer</code> will be filled with.
@@ -1396,7 +1387,7 @@ public:
             <code>rinsert(iterator, InputIterator, InputIterator)</code>
     */
     iterator insert(iterator pos, param_value_type item = value_type()) {
-        BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
         if (full() && pos == begin())
             return begin();
         return insert_item(pos, item);
@@ -1436,7 +1427,7 @@ public:
             <code>rinsert(iterator, InputIterator, InputIterator)</code>
     */
     void insert(iterator pos, size_type n, param_value_type item) {
-        BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
         if (n == 0)
             return;
         size_type copy = capacity() - (end() - pos);
@@ -1486,7 +1477,7 @@ public:
     */
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
-        BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
         insert(pos, first, last, is_integral<InputIterator>());
     }
 
@@ -1515,7 +1506,7 @@ public:
             <code>insert(iterator, InputIterator, InputIterator)</code>
     */
     iterator rinsert(iterator pos, param_value_type item = value_type()) {
-        BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
         if (full() && pos.m_it == 0)
             return end();
         if (pos == begin()) {
@@ -1592,7 +1583,7 @@ public:
             <code>insert(iterator, InputIterator, InputIterator)</code>
     */
     void rinsert(iterator pos, size_type n, param_value_type item) {
-        BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
         rinsert_n(pos, n, cb_details::item_wrapper<const_pointer, param_value_type>(item));
     }
 
@@ -1634,7 +1625,7 @@ public:
     */
     template <class InputIterator>
     void rinsert(iterator pos, InputIterator first, InputIterator last) {
-        BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
         rinsert(pos, first, last, is_integral<InputIterator>());
     }
 
@@ -1659,8 +1650,8 @@ public:
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
     iterator erase(iterator pos) {
-        BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(pos.m_it != 0);  // check for iterator pointing to end()
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(pos.m_it != 0);      // check for iterator pointing to end()
         pointer next = pos.m_it;
         increment(next);
         for (pointer p = pos.m_it; next != m_last; p = next, increment(next))
@@ -1678,7 +1669,8 @@ public:
     //! Erase the range <code>[first, last)</code>.
     /*!
         \pre Valid range <code>[first, last)</code>.
-        \post The elements from the range <code>[first, last)</code> are removed.
+        \post The elements from the range <code>[first, last)</code> are removed. (If <code>first == last</code>
+              nothing is removed.)
         \return Iterator to the first element remaining beyond the removed elements or <code>end()</code> if no such
                 element exists.
         \throws Whatever <code>T::operator = (const T&)</code> throws.
@@ -1693,10 +1685,9 @@ public:
             <code>clear()</code>
     */
     iterator erase(iterator first, iterator last) {
-        BOOST_CB_ASSERT(first.is_valid());            // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(last.is_valid());             // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(first.m_buff == last.m_buff); // check for iterators of different containers
-        BOOST_CB_ASSERT(first <= last);               // check for wrong range
+        BOOST_CB_ASSERT(first.is_valid(this)); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(last.is_valid(this));  // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(first <= last);        // check for wrong range
         if (first == last)
             return first;
         pointer p = first.m_it;
@@ -1728,8 +1719,8 @@ public:
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
     iterator rerase(iterator pos) {
-        BOOST_CB_ASSERT(pos.is_valid()); // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(pos.m_it != 0);  // check for iterator pointing to end()
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(pos.m_it != 0);      // check for iterator pointing to end()
         pointer prev = pos.m_it;
         pointer p = prev;
         for (decrement(prev); p != m_first; p = prev, decrement(prev))
@@ -1762,10 +1753,9 @@ public:
             <code>clear()</code>
     */
     iterator rerase(iterator first, iterator last) {
-        BOOST_CB_ASSERT(first.is_valid());            // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(last.is_valid());             // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(first.m_buff == last.m_buff); // check for iterators of different containers
-        BOOST_CB_ASSERT(first <= last);               // check for wrong range
+        BOOST_CB_ASSERT(first.is_valid(this)); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(last.is_valid(this));  // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(first <= last);        // check for wrong range
         if (first == last)
             return first;
         pointer p = map_pointer(last.m_it);
@@ -1906,6 +1896,9 @@ private:
     void destroy_content() {
         for (size_type ii = 0; ii < size(); ++ii, increment(m_first))
             destroy_item(m_first);
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators(end());
+#endif
     }
 
     //! Destroy content and free allocated memory.
@@ -1955,7 +1948,8 @@ private:
     //! Specialized initialize method.
     template <class InputIterator>
     void initialize(InputIterator first, InputIterator last, const std::input_iterator_tag&) {
-        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
+        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors
+                                                        // for containers
         std::deque<value_type, allocator_type> tmp(first, last, m_alloc);
         size_type distance = tmp.size();
         initialize(distance, tmp.begin(), tmp.end(), distance);
@@ -2075,10 +2069,13 @@ private:
     //! Specialized assign method.
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last, const std::input_iterator_tag&) {
-        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors for containers
+        BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS // check if the STL provides templated iterator constructors
+                                                        // for containers
         std::deque<value_type, allocator_type> tmp(first, last, m_alloc);
         size_type distance = tmp.size();
-        assign_n(distance, distance, cb_details::assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type, allocator_type>::iterator, allocator_type>(tmp.begin(), tmp.end(), m_alloc));
+        assign_n(distance, distance,
+            cb_details::assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type, allocator_type>::iterator,
+                allocator_type>(tmp.begin(), tmp.end(), m_alloc));
     }
 
     //! Specialized assign method.
@@ -2121,14 +2118,16 @@ private:
 
     //! Specialized assign method.
     template <class ForwardIterator>
-    void assign(capacity_type new_capacity, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
+    void assign(capacity_type new_capacity, ForwardIterator first, ForwardIterator last,
+        const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         size_type distance = std::distance(first, last);
         if (distance > new_capacity) {
             std::advance(first, distance - capacity);
             distance = new_capacity;
         }
-        assign_n(new_capacity, distance, cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
+        assign_n(new_capacity, distance,
+            cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
     }
 
     //! Helper assign method.

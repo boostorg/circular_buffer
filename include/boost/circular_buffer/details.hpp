@@ -264,8 +264,8 @@ public:
 
     //! Dereferencing operator.
     reference operator * () const {
-        BOOST_CB_ASSERT(is_valid()); // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(m_it != 0);  // check for iterator pointing to end()
+        BOOST_CB_ASSERT(is_valid(m_buff)); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(m_it != 0);        // check for iterator pointing to end()
         return *m_it;
     }
 
@@ -274,9 +274,8 @@ public:
 
     //! Difference operator.
     difference_type operator - (const iterator& it) const {
-        BOOST_CB_ASSERT(is_valid());          // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(it.is_valid());       // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(m_buff == it.m_buff); // check for iterators of different containers
+        BOOST_CB_ASSERT(is_valid(m_buff));    // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(it.is_valid(m_buff)); // check for uninitialized or invalidated iterator
         helper_pointer<Traits> lhs = create_helper_pointer(*this);
         helper_pointer<Traits> rhs = create_helper_pointer(it);
         if (less(rhs, lhs) && lhs.m_it <= rhs.m_it)
@@ -288,8 +287,8 @@ public:
 
     //! Increment operator (prefix).
     iterator& operator ++ () {
-        BOOST_CB_ASSERT(is_valid()); // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(m_it != 0);  // check for iterator pointing to end()
+        BOOST_CB_ASSERT(is_valid(m_buff)); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(m_it != 0);        // check for iterator pointing to end()
         m_buff->increment(m_it);
         if (m_it == m_buff->m_last)
             m_it = 0;
@@ -305,7 +304,7 @@ public:
 
     //! Decrement operator (prefix).
     iterator& operator -- () {
-        BOOST_CB_ASSERT(is_valid());              // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(is_valid(m_buff));        // check for uninitialized or invalidated iterator
         BOOST_CB_ASSERT(m_it != m_buff->m_first); // check for iterator pointing to begin()
         if (m_it == 0)
             m_it = m_buff->m_last;
@@ -322,7 +321,7 @@ public:
 
     //! Iterator addition.
     iterator& operator += (difference_type n) {
-        BOOST_CB_ASSERT(is_valid()); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(is_valid(m_buff)); // check for uninitialized or invalidated iterator
         if (n > 0) {
             BOOST_CB_ASSERT(m_buff->end() - *this >= n); // check for too large n
             m_it = m_buff->add(m_it, n);
@@ -339,7 +338,7 @@ public:
 
     //! Iterator subtraction.
     iterator& operator -= (difference_type n) {
-        BOOST_CB_ASSERT(is_valid()); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(is_valid(m_buff)); // check for uninitialized or invalidated iterator
         if (n > 0) {
             BOOST_CB_ASSERT(m_buff->begin() - *this <= -n); // check for too large n
             m_it = m_buff->sub(m_it == 0 ? m_buff->m_last : m_it, n);
@@ -360,27 +359,24 @@ public:
     //! Equality.
     template <class Traits0>
     bool operator == (const iterator<Buff, Traits0>& it) const {
-        BOOST_CB_ASSERT(is_valid());          // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(it.is_valid());       // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(m_buff == it.m_buff); // check for iterators of different containers
+        BOOST_CB_ASSERT(is_valid(m_buff));    // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(it.is_valid(m_buff)); // check for uninitialized or invalidated iterator
         return m_it == it.m_it;
     }
 
     //! Inequality.
     template <class Traits0>
     bool operator != (const iterator<Buff, Traits0>& it) const {
-        BOOST_CB_ASSERT(is_valid());          // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(it.is_valid());       // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(m_buff == it.m_buff); // check for iterators of different containers
+        BOOST_CB_ASSERT(is_valid(m_buff));    // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(it.is_valid(m_buff)); // check for uninitialized or invalidated iterator
         return m_it != it.m_it;
     }
 
     //! Less.
     template <class Traits0>
     bool operator < (const iterator<Buff, Traits0>& it) const {
-        BOOST_CB_ASSERT(is_valid());          // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(it.is_valid());       // check for uninitialized or invalidated iterator
-        BOOST_CB_ASSERT(m_buff == it.m_buff); // check for iterators of different containers
+        BOOST_CB_ASSERT(is_valid(m_buff));    // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(it.is_valid(m_buff)); // check for uninitialized or invalidated iterator
         return less(create_helper_pointer(*this), create_helper_pointer(it));
     }
 

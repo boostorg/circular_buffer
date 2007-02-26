@@ -2367,7 +2367,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                A const reference to the element at the <code>index</code> position.
+                A reference to the element at the <code>index</code> position.
               </dd>
             </dl>
             <dl>
@@ -3607,7 +3607,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> if the new capacity is different
+                from the original.
               </dd>
             </dl>
             <dl>
@@ -3710,7 +3711,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> if the new size is different
+                from the original.
               </dd>
             </dl>
             <dl>
@@ -3795,7 +3797,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> if the new capacity is different
+                from the original.
               </dd>
             </dl>
             <dl>
@@ -3898,7 +3901,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> if the new size is different
+                from the original.
               </dd>
             </dl>
             <dl>
@@ -5697,7 +5701,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                The elements from the range <code>[first, last)</code> are removed.
+                The elements from the range <code>[first, last)</code> are removed. (If <code>first == last</code>
+                nothing is removed.)
               </dd>
             </dl>
             <dl>

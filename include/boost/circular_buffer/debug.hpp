@@ -62,7 +62,7 @@ public:
     iterator_base& operator = (const iterator_base& rhs);
 
     //! Is the iterator valid?
-    bool is_valid() const;
+    bool is_valid(const iterator_registry* registry) const;
 
     //! Invalidate the iterator.
     /*!
@@ -184,7 +184,7 @@ inline iterator_base& iterator_base::operator = (const iterator_base& rhs) {
     return *this;
 }
 
-inline bool iterator_base::is_valid() const { return m_registry != 0; }
+inline bool iterator_base::is_valid(const iterator_registry* registry) const { return m_registry == registry; }
 
 inline void iterator_base::invalidate() const { m_registry = 0; }
 
