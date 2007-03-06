@@ -22,47 +22,47 @@ namespace cb_details {
 // The value the uninitialized memory is filled with.
 const int UNINITIALIZED = 0xcc;
 
-class iterator_registry;
+class debug_iterator_registry;
 
 /*!
-    \class iterator_base
+    \class debug_iterator_base
     \brief Registers/unregisters iterators into the registry of valid iterators.
 
     This class is intended to be a base class of an iterator.
 */
-class iterator_base {
+class debug_iterator_base {
 
 private:
 // Members
 
     //! Iterator registry.
-    mutable const iterator_registry* m_registry;
+    mutable const debug_iterator_registry* m_registry;
 
     //! Next iterator in the iterator chain.
-    mutable const iterator_base* m_next;
+    mutable const debug_iterator_base* m_next;
 
 public:
 // Construction/destruction
 
     //! Default constructor.
-    iterator_base();
+    debug_iterator_base();
 
     //! Constructor taking the iterator registry as a parameter.
-    iterator_base(const iterator_registry* registry);
+    debug_iterator_base(const debug_iterator_registry* registry);
 
     //! Copy constructor.
-    iterator_base(const iterator_base& rhs);
+    debug_iterator_base(const debug_iterator_base& rhs);
 
     //! Destructor.
-    ~iterator_base();
+    ~debug_iterator_base();
 
 // Methods
 
     //! Assign operator.
-    iterator_base& operator = (const iterator_base& rhs);
+    debug_iterator_base& operator = (const debug_iterator_base& rhs);
 
     //! Is the iterator valid?
-    bool is_valid(const iterator_registry* registry) const;
+    bool is_valid(const debug_iterator_registry* registry) const;
 
     //! Invalidate the iterator.
     /*!
@@ -71,13 +71,13 @@ public:
     void invalidate() const;
 
     //! Return the next iterator in the iterator chain.
-    const iterator_base* next() const;
+    const debug_iterator_base* next() const;
 
     //! Set the next iterator in the iterator chain.
     /*!
         \note The method is const in order to set a next iterator to a const iterator, too.
     */
-    void set_next(const iterator_base* it) const;
+    void set_next(const debug_iterator_base* it) const;
 
 private:
 // Helpers
@@ -90,27 +90,27 @@ private:
 };
 
 /*!
-    \class iterator_registry
+    \class debug_iterator_registry
     \brief Registry of valid iterators.
 
     This class is intended to be a base class of a container.
 */
-class iterator_registry {
+class debug_iterator_registry {
 
     //! Pointer to the chain of valid iterators.
-    mutable const iterator_base* m_iterators;
+    mutable const debug_iterator_base* m_iterators;
 
 public:
 // Methods
 
     //! Default constructor.
-    iterator_registry() : m_iterators(0) {}
+    debug_iterator_registry() : m_iterators(0) {}
 
     //! Register an iterator into the list of valid iterators.
     /*!
         \note The method is const in order to register iterators into const containers, too.
     */
-    void register_iterator(const iterator_base* it) const {
+    void register_iterator(const debug_iterator_base* it) const {
         it->set_next(m_iterators);
         m_iterators = it;
     }
@@ -119,24 +119,17 @@ public:
     /*!
         \note The method is const in order to unregister iterators from const containers, too.
     */
-    void unregister_iterator(const iterator_base* it) const {
-        const iterator_base* previous = 0;
-        for (const iterator_base* p = m_iterators; p != it; previous = p, p = p->next());
+    void unregister_iterator(const debug_iterator_base* it) const {
+        const debug_iterator_base* previous = 0;
+        for (const debug_iterator_base* p = m_iterators; p != it; previous = p, p = p->next());
         remove(it, previous);
     }
 
-    //! Invalidate all iterators.
-    void invalidate_all_iterators() {
-        for (const iterator_base* p = m_iterators; p != 0; p = p->next())
-            p->invalidate();
-        m_iterators = 0;
-    }
-
-    //! Invalidate every iterator conforming to the condition.
+    //! Invalidate every iterator pointing to the same element as the iterator passed as a parameter.
     template <class Iterator>
     void invalidate_iterators(const Iterator& it) {
-        const iterator_base* previous = 0;
-        for (const iterator_base* p = m_iterators; p != 0; p = p->next()) {
+        const debug_iterator_base* previous = 0;
+        for (const debug_iterator_base* p = m_iterators; p != 0; p = p->next()) {
             if (((Iterator*)p)->m_it == it.m_it) {
                 p->invalidate();
                 remove(p, previous);
@@ -146,12 +139,33 @@ public:
         }
     }
 
+    //! Invalidate all iterators except an iterator poining to the same element as the iterator passed as a parameter.
+    template <class Iterator>
+    void invalidate_iterators_except(const Iterator& it) {
+        const debug_iterator_base* previous = 0;
+        for (const debug_iterator_base* p = m_iterators; p != 0; p = p->next()) {
+            if (((Iterator*)p)->m_it != it.m_it) {
+                p->invalidate();
+                remove(p, previous);
+                continue;
+            }
+            previous = p;
+        }
+    }
+
+    //! Invalidate all iterators.
+    void invalidate_all_iterators() {
+        for (const debug_iterator_base* p = m_iterators; p != 0; p = p->next())
+            p->invalidate();
+        m_iterators = 0;
+    }
+
 private:
 // Helpers
 
     //! Remove the current iterator from the iterator chain.
-    void remove(const iterator_base* current,
-                const iterator_base* previous) const {
+    void remove(const debug_iterator_base* current,
+                const debug_iterator_base* previous) const {
         if (previous == 0)
             m_iterators = m_iterators->next();
         else
@@ -159,23 +173,23 @@ private:
     }
 };
 
-// Implementation of the iterator_base methods.
+// Implementation of the debug_iterator_base methods.
 
-inline iterator_base::iterator_base() : m_registry(0), m_next(0) {}
+inline debug_iterator_base::debug_iterator_base() : m_registry(0), m_next(0) {}
 
-inline iterator_base::iterator_base(const iterator_registry* registry)
+inline debug_iterator_base::debug_iterator_base(const debug_iterator_registry* registry)
 : m_registry(registry), m_next(0) {
     register_self();
 }
 
-inline iterator_base::iterator_base(const iterator_base& rhs)
+inline debug_iterator_base::debug_iterator_base(const debug_iterator_base& rhs)
 : m_registry(rhs.m_registry), m_next(0) {
     register_self();
 }
 
-inline iterator_base::~iterator_base() { unregister_self(); }
+inline debug_iterator_base::~debug_iterator_base() { unregister_self(); }
 
-inline iterator_base& iterator_base::operator = (const iterator_base& rhs) {
+inline debug_iterator_base& debug_iterator_base::operator = (const debug_iterator_base& rhs) {
     if (m_registry == rhs.m_registry)
         return *this;
     unregister_self();
@@ -184,41 +198,25 @@ inline iterator_base& iterator_base::operator = (const iterator_base& rhs) {
     return *this;
 }
 
-inline bool iterator_base::is_valid(const iterator_registry* registry) const { return m_registry == registry; }
+inline bool debug_iterator_base::is_valid(const debug_iterator_registry* registry) const {
+    return m_registry == registry;
+}
 
-inline void iterator_base::invalidate() const { m_registry = 0; }
+inline void debug_iterator_base::invalidate() const { m_registry = 0; }
 
-inline const iterator_base* iterator_base::next() const { return m_next; }
+inline const debug_iterator_base* debug_iterator_base::next() const { return m_next; }
 
-inline void iterator_base::set_next(const iterator_base* it) const { m_next = it; }
+inline void debug_iterator_base::set_next(const debug_iterator_base* it) const { m_next = it; }
 
-inline void iterator_base::register_self() {
+inline void debug_iterator_base::register_self() {
     if (m_registry != 0)
         m_registry->register_iterator(this);
 }
 
-inline void iterator_base::unregister_self() {
+inline void debug_iterator_base::unregister_self() {
     if (m_registry != 0)
         m_registry->unregister_iterator(this);
 }
-
-#else // #if BOOST_CB_ENABLE_DEBUG
-
-class iterator_registry {
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x6000)
-    char dummy_; // BCB: by default empty structure has 8 bytes
-#endif
-};
-
-class iterator_base {
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x6000)
-    char dummy_; // BCB: by default empty structure has 8 bytes
-#endif
-
-public:
-    iterator_base() {}
-    iterator_base(const iterator_registry*) {}
-};
 
 #endif // #if BOOST_CB_ENABLE_DEBUG
 

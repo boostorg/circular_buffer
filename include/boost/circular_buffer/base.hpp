@@ -60,7 +60,11 @@ namespace boost {
     http://www.boost.org/libs/circular_buffer/doc/circular_buffer.html
 */
 template <class T, class Alloc>
-class circular_buffer : public cb_details::iterator_registry {
+class circular_buffer
+#if BOOST_CB_ENABLE_DEBUG
+: public cb_details::debug_iterator_registry
+#endif // #if BOOST_CB_ENABLE_DEBUG
+{
 
 // Requirements
     BOOST_CLASS_REQUIRE(T, boost, SGIAssignableConcept);
@@ -654,7 +658,7 @@ public:
         m_first = m_buff;
         m_last = add(m_buff, size());
 #if BOOST_CB_ENABLE_DEBUG
-        invalidate_all_iterators();
+        invalidate_iterators_except(end());
 #endif
         return m_buff;
     }
@@ -1061,7 +1065,12 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code>.
         \sa <code>clear()</code>
     */
-    ~circular_buffer() { destroy(); }
+    ~circular_buffer() {
+        destroy();
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_all_iterators();
+#endif
+    }
 
 public:
 // Assign methods
@@ -1896,9 +1905,6 @@ private:
     void destroy_content() {
         for (size_type ii = 0; ii < size(); ++ii, increment(m_first))
             destroy_item(m_first);
-#if BOOST_CB_ENABLE_DEBUG
-        invalidate_iterators(end());
-#endif
     }
 
     //! Destroy content and free allocated memory.

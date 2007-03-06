@@ -191,8 +191,10 @@ class iterator :
     typename Traits::value_type,
     typename Traits::difference_type,
     typename Traits::pointer,
-    typename Traits::reference>,
-    public iterator_base
+    typename Traits::reference>
+#if BOOST_CB_ENABLE_DEBUG
+    , public debug_iterator_base
+#endif // #if BOOST_CB_ENABLE_DEBUG
 {
 private:
 // Helper types
@@ -226,6 +228,9 @@ public:
     //! Difference type.
     typedef typename base_iterator::difference_type difference_type;
 
+#if !defined(BOOST_CB_TEST)
+private:
+#endif // #if !defined(BOOST_CB_TEST)
 // Member variables
 
     //! The circular buffer where the iterator points to.
@@ -234,6 +239,7 @@ public:
     //! An internal iterator.
     pointer m_it;
 
+public:
 // Construction & assignment
 
     // Default copy constructor.
@@ -241,20 +247,32 @@ public:
     //! Default constructor.
     iterator() : m_buff(0), m_it(0) {}
 
+#if BOOST_CB_ENABLE_DEBUG
+
     //! Copy constructor (used for converting from a non-const to a const iterator).
-    iterator(const nonconst_self& it) : iterator_base(it), m_buff(it.m_buff), m_it(it.m_it) {}
+    iterator(const nonconst_self& it) : debug_iterator_base(it), m_buff(it.m_buff), m_it(it.m_it) {}
 
     //! Internal constructor.
     /*!
         \note This constructor is not intended to be used directly by the user.
     */
-    iterator(const Buff* cb, const pointer p) : iterator_base(cb), m_buff(cb), m_it(p) {}
+    iterator(const Buff* cb, const pointer p) : debug_iterator_base(cb), m_buff(cb), m_it(p) {}
+
+#else
+
+    iterator(const nonconst_self& it) : m_buff(it.m_buff), m_it(it.m_it) {}
+
+    iterator(const Buff* cb, const pointer p) : m_buff(cb), m_it(p) {}
+
+#endif // #if BOOST_CB_ENABLE_DEBUG
 
     //! Assign operator.
     iterator& operator = (const iterator& it) {
         if (this == &it)
             return *this;
-        iterator_base::operator =(it);
+#if BOOST_CB_ENABLE_DEBUG
+        debug_iterator_base::operator =(it);
+#endif // #if BOOST_CB_ENABLE_DEBUG
         m_buff = it.m_buff;
         m_it = it.m_it;
         return *this;

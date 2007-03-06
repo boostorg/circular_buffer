@@ -13,6 +13,8 @@
     #pragma once
 #endif
 
+#define BOOST_CB_TEST
+
 #include <boost/circular_buffer.hpp>
 #include <boost/test/included/unit_test_framework.hpp>
 #include <boost/iterator.hpp>
