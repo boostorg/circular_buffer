@@ -412,6 +412,47 @@ void linearize_test() {
     generic_test(cb6);
 }
 
+void array_test() {
+
+    CB_CONTAINER<MyInteger> cb(10);
+    const CB_CONTAINER<MyInteger> ccb(10, 1);
+
+    CB_CONTAINER<MyInteger>::array_range ar1 = cb.array_one();
+    CB_CONTAINER<MyInteger>::array_range ar2 = cb.array_two();
+    CB_CONTAINER<MyInteger>::const_array_range car1 = ccb.array_one();
+    CB_CONTAINER<MyInteger>::const_array_range car2 = ccb.array_two();
+
+    BOOST_CHECK(ar1.second == 0);
+    BOOST_CHECK(ar2.second == 0);
+    BOOST_CHECK(car1.second == 10);
+    BOOST_CHECK(*(car1.first) == 1);
+    BOOST_CHECK(car2.second == 0);
+
+    cb.insert(cb.begin(), 10, 2);
+    ar1 = cb.array_one();
+    ar2 = cb.array_two();
+
+    BOOST_CHECK(ar1.second == 10);
+    BOOST_CHECK(ar2.second == 0);
+    BOOST_CHECK(*(ar1.first) == 2);
+    BOOST_CHECK(*(ar1.first + 9) == 2);
+
+    cb.push_back(3);
+    cb.push_back(4);
+    cb.push_back(5);
+    cb.pop_back();
+    ar1 = cb.array_one();
+    ar2 = cb.array_two();
+
+    BOOST_CHECK(ar1.second == 7);
+    BOOST_CHECK(ar2.second == 2);
+    BOOST_CHECK(*(ar1.first) == 2);
+    BOOST_CHECK(*(ar2.first) == 3);
+    BOOST_CHECK(*(ar2.first + 1) == 4);
+
+    generic_test(cb);
+}
+
 void capacity_and_reserve_test() {
 
     CB_CONTAINER<MyInteger> cb1(0);
@@ -656,6 +697,15 @@ void constructor_test() {
 
     CB_CONTAINER<MyInteger> cb1(3);
     CB_CONTAINER<MyInteger> cb2(3, 2);
+    vector<int> v;
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
+    CB_CONTAINER<MyInteger> cb3(v.begin(), v.end());
+    CB_CONTAINER<MyInteger> cb4(3, v.begin(), v.end());
+    CB_CONTAINER<MyInteger> cb5(10, v.begin(), v.end());
 
     BOOST_CHECK(cb1.size() == 0);
     BOOST_CHECK(cb1.capacity() == 3);
@@ -664,9 +714,32 @@ void constructor_test() {
     BOOST_CHECK(cb2[0] == 2);
     BOOST_CHECK(cb2[1] == 2);
     BOOST_CHECK(cb2[2] == 2);
+    BOOST_CHECK(cb3.size() == 5);
+    BOOST_CHECK(cb3.capacity() == 5);
+    BOOST_CHECK(cb3.full());
+    BOOST_CHECK(cb3[0] == 1);
+    BOOST_CHECK(cb3[4] == 5);
+    BOOST_CHECK(cb4.size() == 3);
+    BOOST_CHECK(cb4.capacity() == 3);
+    BOOST_CHECK(cb4.full());
+    BOOST_CHECK(cb4[0] == 3);
+    BOOST_CHECK(cb4[2] == 5);
+    BOOST_CHECK(cb5.size() == 5);
+    BOOST_CHECK(cb5.capacity() == 10);
+    BOOST_CHECK(!cb5.full());
+    BOOST_CHECK(cb5[0] == 1);
+    BOOST_CHECK(cb5[4] == 5);
+
+    cb5.push_back(6);
+
+    BOOST_CHECK(cb5[5] == 6);
+    BOOST_CHECK(cb5.size() == 6);
 
     generic_test(cb1);
     generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
+    generic_test(cb5);
 }
 
 void assign_test() {
@@ -1495,14 +1568,6 @@ void const_methods_test() {
 // TODO - split into sections: constructor, insert, assign ...
 void input_range_test() {
 
-    vector<int> v2;
-    v2.push_back(1);
-    v2.push_back(2);
-    v2.push_back(3);
-    v2.push_back(4);
-    v2.push_back(5);
-    CB_CONTAINER<int> cbx(v2.begin(), v2.end());
-
 #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
 
     vector<int> v;
@@ -1634,6 +1699,7 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&at_test));
     tests->add(BOOST_TEST_CASE(&front_and_back_test));
     tests->add(BOOST_TEST_CASE(&linearize_test));
+    tests->add(BOOST_TEST_CASE(&array_test));
     tests->add(BOOST_TEST_CASE(&capacity_and_reserve_test));
     tests->add(BOOST_TEST_CASE(&full_and_empty_test));
     tests->add(BOOST_TEST_CASE(&set_capacity_test));
