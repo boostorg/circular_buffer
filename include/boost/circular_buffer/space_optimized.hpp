@@ -1,6 +1,6 @@
 // Implementation of the circular buffer adaptor.
 
-// Copyright (c) 2003-2006 Jan Gaspar
+// Copyright (c) 2003-2007 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -32,7 +32,7 @@ namespace boost {
          std::allocator<T>
     \author Jan Gaspar
     \version 1.4
-    \date 2006
+    \date 2007
 
     For detailed documentation of the space_optimized_circular_buffer visit:
     http://www.boost.org/libs/circular_buffer/doc/circular_buffer_adaptor.html

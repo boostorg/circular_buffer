@@ -1,6 +1,6 @@
 // Common tests for the circular buffer and its adaptor.
 
-// Copyright (c) 2003-2006 Jan Gaspar
+// Copyright (c) 2003-2007 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -330,6 +330,7 @@ void linearize_test() {
     cb6.pop_back();
 
     BOOST_CHECK(*cb1.linearize() == 4);
+    BOOST_CHECK(cb1.linearize() == cb1.array_one().first);
     BOOST_CHECK(&cb1[0] < &cb1[1]
         && &cb1[1] < &cb1[2]
         && &cb1[2] < &cb1[3]
@@ -412,45 +413,115 @@ void linearize_test() {
     generic_test(cb6);
 }
 
-void array_test() {
+void array_range_test() {
 
-    CB_CONTAINER<MyInteger> cb(10);
-    const CB_CONTAINER<MyInteger> ccb(10, 1);
+    CB_CONTAINER<MyInteger> cb(7);
+    CB_CONTAINER<MyInteger>::array_range a1 = cb.array_one();
+    CB_CONTAINER<MyInteger>::array_range a2 = cb.array_two();
+    CB_CONTAINER<MyInteger>::const_array_range ca1 = cb.array_one();
+    CB_CONTAINER<MyInteger>::const_array_range ca2 = cb.array_two();
 
-    CB_CONTAINER<MyInteger>::array_range ar1 = cb.array_one();
-    CB_CONTAINER<MyInteger>::array_range ar2 = cb.array_two();
-    CB_CONTAINER<MyInteger>::const_array_range car1 = ccb.array_one();
-    CB_CONTAINER<MyInteger>::const_array_range car2 = ccb.array_two();
+    BOOST_CHECK(a1.second == 0);
+    BOOST_CHECK(a2.second == 0);
+    BOOST_CHECK(ca1.second == 0);
+    BOOST_CHECK(ca2.second == 0);
 
-    BOOST_CHECK(ar1.second == 0);
-    BOOST_CHECK(ar2.second == 0);
-    BOOST_CHECK(car1.second == 10);
-    BOOST_CHECK(*(car1.first) == 1);
-    BOOST_CHECK(car2.second == 0);
-
-    cb.insert(cb.begin(), 10, 2);
-    ar1 = cb.array_one();
-    ar2 = cb.array_two();
-
-    BOOST_CHECK(ar1.second == 10);
-    BOOST_CHECK(ar2.second == 0);
-    BOOST_CHECK(*(ar1.first) == 2);
-    BOOST_CHECK(*(ar1.first + 9) == 2);
-
+    cb.push_back(1);
+    cb.push_back(2);
     cb.push_back(3);
+    a1 = cb.array_one();
+    a2 = cb.array_two();
+    ca1 = cb.array_one();
+    ca2 = cb.array_two();
+
+    BOOST_CHECK(a1.first[0] == 1);
+    BOOST_CHECK(a1.first[2] == 3);
+    BOOST_CHECK(ca1.first[0] == 1);
+    BOOST_CHECK(ca1.first[2] == 3);
+    BOOST_CHECK(a1.second == 3);
+    BOOST_CHECK(a2.second == 0);
+    BOOST_CHECK(ca1.second == 3);
+    BOOST_CHECK(ca2.second == 0);
+
     cb.push_back(4);
     cb.push_back(5);
-    cb.pop_back();
-    ar1 = cb.array_one();
-    ar2 = cb.array_two();
+    cb.push_back(6);
+    cb.push_back(7);
+    cb.push_back(8);
+    cb.push_back(9);
+    cb.push_back(10);
+    a1 = cb.array_one();
+    a2 = cb.array_two();
+    ca1 = cb.array_one();
+    ca2 = cb.array_two();
 
-    BOOST_CHECK(ar1.second == 7);
-    BOOST_CHECK(ar2.second == 2);
-    BOOST_CHECK(*(ar1.first) == 2);
-    BOOST_CHECK(*(ar2.first) == 3);
-    BOOST_CHECK(*(ar2.first + 1) == 4);
+    BOOST_CHECK(a1.first[0] == 4);
+    BOOST_CHECK(a1.first[3] == 7);
+    BOOST_CHECK(a2.first[0] == 8);
+    BOOST_CHECK(a2.first[2] == 10);
+    BOOST_CHECK(ca1.first[0] == 4);
+    BOOST_CHECK(ca1.first[3] == 7);
+    BOOST_CHECK(ca2.first[0] == 8);
+    BOOST_CHECK(ca2.first[2] == 10);
+    BOOST_CHECK(a1.second == 4);
+    BOOST_CHECK(a2.second == 3);
+    BOOST_CHECK(ca1.second == 4);
+    BOOST_CHECK(ca2.second == 3);
+
+    cb.pop_front();
+    cb.pop_back();
+    a1 = cb.array_one();
+    a2 = cb.array_two();
+    ca1 = cb.array_one();
+    ca2 = cb.array_two();
+
+    BOOST_CHECK(a1.first[0] == 5);
+    BOOST_CHECK(a1.first[2] == 7);
+    BOOST_CHECK(a2.first[0] == 8);
+    BOOST_CHECK(a2.first[1] == 9);
+    BOOST_CHECK(ca1.first[0] == 5);
+    BOOST_CHECK(ca1.first[2] == 7);
+    BOOST_CHECK(ca2.first[0] == 8);
+    BOOST_CHECK(ca2.first[1] == 9);
+    BOOST_CHECK(a1.second == 3);
+    BOOST_CHECK(a2.second == 2);
+    BOOST_CHECK(ca1.second == 3);
+    BOOST_CHECK(ca2.second == 2);
+
+    cb.pop_back();
+    cb.pop_back();
+    cb.pop_back();
+    a1 = cb.array_one();
+    a2 = cb.array_two();
+    ca1 = cb.array_one();
+    ca2 = cb.array_two();
+
+    BOOST_CHECK(a1.first[0] == 5);
+    BOOST_CHECK(a1.first[1] == 6);
+    BOOST_CHECK(ca1.first[0] == 5);
+    BOOST_CHECK(ca1.first[1] == 6);
+    BOOST_CHECK(a1.second == 2);
+    BOOST_CHECK(a2.second == 0);
+    BOOST_CHECK(ca1.second == 2);
+    BOOST_CHECK(ca2.second == 0);
+
+    CB_CONTAINER<MyInteger> cb0(0);
+    a1 = cb0.array_one();
+    a2 = cb0.array_two();
+
+    BOOST_CHECK(a1.second == 0);
+    BOOST_CHECK(a2.second == 0);
+
+    const CB_CONTAINER<MyInteger> ccb(10, 1);
+    ca1 = ccb.array_one();
+    ca2 = ccb.array_two();
+
+    BOOST_CHECK(ca1.second == 10);
+    BOOST_CHECK(*(ca1.first) == 1);
+    BOOST_CHECK(ca2.second == 0);
 
     generic_test(cb);
+    generic_test(cb0);
 }
 
 void capacity_and_reserve_test() {
@@ -554,7 +625,6 @@ void set_capacity_test() {
 
     BOOST_CHECK(cb3.size() == 0);
     BOOST_CHECK(cb3.capacity() == 0);
-
 
     generic_test(cb1);
     generic_test(cb2);
@@ -735,6 +805,16 @@ void constructor_test() {
     BOOST_CHECK(cb5[5] == 6);
     BOOST_CHECK(cb5.size() == 6);
 
+#if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+
+    CB_CONTAINER<int> cb6(MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb7(3, MyInputIterator(v.begin()), MyInputIterator(v.end()));
+
+    BOOST_CHECK(cb6.capacity() == 5);
+    BOOST_CHECK(cb7.capacity() == 3);
+
+#endif // #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+
     generic_test(cb1);
     generic_test(cb2);
     generic_test(cb3);
@@ -775,6 +855,25 @@ void assign_test() {
     BOOST_CHECK(cb3[9] == 1);
     BOOST_CHECK(cb3.size() == 10);
     BOOST_CHECK(cb3.capacity() == 10);
+
+#if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+
+    vector<int> v;
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
+
+    CB_CONTAINER<int> cb4(3);
+    cb4.assign(MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb5(3);
+    cb5.assign(4, MyInputIterator(v.begin()), MyInputIterator(v.end()));
+
+    BOOST_CHECK(cb4.capacity() == 5);
+    BOOST_CHECK(cb5.capacity() == 4);
+
+#endif // #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
 
     generic_test(cb1);
     generic_test(cb3);
@@ -992,6 +1091,72 @@ void insert_range_test() {
     BOOST_CHECK(cb5[4] == 3);
     BOOST_CHECK(cb5[5] == 4);
 
+#if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+
+    v.clear();
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
+
+    CB_CONTAINER<int> cb6(4);
+    cb6.push_back(0);
+    cb6.push_back(-1);
+    cb6.push_back(-2);
+    cb6.insert(cb6.begin() + 1, MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    v.clear();
+    v.push_back(11);
+    v.push_back(12);
+    v.push_back(13);
+    CB_CONTAINER<int> cb7(4);
+    cb7.push_back(1);
+    cb7.push_back(2);
+    cb7.push_back(3);
+    cb7.insert(cb7.begin() + 1, MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb8(2, 2);
+    cb8.insert(cb8.end(), MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb9(5);
+    cb9.insert(cb9.end(), MyInputIterator(v.end()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb10(5);
+    cb10.insert(cb10.end(), MyInputIterator(v.begin()), MyInputIterator(v.begin() + 1));
+    v.clear();
+    v.push_back(5);
+    v.push_back(6);
+    v.push_back(7);
+    v.push_back(8);
+    v.push_back(9);
+    CB_CONTAINER<int> cb11(6);
+    cb11.push_back(1);
+    cb11.push_back(2);
+    cb11.push_back(3);
+    cb11.push_back(4);
+    cb11.insert(cb11.begin() + 2, MyInputIterator(v.begin()), MyInputIterator(v.begin() + 5));
+    cb11.insert(cb11.begin(), MyInputIterator(v.begin()), MyInputIterator(v.begin() + 5));
+
+    BOOST_CHECK(cb6.capacity() == 4);
+    BOOST_CHECK(cb6[0] == 4);
+    BOOST_CHECK(cb6[3] == -2);
+    BOOST_CHECK(cb7.full());
+    BOOST_CHECK(cb7[0] == 12);
+    BOOST_CHECK(cb7[1] == 13);
+    BOOST_CHECK(cb7[2] == 2);
+    BOOST_CHECK(cb7[3] == 3);
+    BOOST_CHECK(cb8[0] == 12);
+    BOOST_CHECK(cb8[1] == 13);
+    BOOST_CHECK(cb9.empty());
+    BOOST_CHECK(cb10[0] == 11);
+    BOOST_CHECK(cb10.size() == 1);
+    BOOST_CHECK(cb11.size() == 6);
+    BOOST_CHECK(cb11[0] == 6);
+    BOOST_CHECK(cb11[1] == 7);
+    BOOST_CHECK(cb11[2] == 8);
+    BOOST_CHECK(cb11[3] == 9);
+    BOOST_CHECK(cb11[4] == 3);
+    BOOST_CHECK(cb11[5] == 4);
+
+#endif // #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+
     generic_test(cb1);
     generic_test(cb2);
     generic_test(cb3);
@@ -1199,6 +1364,53 @@ void rinsert_range_test() {
     BOOST_CHECK(cb3.empty());
     BOOST_CHECK(cb4[0] == 11);
     BOOST_CHECK(cb4.size() == 1);
+
+#if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+
+    v.clear();
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
+
+    CB_CONTAINER<int> cb10(4);
+    cb10.push_back(0);
+    cb10.push_back(-1);
+    cb10.push_back(-2);
+    cb10.rinsert(cb10.begin() + 1, MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    v.clear();
+    v.push_back(11);
+    v.push_back(12);
+    v.push_back(13);
+    v.push_back(14);
+    CB_CONTAINER<int> cb11(4);
+    cb11.push_back(1);
+    cb11.push_back(2);
+    cb11.push_back(3);
+    cb11.rinsert(cb11.begin() + 1, MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb12(2, 2);
+    cb12.rinsert(cb12.begin(), MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb13(5);
+    cb13.rinsert(cb13.begin(), MyInputIterator(v.end()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb14(5);
+    cb14.rinsert(cb14.begin(), MyInputIterator(v.begin()), MyInputIterator(v.begin() + 1));
+
+    BOOST_CHECK(cb10.capacity() == 4);
+    BOOST_CHECK(cb10[0] == 0);
+    BOOST_CHECK(cb10[3] == 3);
+    BOOST_CHECK(cb11.full());
+    BOOST_CHECK(cb11[0] == 1);
+    BOOST_CHECK(cb11[1] == 11);
+    BOOST_CHECK(cb11[2] == 12);
+    BOOST_CHECK(cb11[3] == 13);
+    BOOST_CHECK(cb12[0] == 11);
+    BOOST_CHECK(cb12[1] == 12);
+    BOOST_CHECK(cb13.empty());
+    BOOST_CHECK(cb14[0] == 11);
+    BOOST_CHECK(cb14.size() == 1);
+
+#endif // #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
 
     generic_test(cb1);
     generic_test(cb2);
@@ -1565,125 +1777,6 @@ void const_methods_test() {
     BOOST_CHECK(cb.back() == 5);
 }
 
-// TODO - split into sections: constructor, insert, assign ...
-void input_range_test() {
-
-#if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-
-    vector<int> v;
-    v.push_back(1);
-    v.push_back(2);
-    v.push_back(3);
-    v.push_back(4);
-    v.push_back(5);
-
-    CB_CONTAINER<int> cb1(MyInputIterator(v.begin()), MyInputIterator(v.end()));
-
-    CB_CONTAINER<int> cb2(3, MyInputIterator(v.begin()), MyInputIterator(v.end()));
-
-    CB_CONTAINER<int> cb3(3);
-    cb3.assign(MyInputIterator(v.begin()), MyInputIterator(v.end()));
-
-    CB_CONTAINER<int> cb4(3);
-    cb4.assign(4, MyInputIterator(v.begin()), MyInputIterator(v.end()));
-
-    CB_CONTAINER<int> cb5(4);
-    cb5.push_back(0);
-    cb5.push_back(-1);
-    cb5.push_back(-2);
-    cb5.insert(cb5.begin() + 1, MyInputIterator(v.begin()), MyInputIterator(v.end()));
-
-    CB_CONTAINER<int> cb6(4);
-    cb6.push_back(0);
-    cb6.push_back(-1);
-    cb6.push_back(-2);
-    cb6.rinsert(cb6.begin() + 1, MyInputIterator(v.begin()), MyInputIterator(v.end()));
-
-    BOOST_CHECK(cb1.capacity() == 5);
-    BOOST_CHECK(cb2.capacity() == 3);
-    BOOST_CHECK(cb3.capacity() == 5);
-    BOOST_CHECK(cb4.capacity() == 4);
-    BOOST_CHECK(cb5.capacity() == 4);
-    BOOST_CHECK(cb6.capacity() == 4);
-
-    v.clear();
-    v.push_back(11);
-    v.push_back(12);
-    v.push_back(13);
-    v.push_back(14);
-    CB_CONTAINER<int> cb11(4);
-    cb11.push_back(1);
-    cb11.push_back(2);
-    cb11.push_back(3);
-    cb11.rinsert(cb11.begin() + 1, MyInputIterator(v.begin()), MyInputIterator(v.end()));
-    CB_CONTAINER<int> cb12(2, 2);
-    cb12.rinsert(cb12.begin(), MyInputIterator(v.begin()), MyInputIterator(v.end()));
-    CB_CONTAINER<int> cb13(5);
-    cb13.rinsert(cb13.begin(), MyInputIterator(v.end()), MyInputIterator(v.end()));
-    CB_CONTAINER<int> cb14(5);
-    cb14.rinsert(cb14.begin(), MyInputIterator(v.begin()), MyInputIterator(v.begin() + 1));
-
-    BOOST_CHECK(cb11.full());
-    BOOST_CHECK(cb11[0] == 1);
-    BOOST_CHECK(cb11[1] == 11);
-    BOOST_CHECK(cb11[2] == 12);
-    BOOST_CHECK(cb11[3] == 13);
-    BOOST_CHECK(cb12[0] == 11);
-    BOOST_CHECK(cb12[1] == 12);
-    BOOST_CHECK(cb13.empty());
-    BOOST_CHECK(cb14[0] == 11);
-    BOOST_CHECK(cb14.size() == 1);
-
-    v.clear();
-    v.push_back(11);
-    v.push_back(12);
-    v.push_back(13);
-    CB_CONTAINER<int> cb21(4);
-    cb21.push_back(1);
-    cb21.push_back(2);
-    cb21.push_back(3);
-    cb21.insert(cb21.begin() + 1, MyInputIterator(v.begin()), MyInputIterator(v.end()));
-    CB_CONTAINER<int> cb22(2, 2);
-    cb22.insert(cb22.end(), MyInputIterator(v.begin()), MyInputIterator(v.end()));
-    CB_CONTAINER<int> cb23(5);
-    cb23.insert(cb23.end(), MyInputIterator(v.end()), MyInputIterator(v.end()));
-    CB_CONTAINER<int> cb24(5);
-    cb24.insert(cb24.end(), MyInputIterator(v.begin()), MyInputIterator(v.begin() + 1));
-    v.clear();
-    v.push_back(5);
-    v.push_back(6);
-    v.push_back(7);
-    v.push_back(8);
-    v.push_back(9);
-    CB_CONTAINER<int> cb25(6);
-    cb25.push_back(1);
-    cb25.push_back(2);
-    cb25.push_back(3);
-    cb25.push_back(4);
-    cb25.insert(cb25.begin() + 2, MyInputIterator(v.begin()), MyInputIterator(v.begin() + 5));
-    cb25.insert(cb25.begin(), MyInputIterator(v.begin()), MyInputIterator(v.begin() + 5));
-
-    BOOST_CHECK(cb21.full());
-    BOOST_CHECK(cb21[0] == 12);
-    BOOST_CHECK(cb21[1] == 13);
-    BOOST_CHECK(cb21[2] == 2);
-    BOOST_CHECK(cb21[3] == 3);
-    BOOST_CHECK(cb22[0] == 12);
-    BOOST_CHECK(cb22[1] == 13);
-    BOOST_CHECK(cb23.empty());
-    BOOST_CHECK(cb24[0] == 11);
-    BOOST_CHECK(cb24.size() == 1);
-    BOOST_CHECK(cb25.size() == 6);
-    BOOST_CHECK(cb25[0] == 6);
-    BOOST_CHECK(cb25[1] == 7);
-    BOOST_CHECK(cb25[2] == 8);
-    BOOST_CHECK(cb25[3] == 9);
-    BOOST_CHECK(cb25[4] == 3);
-    BOOST_CHECK(cb25[5] == 4);
-
-#endif // #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-}
-
 int MyInteger::ms_exception_trigger = 0;
 int InstanceCounter::ms_count = 0;
 
@@ -1699,7 +1792,7 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&at_test));
     tests->add(BOOST_TEST_CASE(&front_and_back_test));
     tests->add(BOOST_TEST_CASE(&linearize_test));
-    tests->add(BOOST_TEST_CASE(&array_test));
+    tests->add(BOOST_TEST_CASE(&array_range_test));
     tests->add(BOOST_TEST_CASE(&capacity_and_reserve_test));
     tests->add(BOOST_TEST_CASE(&full_and_empty_test));
     tests->add(BOOST_TEST_CASE(&set_capacity_test));
@@ -1731,5 +1824,4 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&example_test));
     tests->add(BOOST_TEST_CASE(&element_destruction_test));
     tests->add(BOOST_TEST_CASE(&const_methods_test));
-    tests->add(BOOST_TEST_CASE(&input_range_test));
 }

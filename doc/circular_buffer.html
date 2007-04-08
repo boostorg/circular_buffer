@@ -983,7 +983,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 This constructor has been defined only due to compatibility with the STL container definition. Avoid
-                using it because it allocates very large amount of memory.
+                using it because it may allocate very large amount of memory.
               </dd>
             </dl>
           </td>
@@ -1499,26 +1499,19 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (including iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Complexity:</b>
               </dt>
               <dd>
                 Linear (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Exception Safety:</b>
-              </dt>
-              <dd>
-                No-throw.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Iterator Invalidation:</b>
-              </dt>
-              <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
               </dd>
             </dl>
             <dl>
@@ -1564,14 +1557,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -1584,6 +1569,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -1624,14 +1617,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -1644,6 +1629,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -1693,14 +1686,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -1713,6 +1698,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -1755,14 +1748,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -1775,6 +1760,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -1818,14 +1811,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -1838,6 +1823,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -1883,14 +1876,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -1903,6 +1888,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -1947,14 +1940,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -1967,6 +1952,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2010,14 +2003,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2030,6 +2015,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2073,14 +2066,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2093,6 +2078,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2138,14 +2131,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2158,6 +2143,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2224,14 +2217,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2244,6 +2229,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2307,14 +2300,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2327,6 +2312,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2375,16 +2368,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                &lt;code&gt;std::out_of_range&lt;/code&gt; when the <code>index</code> is invalid (when <code>index
-                &gt;= <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
+                <code>std::out_of_range</code> when the <code>index</code> is invalid (when <code>index &gt;= <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>).
               </dd>
             </dl>
             <dl>
@@ -2401,6 +2386,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2450,16 +2443,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Throws:</b>
               </dt>
               <dd>
-                &lt;code&gt;std::out_of_range&lt;/code&gt; when the <code>index</code> is invalid (when <code>index
-                &gt;= <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
+                <code>std::out_of_range</code> when the <code>index</code> is invalid (when <code>index &gt;= <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>).
               </dd>
             </dl>
             <dl>
@@ -2476,6 +2461,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2522,14 +2515,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2542,6 +2527,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2587,14 +2580,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2607,6 +2592,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2653,14 +2646,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2673,6 +2658,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2720,14 +2713,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2740,6 +2725,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2827,14 +2820,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2847,6 +2832,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2919,14 +2912,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -2939,6 +2924,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -2984,14 +2977,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3004,6 +2989,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3052,14 +3045,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3072,6 +3057,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3125,18 +3118,10 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the size of the <code>circular_buffer</code>); constant if the postcondition is already met.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                Basic; no-throw if the operations in the Throws section do not throw anything.
+                Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
               </dd>
             </dl>
             <dl>
@@ -3144,8 +3129,17 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>; does not invalidate any
-                iterators if the postcondition is already met prior calling this method.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>); does not
+                invalidate any iterators if the postcondition is already met prior calling this method.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>); constant if the postcondition is already met.
               </dd>
             </dl>
             <dl>
@@ -3197,14 +3191,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3217,6 +3203,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3260,14 +3254,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3280,6 +3266,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3321,14 +3315,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3341,6 +3327,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3379,14 +3373,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3399,6 +3385,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3439,14 +3433,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3459,6 +3445,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3500,14 +3494,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3520,6 +3506,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3551,12 +3545,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
+                new_capacity &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &lt;=
                 new_capacity</code><br>
                 <br>
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new capacity then number of <code>[<a href=
                 "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_capacity]</code>
-                <b>last</b> elements will be removed.
+                <b>last</b> elements will be removed and the new size will be equal to <code>new_capacity</code>.
               </dd>
             </dl>
             <dl>
@@ -3588,14 +3584,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3607,8 +3595,17 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code> if the new capacity is different
-                from the original.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) if the new
+                capacity is different from the original.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size/new capacity of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3692,14 +3689,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the new size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3711,8 +3700,18 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code> if the new size is different
-                from the original.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) if the new size
+                is greater than the current capacity. Invalidates iterators pointing to the removed elements if the new
+                size is lower that the original size. Otherwise it does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the new size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3741,12 +3740,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
+                new_capacity &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &lt;=
                 new_capacity</code><br>
                 <br>
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new capacity then number of <code>[<a href=
                 "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_capacity]</code>
-                <b>first</b> elements will be removed.
+                <b>first</b> elements will be removed and the new size will be equal to <code>new_capacity</code>.
               </dd>
             </dl>
             <dl>
@@ -3778,14 +3779,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3797,8 +3790,17 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code> if the new capacity is different
-                from the original.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) if the new
+                capacity is different from the original.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size/new capacity of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3863,7 +3865,7 @@ template &lt;class T, class Alloc&gt;
                   </dt>
                   <dd>
                     The element the <code>circular_buffer</code> will be filled with in order to gain the requested
-                    size. (See the postcondition.)
+                    size. (See the <i>Effect</i>.)
                   </dd>
                 </dl>
               </dd>
@@ -3882,14 +3884,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the new size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3901,8 +3895,18 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code> if the new size is different
-                from the original.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) if the new size
+                is greater than the current capacity. Invalidates iterators pointing to the removed elements if the new
+                size is lower that the original size. Otherwise it does not invalidate any iterator.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the new size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -3964,14 +3968,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the size of <code>cb</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -3984,6 +3980,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates all iterators pointing to this <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of <code>cb</code>).
               </dd>
             </dl>
             <dl>
@@ -4066,14 +4070,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the <code>n</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -4086,6 +4082,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates all iterators pointing to the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>n</code>).
               </dd>
             </dl>
             <dl>
@@ -4188,14 +4192,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the <code>n</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -4208,6 +4204,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates all iterators pointing to the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>n</code>).
               </dd>
             </dl>
             <dl>
@@ -4299,14 +4303,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the <code>std::distance(first, last)</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -4319,6 +4315,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates all iterators pointing to the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>std::distance(first, last)</code>).
               </dd>
             </dl>
             <dl>
@@ -4350,7 +4354,7 @@ template &lt;class T, class Alloc&gt;
             <p>
               The capacity of the <code>circular_buffer</code> will be set to the specified value and the content of
               the <code>circular_buffer</code> will be removed and replaced with copies of elements from the specified
-              range. (See the postcondition.)
+              range. (See the <i>Effect</i>.)
             </p>
             <dl>
               <dt>
@@ -4427,14 +4431,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the <code>std::distance(first, last)</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -4447,6 +4443,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates all iterators pointing to the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>std::distance(first, last)</code>).
               </dd>
             </dl>
             <dl>
@@ -4505,14 +4509,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -4528,6 +4524,14 @@ template &lt;class T, class Alloc&gt;
                 point to the same elements but within another container. If you want to rely on this feature you have
                 to turn the <a href="#debug">Debug Support</a> off otherwise an assertion will report an error if such
                 invalidated iterator is used.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -4586,18 +4590,10 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                Basic; no-throw if the operation in the Throws section do not throw anything.
+                Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
               </dd>
             </dl>
             <dl>
@@ -4606,6 +4602,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -4668,18 +4672,10 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                Basic; no-throw if the operation in the Throws section do not throw anything.
+                Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
               </dd>
             </dl>
             <dl>
@@ -4688,6 +4684,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -4738,14 +4742,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -4758,6 +4754,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates only iterators pointing to the removed element.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -4808,14 +4812,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Constant (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -4828,6 +4824,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates only iterators pointing to the removed element.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -4907,7 +4911,7 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Iterator to the inserted element or <code><a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code> if the
-                <code>item</code> is not inserted. (See the postcondition.)
+                <code>item</code> is not inserted. (See the <i>Effect</i>.)
               </dd>
             </dl>
             <dl>
@@ -4923,12 +4927,28 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
                 Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
                 iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
                 overwritten element.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -4981,7 +5001,7 @@ template &lt;class T, class Alloc&gt;
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, max[0, n - <a href=
                 "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]]</code> elements
                 will be overwritten at the beginning of the <code>circular_buffer</code>.<br>
-                (See Example for the explanation.)
+                (See <i>Example</i> for the explanation.)
               </dd>
             </dl>
             <dl>
@@ -5032,6 +5052,32 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
+                iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
+                overwritten elements.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Example:</b>
               </dt>
               <dd>
@@ -5053,16 +5099,6 @@ template &lt;class T, class Alloc&gt;
                 <br>
                 For comparison if the capacity would not be preserved the internal buffer would then result in
                 <code>|1|2|0|0|0|0|0|3|4|</code>.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Iterator Invalidation:</b>
-              </dt>
-              <dd>
-                Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-                iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
-                overwritten elements.
               </dd>
             </dl>
             <dl>
@@ -5117,7 +5153,7 @@ template &lt;class T, class Alloc&gt;
                 last) - <a href=
                 "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]]</code> elements
                 will be overwritten at the beginning of the <code>circular_buffer</code>.<br>
-                (See Example for the explanation.)
+                (See <i>Example</i> for the explanation.)
               </dd>
             </dl>
             <dl>
@@ -5157,6 +5193,43 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
+                iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
+                overwritten elements.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Example:</b>
               </dt>
               <dd>
@@ -5180,27 +5253,6 @@ template &lt;class T, class Alloc&gt;
                 <br>
                 For comparison if the capacity would not be preserved the internal buffer would then result in
                 <code>|1|2|5|6|7|8|9|3|4|</code>.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Throws:</b>
-              </dt>
-              <dd>
-                Whatever <code>T::T(const T&amp;)</code> throws.
-              </dd>
-              <dd>
-                Whatever <code>T::operator = (const T&amp;)</code> throws.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Iterator Invalidation:</b>
-              </dt>
-              <dd>
-                Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-                iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
-                overwritten elements.
               </dd>
             </dl>
             <dl>
@@ -5284,7 +5336,7 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Iterator to the inserted element or <code><a href=
                 "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code> if the
-                <code>item</code> is not inserted. (See the postcondition.)
+                <code>item</code> is not inserted. (See the <i>Effect</i>.)
               </dd>
             </dl>
             <dl>
@@ -5300,11 +5352,27 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
                 Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
                 excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten element.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -5357,7 +5425,7 @@ template &lt;class T, class Alloc&gt;
                 "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> - pos, max[0, n -
                 <a href="#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]]</code>
                 elements will be overwritten at the end of the <code>circular_buffer</code>.<br>
-                (See Example for the explanation.)
+                (See <i>Example</i> for the explanation.)
               </dd>
             </dl>
             <dl>
@@ -5408,6 +5476,31 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+                excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Example:</b>
               </dt>
               <dd>
@@ -5429,15 +5522,6 @@ template &lt;class T, class Alloc&gt;
                 <br>
                 For comparison if the capacity would not be preserved the internal buffer would then result in
                 <code>|1|2|0|0|0|0|0|3|4|</code>.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Iterator Invalidation:</b>
-              </dt>
-              <dd>
-                Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
-                excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
               </dd>
             </dl>
             <dl>
@@ -5492,7 +5576,7 @@ template &lt;class T, class Alloc&gt;
                 distance(first, last) - <a href=
                 "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]]</code> elements
                 will be overwritten at the end of the <code>circular_buffer</code>.<br>
-                (See Example for the explanation.)
+                (See <i>Example</i> for the explanation.)
               </dd>
             </dl>
             <dl>
@@ -5532,6 +5616,42 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+                excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Example:</b>
               </dt>
               <dd>
@@ -5555,26 +5675,6 @@ template &lt;class T, class Alloc&gt;
                 <br>
                 For comparison if the capacity would not be preserved the internal buffer would then result in
                 <code>|1|2|5|6|7|8|9|3|4|</code>.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Throws:</b>
-              </dt>
-              <dd>
-                Whatever <code>T::T(const T&amp;)</code> throws.
-              </dd>
-              <dd>
-                Whatever <code>T::operator = (const T&amp;)</code> throws.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Iterator Invalidation:</b>
-              </dt>
-              <dd>
-                Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
-                excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
               </dd>
             </dl>
             <dl>
@@ -5623,6 +5723,21 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator pointing at the element to be removed.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Returns:</b>
               </dt>
               <dd>
@@ -5641,18 +5756,10 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                Basic; no-throw if the operation in the Throws section does not throw anything.
+                Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
               </dd>
             </dl>
             <dl>
@@ -5662,6 +5769,14 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Invalidates iterators pointing to the erased element and iterators pointing to the elements behind the
                 erased element (towards the end).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -5707,6 +5822,31 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be removed.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be removed.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Returns:</b>
               </dt>
               <dd>
@@ -5725,18 +5865,10 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                Basic; no-throw if the operation in the Throws section does not throw anything.
+                Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
               </dd>
             </dl>
             <dl>
@@ -5746,6 +5878,14 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Invalidates iterators pointing to the erased elements and iterators pointing to the elements behind the
                 erased range (towards the end).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -5777,7 +5917,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> (but not an
+                <code><a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
               </dd>
             </dl>
             <dl>
@@ -5786,6 +5927,21 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 The element at the position <code>pos</code> is removed.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator pointing at the element to be removed.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -5808,18 +5964,10 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                Basic; no-throw if the operation in the Throws section does not throw anything.
+                Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
               </dd>
             </dl>
             <dl>
@@ -5829,6 +5977,14 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Invalidates iterators pointing to the erased element and iterators pointing to the elements in front of
                 the erased element (towards the beginning).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -5874,6 +6030,31 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be removed.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be removed.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Returns:</b>
               </dt>
               <dd>
@@ -5892,18 +6073,10 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                Basic; no-throw if the operation in the Throws section does not throw anything.
+                Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
               </dd>
             </dl>
             <dl>
@@ -5913,6 +6086,14 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Invalidates iterators pointing to the erased elements and iterators pointing to the elements in front
                 of the erased range (towards the beginning).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -5956,14 +6137,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Complexity:</b>
-              </dt>
-              <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Exception Safety:</b>
               </dt>
               <dd>
@@ -5976,6 +6149,14 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates all iterators pointing to the <code>circular_buffer</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer</code>).
               </dd>
             </dl>
             <dl>
@@ -6595,7 +6776,7 @@ template &lt;class T, class Alloc&gt;
       <tr valign="top">
         <td valign="top" align="left">
           <p>
-            <small>Copyright © 2003-2006 Jan Gaspar</small>
+            <small>Copyright © 2003-2007 Jan Gaspar</small>
           </p>
           <p>
             <small>Use, modification, and distribution is subject to the Boost Software License, Version 1.0.<br>

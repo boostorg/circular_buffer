@@ -3,7 +3,7 @@
 // Note: The soft iterator invalidation definition can not be applied
 //       to the space optimized circular buffer.
 
-// Copyright (c) 2003-2006 Jan Gaspar
+// Copyright (c) 2003-2007 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at

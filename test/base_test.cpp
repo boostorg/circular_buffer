@@ -1,6 +1,6 @@
 // Test of the base circular buffer container.
 
-// Copyright (c) 2003-2006 Jan Gaspar
+// Copyright (c) 2003-2007 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -189,7 +189,7 @@ void iterator_comparison_test() {
     BOOST_CHECK(!(end - 1 < it));
 }
 
-// TODO add insert, linearize etc.
+// TODO add insert, push_back etc.
 void iterator_invalidation_test() {
 
 #if !defined(NDEBUG) && !defined(BOOST_CB_DISABLE_DEBUG)
@@ -327,6 +327,119 @@ void iterator_invalidation_test() {
     BOOST_CHECK(!it4.is_valid(&cb6));
     BOOST_CHECK(it2.is_valid(&cb6));
 
+    circular_buffer<MyInteger> cb7(10, 1);
+    cb7.push_back(2);
+    cb7.push_back(3);
+    cb7.push_back(4);
+    it1 = cb7.end();
+    it2 = cb7.begin();
+    it3 = cb7.begin() + 6;
+    cb7.linearize();
+    BOOST_CHECK(it1.is_valid(&cb7));
+    BOOST_CHECK(!it2.is_valid(&cb7));
+    BOOST_CHECK(!it3.is_valid(&cb7));
+    it1 = cb7.end();
+    it2 = cb7.begin();
+    it3 = cb7.begin() + 6;
+    cb7.linearize();
+    BOOST_CHECK(it1.is_valid(&cb7));
+    BOOST_CHECK(it2.is_valid(&cb7));
+    BOOST_CHECK(it3.is_valid(&cb7));
+
+    cb7.push_back(5);
+    cb7.push_back(6);
+    it1 = cb7.end();
+    it2 = cb7.begin();
+    it3 = cb7.begin() + 6;
+    cb7.set_capacity(10);
+    BOOST_CHECK(it1.is_valid(&cb7));
+    BOOST_CHECK(it2.is_valid(&cb7));
+    BOOST_CHECK(it3.is_valid(&cb7));
+    cb7.set_capacity(20);
+    BOOST_CHECK(it1.is_valid(&cb7));
+    BOOST_CHECK(!it2.is_valid(&cb7));
+    BOOST_CHECK(!it3.is_valid(&cb7));
+    cb7.push_back(7);
+    it1 = cb7.end();
+    it2 = cb7.begin();
+    it3 = cb7.begin() + 6;
+    cb7.set_capacity(10);
+    BOOST_CHECK(it1.is_valid(&cb7));
+    BOOST_CHECK(!it2.is_valid(&cb7));
+    BOOST_CHECK(!it3.is_valid(&cb7));
+
+    cb7.push_back(8);
+    cb7.push_back(9);
+    it1 = cb7.end();
+    it2 = cb7.begin();
+    it3 = cb7.begin() + 6;
+    cb7.rset_capacity(10);
+    BOOST_CHECK(it1.is_valid(&cb7));
+    BOOST_CHECK(it2.is_valid(&cb7));
+    BOOST_CHECK(it3.is_valid(&cb7));
+    cb7.rset_capacity(20);
+    BOOST_CHECK(it1.is_valid(&cb7));
+    BOOST_CHECK(!it2.is_valid(&cb7));
+    BOOST_CHECK(!it3.is_valid(&cb7));
+    cb7.push_back(10);
+    it1 = cb7.end();
+    it2 = cb7.begin();
+    it3 = cb7.begin() + 6;
+    cb7.rset_capacity(10);
+    BOOST_CHECK(it1.is_valid(&cb7));
+    BOOST_CHECK(!it2.is_valid(&cb7));
+    BOOST_CHECK(!it3.is_valid(&cb7));
+
+    circular_buffer<MyInteger> cb8(10, 1);
+    cb8.push_back(2);
+    cb8.push_back(3);
+    it1 = cb8.end();
+    it2 = cb8.begin();
+    it3 = cb8.begin() + 6;
+    cb8.resize(10);
+    BOOST_CHECK(it1.is_valid(&cb8));
+    BOOST_CHECK(it2.is_valid(&cb8));
+    BOOST_CHECK(it3.is_valid(&cb8));
+    cb8.resize(20);
+    BOOST_CHECK(it1.is_valid(&cb8));
+    BOOST_CHECK(!it2.is_valid(&cb8));
+    BOOST_CHECK(!it3.is_valid(&cb8));
+    cb8.push_back(4);
+    it1 = cb8.end();
+    it2 = cb8.begin();
+    it3 = cb8.begin() + 6;
+    it4 = cb8.begin() + 12;
+    cb8.resize(10);
+    BOOST_CHECK(it1.is_valid(&cb8));
+    BOOST_CHECK(it2.is_valid(&cb8));
+    BOOST_CHECK(it3.is_valid(&cb8));
+    BOOST_CHECK(!it4.is_valid(&cb8));
+
+    cb8.set_capacity(10);
+    cb8.push_back(5);
+    cb8.push_back(6);
+    it1 = cb8.end();
+    it2 = cb8.begin();
+    it3 = cb8.begin() + 6;
+    cb8.rresize(10);
+    BOOST_CHECK(it1.is_valid(&cb8));
+    BOOST_CHECK(it2.is_valid(&cb8));
+    BOOST_CHECK(it3.is_valid(&cb8));
+    cb8.rresize(20);
+    BOOST_CHECK(it1.is_valid(&cb8));
+    BOOST_CHECK(!it2.is_valid(&cb8));
+    BOOST_CHECK(!it3.is_valid(&cb8));
+    cb8.push_back(7);
+    it1 = cb8.end();
+    it2 = cb8.begin();
+    it3 = cb8.begin() + 6;
+    it4 = cb8.begin() + 12;
+    cb8.rresize(10);
+    BOOST_CHECK(it1.is_valid(&cb8));
+    BOOST_CHECK(!it2.is_valid(&cb8));
+    BOOST_CHECK(!it3.is_valid(&cb8));
+    BOOST_CHECK(it4.is_valid(&cb8));
+
 #endif // #if !defined(NDEBUG) && !defined(BOOST_CB_DISABLE_DEBUG)
 }
 
@@ -338,6 +451,11 @@ void exception_safety_test() {
     circular_buffer<MyInteger> cb1(3, 5);
     MyInteger::set_exception_trigger(3);
     BOOST_CHECK_THROW(cb1.set_capacity(5), exception);
+    BOOST_CHECK(cb1.capacity() == 3);
+    MyInteger::set_exception_trigger(3);
+    BOOST_CHECK_THROW(cb1.rset_capacity(5), exception);
+    BOOST_CHECK(cb1.capacity() == 3);
+    generic_test(cb1);
 
     MyInteger::set_exception_trigger(3);
     BOOST_CHECK_THROW(circular_buffer<MyInteger> cb2(5, 10), exception);
@@ -493,101 +611,6 @@ void exception_safety_test() {
 #endif // #if !defined(BOOST_NO_EXCEPTIONS)
 }
 
-void array_range_test() {
-
-    CB_CONTAINER<MyInteger> cb(7);
-    CB_CONTAINER<MyInteger>::array_range a1 = cb.array_one();
-    CB_CONTAINER<MyInteger>::array_range a2 = cb.array_two();
-    CB_CONTAINER<MyInteger>::const_array_range ca1 = cb.array_one();
-    CB_CONTAINER<MyInteger>::const_array_range ca2 = cb.array_two();
-
-    BOOST_CHECK(a1.second == 0);
-    BOOST_CHECK(a2.second == 0);
-    BOOST_CHECK(ca1.second == 0);
-    BOOST_CHECK(ca2.second == 0);
-
-    cb.push_back(1);
-    cb.push_back(2);
-    cb.push_back(3);
-    a1 = cb.array_one();
-    a2 = cb.array_two();
-    ca1 = cb.array_one();
-    ca2 = cb.array_two();
-
-    BOOST_CHECK(a1.first[0] == 1);
-    BOOST_CHECK(a1.first[2] == 3);
-    BOOST_CHECK(ca1.first[0] == 1);
-    BOOST_CHECK(ca1.first[2] == 3);
-    BOOST_CHECK(a1.second == 3);
-    BOOST_CHECK(a2.second == 0);
-    BOOST_CHECK(ca1.second == 3);
-    BOOST_CHECK(ca2.second == 0);
-
-    cb.push_back(4);
-    cb.push_back(5);
-    cb.push_back(6);
-    cb.push_back(7);
-    cb.push_back(8);
-    cb.push_back(9);
-    cb.push_back(10);
-    a1 = cb.array_one();
-    a2 = cb.array_two();
-    ca1 = cb.array_one();
-    ca2 = cb.array_two();
-
-    BOOST_CHECK(a1.first[0] == 4);
-    BOOST_CHECK(a1.first[3] == 7);
-    BOOST_CHECK(a2.first[0] == 8);
-    BOOST_CHECK(a2.first[2] == 10);
-    BOOST_CHECK(ca1.first[0] == 4);
-    BOOST_CHECK(ca1.first[3] == 7);
-    BOOST_CHECK(ca2.first[0] == 8);
-    BOOST_CHECK(ca2.first[2] == 10);
-    BOOST_CHECK(a1.second == 4);
-    BOOST_CHECK(a2.second == 3);
-    BOOST_CHECK(ca1.second == 4);
-    BOOST_CHECK(ca2.second == 3);
-
-    cb.pop_front();
-    cb.pop_back();
-    a1 = cb.array_one();
-    a2 = cb.array_two();
-    ca1 = cb.array_one();
-    ca2 = cb.array_two();
-
-    BOOST_CHECK(a1.first[0] == 5);
-    BOOST_CHECK(a1.first[2] == 7);
-    BOOST_CHECK(a2.first[0] == 8);
-    BOOST_CHECK(a2.first[1] == 9);
-    BOOST_CHECK(ca1.first[0] == 5);
-    BOOST_CHECK(ca1.first[2] == 7);
-    BOOST_CHECK(ca2.first[0] == 8);
-    BOOST_CHECK(ca2.first[1] == 9);
-    BOOST_CHECK(a1.second == 3);
-    BOOST_CHECK(a2.second == 2);
-    BOOST_CHECK(ca1.second == 3);
-    BOOST_CHECK(ca2.second == 2);
-
-    cb.pop_back();
-    cb.pop_back();
-    cb.pop_back();
-    a1 = cb.array_one();
-    a2 = cb.array_two();
-    ca1 = cb.array_one();
-    ca2 = cb.array_two();
-
-    BOOST_CHECK(a1.first[0] == 5);
-    BOOST_CHECK(a1.first[1] == 6);
-    BOOST_CHECK(ca1.first[0] == 5);
-    BOOST_CHECK(ca1.first[1] == 6);
-    BOOST_CHECK(a1.second == 2);
-    BOOST_CHECK(a2.second == 0);
-    BOOST_CHECK(ca1.second == 2);
-    BOOST_CHECK(ca2.second == 0);
-
-    generic_test(cb);
-}
-
 // test main
 test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
 
@@ -605,7 +628,6 @@ test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
     tests->add(BOOST_TEST_CASE(&iterator_comparison_test));
     tests->add(BOOST_TEST_CASE(&iterator_invalidation_test));
     tests->add(BOOST_TEST_CASE(&exception_safety_test));
-    tests->add(BOOST_TEST_CASE(&array_range_test));
 
     return tests;
 }
