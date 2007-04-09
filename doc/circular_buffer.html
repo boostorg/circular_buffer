@@ -1000,6 +1000,16 @@ template &lt;class T, class Alloc&gt;
             Create an empty <code>circular_buffer</code> with the specified capacity.
             <dl>
               <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
+                capacity &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == 0</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>Parameter(s):</b>
               </dt>
               <dd>
@@ -1021,16 +1031,6 @@ template &lt;class T, class Alloc&gt;
                     The allocator.
                   </dd>
                 </dl>
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Effect:</b>
-              </dt>
-              <dd>
-                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
-                capacity &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == 0</code>
               </dd>
             </dl>
             <dl>
@@ -1069,9 +1069,9 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> == n
-                &amp;&amp; <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n
-                &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this) [n - 1]
-                == item</code>
+                &amp;&amp; <a href="#classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a">full()</a>
+                &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this)[n - 1] ==
+                item</code>
               </dd>
             </dl>
             <dl>
@@ -1294,7 +1294,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
-            Create a <code>circular_buffer</code> filled with a copy of the range.
+            Create a full <code>circular_buffer</code> filled with a copy of the range.
             <dl>
               <dt>
                 <b>Precondition:</b>
@@ -1312,9 +1312,9 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 std::distance(first, last) &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == std::distance(first,
-                last) &amp;&amp; (*this)[0]== *first &amp;&amp; (*this)[1] == *(first + 1) &amp;&amp; ... &amp;&amp;
-                (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
+                "#classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a">full()</a> &amp;&amp; (*this)[0]==
+                *first &amp;&amp; (*this)[1] == *(first + 1) &amp;&amp; ... &amp;&amp; (*this)[std::distance(first,
+                last) - 1] == *(last - 1)</code>
               </dd>
             </dl>
             <dl>
@@ -3670,7 +3670,7 @@ template &lt;class T, class Alloc&gt;
                   </dt>
                   <dd>
                     The element the <code>circular_buffer</code> will be filled with in order to gain the requested
-                    size. (See the postcondition.)
+                    size. (See the <i>Effect</i>.)
                   </dd>
                 </dl>
               </dd>
@@ -6781,7 +6781,7 @@ template &lt;class T, class Alloc&gt;
           <p>
             <small>Use, modification, and distribution is subject to the Boost Software License, Version 1.0.<br>
             (See accompanying file <code>LICENSE_1_0.txt</code> or copy at <a href=
-            "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>.)</small>
+            "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</small>
           </p>
         </td>
         <td valign="top" align="right">

@@ -18,27 +18,18 @@ namespace boost {
 /*!
     \class circular_buffer_space_optimized
     \brief Space optimized circular buffer container adaptor.
-    \param T The type of the elements stored in the space optimized circular buffer.
-    \par Type Requirements T
-         The <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/Assignable.html">
-         SGIAssignable</a> (SGI STL defined combination of <a href="../../utility/Assignable.html">
-         Assignable</a> and <a href="../../utility/CopyConstructible.html">CopyConstructible</a>).
-         Moreover <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">
-         DefaultConstructible</a> if supplied as a default parameter when invoking some of the methods.
-    \param Alloc The allocator type used for all internal memory management.
-    \par Type Requirements Alloc
-         The <code>Alloc</code> has to meet the allocator requirements imposed by STL.
-    \par Default Alloc
-         std::allocator<T>
-    \author Jan Gaspar
-    \version 1.4
-    \date 2007
 
     For detailed documentation of the space_optimized_circular_buffer visit:
-    http://www.boost.org/libs/circular_buffer/doc/circular_buffer_adaptor.html
+    http://www.boost.org/libs/circular_buffer/doc/circular_buffer_space_optimized.html
 */
 template <class T, class Alloc>
-class circular_buffer_space_optimized : private circular_buffer<T, Alloc> {
+class circular_buffer_space_optimized :
+/*! \cond */
+#if BOOST_CB_ENABLE_DEBUG
+public
+#endif
+/*! \endcond */
+circular_buffer<T, Alloc> {
 public:
 // Typedefs
 
@@ -63,27 +54,31 @@ public:
     //! Capacity controller of the space optimized circular buffer.
     /*!
         <p><pre>
-    struct capacity_control {
-       capacity_control(size_type capacity, size_type min_capacity = 0) m_capacity(capacity), m_min_capacity(min_capacity) {};
-       size_type m_capacity;
-       size_type m_min_capacity;
-    };
-        </pre></p>
+class capacity_control {
+   size_type m_capacity;
+   size_type m_min_capacity;
+public:
+   capacity_control(size_type capacity, size_type min_capacity = 0) : m_capacity(capacity), m_min_capacity(min_capacity) {};
+   size_type %capacity() const { return m_capacity; }
+   size_type min_capacity() const { return m_min_capacity; }
+   operator size_type() const { return m_capacity; }
+};</pre></p>
         \pre <code>capacity >= min_capacity</code>
-        <p>The <code>m_capacity</code> denotes the capacity of the
-        <code>circular_buffer_space_optimized</code> and the <code>m_min_capacity</code>
-        determines the minimal allocated size of its internal buffer.</p>
-        <p>The converting constructor of the <code>capacity_control</code>
-        allows implicit conversion from <code>size_type</code> like types
-        which ensures compatibility of creating an instance of the
-        <code>circular_buffer_space_optimized</code> with other STL containers.</p>
+        <p>The <code>m_capacity</code> represents the capacity of the <code>circular_buffer_space_optimized</code> and
+        the <code>m_min_capacity</code> determines the minimal allocated size of its internal buffer.</p>
+        <p>The converting constructor of the <code>capacity_control</code> allows implicit conversion from
+        <code>size_type</code>-like types which ensures compatibility of creating an instance of the
+        <code>circular_buffer_space_optimized</code> with other STL containers. On the other hand the operator
+        <code>%size_type()</code> (returning <code>m_capacity</code>) provides implicit conversion to the
+        <code>size_type</code> which allows to treat the capacity of the <code>circular_buffer_space_optimized</code>
+        the same way as in the <code><a href="circular_buffer.html">circular_buffer</a></code>.</p>
     */
     typedef cb_details::capacity_control<size_type, T, Alloc> capacity_type;
 #else
     /*! \cond */
     typedef cb_details::capacity_control<size_type> capacity_type;
     /*! \endcond */
-#endif
+#endif // #if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 
 // Inherited
 
@@ -118,13 +113,48 @@ private:
 public:
 // Overridden
 
-    //! See the circular_buffer source documentation.
-    bool full() const { return capacity() == size(); }
+    //! Is the <code>circular_buffer_space_optimized</code> full?
+    /*!
+        \return <code>true</code> if the number of elements stored in the <code>circular_buffer_space_optimized</code>
+                equals the capacity of the <code>circular_buffer_space_optimized</code>; <code>false</code> otherwise.
+        \throws Nothing.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterators.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>empty()</code>
+    */
+    bool full() const { return m_capacity_ctrl.capacity() == size(); }
 
-    //! See the circular_buffer source documentation.
-    size_type reserve() const { return capacity() - size(); }
+    /*! \brief Get the maximum number of elements which can be inserted into the
+               <code>circular_buffer_space_optimized</code> without overwriting any of already stored elements.
+        \return <code>capacity() - size()</code>
+        \throws Nothing.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterators.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>capacity()</code>, <code>size()</code>, <code>max_size()</code>
+    */
+    size_type reserve() const { return m_capacity_ctrl.capacity() - size(); }
 
-    //! See the circular_buffer source documentation.
+    //! Get the capacity of the <code>circular_buffer_space_optimized</code>.
+    /*!
+        \return The capacity controller representing the maximum number of elements which can be stored in the
+                <code>circular_buffer_space_optimized</code> and the minimal allocated size of the internal buffer.
+        \throws Nothing.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterators.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>reserve()</code>, <code>size()</code>, <code>max_size()</code>, <code>set_capacity()</code>
+    */
     const capacity_type& capacity() const { return m_capacity_ctrl; }
 
 #if defined(BOOST_CB_TEST)
@@ -138,28 +168,69 @@ public:
 
 #endif // #if defined(BOOST_CB_TEST)
 
-    //! TODO Change the minimal guaranteed amount of allocated memory.
-    /*!
-        \pre <code>(*this).capacity() >= new_min_capacity</code>
-        \post <code>(*this).min_capacity() == new_min_capacity</code>
-              Allocates memory specified by the <code>new_min_capacity</code> parameter.
-        \note It is considered as a bug if the precondition is not met (i.e. if
-              <code>new_min_capacity > (*this).capacity()</code>) and an assertion
-              will be invoked in the debug mode.
-
-         \pre <code>min_capacity() <= new_capacity</code>
-         \note It is considered as a bug if the precondition is not met (i.e. if
-               <code>new_capacity > min_capacity()</code>) and an assertion
-               will be invoked in the debug mode.
+    /*! \brief Change the capacity (and the minimal guaranteed amount of allocated memory) of the
+               <code>circular_buffer_space_optimized</code>.
+        \post <code>capacity() == capacity_ctrl \&\& size() \<= capacity_ctrl.capacity()</code><br><br>
+              If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
+              than the desired new capacity then number of <code>[size() - capacity_ctrl.capacity()]</code> <b>last</b>
+              elements will be removed and the new size will be equal to <code>capacity_ctrl.capacity()</code>.<br><br>
+              If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is lower
+              than than the new capacity the allocated memory (in the internal buffer) may be accommodated as necessary
+              but it will never drop below <code>capacity_ctrl.min_capacity()</code>.
+        \param capacity_ctrl The new capacity controller.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to end()).
+        \par Complexity
+             Linear (in the size/new capacity of the <code>circular_buffer_space_optimized</code>).
+        \note To explicitly clear the extra allocated memory use the <b>shrink-to-fit</b> technique:<br><br>
+              <code>boost::%circular_buffer_space_optimized\<int\> cb(1000);<br>
+              ...<br>
+              boost::%circular_buffer_space_optimized\<int\>(cb).swap(cb);</code><br><br>
+              For more information about the shrink-to-fit technique in STL see
+              <a href="http://www.gotw.ca/gotw/054.htm">http://www.gotw.ca/gotw/054.htm</a>.
+        \sa <code>rset_capacity()</code>, <code>resize()</code>
     */
-    void set_capacity(const capacity_type& new_capacity) {
-        m_capacity_ctrl = new_capacity;
-        if (new_capacity.capacity() < circular_buffer<T, Alloc>::capacity())
-            circular_buffer<T, Alloc>::set_capacity(new_capacity.capacity());
-        set_min_capacity(new_capacity.min_capacity());
+    void set_capacity(const capacity_type& capacity_ctrl) {
+        m_capacity_ctrl = capacity_ctrl;
+        if (capacity_ctrl.capacity() < circular_buffer<T, Alloc>::capacity())
+            circular_buffer<T, Alloc>::set_capacity(capacity_ctrl.capacity());
+        set_min_capacity(capacity_ctrl.min_capacity());
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
     }
 
-    //! See the circular_buffer source documentation.
+    //! Change the size of the <code>circular_buffer_space_optimized</code>.
+    /*!
+        \post <code>size() == new_size \&\& capacity().%capacity() >= new_size</code><br><br>
+              If the new size is greater than the current size, copies of <code>item</code> will be inserted at the
+              <b>back</b> of the of the <code>circular_buffer_space_optimized</code> in order to achieve the desired
+              size. In the case the resulting size exceeds the current capacity the capacity will be set to
+              <code>new_size</code>.<br><br>
+              If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
+              than the desired new size then number of <code>[size() - new_size]</code> <b>last</b> elements will be
+              removed. (The capacity will remain unchanged.)
+        \param new_size The new size.
+        \param item The element the <code>circular_buffer_space_optimized</code> will be filled with in order to gain
+                    the requested size. (See the <i>Effect</i>.)
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to end()).
+        \par Complexity
+             Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>rresize()</code>, <code>set_capacity()</code>
+    */
     void resize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
             if (new_size > capacity())
@@ -168,36 +239,90 @@ public:
         } else {
             erase(end() - (size() - new_size), end());
         }
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
     }
 
-    //! See the circular_buffer source documentation.
-    /*!
-         \pre <code>min_capacity() <= new_capacity</code>
-         \note It is considered as a bug if the precondition is not met (i.e. if
-               <code>new_capacity > min_capacity()</code>) and an assertion
-               will be invoked in the debug mode.
+    /*! \brief Change the capacity (and the minimal guaranteed amount of allocated memory) of the
+               <code>circular_buffer_space_optimized</code>.
+        \post <code>capacity() == capacity_ctrl \&\& size() \<= capacity_ctrl</code><br><br>
+              If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
+              than the desired new capacity then number of <code>[size() - capacity_ctrl.capacity()]</code>
+              <b>first</b> elements will be removed and the new size will be equal to
+              <code>capacity_ctrl.capacity()</code>.<br><br>
+              If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is lower
+              than than the new capacity the allocated memory (in the internal buffer) may be accommodated as necessary
+              but it will never drop below <code>capacity_ctrl.min_capacity()</code>.
+        \param capacity_ctrl The new capacity controller.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to end()).
+        \par Complexity
+             Linear (in the size/new capacity of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>set_capacity()</code>, <code>rresize()</code>
     */
-    void rset_capacity(const capacity_type& new_capacity) {
-        m_capacity_ctrl = new_capacity;
-        if (new_capacity.capacity() < circular_buffer<T, Alloc>::capacity())
-            circular_buffer<T, Alloc>::rset_capacity(new_capacity.capacity());
-        set_min_capacity(new_capacity.min_capacity());
+    void rset_capacity(const capacity_type& capacity_ctrl) {
+        m_capacity_ctrl = capacity_ctrl;
+        if (capacity_ctrl.capacity() < circular_buffer<T, Alloc>::capacity())
+            circular_buffer<T, Alloc>::rset_capacity(capacity_ctrl.capacity());
+        set_min_capacity(capacity_ctrl.min_capacity());
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
     }
 
-    //! See the circular_buffer source documentation.
+    //! Change the size of the <code>circular_buffer_space_optimized</code>.
+    /*!
+        \post <code>size() == new_size \&\& capacity().%capacity() >= new_size</code><br><br>
+              If the new size is greater than the current size, copies of <code>item</code> will be inserted at the
+              <b>front</b> of the of the <code>circular_buffer_space_optimized</code> in order to achieve the desired
+              size. In the case the resulting size exceeds the current capacity the capacity will be set to
+              <code>new_size</code>.<br><br>
+              If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
+              than the desired new size then number of <code>[size() - new_size]</code> <b>first</b> elements will be
+              removed. (The capacity will remain unchanged.)
+        \param new_size The new size.
+        \param item The element the <code>circular_buffer_space_optimized</code> will be filled with in order to gain
+                    the requested size. (See the <i>Effect</i>.)
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to end()).
+        \par Complexity
+             Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>rresize()</code>, <code>set_capacity()</code>
+    */
     void rresize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
             if (new_size > capacity())
                 m_capacity_ctrl.m_capacity = new_size;
-            insert(begin(), new_size - size(), item);
+            rinsert(begin(), new_size - size(), item);
         } else {
-            erase(begin(), end() - new_size);
+            rerase(begin(), end() - new_size);
         }
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
     }
 
     //! Create an empty space optimized circular buffer with a maximum capacity.
     /*!
-        TODO - doc
+        \post <code>capacity().%capacity() == max_size() \&\& capacity().min_capacity() == 0 \&\& size() == 0</code>
+              <br><br>There is no memory allocated in the internal buffer after execution of this constructor.
+        \param alloc The allocator.
+        \throws Nothing.
+        \par Complexity
+             Constant.
     */
     explicit circular_buffer_space_optimized(
         const allocator_type& alloc = allocator_type())
@@ -206,17 +331,15 @@ public:
 
     //! Create an empty space optimized circular buffer with the specified capacity.
     /*!
-        \param capacity_ctrl The capacity of the buffer.
-        (param min_capacity The minimal guaranteed amount of allocated memory.)
-               (The metrics of the min_capacity is number of items.)
+        \post <code>capacity() == capacity_ctrl \&\& size() == 0</code>
+        \param capacity_ctrl The capacity controller representing the maximum number of elements which can be stored in
+                             the <code>circular_buffer_space_optimized</code> and the minimal allocated size of the
+                             internal buffer.
         \param alloc The allocator.
-        \pre <code>capacity >= min_capacity</code>
-        \post <code>(*this).capacity() == capacity \&\& (*this).size == 0</code><br>
-              Allocates memory specified by the <code>min_capacity</code> parameter.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
-        \note It is considered as a bug if the precondition is not met (i.e. if
-              <code>capacity < min_capacity</code>) and an assertion will be invoked
-              in the debug mode.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \par Complexity
+             Constant.
     */
     explicit circular_buffer_space_optimized(
         capacity_type capacity_ctrl,
@@ -224,20 +347,21 @@ public:
     : circular_buffer<T, Alloc>(capacity_ctrl.m_min_capacity, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
-    //! Create a full space optimized circular buffer filled with copies of <code>item</code>.
-    /*!
-        \param capacity_ctrl The capacity of the buffer.
-        (param min_capacity The minimal guaranteed amount of allocated memory.)
-               (The metrics of the min_capacity is number of items.)
-        \param item The item to be filled with.
+    /*! \brief Create a full space optimized circular buffer with the specified capacity (and the minimal guaranteed
+               amount of allocated memory) filled with <code>capacity_ctrl.%capacity()</code> copies of
+               <code>item</code>.
+        \post <code>capacity() == capacity_ctrl \&\& full() \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ...
+              \&\& (*this) [capacity_ctrl.%capacity() - 1] == item </code>
+        \param capacity_ctrl The capacity controller representing the maximum number of elements which can be stored in
+                             the <code>circular_buffer_space_optimized</code> and the minimal allocated size of the
+                             internal buffer.
+        \param item The element the created <code>circular_buffer_space_optimized</code> will be filled with.
         \param alloc The allocator.
-        \pre <code>capacity >= min_capacity</code>
-        \post <code>(*this).size() == capacity \&\& (*this)[0] == (*this)[1] == ... == (*this).back() == item</code>
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
-        \throws Whatever T::T(const T&) throws.
-        \note It is considered as a bug if the precondition is not met (i.e. if
-              <code>capacity < min_capacity</code>) and an assertion will be invoked
-              in the debug mode.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Complexity
+             Linear (in the <code>capacity_ctrl.%capacity()</code>).
     */
     circular_buffer_space_optimized(
         capacity_type capacity_ctrl,
@@ -246,7 +370,24 @@ public:
     : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
-    //! TODO doc
+    /*! \brief Create a space optimized circular buffer with the specified capacity (and the minimal guaranteed amount
+               of allocated memory) filled with <code>n</code> copies of <code>item</code>.
+        \pre <code>capacity_ctrl.%capacity() >= n</code>
+        \post <code>capacity() == capacity_ctrl \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item
+              \&\& ... \&\& (*this)[n - 1] == item</code><br><br>
+              Allocates at least as much memory as specified by the <code>capacity_ctrl.min_capacity()</code>.
+        \param capacity_ctrl The capacity controller representing the maximum number of elements which can be stored in
+                             the <code>circular_buffer_space_optimized</code> and the minimal allocated size of the
+                             internal buffer.
+        \param n The number of elements the created <code>circular_buffer_space_optimized</code> will be filled with.
+        \param item The element the created <code>circular_buffer_space_optimized</code> will be filled with.
+        \param alloc The allocator.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Complexity
+             Linear (in the <code>n</code>).
+    */
     circular_buffer_space_optimized(
         capacity_type capacity_ctrl,
         size_type n,
@@ -255,21 +396,13 @@ public:
     : circular_buffer<T, Alloc>(init_capacity(capacity_ctrl, n), n, item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
-#if defined(BOOST_CB_NEVER_DEFINED)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
-    // Default copy constructor - declared only for documentation purpose.
-    /*
-       \note This section will never be compiled. The default copy constructor
-             will be generated instead.
-    */
-    //! TODO doc
-    circular_buffer_space_optimized(const circular_buffer_space_optimized<T, Alloc>& cb);
+    /*! \cond */
+    circular_buffer_space_optimized(const circular_buffer_space_optimized<T, Alloc>& cb)
+    : circular_buffer<T, Alloc>(cb.begin(), cb.end())
+    , m_capacity_ctrl(cb.m_capacity_ctrl) {}
 
-#endif // #if defined(BOOST_CB_NEVER_DEFINED)
-
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
-    // TODO describe workaround
     template <class InputIterator>
     circular_buffer_space_optimized(
         InputIterator first,
@@ -277,7 +410,6 @@ public:
     : circular_buffer<T, Alloc>(first, last)
     , m_capacity_ctrl(circular_buffer<T, Alloc>::capacity()) {}
 
-  // TODO describe workaround
     template <class InputIterator>
     circular_buffer_space_optimized(
         capacity_type capacity_ctrl,
@@ -289,10 +421,43 @@ public:
     , m_capacity_ctrl(capacity_ctrl) {
         check_high_capacity(is_integral<InputIterator>());
     }
+    /*! \endcond */
 
 #else
 
-    //! TODO doc
+    //! The copy constructor.
+    /*!
+        Creates a copy of the specified <code>circular_buffer_space_optimized</code>.
+        \post <code>*this == cb</code><br><br>
+              Allocates the exact amount of memory to store the content of <code>cb</code>.
+        \param cb The <code>circular_buffer_space_optimized</code> to be copied.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Complexity
+             Linear (in the size of <code>cb</code>).
+    */
+    circular_buffer_space_optimized(const circular_buffer_space_optimized<T, Alloc>& cb)
+    : circular_buffer<T, Alloc>(cb.begin(), cb.end(), cb.get_allocator())
+    , m_capacity_ctrl(cb.m_capacity_ctrl) {}
+
+    //! Create a full space optimized circular buffer filled with a copy of the range.
+    /*!
+        \pre Valid range <code>[first, last)</code>.<br>
+             <code>first</code> and <code>last</code> have to meet the requirements of
+             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+        \post <code>capacity().%capacity() == std::distance(first, last) \&\& capacity().min_capacity() == 0 \&\&
+              full() \&\& (*this)[0]== *first \&\& (*this)[1] == *(first + 1) \&\& ... \&\&
+              (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
+        \param first The beginning of the range to be copied.
+        \param last The end of the range to be copied.
+        \param alloc The allocator.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Complexity
+             Linear (in the <code>std::distance(first, last)</code>).
+    */
     template <class InputIterator>
     circular_buffer_space_optimized(
         InputIterator first,
@@ -301,28 +466,29 @@ public:
     : circular_buffer<T, Alloc>(first, last, alloc)
     , m_capacity_ctrl(circular_buffer<T, Alloc>::capacity()) {}
 
-
-    //! Create a space optimized circular buffer with a copy of a range.
-    /*!
-        \param capacity_ctrl The capacity of the buffer.
-        (param min_capacity The minimal guaranteed amount of allocated memory.)
-              (The metrics of the min_capacity is number of items.)
-        \param first The beginning of the range.
-        \param last The end of the range.
+    /*! \brief Create a space optimized circular buffer with the specified capacity (and the minimal guaranteed amount
+               of allocated memory) filled with a copy of the range.
+        \pre Valid range <code>[first, last)</code>.<br>
+             <code>first</code> and <code>last</code> have to meet the requirements of
+             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+        \post <code>capacity() == capacity_ctrl \&\& size() \<= std::distance(first, last) \&\& (*this)[0]==
+              *(last - capacity_ctrl.%capacity()) \&\& (*this)[1] == *(last - capacity_ctrl.%capacity() + 1) \&\& ...
+              \&\& (*this)[capacity_ctrl.%capacity() - 1] == *(last - 1)</code><br><br>
+              Allocates at least as much memory as specified by the <code>capacity_ctrl.min_capacity()</code>.<br><br>
+              If the number of items to be copied from the range <code>[first, last)</code> is greater than the
+              specified <code>capacity_ctrl.%capacity()</code> then only elements from the range
+              <code>[last - capacity_ctrl.%capacity(), last)</code> will be copied.
+        \param capacity_ctrl The capacity controller representing the maximum number of elements which can be stored in
+                             the <code>circular_buffer_space_optimized</code> and the minimal allocated size of the
+                             internal buffer.
+        \param first The beginning of the range to be copied.
+        \param last The end of the range to be copied.
         \param alloc The allocator.
-        \pre <code>capacity >= min_capacity</code> and valid range <code>[first, last)</code>.
-        \post <code>(*this).capacity() == capacity</code><br>
-              Allocates at least as much memory as specified by the - TODO change
-              <code>min_capacity</code> parameter.<br>
-              If the number of items to copy from the range
-              <code>[first, last)</code> is greater than the specified
-              <code>capacity</code> then only elements from the range
-              <code>[last - capacity, last)</code> will be copied.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is used).
-        \throws Whatever T::T(const T&) throws.
-        \note It is considered as a bug if the precondition is not met (i.e. if
-              <code>capacity < min_capacity</code>) and an assertion will be invoked
-              in the debug mode.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Complexity
+             Linear (in the <code>capacity_ctrl.%capacity()</code>/<code>std::distance(first, last)</code>).
     */
     template <class InputIterator>
     circular_buffer_space_optimized(
@@ -337,20 +503,25 @@ public:
         check_high_capacity(is_integral<InputIterator>());
     }
 
-#endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
 #if defined(BOOST_CB_NEVER_DEFINED)
+// This section will never be compiled - the default destructor and assignment operator will be generated instead.
+// Declared only for documentation purpose.
 
-    // Default destructor
-    //! TODO doc
+    //! The destructor.
+    /*!
+        Destroys the <code>circular_buffer_space_optimized</code>.
+        \throws Nothing.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (including
+             iterators equal to end()).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>clear()</code>
+    */
     ~circular_buffer_space_optimized();
 
-
-    // Assignment operator - declared only for documentation purpose.
-    /*
-       \note This section will never be compiled. The default assignment
-             operator will be generated instead.
-    */
     //! TODO doc
     circular_buffer_space_optimized<T, Alloc>& operator = (const circular_buffer_space_optimized<T, Alloc>& cb);
 
@@ -614,15 +785,15 @@ private:
             ensure_reserve(new_capacity, size()));
     }
 
-    //! TODO doc
+    //! Specialized method for checking of the high capacity.
     void check_high_capacity(const true_type&) {}
 
-    //! TODO doc
+    //! Specialized method for checking of the high capacity.
     void check_high_capacity(const false_type&) {
         check_high_capacity();
     }
 
-    //! TODO doc
+    //! Determine the initial capacity.
     static size_type init_capacity(const capacity_type& capacity_ctrl, size_type n) {
         BOOST_CB_ASSERT(capacity_ctrl.m_capacity >= n); // check for capacity lower than n
         return std::max(capacity_ctrl.m_min_capacity, n);

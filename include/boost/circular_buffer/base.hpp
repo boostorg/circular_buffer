@@ -52,9 +52,6 @@ namespace boost {
          The <code>Alloc</code> has to meet the allocator requirements imposed by STL.
     \par Default Alloc
          std::allocator<T>
-    \author Jan Gaspar
-    \version 3.7
-    \date 2007
 
     For detailed documentation of the circular_buffer visit:
     http://www.boost.org/libs/circular_buffer/doc/circular_buffer.html
@@ -64,7 +61,7 @@ class circular_buffer
 /*! \cond */
 #if BOOST_CB_ENABLE_DEBUG
 : public cb_details::debug_iterator_registry
-#endif // #if BOOST_CB_ENABLE_DEBUG
+#endif
 /*! \endcond */
 {
 
@@ -800,7 +797,7 @@ public:
               capacity will remain unchanged.)
         \param new_size The new size.
         \param item The element the <code>circular_buffer</code> will be filled with in order to gain the requested
-                    size. (See the postcondition.)
+                    size. (See the <i>Effect</i>.)
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
         \throws Whatever <code>T::T(const T&)</code> throws.
@@ -912,9 +909,9 @@ public:
 
     //! Create an empty <code>circular_buffer</code> with the specified capacity.
     /*!
+        \post <code>capacity() == capacity \&\& size() == 0</code>
         \param capacity The maximum number of elements which can be stored in the <code>circular_buffer</code>.
         \param alloc The allocator.
-        \post <code>capacity() == capacity \&\& size() == 0</code>
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
         \par Complexity
@@ -927,8 +924,8 @@ public:
 
     /*! \brief Create a full <code>circular_buffer</code> with the specified capacity and filled with <code>n</code>
                copies of <code>item</code>.
-        \post <code>capacity() == n \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ... \&\&
-              (*this) [n - 1] == item </code>
+        \post <code>capacity() == n \&\& full() \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ... \&\&
+              (*this)[n - 1] == item </code>
         \param n The number of elements the created <code>circular_buffer</code> will be filled with.
         \param item The element the created <code>circular_buffer</code> will be filled with.
         \param alloc The allocator.
@@ -988,7 +985,7 @@ public:
         BOOST_CATCH_END
     }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
     /*! \cond */
     template <class InputIterator>
@@ -1006,14 +1003,13 @@ public:
 
 #else
 
-    //! Create a <code>circular_buffer</code> filled with a copy of the range.
+    //! Create a full <code>circular_buffer</code> filled with a copy of the range.
     /*!
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
              <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
-        \post <code>capacity() == std::distance(first, last) \&\& size() == std::distance(first, last) \&\&
-             (*this)[0]== *first \&\& (*this)[1] == *(first + 1) \&\& ... \&\& (*this)[std::distance(first, last) - 1]
-             == *(last - 1)</code>
+        \post <code>capacity() == std::distance(first, last) \&\& full() \&\& (*this)[0]== *first \&\&
+              (*this)[1] == *(first + 1) \&\& ... \&\& (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
         \param first The beginning of the range to be copied.
         \param last The end of the range to be copied.
         \param alloc The allocator.
@@ -1057,7 +1053,7 @@ public:
         initialize(capacity, first, last, is_integral<InputIterator>());
     }
 
-#endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
     //! The destructor.
     /*!
@@ -2149,7 +2145,7 @@ private:
             clear();
             insert(begin(), first, last);
         } else {
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
             circular_buffer<value_type, allocator_type> tmp(new_capacity, m_alloc);
             tmp.insert(begin(), first, last);
 #else

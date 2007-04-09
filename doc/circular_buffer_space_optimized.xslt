@@ -23,7 +23,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <xsl:variable name="standalone-functions" select="document(concat($xmldir, '/namespaceboost.xml'))/doxygen/compounddef/sectiondef[@kind='func']"/>
 
   <xsl:template name="reference">
-    <xsl:variable name="refid" select="$circular_buffer-reimplemented[@refid=current()/@refid]/../@id"/>
+    <xsl:variable name="refid" select="$circular_buffer-reimplemented[@refid=current()/@refid and text()!='capacity_type']/../@id"/>
     <xsl:value-of select="concat(substring(concat($link-prefix, '#', $refid), 1 div (string-length($refid) &gt; 0)), substring(concat('#', @refid), 1 div (string-length($refid) = 0)))"/>
   </xsl:template>
 
@@ -71,30 +71,6 @@ http://www.boost.org/LICENSE_1_0.txt)
     <xsl:for-each select="$current[string-length(normalize-space(briefdescription)) &gt; 0]">
       <xsl:apply-templates select="." mode="synopsis"/>
     </xsl:for-each>
-    <!--
-    <xsl:for-each select="$current | document($circular_buffer-file)/doxygen/compounddef[@id = $circular_buffer-ref and @kind = 'class']/sectiondef[@kind='public-func']/memberdef[type != '']">
-      <xsl:variable name="briefdescription" select="normalize-space(briefdescription)"/>
-      <xsl:if test="string-length($briefdescription) &gt; 0">
-        <xsl:choose>
-          <xsl:when test="count($current[name=current()/name]) &gt; 0 and count(param/type[ref='circular_buffer']) &gt; 0">
-            <xsl:apply-templates select="$current[name=current()/name]" mode="synopsis">
-              <xsl:with-param name="link-prefix" select="$link-prefix"/>
-              <xsl:with-param name="link" select="@id"/>
-            </xsl:apply-templates>
-          </xsl:when>
-          <xsl:when test="count($current[name=current()/name]) &gt; 0 and count(param/type[ref='circular_buffer_space_optimized']) &gt; 0"/>
-          <xsl:when test="../../compoundname = 'boost::circular_buffer_space_optimized'">
-            <xsl:apply-templates select="." mode="synopsis"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="." mode="synopsis">
-              <xsl:with-param name="link-prefix" select="$link-prefix"/>
-            </xsl:apply-templates>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:if>
-    </xsl:for-each>
-    -->
   </xsl:template>
 
   <xsl:template name="standalone-functions">

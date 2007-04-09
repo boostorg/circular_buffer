@@ -190,11 +190,11 @@ public:
    const capacity_type&amp; <a href=
 "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity</a>() const;
    void <a href=
-"#classboost_1_1circular__buffer__space__optimized_143fa35280fc3cad2a6510065a065d67c">set_capacity</a>(const capacity_type&amp; new_capacity);
+"#classboost_1_1circular__buffer__space__optimized_149f28bc5b33d2062b9f6a33b48264e3f">set_capacity</a>(const capacity_type&amp; capacity_ctrl);
    void <a href=
 "#classboost_1_1circular__buffer__space__optimized_1f244ff5576b79f8d60e273c02d71c9f2">resize</a>(size_type new_size, const_reference item = value_type());
    void <a href=
-"#classboost_1_1circular__buffer__space__optimized_16e2c5d77ea32819fd28f8ff2d5ce888a">rset_capacity</a>(size_type new_capacity);
+"#classboost_1_1circular__buffer__space__optimized_10f096c108ebde69ae83a9de41b3bea56">rset_capacity</a>(const capacity_type&amp; capacity_ctrl);
    void <a href=
 "#classboost_1_1circular__buffer__space__optimized_1d45e2e72d9e3fb42e090ebc47ac8d7ee">rresize</a>(size_type new_size, const_reference item = value_type());
    circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; <a href=
@@ -323,12 +323,15 @@ template &lt;class T, class Alloc&gt;
           <td>
             Capacity controller of the space optimized circular buffer.
             <pre>
-    struct capacity_control {
-       capacity_control(size_type capacity, size_type min_capacity = 0) m_capacity(capacity), m_min_capacity(min_capacity) {};
-       size_type m_capacity;
-       size_type m_min_capacity;
-    };
-        
+class capacity_control {
+   size_type m_capacity;
+   size_type m_min_capacity;
+public:
+   capacity_control(size_type capacity, size_type min_capacity = 0) : m_capacity(capacity), m_min_capacity(min_capacity) {};
+   size_type capacity() const { return m_capacity; }
+   size_type min_capacity() const { return m_min_capacity; }
+   operator size_type() const { return m_capacity; }
+};
 </pre>
             <dl>
               <dt>
@@ -337,11 +340,15 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 <code>capacity &gt;= min_capacity</code>
               </dd>
-            </dl>The <code>m_capacity</code> denotes the capacity of the <code>circular_buffer_space_optimized</code>
-            and the <code>m_min_capacity</code> determines the minimal allocated size of its internal buffer. The
-            converting constructor of the <code>capacity_control</code> allows implicit conversion from
-            <code>size_type</code> like types which ensures compatibility of creating an instance of the
-            <code>circular_buffer_space_optimized</code> with other STL containers.
+            </dl>The <code>m_capacity</code> represents the capacity of the
+            <code>circular_buffer_space_optimized</code> and the <code>m_min_capacity</code> determines the minimal
+            allocated size of its internal buffer. The converting constructor of the <code>capacity_control</code>
+            allows implicit conversion from <code>size_type</code>-like types which ensures compatibility of creating
+            an instance of the <code>circular_buffer_space_optimized</code> with other STL containers. On the other
+            hand the operator <code>size_type()</code> (returning <code>m_capacity</code>) provides implicit conversion
+            to the <code>size_type</code> which allows to treat the capacity of the
+            <code>circular_buffer_space_optimized</code> the same way as in the <code><a href=
+            "circular_buffer.html">circular_buffer</a></code>.
           </td>
         </tr>
       </table>
@@ -363,9 +370,55 @@ template &lt;class T, class Alloc&gt;
             alloc = allocator_type());</b></code><br>
             <br>
             Create an empty space optimized circular buffer with a maximum capacity.
-            <p>
-              TODO - doc
-            </p>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity()
+                == <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a>
+                &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.min_capacity()
+                == 0 &amp;&amp; <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                0</code><br>
+                <br>
+                There is no memory allocated in the internal buffer after execution of this constructor.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>alloc</code>
+                  </dt>
+                  <dd>
+                    The allocator.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant.
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -373,12 +426,24 @@ template &lt;class T, class Alloc&gt;
             <a id="classboost_1_1circular__buffer__space__optimized_1741159a0511a4e0fed6eaab6d6959fa7" name=
             "classboost_1_1circular__buffer__space__optimized_1741159a0511a4e0fed6eaab6d6959fa7"></a><code><b>explicit
             circular_buffer_space_optimized(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>
+            "#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>
             capacity_ctrl, const <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
             <br>
             Create an empty space optimized circular buffer with the specified capacity.
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
+                capacity_ctrl &amp;&amp; <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                0</code>
+              </dd>
+            </dl>
             <dl>
               <dt>
                 <b>Parameter(s):</b>
@@ -389,8 +454,8 @@ template &lt;class T, class Alloc&gt;
                     <code>capacity_ctrl</code>
                   </dt>
                   <dd>
-                    The capacity of the buffer. (param min_capacity The minimal guaranteed amount of allocated memory.)
-                    (The metrics of the min_capacity is number of items.)
+                    The capacity controller representing the maximum number of elements which can be stored in the
+                    <code>circular_buffer_space_optimized</code> and the minimal allocated size of the internal buffer.
                   </dd>
                 </dl>
               </dd>
@@ -407,25 +472,6 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Precondition:</b>
-              </dt>
-              <dd>
-                <code>capacity &gt;= min_capacity</code>
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Effect:</b>
-              </dt>
-              <dd>
-                <code>(*this).<a href=
-                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
-                capacity &amp;&amp; (*this).size == 0</code><br>
-                Allocates memory specified by the <code>min_capacity</code> parameter.
-              </dd>
-            </dl>
-            <dl>
-              <dt>
                 <b>Throws:</b>
               </dt>
               <dd>
@@ -435,11 +481,10 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Complexity:</b>
               </dt>
               <dd>
-                It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt;
-                min_capacity</code>) and an assertion will be invoked in the debug mode.
+                Constant.
               </dd>
             </dl>
           </td>
@@ -447,14 +492,28 @@ template &lt;class T, class Alloc&gt;
         <tr>
           <td>
             <a id="classboost_1_1circular__buffer__space__optimized_1f8c9fa872f9a84d454d7e245cc2eadbd" name=
-            "classboost_1_1circular__buffer__space__optimized_1f8c9fa872f9a84d454d7e245cc2eadbd"></a><code><b>circular_buffer_space_optimized(<a href="circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>
+            "classboost_1_1circular__buffer__space__optimized_1f8c9fa872f9a84d454d7e245cc2eadbd"></a><code><b>circular_buffer_space_optimized(<a href="#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>
             capacity_ctrl, <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item, const <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
             <br>
-            Create a full space optimized circular buffer filled with copies of <code>item</code>.
+            Create a full space optimized circular buffer with the specified capacity (and the minimal guaranteed
+            amount of allocated memory) filled with <code>capacity_ctrl.capacity()</code> copies of <code>item</code>.
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
+                capacity_ctrl &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer__space__optimized_142f4a13c50904a4ac0bf746c88451954">full()</a>
+                &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this)
+                [capacity_ctrl.capacity() - 1] == item</code>
+              </dd>
+            </dl>
             <dl>
               <dt>
                 <b>Parameter(s):</b>
@@ -465,8 +524,8 @@ template &lt;class T, class Alloc&gt;
                     <code>capacity_ctrl</code>
                   </dt>
                   <dd>
-                    The capacity of the buffer. (param min_capacity The minimal guaranteed amount of allocated memory.)
-                    (The metrics of the min_capacity is number of items.)
+                    The capacity controller representing the maximum number of elements which can be stored in the
+                    <code>circular_buffer_space_optimized</code> and the minimal allocated size of the internal buffer.
                   </dd>
                 </dl>
               </dd>
@@ -476,7 +535,7 @@ template &lt;class T, class Alloc&gt;
                     <code>item</code>
                   </dt>
                   <dd>
-                    The item to be filled with.
+                    The element the created <code>circular_buffer_space_optimized</code> will be filled with.
                   </dd>
                 </dl>
               </dd>
@@ -493,10 +552,46 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>capacity_ctrl.capacity()</code>).
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer__space__optimized_1d29ce80b10d4a3250fedeb9427210d96" name=
+            "classboost_1_1circular__buffer__space__optimized_1d29ce80b10d4a3250fedeb9427210d96"></a><code><b>circular_buffer_space_optimized(<a href="#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>
+            capacity_ctrl, <a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n,
+            <a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
+            item, const <a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
+            alloc = allocator_type());</b></code><br>
+            <br>
+            Create a space optimized circular buffer with the specified capacity (and the minimal guaranteed amount of
+            allocated memory) filled with <code>n</code> copies of <code>item</code>.
+            <dl>
+              <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>capacity &gt;= min_capacity</code>
+                <code>capacity_ctrl.capacity() &gt;= n</code>
               </dd>
             </dl>
             <dl>
@@ -504,11 +599,61 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code>(*this).<a href=
-                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
-                capacity &amp;&amp; (*this)[0] == (*this)[1] == ... == (*this).<a href=
-                "circular_buffer.html#classboost_1_1circular__buffer_1d985d974020f88bb4255d8edbae0a30a">back()</a> ==
-                item</code>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
+                capacity_ctrl &amp;&amp; <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n
+                &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this)[n - 1] ==
+                item</code><br>
+                <br>
+                Allocates at least as much memory as specified by the <code>capacity_ctrl.min_capacity()</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>capacity_ctrl</code>
+                  </dt>
+                  <dd>
+                    The capacity controller representing the maximum number of elements which can be stored in the
+                    <code>circular_buffer_space_optimized</code> and the minimal allocated size of the internal buffer.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of elements the created <code>circular_buffer_space_optimized</code> will be filled
+                    with.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the created <code>circular_buffer_space_optimized</code> will be filled with.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>alloc</code>
+                  </dt>
+                  <dd>
+                    The allocator.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -520,34 +665,17 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Complexity:</b>
               </dt>
               <dd>
-                It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt;
-                min_capacity</code>) and an assertion will be invoked in the debug mode.
+                Linear (in the <code>n</code>).
               </dd>
             </dl>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_1d29ce80b10d4a3250fedeb9427210d96" name=
-            "classboost_1_1circular__buffer__space__optimized_1d29ce80b10d4a3250fedeb9427210d96"></a><code><b>circular_buffer_space_optimized(<a href="circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>
-            capacity_ctrl, <a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n,
-            <a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
-            item, const <a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
-            alloc = allocator_type());</b></code><br>
-            <br>
-            TODO doc.<br>
-            <br>
           </td>
         </tr>
         <tr>
@@ -556,8 +684,55 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer__space__optimized_1d9f273c1a794f84484d220e977a3e24b"></a><code><b>circular_buffer_space_optimized(const
             circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; cb);</b></code><br>
             <br>
-            TODO doc.<br>
-            <br>
+            The copy constructor.
+            <p>
+              Creates a copy of the specified <code>circular_buffer_space_optimized</code>.
+            </p>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code>*this == cb</code><br>
+                <br>
+                Allocates the exact amount of memory to store the content of <code>cb</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>cb</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer_space_optimized</code> to be copied.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of <code>cb</code>).
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -569,22 +744,32 @@ template &lt;class T, class Alloc&gt;
             "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
             alloc = allocator_type());</b></code><br>
             <br>
-            TODO doc.<br>
-            <br>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_196c63e0ecd56f6f1ac87bc79d2fd5b9f" name=
-            "classboost_1_1circular__buffer__space__optimized_196c63e0ecd56f6f1ac87bc79d2fd5b9f"></a> <code><b>template
-            &lt;class InputIterator&gt;<br>
-                circular_buffer_space_optimized(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>
-            capacity_ctrl, InputIterator first, InputIterator last, const <a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
-            alloc = allocator_type());</b></code><br>
-            <br>
-            Create a space optimized circular buffer with a copy of a range.
+            Create a full space optimized circular buffer filled with a copy of the range.
+            <dl>
+              <dt>
+                <b>Precondition:</b>
+              </dt>
+              <dd>
+                Valid range <code>[first, last)</code>.<br>
+                <code>first</code> and <code>last</code> have to meet the requirements of <a href=
+                "http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity()
+                == std::distance(first, last) &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.min_capacity()
+                == 0 &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer__space__optimized_142f4a13c50904a4ac0bf746c88451954">full()</a>
+                &amp;&amp; (*this)[0]== *first &amp;&amp; (*this)[1] == *(first + 1) &amp;&amp; ... &amp;&amp;
+                (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
+              </dd>
+            </dl>
             <dl>
               <dt>
                 <b>Parameter(s):</b>
@@ -592,21 +777,10 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 <dl compact>
                   <dt>
-                    <code>capacity_ctrl</code>
-                  </dt>
-                  <dd>
-                    The capacity of the buffer. (param min_capacity The minimal guaranteed amount of allocated memory.)
-                    (The metrics of the min_capacity is number of items.)
-                  </dd>
-                </dl>
-              </dd>
-              <dd>
-                <dl compact>
-                  <dt>
                     <code>first</code>
                   </dt>
                   <dd>
-                    The beginning of the range.
+                    The beginning of the range to be copied.
                   </dd>
                 </dl>
               </dd>
@@ -616,7 +790,7 @@ template &lt;class T, class Alloc&gt;
                     <code>last</code>
                   </dt>
                   <dd>
-                    The end of the range.
+                    The end of the range to be copied.
                   </dd>
                 </dl>
               </dd>
@@ -633,10 +807,47 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>std::distance(first, last)</code>).
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer__space__optimized_196c63e0ecd56f6f1ac87bc79d2fd5b9f" name=
+            "classboost_1_1circular__buffer__space__optimized_196c63e0ecd56f6f1ac87bc79d2fd5b9f"></a> <code><b>template
+            &lt;class InputIterator&gt;<br>
+                circular_buffer_space_optimized(<a href=
+            "#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>
+            capacity_ctrl, InputIterator first, InputIterator last, const <a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp;
+            alloc = allocator_type());</b></code><br>
+            <br>
+            Create a space optimized circular buffer with the specified capacity (and the minimal guaranteed amount of
+            allocated memory) filled with a copy of the range.
+            <dl>
+              <dt>
                 <b>Precondition:</b>
               </dt>
               <dd>
-                <code>capacity &gt;= min_capacity</code> and valid range <code>[first, last)</code>.
+                Valid range <code>[first, last)</code>.<br>
+                <code>first</code> and <code>last</code> have to meet the requirements of <a href=
+                "http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
               </dd>
             </dl>
             <dl>
@@ -644,14 +855,65 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code>(*this).<a href=
+                <code><a href=
                 "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
-                capacity</code><br>
-                Allocates at least as much memory as specified by the - TODO change <code>min_capacity</code>
-                parameter.<br>
-                If the number of items to copy from the range <code>[first, last)</code> is greater than the specified
-                <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code> will be
-                copied.
+                capacity_ctrl &amp;&amp; <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>
+                &lt;= std::distance(first, last) &amp;&amp; (*this)[0]== (last - capacity_ctrl.capacity()) &amp;&amp;
+                (*this)[1] == *(last - capacity_ctrl.capacity() + 1) &amp;&amp; ... &amp;&amp;
+                (*this)[capacity_ctrl.capacity() - 1] == *(last - 1)</code><br>
+                <br>
+                Allocates at least as much memory as specified by the <code>capacity_ctrl.min_capacity()</code>.<br>
+                <br>
+                If the number of items to be copied from the range <code>[first, last)</code> is greater than the
+                specified <code>capacity_ctrl.capacity()</code> then only elements from the range <code>[last -
+                capacity_ctrl.capacity(), last)</code> will be copied.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>capacity_ctrl</code>
+                  </dt>
+                  <dd>
+                    The capacity controller representing the maximum number of elements which can be stored in the
+                    <code>circular_buffer_space_optimized</code> and the minimal allocated size of the internal buffer.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be copied.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be copied.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>alloc</code>
+                  </dt>
+                  <dd>
+                    The allocator.
+                  </dd>
+                </dl>
               </dd>
             </dl>
             <dl>
@@ -663,16 +925,15 @@ template &lt;class T, class Alloc&gt;
                 used).
               </dd>
               <dd>
-                Whatever T::T(const T&amp;) throws.
+                Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Complexity:</b>
               </dt>
               <dd>
-                It is considered as a bug if the precondition is not met (i.e. if <code>capacity &lt;
-                min_capacity</code>) and an assertion will be invoked in the debug mode.
+                Linear (in the <code>capacity_ctrl.capacity()</code>/<code>std::distance(first, last)</code>).
               </dd>
             </dl>
           </td>
@@ -683,8 +944,45 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer__space__optimized_16839c3ea656ff0f800e38096748fe8ac"></a><code><b>~circular_buffer_space_optimized();</b></code><br>
 
             <br>
-            TODO doc.<br>
-            <br>
+            The destructor.
+            <p>
+              Destroys the <code>circular_buffer_space_optimized</code>.
+            </p>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (including
+                iterators equal to <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_12aa1dd29bd9509b5482ca2666c61deab">clear()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
       </table>
@@ -700,9 +998,57 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer__space__optimized_142f4a13c50904a4ac0bf746c88451954"></a><code><b>bool
             full() const;</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.<br>
-            <br>
+            Is the <code>circular_buffer_space_optimized</code> full?
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code>true</code> if the number of elements stored in the <code>circular_buffer_space_optimized</code>
+                equals the capacity of the <code>circular_buffer_space_optimized</code>; <code>false</code> otherwise.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -712,9 +1058,64 @@ template &lt;class T, class Alloc&gt;
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
             reserve() const;</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.<br>
-            <br>
+            Get the maximum number of elements which can be inserted into the
+            <code>circular_buffer_space_optimized</code> without overwriting any of already stored elements.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> -
+                <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a></code>,
+                <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>,
+                <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -722,40 +1123,151 @@ template &lt;class T, class Alloc&gt;
             <a id="classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa" name=
             "classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa"></a><code><b>const
             <a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>&amp;
+            "#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>&amp;
             capacity() const;</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.<br>
-            <br>
+            Get the capacity of the <code>circular_buffer_space_optimized</code>.
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                The capacity controller representing the maximum number of elements which can be stored in the
+                <code>circular_buffer_space_optimized</code> and the minimal allocated size of the internal buffer.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_170eec72a6e8d088b58e26ac7e2dd7c9f">reserve()</a></code>,
+                <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>,
+                <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_149f28bc5b33d2062b9f6a33b48264e3f">set_capacity()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_143fa35280fc3cad2a6510065a065d67c" name=
-            "classboost_1_1circular__buffer__space__optimized_143fa35280fc3cad2a6510065a065d67c"></a><code><b>void
+            <a id="classboost_1_1circular__buffer__space__optimized_149f28bc5b33d2062b9f6a33b48264e3f" name=
+            "classboost_1_1circular__buffer__space__optimized_149f28bc5b33d2062b9f6a33b48264e3f"></a><code><b>void
             set_capacity(const <a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>&amp;
-            new_capacity);</b></code><br>
+            "#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>&amp;
+            capacity_ctrl);</b></code><br>
             <br>
-            TODO Change the minimal guaranteed amount of allocated memory.
-            <dl>
-              <dt>
-                <b>Precondition:</b>
-              </dt>
-              <dd>
-                <code>(*this).<a href=
-                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>
-                &gt;= new_min_capacity</code>
-              </dd>
-            </dl>
+            Change the capacity (and the minimal guaranteed amount of allocated memory) of the
+            <code>circular_buffer_space_optimized</code>.
             <dl>
               <dt>
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code>(*this).min_capacity() == new_min_capacity</code> Allocates memory specified by the
-                <code>new_min_capacity</code> parameter.
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
+                capacity_ctrl &amp;&amp; <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>
+                &lt;= capacity_ctrl.capacity()</code><br>
+                <br>
+                If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
+                than the desired new capacity then number of <code>[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> -
+                capacity_ctrl.capacity()]</code> <b>last</b> elements will be removed and the new size will be equal to
+                <code>capacity_ctrl.capacity()</code>.<br>
+                <br>
+                If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is lower
+                than than the new capacity the allocated memory (in the internal buffer) may be accommodated as
+                necessary but it will never drop below <code>capacity_ctrl.min_capacity()</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>capacity_ctrl</code>
+                  </dt>
+                  <dd>
+                    The new capacity controller.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Strong.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size/new capacity of the <code>circular_buffer_space_optimized</code>).
               </dd>
             </dl>
             <dl>
@@ -763,27 +1275,25 @@ template &lt;class T, class Alloc&gt;
                 <b>Note:</b>
               </dt>
               <dd>
-                It is considered as a bug if the precondition is not met (i.e. if <code>new_min_capacity &gt;
-                (*this).<a href=
-                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a></code>)
-                and an assertion will be invoked in the debug mode.
+                To explicitly clear the extra allocated memory use the <b>shrink-to-fit</b> technique:<br>
+                <br>
+                <code>boost::circular_buffer_space_optimized&lt;int&gt; cb(1000);<br>
+                ...<br>
+                boost::circular_buffer_space_optimized&lt;int&gt;(cb).swap(cb);</code><br>
+                <br>
+                For more information about the shrink-to-fit technique in STL see <a href=
+                "http://www.gotw.ca/gotw/054.htm">http://www.gotw.ca/gotw/054.htm</a>.
               </dd>
             </dl>
             <dl>
               <dt>
-                <b>Precondition:</b>
+                <b>See Also:</b>
               </dt>
               <dd>
-                <code>min_capacity() &lt;= new_capacity</code>
-              </dd>
-            </dl>
-            <dl>
-              <dt>
-                <b>Note:</b>
-              </dt>
-              <dd>
-                It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt;
-                min_capacity()</code>) and an assertion will be invoked in the debug mode.
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_10f096c108ebde69ae83a9de41b3bea56">rset_capacity()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1f244ff5576b79f8d60e273c02d71c9f2">resize()</a></code>
               </dd>
             </dl>
           </td>
@@ -798,36 +1308,200 @@ template &lt;class T, class Alloc&gt;
             "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item = value_type());</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.<br>
-            <br>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_16e2c5d77ea32819fd28f8ff2d5ce888a" name=
-            "classboost_1_1circular__buffer__space__optimized_16e2c5d77ea32819fd28f8ff2d5ce888a"></a><code><b>void
-            rset_capacity(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a>
-            new_capacity);</b></code><br>
-            <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.
+            Change the size of the <code>circular_buffer_space_optimized</code>.
             <dl>
               <dt>
-                <b>Precondition:</b>
+                <b>Effect:</b>
               </dt>
               <dd>
-                <code>min_capacity() &lt;= new_capacity</code>
+                <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                new_size &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity()
+                &gt;= new_size</code><br>
+                <br>
+                If the new size is greater than the current size, copies of <code>item</code> will be inserted at the
+                <b>back</b> of the of the <code>circular_buffer_space_optimized</code> in order to achieve the desired
+                size. In the case the resulting size exceeds the current capacity the capacity will be set to
+                <code>new_size</code>.<br>
+                <br>
+                If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
+                than the desired new size then number of <code>[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> -
+                new_size]</code> <b>last</b> elements will be removed. (The capacity will remain unchanged.)
               </dd>
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Parameter(s):</b>
               </dt>
               <dd>
-                It is considered as a bug if the precondition is not met (i.e. if <code>new_capacity &gt;
-                min_capacity()</code>) and an assertion will be invoked in the debug mode.
+                <dl compact>
+                  <dt>
+                    <code>new_size</code>
+                  </dt>
+                  <dd>
+                    The new size.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the <code>circular_buffer_space_optimized</code> will be filled with in order to gain
+                    the requested size. (See the <i>Effect</i>.)
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1d45e2e72d9e3fb42e090ebc47ac8d7ee">rresize()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_149f28bc5b33d2062b9f6a33b48264e3f">set_capacity()</a></code>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer__space__optimized_10f096c108ebde69ae83a9de41b3bea56" name=
+            "classboost_1_1circular__buffer__space__optimized_10f096c108ebde69ae83a9de41b3bea56"></a><code><b>void
+            rset_capacity(const <a href=
+            "#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>&amp;
+            capacity_ctrl);</b></code><br>
+            <br>
+            Change the capacity (and the minimal guaranteed amount of allocated memory) of the
+            <code>circular_buffer_space_optimized</code>.
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
+                capacity_ctrl &amp;&amp; <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>
+                &lt;= capacity_ctrl</code><br>
+                <br>
+                If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
+                than the desired new capacity then number of <code>[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> -
+                capacity_ctrl.capacity()]</code> <b>first</b> elements will be removed and the new size will be equal
+                to <code>capacity_ctrl.capacity()</code>.<br>
+                <br>
+                If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is lower
+                than than the new capacity the allocated memory (in the internal buffer) may be accommodated as
+                necessary but it will never drop below <code>capacity_ctrl.min_capacity()</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>capacity_ctrl</code>
+                  </dt>
+                  <dd>
+                    The new capacity controller.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Strong.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size/new capacity of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_149f28bc5b33d2062b9f6a33b48264e3f">set_capacity()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1d45e2e72d9e3fb42e090ebc47ac8d7ee">rresize()</a></code>
               </dd>
             </dl>
           </td>
@@ -842,9 +1516,104 @@ template &lt;class T, class Alloc&gt;
             "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item = value_type());</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.<br>
-            <br>
+            Change the size of the <code>circular_buffer_space_optimized</code>.
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                new_size &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity()
+                &gt;= new_size</code><br>
+                <br>
+                If the new size is greater than the current size, copies of <code>item</code> will be inserted at the
+                <b>front</b> of the of the <code>circular_buffer_space_optimized</code> in order to achieve the desired
+                size. In the case the resulting size exceeds the current capacity the capacity will be set to
+                <code>new_size</code>.<br>
+                <br>
+                If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
+                than the desired new size then number of <code>[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> -
+                new_size]</code> <b>first</b> elements will be removed. (The capacity will remain unchanged.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>new_size</code>
+                  </dt>
+                  <dd>
+                    The new size.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the <code>circular_buffer_space_optimized</code> will be filled with in order to gain
+                    the requested size. (See the <i>Effect</i>.)
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1d45e2e72d9e3fb42e090ebc47ac8d7ee">rresize()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_149f28bc5b33d2062b9f6a33b48264e3f">set_capacity()</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -877,7 +1646,7 @@ template &lt;class T, class Alloc&gt;
             <a id="classboost_1_1circular__buffer__space__optimized_1108055ae3f6b1635e1428b0455902cbf" name=
             "classboost_1_1circular__buffer__space__optimized_1108055ae3f6b1635e1428b0455902cbf"></a><code><b>void
             assign(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>
+            "#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>
             capacity_ctrl, <a href=
             "circular_buffer.html#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n,
             <a href=
@@ -907,7 +1676,7 @@ template &lt;class T, class Alloc&gt;
             "classboost_1_1circular__buffer__space__optimized_1e9347091d2d644854af0821d4b46869b"></a> <code><b>template
             &lt;class InputIterator&gt;<br>
                 void assign(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a>
+            "#classboost_1_1circular__buffer__space__optimized_1e805212e7de49dcb60f2cad1ef304bb3">capacity_type</a>
             capacity_ctrl, InputIterator first, InputIterator last);</b></code><br>
             <br>
             See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source

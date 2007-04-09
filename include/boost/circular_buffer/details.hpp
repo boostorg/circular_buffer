@@ -166,10 +166,10 @@ public:
 
     // Default assign operator.
 
-    // Get the capacity of the space optimized circular buffer.
+    //! Get the capacity of the space optimized circular buffer.
     Size capacity() const { return m_capacity; }
 
-    // Get the minimal capacity of the space optimized circular buffer.
+    //! Get the minimal capacity of the space optimized circular buffer.
     Size min_capacity() const { return m_min_capacity; }
 
     //! Size operator - returns the capacity of the space optimized circular buffer.
