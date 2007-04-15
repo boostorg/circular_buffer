@@ -1,6 +1,6 @@
 // Demonstration of rules when an iterator is considered to be valid if the soft
 // iterator invalidation definition is applied.
-// Note: The soft iterator invalidation definition can not be applied
+// Note: The soft iterator invalidation definition CAN NOT be applied
 //       to the space optimized circular buffer.
 
 // Copyright (c) 2003-2007 Jan Gaspar

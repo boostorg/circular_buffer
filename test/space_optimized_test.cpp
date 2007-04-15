@@ -152,7 +152,6 @@ void iterator_invalidation_test() {
     BOOST_CHECK(!it2.is_valid(&cb1));
     BOOST_CHECK(!it3.is_valid(&cb1));
 
-
 #endif // #if !defined(NDEBUG) && !defined(BOOST_CB_DISABLE_DEBUG)
 }
 

@@ -3131,7 +3131,8 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
                 <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>); does not
-                invalidate any iterators if the postcondition is already met prior calling this method.
+                invalidate any iterators if the postcondition (the <i>Effect</i>) is already met prior calling this
+                method.
               </dd>
             </dl>
             <dl>
@@ -3139,7 +3140,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>); constant if the postcondition is already met.
+                Linear (in the size of the <code>circular_buffer</code>); constant if the postcondition (the
+                <i>Effect</i>) is already met.
               </dd>
             </dl>
             <dl>
@@ -3979,7 +3981,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to this <code>circular_buffer</code>.
+                Invalidates all iterators pointing to this <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
               </dd>
             </dl>
             <dl>
@@ -4081,7 +4084,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
               </dd>
             </dl>
             <dl>
@@ -4117,7 +4121,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item);</b></code><br>
             <br>
-            Assign <code>n</code> items into the <code>circular_buffer</code> with the specified capacity.
+            Assign <code>n</code> items into the <code>circular_buffer</code> specifying the capacity.
             <p>
               The capacity of the <code>circular_buffer</code> will be set to the specified value and the content of
               the <code>circular_buffer</code> will be removed and replaced with <code>n</code> copies of the
@@ -4153,7 +4157,7 @@ template &lt;class T, class Alloc&gt;
                     <code>capacity</code>
                   </dt>
                   <dd>
-                    The new capacity of the <code>circular_buffer</code>.
+                    The new capacity.
                   </dd>
                 </dl>
               </dd>
@@ -4203,7 +4207,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
               </dd>
             </dl>
             <dl>
@@ -4350,7 +4355,7 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a> capacity,
             InputIterator first, InputIterator last);</b></code><br>
             <br>
-            Assign a copy of the range into the <code>circular_buffer</code> with the specified capacity.
+            Assign a copy of the range into the <code>circular_buffer</code> specifying the capacity.
             <p>
               The capacity of the <code>circular_buffer</code> will be set to the specified value and the content of
               the <code>circular_buffer</code> will be removed and replaced with copies of elements from the specified
@@ -4392,7 +4397,7 @@ template &lt;class T, class Alloc&gt;
                     <code>capacity</code>
                   </dt>
                   <dd>
-                    The new capacity of the <code>circular_buffer</code>.
+                    The new capacity.
                   </dd>
                 </dl>
               </dd>

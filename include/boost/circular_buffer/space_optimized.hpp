@@ -522,19 +522,87 @@ public:
     */
     ~circular_buffer_space_optimized();
 
-    //! TODO doc
+    //! The assign operator.
+    /*!
+        Makes this <code>circular_buffer_space_optimized</code> to become a copy of the specified
+        <code>circular_buffer_space_optimized</code>.
+        \post <code>*this == cb</code>
+        \param cb The <code>circular_buffer_space_optimized</code> to be copied.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Strong.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to this <code>circular_buffer_space_optimized</code> (except iterators
+             equal to end()).
+        \par Complexity
+             Linear (in the size of <code>cb</code>).
+        \sa <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
+            <code>\link assign(capacity_type, size_type, param_value_type)
+            assign(capacity_type, size_type, const_reference)\endlink</code>,
+            <code>assign(InputIterator, InputIterator)</code>,
+            <code>assign(capacity_type, InputIterator, InputIterator)</code>
+    */
     circular_buffer_space_optimized<T, Alloc>& operator = (const circular_buffer_space_optimized<T, Alloc>& cb);
 
 #endif // #if defined(BOOST_CB_NEVER_DEFINED)
 
-    //! See the circular_buffer source documentation.
+    //! Assign <code>n</code> items into the space optimized circular buffer.
+    /*!
+        The content of the <code>circular_buffer_space_optimized</code> will be removed and replaced with
+        <code>n</code> copies of the <code>item</code>.
+        \post <code>capacity().%capacity() == n \&\& capacity().min_capacity() == 0 \&\& size() == n \&\& (*this)[0] ==
+              item \&\& (*this)[1] == item \&\& ... \&\& (*this) [n - 1] == item</code>
+        \param n The number of elements the <code>circular_buffer_space_optimized</code> will be filled with.
+        \param item The element the <code>circular_buffer_space_optimized</code> will be filled with.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to end()).
+        \par Complexity
+             Linear (in the <code>n</code>).
+        \sa <code>operator=</code>, <code>\link assign(capacity_type, size_type, param_value_type)
+            assign(capacity_type, size_type, const_reference)\endlink</code>,
+            <code>assign(InputIterator, InputIterator)</code>,
+            <code>assign(capacity_type, InputIterator, InputIterator)</code>
+    */
     void assign(size_type n, param_value_type item) {
         circular_buffer<T, Alloc>::assign(n, item);
         m_capacity_ctrl.m_capacity = n;
         m_capacity_ctrl.m_min_capacity = 0;
     }
 
-    //! See the circular_buffer source documentation.
+    //! Assign <code>n</code> items into the space optimized circular buffer specifying the capacity.
+    /*!
+        The capacity of the <code>circular_buffer_space_optimized</code> will be set to the specified value and the
+        content of the <code>circular_buffer_space_optimized</code> will be removed and replaced with <code>n</code>
+        copies of the <code>item</code>.
+        \pre <code>capacity_ctrl.%capacity() >= n</code>
+        \post <code>capacity() == capacity_ctrl \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item
+              \&\& ... \&\& (*this) [n - 1] == item </code><br><br>
+              The amount of allocated memory will be <code>max[n, capacity_ctrl.min_capacity()]</code>.
+        \param capacity_ctrl The new capacity controller.
+        \param n The number of elements the <code>circular_buffer_space_optimized</code> will be filled with.
+        \param item The element the <code>circular_buffer_space_optimized</code> will be filled with.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to end()).
+        \par Complexity
+             Linear (in the <code>n</code>).
+        \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
+            assign(size_type, const_reference)\endlink</code>, <code>assign(InputIterator, InputIterator)</code>,
+            <code>assign(capacity_type, InputIterator, InputIterator)</code>
+    */
     void assign(capacity_type capacity_ctrl, size_type n, param_value_type item) {
        BOOST_CB_ASSERT(capacity_ctrl.m_capacity >= n); // check for new capacity lower than n
        circular_buffer<T, Alloc>::assign(std::max(capacity_ctrl.m_min_capacity, n), n, item);

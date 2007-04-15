@@ -234,6 +234,17 @@ void iterator_invalidation_test() {
     BOOST_CHECK(it5.is_valid(0));
     BOOST_CHECK(it6.is_valid(0));
 
+    circular_buffer<MyInteger> cb(10, 0);
+    it1 = cb.end();
+    cb.clear();
+    BOOST_CHECK(it1.is_valid(&cb));
+    cb.push_back(1);
+    cb.push_back(2);
+    cb.push_back(3);
+    int i = 0;
+    for (it2 = cb.begin(); it2 != it1; it2++, i++);
+    BOOST_CHECK(i == 3);
+
     circular_buffer<MyInteger> cb1(10, 0);
     circular_buffer<MyInteger> cb2(20, 0);
     it1 = cb1.end();
@@ -440,6 +451,39 @@ void iterator_invalidation_test() {
     BOOST_CHECK(!it3.is_valid(&cb8));
     BOOST_CHECK(it4.is_valid(&cb8));
 
+    circular_buffer<MyInteger> cb9(15, 1);
+    it1 = cb9.end();
+    it2 = cb9.begin();
+    it3 = cb9.begin() + 6;
+    it4 = cb9.begin() + 12;
+    cb9 = cb8;
+    BOOST_CHECK(it1.is_valid(&cb9));
+    BOOST_CHECK(!it2.is_valid(&cb9));
+    BOOST_CHECK(!it3.is_valid(&cb9));
+    BOOST_CHECK(!it4.is_valid(&cb9));
+
+    circular_buffer<MyInteger> cb10(10, 1);
+    it1 = cb10.end();
+    it2 = cb10.begin();
+    it3 = cb10.begin() + 3;
+    it4 = cb10.begin() + 7;
+    cb10.assign(5, 2);
+    BOOST_CHECK(it1.is_valid(&cb10));
+    BOOST_CHECK(!it2.is_valid(&cb10));
+    BOOST_CHECK(!it3.is_valid(&cb10));
+    BOOST_CHECK(!it4.is_valid(&cb10));
+
+    circular_buffer<MyInteger> cb11(10, 1);
+    it1 = cb11.end();
+    it2 = cb11.begin();
+    it3 = cb11.begin() + 3;
+    it4 = cb11.begin() + 7;
+    cb11.assign(15, 5, 2);
+    BOOST_CHECK(it1.is_valid(&cb11));
+    BOOST_CHECK(!it2.is_valid(&cb11));
+    BOOST_CHECK(!it3.is_valid(&cb11));
+    BOOST_CHECK(!it4.is_valid(&cb11));
+
 #endif // #if !defined(NDEBUG) && !defined(BOOST_CB_DISABLE_DEBUG)
 }
 
@@ -472,6 +516,11 @@ void exception_safety_test() {
     circular_buffer<MyInteger> cb7(8, 3);
     MyInteger::set_exception_trigger(3);
     BOOST_CHECK_THROW(cb7 = cb6, exception);
+    BOOST_CHECK(cb7.size() == 8);
+    BOOST_CHECK(cb7.capacity() == 8);
+    BOOST_CHECK(cb7[0] == 3);
+    BOOST_CHECK(cb7[7] == 3);
+    generic_test(cb7);
 
     circular_buffer<MyInteger> cb8(5, 10);
     MyInteger::set_exception_trigger(2);

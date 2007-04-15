@@ -1622,8 +1622,88 @@ public:
             "classboost_1_1circular__buffer__space__optimized_177e35432c5e69b7a16ef7d937950e7a8"></a><code><b>circular_buffer_space_optimized&lt;T,Alloc&gt;&amp;
             operator=(const circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; cb);</b></code><br>
             <br>
-            TODO doc.<br>
-            <br>
+            The assign operator.
+            <p>
+              Makes this <code>circular_buffer_space_optimized</code> to become a copy of the specified
+              <code>circular_buffer_space_optimized</code>.
+            </p>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code>*this == cb</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>cb</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer_space_optimized</code> to be copied.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Strong.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to this <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of <code>cb</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_17ca4fda9526d0dad99706763c3b2d9f1">assign(size_type,
+                const_reference)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1108055ae3f6b1635e1428b0455902cbf">assign(capacity_type,
+                size_type, const_reference)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1417de2c2419c44d83a92c463762df5fb">assign(InputIterator,
+                InputIterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1e9347091d2d644854af0821d4b46869b">assign(capacity_type,
+                InputIterator, InputIterator)</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -1636,9 +1716,105 @@ public:
             "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.<br>
-            <br>
+            Assign <code>n</code> items into the space optimized circular buffer.
+            <p>
+              The content of the <code>circular_buffer_space_optimized</code> will be removed and replaced with
+              <code>n</code> copies of the <code>item</code>.
+            </p>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity()
+                == n &amp;&amp; <a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.min_capacity()
+                == 0 &amp;&amp; <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n
+                &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this) [n - 1]
+                == item</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of elements the <code>circular_buffer_space_optimized</code> will be filled with.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the <code>circular_buffer_space_optimized</code> will be filled with.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>n</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_177e35432c5e69b7a16ef7d937950e7a8">operator=</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1108055ae3f6b1635e1428b0455902cbf">assign(capacity_type,
+                size_type, const_reference)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1417de2c2419c44d83a92c463762df5fb">assign(InputIterator,
+                InputIterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1e9347091d2d644854af0821d4b46869b">assign(capacity_type,
+                InputIterator, InputIterator)</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
@@ -1653,9 +1829,124 @@ public:
             "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.<br>
-            <br>
+            Assign <code>n</code> items into the space optimized circular buffer specifying the capacity.
+            <p>
+              The capacity of the <code>circular_buffer_space_optimized</code> will be set to the specified value and
+              the content of the <code>circular_buffer_space_optimized</code> will be removed and replaced with
+              <code>n</code> copies of the <code>item</code>.
+            </p>
+            <dl>
+              <dt>
+                <b>Precondition:</b>
+              </dt>
+              <dd>
+                <code>capacity_ctrl.capacity() &gt;= n</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> ==
+                capacity_ctrl &amp;&amp; <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n
+                &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this) [n - 1]
+                == item</code><br>
+                <br>
+                The amount of allocated memory will be <code>max[n, capacity_ctrl.min_capacity()]</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>capacity_ctrl</code>
+                  </dt>
+                  <dd>
+                    The new capacity controller.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of elements the <code>circular_buffer_space_optimized</code> will be filled with.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element the <code>circular_buffer_space_optimized</code> will be filled with.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the <code>n</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_177e35432c5e69b7a16ef7d937950e7a8">operator=</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_17ca4fda9526d0dad99706763c3b2d9f1">assign(size_type,
+                const_reference)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1417de2c2419c44d83a92c463762df5fb">assign(InputIterator,
+                InputIterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1e9347091d2d644854af0821d4b46869b">assign(capacity_type,
+                InputIterator, InputIterator)</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>
