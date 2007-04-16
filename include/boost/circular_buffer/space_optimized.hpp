@@ -609,7 +609,34 @@ public:
        m_capacity_ctrl = capacity_ctrl;
     }
 
-    //! See the circular_buffer source documentation.
+    //! Assign a copy of the range into the space optimized circular buffer.
+    /*!
+        The content of the <code>circular_buffer_space_optimized</code> will be removed and replaced with copies of
+        elements from the specified range.
+        \pre Valid range <code>[first, last)</code>.<br>
+             <code>first</code> and <code>last</code> have to meet the requirements of
+             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+        \post <code>capacity().%capacity() == std::distance(first, last) \&\& capacity().min_capacity() == 0 \&\&
+              size() == std::distance(first, last) \&\& (*this)[0]== *first \&\& (*this)[1] == *(first + 1) \&\& ...
+              \&\& (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
+        \param first The beginning of the range to be copied.
+        \param last The end of the range to be copied.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to end()).
+        \par Complexity
+             Linear (in the <code>std::distance(first, last)</code>).
+        \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
+            assign(size_type, const_reference)\endlink</code>,
+            <code>\link assign(capacity_type, size_type, param_value_type)
+            assign(capacity_type, size_type, const_reference)\endlink</code>,
+            <code>assign(capacity_type, InputIterator, InputIterator)</code>
+    */
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
         circular_buffer<T, Alloc>::assign(first, last);
@@ -617,7 +644,40 @@ public:
         m_capacity_ctrl.m_min_capacity = 0;
     }
 
-    //! See the circular_buffer source documentation.
+    //! Assign a copy of the range into the space optimized circular buffer specifying the capacity.
+    /*!
+        The capacity of the <code>circular_buffer_space_optimized</code> will be set to the specified value and the
+        content of the <code>circular_buffer_space_optimized</code> will be removed and replaced with copies of
+        elements from the specified range.
+        \pre Valid range <code>[first, last)</code>.<br>
+             <code>first</code> and <code>last</code> have to meet the requirements of
+             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+        \post <code>capacity() == capacity_ctrl \&\& size() \<= std::distance(first, last) \&\&
+             (*this)[0]== *(last - capacity) \&\& (*this)[1] == *(last - capacity + 1) \&\& ... \&\&
+             (*this)[capacity - 1] == *(last - 1)</code><br><br>
+             If the number of items to be copied from the range <code>[first, last)</code> is greater than the
+             specified <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code>
+             will be copied.<br><br> The amount of allocated memory will be
+             <code>max[std::distance(first, last), capacity_ctrl.min_capacity()]</code>.
+        \param capacity_ctrl The new capacity controller.
+        \param first The beginning of the range to be copied.
+        \param last The end of the range to be copied.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to end()).
+        \par Complexity
+             Linear (in the <code>std::distance(first, last)</code>).
+        \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
+            assign(size_type, const_reference)\endlink</code>,
+            <code>\link assign(capacity_type, size_type, param_value_type)
+            assign(capacity_type, size_type, const_reference)\endlink</code>,
+            <code>assign(InputIterator, InputIterator)</code>
+    */
     template <class InputIterator>
     void assign(capacity_type capacity_ctrl, InputIterator first, InputIterator last) {
        m_capacity_ctrl = capacity_ctrl;

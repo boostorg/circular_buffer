@@ -484,6 +484,28 @@ void iterator_invalidation_test() {
     BOOST_CHECK(!it3.is_valid(&cb11));
     BOOST_CHECK(!it4.is_valid(&cb11));
 
+    circular_buffer<MyInteger> cb12(10, 1);
+    it1 = cb12.end();
+    it2 = cb12.begin();
+    it3 = cb12.begin() + 3;
+    it4 = cb12.begin() + 7;
+    cb12.assign(cb11.begin(), cb11.end());
+    BOOST_CHECK(it1.is_valid(&cb12));
+    BOOST_CHECK(!it2.is_valid(&cb12));
+    BOOST_CHECK(!it3.is_valid(&cb12));
+    BOOST_CHECK(!it4.is_valid(&cb12));
+
+    circular_buffer<MyInteger> cb13(10, 1);
+    it1 = cb13.end();
+    it2 = cb13.begin();
+    it3 = cb13.begin() + 3;
+    it4 = cb13.begin() + 7;
+    cb13.assign(15, cb11.begin(), cb11.end());
+    BOOST_CHECK(it1.is_valid(&cb13));
+    BOOST_CHECK(!it2.is_valid(&cb13));
+    BOOST_CHECK(!it3.is_valid(&cb13));
+    BOOST_CHECK(!it4.is_valid(&cb13));
+
 #endif // #if !defined(NDEBUG) && !defined(BOOST_CB_DISABLE_DEBUG)
 }
 

@@ -4319,7 +4319,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
               </dd>
             </dl>
             <dl>
@@ -4359,7 +4360,7 @@ template &lt;class T, class Alloc&gt;
             <p>
               The capacity of the <code>circular_buffer</code> will be set to the specified value and the content of
               the <code>circular_buffer</code> will be removed and replaced with copies of elements from the specified
-              range. (See the <i>Effect</i>.)
+              range.
             </p>
             <dl>
               <dt>
@@ -4447,7 +4448,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>).
               </dd>
             </dl>
             <dl>

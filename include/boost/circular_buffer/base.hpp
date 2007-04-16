@@ -1184,7 +1184,7 @@ public:
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end()).
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
@@ -1202,7 +1202,6 @@ public:
     /*!
         The capacity of the <code>circular_buffer</code> will be set to the specified value and the content of the
         <code>circular_buffer</code> will be removed and replaced with copies of elements from the specified range.
-        (See the <i>Effect</i>.)
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
              <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
@@ -1221,7 +1220,7 @@ public:
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end()).
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
@@ -2164,7 +2163,7 @@ private:
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         size_type distance = std::distance(first, last);
         if (distance > new_capacity) {
-            std::advance(first, distance - capacity);
+            std::advance(first, distance - new_capacity);
             distance = new_capacity;
         }
         assign_n(new_capacity, distance,
