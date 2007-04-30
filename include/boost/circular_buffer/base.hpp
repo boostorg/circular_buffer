@@ -1236,7 +1236,8 @@ public:
 
     //! Swap the contents of two <code>circular_buffer</code>s.
     /*!
-        \post <code>this</code> contains elements of <code>cb</code> and vice versa.
+        \post <code>this</code> contains elements of <code>cb</code> and vice versa; capacity of <code>this</code>
+              equals to capacity of <code>cb</code> and vice versa.
         \param cb The <code>circular_buffer</code> whose content will be swapped.
         \throws Nothing.
         \par Exception Safety

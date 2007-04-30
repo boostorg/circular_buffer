@@ -2209,9 +2209,76 @@ public:
             "classboost_1_1circular__buffer__space__optimized_14fd3b613f754d529ca250f2563b2f863"></a><code><b>void
             swap(circular_buffer_space_optimized&lt;T,Alloc&gt;&amp; cb);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.<br>
-            <br>
+            Swap the contents of two space optimized circular buffers.
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                <code>this</code> contains elements of <code>cb</code> and vice versa; capacity of <code>this</code>
+                equals to capacity of <code>cb</code> and vice versa.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>cb</code>
+                  </dt>
+                  <dd>
+                    The <code>circular_buffer_space_optimized</code> whose content will be swapped.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators of both <code>circular_buffer_space_optimized</code>s. (On the other hand the
+                iterators still point to the same elements but within another container. If you want to rely on this
+                feature you have to turn the <a href="circular_buffer.html#debug">Debug Support</a> off otherwise an
+                assertion will report an error if such invalidated iterator is used.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "circular_buffer.html#namespaceboost_14aa8f6a2c9640f3f22e266f0fca85777">swap(circular_buffer_space_optimized&lt;T,
+                Alloc&gt;&amp;, circular_buffer_space_optimized&lt;T, Alloc&gt;&amp;)</a></code>
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>

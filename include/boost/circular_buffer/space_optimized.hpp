@@ -685,7 +685,24 @@ public:
        check_high_capacity();
     }
 
-    //! See the circular_buffer source documentation.
+    //! Swap the contents of two space optimized circular buffers.
+    /*!
+        \post <code>this</code> contains elements of <code>cb</code> and vice versa; capacity of <code>this</code>
+              equals to capacity of <code>cb</code> and vice versa.
+        \param cb The <code>circular_buffer_space_optimized</code> whose content will be swapped.
+        \throws Nothing.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Invalidates all iterators of both <code>circular_buffer_space_optimized</code>s. (On the other hand the
+             iterators still point to the same elements but within another container. If you want to rely on this
+             feature you have to turn the <a href="circular_buffer.html#debug">Debug Support</a> off otherwise an
+             assertion will report an error if such invalidated iterator is used.)
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link swap(circular_buffer<T, Alloc>&, circular_buffer<T, Alloc>&)
+            swap(circular_buffer_space_optimized<T, Alloc>&, circular_buffer_space_optimized<T, Alloc>&)\endlink</code>
+    */
     void swap(circular_buffer_space_optimized<T, Alloc>& cb) {
         std::swap(m_capacity_ctrl, cb.m_capacity_ctrl);
         circular_buffer<T, Alloc>::swap(cb);
