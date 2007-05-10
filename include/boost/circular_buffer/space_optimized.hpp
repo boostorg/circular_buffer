@@ -185,7 +185,7 @@ public:
              Strong.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
-             equal to end()).
+             equal to <code>end()</code>).
         \par Complexity
              Linear (in the size/new capacity of the <code>circular_buffer_space_optimized</code>).
         \note To explicitly clear the extra allocated memory use the <b>shrink-to-fit</b> technique:<br><br>
@@ -226,7 +226,7 @@ public:
              Basic.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
-             equal to end()).
+             equal to <code>end()</code>).
         \par Complexity
              Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
         \sa <code>rresize()</code>, <code>set_capacity()</code>
@@ -262,7 +262,7 @@ public:
              Strong.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
-             equal to end()).
+             equal to <code>end()</code>).
         \par Complexity
              Linear (in the size/new capacity of the <code>circular_buffer_space_optimized</code>).
         \sa <code>set_capacity()</code>, <code>rresize()</code>
@@ -297,7 +297,7 @@ public:
              Basic.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
-             equal to end()).
+             equal to <code>end()</code>).
         \par Complexity
              Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
         \sa <code>rresize()</code>, <code>set_capacity()</code>
@@ -331,7 +331,9 @@ public:
 
     //! Create an empty space optimized circular buffer with the specified capacity.
     /*!
-        \post <code>capacity() == capacity_ctrl \&\& size() == 0</code>
+        \post <code>capacity() == capacity_ctrl \&\& size() == 0</code><br><br>
+              Allocates the minimal guaranteed amount of allocated memory specified by the
+              <code>capacity_ctrl.min_capacity()</code>.
         \param capacity_ctrl The capacity controller representing the maximum number of elements which can be stored in
                              the <code>circular_buffer_space_optimized</code> and the minimal allocated size of the
                              internal buffer.
@@ -347,9 +349,8 @@ public:
     : circular_buffer<T, Alloc>(capacity_ctrl.m_min_capacity, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
-    /*! \brief Create a full space optimized circular buffer with the specified capacity (and the minimal guaranteed
-               amount of allocated memory) filled with <code>capacity_ctrl.%capacity()</code> copies of
-               <code>item</code>.
+    /*! \brief Create a full space optimized circular buffer with the specified capacity filled with
+               <code>capacity_ctrl.%capacity()</code> copies of <code>item</code>.
         \post <code>capacity() == capacity_ctrl \&\& full() \&\& (*this)[0] == item \&\& (*this)[1] == item \&\& ...
               \&\& (*this) [capacity_ctrl.%capacity() - 1] == item </code>
         \param capacity_ctrl The capacity controller representing the maximum number of elements which can be stored in
@@ -370,8 +371,8 @@ public:
     : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
-    /*! \brief Create a space optimized circular buffer with the specified capacity (and the minimal guaranteed amount
-               of allocated memory) filled with <code>n</code> copies of <code>item</code>.
+    /*! \brief Create a space optimized circular buffer with the specified capacity filled with <code>n</code> copies
+               of <code>item</code>.
         \pre <code>capacity_ctrl.%capacity() >= n</code>
         \post <code>capacity() == capacity_ctrl \&\& size() == n \&\& (*this)[0] == item \&\& (*this)[1] == item
               \&\& ... \&\& (*this)[n - 1] == item</code><br><br>
@@ -515,7 +516,7 @@ public:
         \throws Nothing.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (including
-             iterators equal to end()).
+             iterators equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
         \sa <code>clear()</code>
@@ -535,7 +536,7 @@ public:
              Strong.
         \par Iterator Invalidation
              Invalidates all iterators pointing to this <code>circular_buffer_space_optimized</code> (except iterators
-             equal to end()).
+             equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of <code>cb</code>).
         \sa <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
@@ -563,7 +564,7 @@ public:
              Basic.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
-             equal to end()).
+             equal to <code>end()</code>).
         \par Complexity
              Linear (in the <code>n</code>).
         \sa <code>operator=</code>, <code>\link assign(capacity_type, size_type, param_value_type)
@@ -596,7 +597,7 @@ public:
              Basic.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
-             equal to end()).
+             equal to <code>end()</code>).
         \par Complexity
              Linear (in the <code>n</code>).
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
@@ -628,7 +629,7 @@ public:
              Basic.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
-             equal to end()).
+             equal to <code>end()</code>).
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
@@ -669,7 +670,7 @@ public:
              Basic.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
-             equal to end()).
+             equal to <code>end()</code>).
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
@@ -694,9 +695,9 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Invalidates all iterators of both <code>circular_buffer_space_optimized</code>s. (On the other hand the
-             iterators still point to the same elements but within another container. If you want to rely on this
-             feature you have to turn the <a href="circular_buffer.html#debug">Debug Support</a> off otherwise an
+             Invalidates all iterators of both <code>circular_buffer_space_optimized</code> containers. (On the other
+             hand the iterators still point to the same elements but within another container. If you want to rely on
+             this feature you have to turn the <a href="circular_buffer.html#debug">Debug Support</a> off otherwise an
              assertion will report an error if such invalidated iterator is used.)
         \par Complexity
              Constant (in the size of the <code>circular_buffer_space_optimized</code>).
@@ -708,83 +709,238 @@ public:
         circular_buffer<T, Alloc>::swap(cb);
     }
 
-    //! See the circular_buffer source documentation.
+    //! Insert a new element at the end of the space optimized circular buffer.
     /*!
-         \warning The rules for iterator invalidation differ from the original
-                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                  documentation</a>.
+        \post if <code>capacity().%capacity() > 0</code> then <code>back() == item</code><br>
+              If the <code>circular_buffer_space_optimized</code> is full, the first element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.<br><br>
+              Will predictively increase the allocated memory if necessary.
+        \param item The element to be inserted.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>push_front()</code>, <code>pop_back()</code>, <code>pop_front()</code>
     */
     void push_back(param_value_type item = value_type()) {
         check_low_capacity();
         circular_buffer<T, Alloc>::push_back(item);
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
     }
 
-    //! See the circular_buffer source documentation.
+    //! Insert a new element at the beginning of the space optimized circular buffer.
     /*!
-         \warning The rules for iterator invalidation differ from the original
-                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                  documentation</a>.
+        \post if <code>capacity().%capacity() > 0</code> then <code>front() == item</code><br>
+              If the <code>circular_buffer_space_optimized</code> is full, the last element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.<br><br>
+              Will predictively increase the allocated memory if necessary.
+        \param item The element to be inserted.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>push_back()</code>, <code>pop_back()</code>, <code>pop_front()</code>
     */
     void push_front(param_value_type item = value_type()) {
         check_low_capacity();
         circular_buffer<T, Alloc>::push_front(item);
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
     }
 
-    //! See the circular_buffer source documentation.
+    //! Remove the last element from the space optimized circular buffer.
     /*!
-         \warning The rules for iterator invalidation differ from the original
-                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                  documentation</a>.
+        \pre <code>!empty()</code>
+        \post The last element is removed from the <code>circular_buffer_space_optimized</code>.<br><br>
+              Will predictively decrease the allocated memory if necessary.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>pop_front()</code>, <code>push_back()</code>, <code>push_front()</code>
     */
     void pop_back() {
         circular_buffer<T, Alloc>::pop_back();
         check_high_capacity();
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
     }
 
-    //! See the circular_buffer source documentation.
+    //! Remove the first element from the space optimized circular buffer.
     /*!
-         \warning The rules for iterator invalidation differ from the original
-                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                  documentation</a>.
+        \pre <code>!empty()</code>
+        \post The first element is removed from the <code>circular_buffer_space_optimized</code>.<br><br>
+              Will predictively decrease the allocated memory if necessary.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>pop_back()</code>, <code>push_back()</code>, <code>push_front()</code>
     */
     void pop_front() {
         circular_buffer<T, Alloc>::pop_front();
         check_high_capacity();
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
     }
 
-    //! See the circular_buffer source documentation.
+    //! Insert an element at the specified position.
     /*!
-         \warning The rules for iterator invalidation differ from the original
-                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                  documentation</a>.
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or its
+             end.
+        \post The <code>item</code> will be inserted at the position <code>pos</code>.<br>
+              If the <code>circular_buffer_space_optimized</code> is full, the first element will be overwritten. If
+              the <code>circular_buffer_space_optimized</code> is full and the <code>pos</code> points to
+              <code>begin()</code>, then the <code>item</code> will not be inserted. If the capacity is <code>0</code>,
+              nothing will be inserted.<br><br>
+              Will predictively increase the allocated memory if necessary.
+        \param pos An iterator specifying the position where the <code>item</code> will be inserted.
+        \param item The element to be inserted.
+        \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>
     */
     iterator insert(iterator pos, param_value_type item = value_type()) {
         size_type index = pos - begin();
         check_low_capacity();
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
         return circular_buffer<T, Alloc>::insert(begin() + index, item);
     }
 
-    //! See the circular_buffer source documentation.
+    //! Insert <code>n</code> copies of the <code>item</code> at the specified position.
     /*!
-         \warning The rules for iterator invalidation differ from the original
-                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                  documentation</a>.
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or its
+             end.
+        \post The number of <code>min[n, (pos - begin()) + reserve()]</code> elements will be inserted at the position
+              <code>pos</code>.<br>The number of <code>min[pos - begin(), max[0, n - reserve()]]</code> elements will
+              be overwritten at the beginning of the <code>circular_buffer_space_optimized</code>.<br>(See
+              <i>Example</i> for the explanation.)<br><br>
+              Will predictively increase the allocated memory if necessary.
+        \param pos An iterator specifying the position where the <code>item</code>s will be inserted.
+        \param n The number of <code>item</code>s the to be inserted.
+        \param item The element whose copies will be inserted.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \par Example
+             Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
+             internal buffer may look like the one below.<br><br>
+             <code>|1|2|3|4| | |</code><br>
+             <code>p ---^</code><br><br>After inserting 5 elements at the position <code>p</code>:<br><br>
+             <code>insert(p, (size_t)5, 0);</code><br><br>actually only 4 elements get inserted and elements
+             <code>1</code> and <code>2</code> are overwritten. This is due to the fact the insert operation preserves
+             the capacity. After insertion the internal buffer looks like this:<br><br><code>|0|0|0|0|3|4|</code><br>
+             <br>For comparison if the capacity would not be preserved the internal buffer would then result in
+             <code>|1|2|0|0|0|0|0|3|4|</code>.
+        \sa <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>
     */
     void insert(iterator pos, size_type n, param_value_type item) {
         size_type index = pos - begin();
         check_low_capacity(n);
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
         circular_buffer<T, Alloc>::insert(begin() + index, n, item);
     }
 
-    //! See the circular_buffer source documentation.
+    //! Insert an element before the specified position.
     /*!
-         \warning The rules for iterator invalidation differ from the original
-                  circular_buffer. See the <a href="../circular_buffer_adaptor.html#invalidation">
-                  documentation</a>.
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or its
+             end.
+        \post The <code>item</code> will be inserted before the position <code>pos</code>.<br>
+              If the <code>circular_buffer_space_optimized</code> is full, the last element will be overwritten. If the
+              <code>circular_buffer_space_optimized</code> is full and the <code>pos</code> points to
+              <code>end()</code>, then the <code>item</code> will not be inserted. If the capacity is <code>0</code>,
+              nothing will be inserted.<br><br>
+              Will predictively increase the allocated memory if necessary.
+        \param pos An iterator specifying the position before which the <code>item</code> will be inserted.
+        \param item The element to be inserted.
+        \return Iterator to the inserted element or <code>end()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>,
+            <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>
     */
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
         insert(pos, first, last, is_integral<InputIterator>());
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators_except(end());
+#endif
     }
 
     //! See the circular_buffer source documentation.
@@ -874,7 +1030,20 @@ public:
         return begin() + index;
     }
 
-    //! See the circular_buffer source documentation.
+    //! Remove all stored elements from the space optimized circular buffer.
+    /*! TODO
+        \post <code>size() == 0</code>
+        \throws Nothing.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code>.
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer</code>).
+        \sa <code>~circular_buffer_space_optimized()</code>, <code>erase(iterator)</code>,
+            <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
+            <code>rerase(iterator, iterator)</code>
+    */
     void clear() { erase(begin(), end()); }
 
 private:

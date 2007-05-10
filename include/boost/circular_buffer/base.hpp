@@ -607,9 +607,9 @@ public:
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end());
-             does not invalidate any iterators if the postcondition (the <i>Effect</i>) is already met prior calling
-             this method.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>); does not invalidate any iterators if the postcondition (the <i>Effect</i>) is already
+             met prior calling this method.
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>); constant if the postcondition (the
              <i>Effect</i>) is already met.
@@ -767,8 +767,8 @@ public:
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end())
-             if the new capacity is different from the original.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>) if the new capacity is different from the original.
         \par Complexity
              Linear (in the size/new capacity of the <code>circular_buffer</code>).
         \sa <code>rset_capacity()</code>, <code>resize()</code>
@@ -806,9 +806,10 @@ public:
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end())
-             if the new size is greater than the current capacity. Invalidates iterators pointing to the removed
-             elements if the new size is lower that the original size. Otherwise it does not invalidate any iterator.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>) if the new size is greater than the current capacity. Invalidates iterators pointing
+             to the removed elements if the new size is lower that the original size. Otherwise it does not invalidate
+             any iterator.
         \par Complexity
              Linear (in the new size of the <code>circular_buffer</code>).
         \sa <code>rresize()</code>, <code>set_capacity()</code>
@@ -836,8 +837,8 @@ public:
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end())
-             if the new capacity is different from the original.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>) if the new capacity is different from the original.
         \par Complexity
              Linear (in the size/new capacity of the <code>circular_buffer</code>).
         \sa <code>set_capacity()</code>, <code>rresize()</code>
@@ -874,9 +875,10 @@ public:
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end())
-             if the new size is greater than the current capacity. Invalidates iterators pointing to the removed
-             elements if the new size is lower that the original size. Otherwise it does not invalidate any iterator.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>) if the new size is greater than the current capacity. Invalidates iterators pointing
+             to the removed elements if the new size is lower that the original size. Otherwise it does not invalidate
+             any iterator.
         \par Complexity
              Linear (in the new size of the <code>circular_buffer</code>).
         \sa <code>rresize()</code>, <code>set_capacity()</code>
@@ -1063,7 +1065,7 @@ public:
         \throws Nothing.
         \par Iterator Invalidation
              Invalidates all iterators pointing to the <code>circular_buffer</code> (including iterators equal to
-             end()).
+             <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>).
         \sa <code>clear()</code>
@@ -1089,7 +1091,8 @@ public:
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to this <code>circular_buffer</code> (except iterators equal to end()).
+             Invalidates all iterators pointing to this <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>).
         \par Complexity
              Linear (in the size of <code>cb</code>).
         \sa <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
@@ -1126,7 +1129,8 @@ public:
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end()).
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>).
         \par Complexity
              Linear (in the <code>n</code>).
         \sa <code>operator=</code>, <code>\link assign(capacity_type, size_type, param_value_type)
@@ -1154,7 +1158,8 @@ public:
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end()).
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>).
         \par Complexity
              Linear (in the <code>n</code>).
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
@@ -1184,7 +1189,8 @@ public:
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end()).
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>).
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
@@ -1220,7 +1226,8 @@ public:
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to end()).
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>).
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
