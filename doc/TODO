@@ -212,18 +212,3 @@ t55  DONE
 
 t56  DONE
      Synopsis - do not sort methods.
-
--------------------------------------------------------------------------------
-
-Some routine tasks:
-
-r01  check for memory leaks
-
-r02  check for test coverage (doesn't have to be 100% but it would be good
-     if every line is hit at least once)
-
-r03  update version number/date
-
-r04  format source files
-
-r05  spellcheck

@@ -383,7 +383,7 @@ public:
                 "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
                 0</code><br>
                 <br>
-                There is no memory allocated in the internal buffer after execution of this constructor.
+                There is no memory allocated in the internal buffer.
               </dd>
             </dl>
             <dl>
@@ -441,8 +441,7 @@ public:
                 "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
                 0</code><br>
                 <br>
-                Allocates the minimal guaranteed amount of allocated memory specified by the
-                <code>capacity_ctrl.min_capacity()</code>.
+                The amount of allocated memory in the internal buffer is <code>capacity_ctrl.min_capacity()</code>.
               </dd>
             </dl>
             <dl>
@@ -512,7 +511,9 @@ public:
                 capacity_ctrl &amp;&amp; <a href=
                 "#classboost_1_1circular__buffer__space__optimized_142f4a13c50904a4ac0bf746c88451954">full()</a>
                 &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this)
-                [capacity_ctrl.capacity() - 1] == item</code>
+                [capacity_ctrl.capacity() - 1] == item</code><br>
+                <br>
+                The amount of allocated memory in the internal buffer is <code>capacity_ctrl.capacity()</code>.
               </dd>
             </dl>
             <dl>
@@ -607,7 +608,8 @@ public:
                 &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this)[n - 1] ==
                 item</code><br>
                 <br>
-                Allocates at least as much memory as specified by the <code>capacity_ctrl.min_capacity()</code>.
+                The amount of allocated memory in the internal buffer is <code>max[n,
+                capacity_ctrl.min_capacity()]</code>.
               </dd>
             </dl>
             <dl>
@@ -696,7 +698,7 @@ public:
               <dd>
                 <code>*this == cb</code><br>
                 <br>
-                Allocates the exact amount of memory to store the content of <code>cb</code>.
+                The amount of allocated memory in the internal buffer is <code>cb.size()</code>.
               </dd>
             </dl>
             <dl>
@@ -768,7 +770,9 @@ public:
                 == 0 &amp;&amp; <a href=
                 "#classboost_1_1circular__buffer__space__optimized_142f4a13c50904a4ac0bf746c88451954">full()</a>
                 &amp;&amp; (*this)[0]== *first &amp;&amp; (*this)[1] == *(first + 1) &amp;&amp; ... &amp;&amp;
-                (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
+                (*this)[std::distance(first, last) - 1] == *(last - 1)</code><br>
+                <br>
+                The amount of allocated memory in the internal buffer is <code>std::distance(first, last)</code>.
               </dd>
             </dl>
             <dl>
@@ -864,11 +868,12 @@ public:
                 (*this)[1] == *(last - capacity_ctrl.capacity() + 1) &amp;&amp; ... &amp;&amp;
                 (*this)[capacity_ctrl.capacity() - 1] == *(last - 1)</code><br>
                 <br>
-                Allocates at least as much memory as specified by the <code>capacity_ctrl.min_capacity()</code>.<br>
-                <br>
                 If the number of items to be copied from the range <code>[first, last)</code> is greater than the
                 specified <code>capacity_ctrl.capacity()</code> then only elements from the range <code>[last -
-                capacity_ctrl.capacity(), last)</code> will be copied.
+                capacity_ctrl.capacity(), last)</code> will be copied.<br>
+                <br>
+                The amount of allocated memory in the internal buffer is <code>max[capacity_ctrl.min_capacity(),
+                min[capacity_ctrl.capacity(), std::distance(first, last)]]</code>.
               </dd>
             </dl>
             <dl>
@@ -934,7 +939,9 @@ public:
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the <code>capacity_ctrl.capacity()</code>/<code>std::distance(first, last)</code>).
+                Linear (in <code>std::distance(first, last)</code>; in <code>min[capacity_ctrl.capacity(),
+                std::distance(first, last)]</code> if the <code>InputIterator</code> is a <a href=
+                "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
               </dd>
             </dl>
           </td>
@@ -1072,8 +1079,8 @@ public:
               </dt>
               <dd>
                 <code><a href=
-                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a> -
-                <a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity()
+                - <a href=
                 "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
               </dd>
             </dl>
@@ -1219,7 +1226,7 @@ public:
                 <code>capacity_ctrl.capacity()</code>.<br>
                 <br>
                 If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is lower
-                than than the new capacity the allocated memory (in the internal buffer) may be accommodated as
+                than the new capacity then the amount of allocated memory in the internal buffer may be accommodated as
                 necessary but it will never drop below <code>capacity_ctrl.min_capacity()</code>.
               </dd>
             </dl>
@@ -1273,7 +1280,9 @@ public:
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer_space_optimized</code>).
+                Linear (in <code>min[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>,
+                capacity_ctrl.capacity()]</code>).
               </dd>
             </dl>
             <dl>
@@ -1334,7 +1343,9 @@ public:
                 If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
                 than the desired new size then number of <code>[<a href=
                 "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> -
-                new_size]</code> <b>last</b> elements will be removed. (The capacity will remain unchanged.)
+                new_size]</code> <b>last</b> elements will be removed. (The capacity will remain unchanged.)<br>
+                <br>
+                The amount of allocated memory in the internal buffer may be accommodated as necessary.
               </dd>
             </dl>
             <dl>
@@ -1442,7 +1453,7 @@ public:
                 to <code>capacity_ctrl.capacity()</code>.<br>
                 <br>
                 If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is lower
-                than than the new capacity the allocated memory (in the internal buffer) may be accommodated as
+                than the new capacity then the amount of allocated memory in the internal buffer may be accommodated as
                 necessary but it will never drop below <code>capacity_ctrl.min_capacity()</code>.
               </dd>
             </dl>
@@ -1496,7 +1507,9 @@ public:
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer_space_optimized</code>).
+                Linear (in <code>min[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>,
+                capacity_ctrl.capacity()]</code>).
               </dd>
             </dl>
             <dl>
@@ -1542,7 +1555,9 @@ public:
                 If the current number of elements stored in the <code>circular_buffer_space_optimized</code> is greater
                 than the desired new size then number of <code>[<a href=
                 "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> -
-                new_size]</code> <b>first</b> elements will be removed. (The capacity will remain unchanged.)
+                new_size]</code> <b>first</b> elements will be removed. (The capacity will remain unchanged.)<br>
+                <br>
+                The amount of allocated memory in the internal buffer may be accommodated as necessary.
               </dd>
             </dl>
             <dl>
@@ -1638,7 +1653,9 @@ public:
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code>*this == cb</code>
+                <code>*this == cb</code><br>
+                <br>
+                The amount of allocated memory in the internal buffer is <code>cb.size()</code>.
               </dd>
             </dl>
             <dl>
@@ -1739,7 +1756,9 @@ public:
                 == 0 &amp;&amp; <a href=
                 "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n
                 &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this) [n - 1]
-                == item</code>
+                == item</code><br>
+                <br>
+                The amount of allocated memory in the internal buffer is <code>n</code>.
               </dd>
             </dl>
             <dl>
@@ -1989,7 +2008,9 @@ public:
                 == 0 &amp;&amp; <a href=
                 "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
                 std::distance(first, last) &amp;&amp; (*this)[0]== *first &amp;&amp; (*this)[1] == *(first + 1)
-                &amp;&amp; ... &amp;&amp; (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
+                &amp;&amp; ... &amp;&amp; (*this)[std::distance(first, last) - 1] == *(last - 1)</code><br>
+                <br>
+                The amount of allocated memory in the internal buffer is <code>std::distance(first, last)</code>.
               </dd>
             </dl>
             <dl>
@@ -2114,7 +2135,7 @@ public:
                 specified <code>capacity</code> then only elements from the range <code>[last - capacity, last)</code>
                 will be copied.<br>
                 <br>
-                The amount of allocated memory will be <code>max[std::distance(first, last),
+                The amount of allocated memory in the internal buffer is <code>max[std::distance(first, last),
                 capacity_ctrl.min_capacity()]</code>.
               </dd>
             </dl>
@@ -2188,7 +2209,9 @@ public:
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the <code>std::distance(first, last)</code>).
+                Linear (in <code>std::distance(first, last)</code>; in <code>min[capacity_ctrl.capacity(),
+                std::distance(first, last)]</code> if the <code>InputIterator</code> is a <a href=
+                "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
               </dd>
             </dl>
             <dl>
@@ -2221,8 +2244,9 @@ public:
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code>this</code> contains elements of <code>cb</code> and vice versa; capacity of <code>this</code>
-                equals to capacity of <code>cb</code> and vice versa.
+                <code>this</code> contains elements of <code>cb</code> and vice versa; the capacity and the amount of
+                allocated memory in the internal buffer of <code>this</code> equal to the capacity and the amount of
+                allocated memory of <code>cb</code> and vice versa.
               </dd>
             </dl>
             <dl>
@@ -2309,7 +2333,7 @@ public:
                 If the <code>circular_buffer_space_optimized</code> is full, the first element will be removed. If the
                 capacity is <code>0</code>, nothing will be inserted.<br>
                 <br>
-                Will predictively increase the allocated memory if necessary.
+                The amount of allocated memory in the internal buffer may be predictively increased.
               </dd>
             </dl>
             <dl>
@@ -2402,7 +2426,7 @@ public:
                 If the <code>circular_buffer_space_optimized</code> is full, the last element will be removed. If the
                 capacity is <code>0</code>, nothing will be inserted.<br>
                 <br>
-                Will predictively increase the allocated memory if necessary.
+                The amount of allocated memory in the internal buffer may be predictively increased.
               </dd>
             </dl>
             <dl>
@@ -2495,7 +2519,7 @@ public:
               <dd>
                 The last element is removed from the <code>circular_buffer_space_optimized</code>.<br>
                 <br>
-                Will predictively decrease the allocated memory if necessary.
+                The amount of allocated memory in the internal buffer may be predictively decreased.
               </dd>
             </dl>
             <dl>
@@ -2570,7 +2594,7 @@ public:
               <dd>
                 The first element is removed from the <code>circular_buffer_space_optimized</code>.<br>
                 <br>
-                Will predictively decrease the allocated memory if necessary.
+                The amount of allocated memory in the internal buffer may be predictively decreased.
               </dd>
             </dl>
             <dl>
@@ -2657,7 +2681,7 @@ public:
                 then the <code>item</code> will not be inserted. If the capacity is <code>0</code>, nothing will be
                 inserted.<br>
                 <br>
-                Will predictively increase the allocated memory if necessary.
+                The amount of allocated memory in the internal buffer may be predictively increased.
               </dd>
             </dl>
             <dl>
@@ -2795,7 +2819,7 @@ public:
                 elements will be overwritten at the beginning of the <code>circular_buffer_space_optimized</code>.<br>
                 (See <i>Example</i> for the explanation.)<br>
                 <br>
-                Will predictively increase the allocated memory if necessary.
+                The amount of allocated memory in the internal buffer may be predictively increased.
               </dd>
             </dl>
             <dl>
@@ -2871,7 +2895,11 @@ public:
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+                Linear (in <code>min[<a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity(),
+                <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> +
+                n]</code>).
               </dd>
             </dl>
             <dl>
@@ -2928,6 +2956,179 @@ public:
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
             InputIterator first, InputIterator last);</b></code><br>
             <br>
+            Insert the range <code>[first, last)</code> at the specified position.
+            <dl>
+              <dt>
+                <b>Precondition:</b>
+              </dt>
+              <dd>
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or
+                its end.<br>
+                Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
+                requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                Elements from the range <code>[first + max[0, distance(first, last) - (pos - <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>) -
+                <a href=
+                "#classboost_1_1circular__buffer__space__optimized_170eec72a6e8d088b58e26ac7e2dd7c9f">reserve()</a>],
+                last)</code> will be inserted at the position <code>pos</code>.<br>
+                The number of <code>min[pos - <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>,
+                max[0, distance(first, last) - <a href=
+                "#classboost_1_1circular__buffer__space__optimized_170eec72a6e8d088b58e26ac7e2dd7c9f">reserve()</a>]]</code>
+                elements will be overwritten at the beginning of the <code>circular_buffer_space_optimized</code>.<br>
+                (See <i>Example</i> for the explanation.)<br>
+                <br>
+                The amount of allocated memory in the internal buffer may be predictively increased.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator specifying the position where the range will be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be inserted.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in <code>[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> +
+                std::distance(first, last)]</code>; in <code>min[<a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity(),
+                <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> +
+                std::distance(first, last)]</code> if the <code>InputIterator</code> is a <a href=
+                "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Example:</b>
+              </dt>
+              <dd>
+                Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
+                internal buffer may look like the one below.<br>
+                <br>
+                <code>|1|2|3|4| | |</code><br>
+                <code>p ---^</code><br>
+                <br>
+                After inserting a range of elements at the position <code>p</code>:<br>
+                <br>
+                <code>int array[] = { 5, 6, 7, 8, 9 };</code><br>
+                <code>insert(p, array, array + 5);</code><br>
+                <br>
+                actually only elements <code>6</code>, <code>7</code>, <code>8</code> and <code>9</code> from the
+                specified range get inserted and elements <code>1</code> and <code>2</code> are overwritten. This is
+                due to the fact the insert operation preserves the capacity. After insertion the internal buffer looks
+                like this:<br>
+                <br>
+                <code>|6|7|8|9|3|4|</code><br>
+                <br>
+                For comparison if the capacity would not be preserved the internal buffer would then result in
+                <code>|1|2|5|6|7|8|9|3|4|</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_145877a0d46400f4894a13d25d138c130">insert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1dc2060ce1105d80429ff3f004ca0691b">insert(iterator,
+                size_type, value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de">rinsert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_11eff7ec0eb603d489bd12f8c48928c9d">rinsert(iterator,
+                size_type, value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1faeda7342f4717d7fb6b4589cb43b74e">rinsert(iterator,
+                InputIterator, InputIterator)</a></code>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de" name=
+            "classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de"></a><code><b><a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
+            rinsert(<a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
+            <a href=
+            "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
+            item = value_type());</b></code><br>
+            <br>
             Insert an element before the specified position.
             <dl>
               <dt>
@@ -2951,7 +3152,7 @@ public:
                 then the <code>item</code> will not be inserted. If the capacity is <code>0</code>, nothing will be
                 inserted.<br>
                 <br>
-                Will predictively increase the allocated memory if necessary.
+                The amount of allocated memory in the internal buffer may be predictively increased.
               </dd>
             </dl>
             <dl>
@@ -3052,31 +3253,6 @@ public:
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de" name=
-            "classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de"></a><code><b><a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
-            rinsert(<a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
-            <a href=
-            "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
-            item = value_type());</b></code><br>
-            <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.
-            <dl>
-              <dt>
-                <b>Warning:</b>
-              </dt>
-              <dd>
-                The rules for iterator invalidation differ from the original <a href=
-                "circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href=
-                "../circular_buffer_adaptor.html#invalidation">documentation</a>.
-              </dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <a id="classboost_1_1circular__buffer__space__optimized_11eff7ec0eb603d489bd12f8c48928c9d" name=
             "classboost_1_1circular__buffer__space__optimized_11eff7ec0eb603d489bd12f8c48928c9d"></a><code><b>void
             rinsert(<a href=
@@ -3087,16 +3263,157 @@ public:
             "circular_buffer.html#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a>
             item);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.
+            Insert <code>n</code> copies of the <code>item</code> before the specified position.
             <dl>
               <dt>
-                <b>Warning:</b>
+                <b>Precondition:</b>
               </dt>
               <dd>
-                The rules for iterator invalidation differ from the original <a href=
-                "circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href=
-                "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or
+                its end.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                The number of <code>min[n, (<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> -
+                pos) + <a href=
+                "#classboost_1_1circular__buffer__space__optimized_170eec72a6e8d088b58e26ac7e2dd7c9f">reserve()</a>]</code>
+                elements will be inserted before the position <code>pos</code>.<br>
+                The number of <code>min[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> -
+                pos, max[0, n - <a href=
+                "#classboost_1_1circular__buffer__space__optimized_170eec72a6e8d088b58e26ac7e2dd7c9f">reserve()</a>]]</code>
+                elements will be overwritten at the end of the <code>circular_buffer_space_optimized</code>.<br>
+                (See <i>Example</i> for the explanation.)<br>
+                <br>
+                The amount of allocated memory in the internal buffer may be predictively increased.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator specifying the position where the <code>item</code>s will be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of <code>item</code>s the to be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>item</code>
+                  </dt>
+                  <dd>
+                    The element whose copies will be inserted.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in <code>min[<a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity(),
+                <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> +
+                n]</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Example:</b>
+              </dt>
+              <dd>
+                Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
+                internal buffer may look like the one below.<br>
+                <br>
+                <code>|1|2|3|4| | |</code><br>
+                <code>p ---^</code><br>
+                <br>
+                After inserting 5 elements before the position <code>p</code>:<br>
+                <br>
+                <code>rinsert(p, (size_t)5, 0);</code><br>
+                <br>
+                actually only 4 elements get inserted and elements <code>3</code> and <code>4</code> are overwritten.
+                This is due to the fact the rinsert operation preserves the capacity. After insertion the internal
+                buffer looks like this:<br>
+                <br>
+                <code>|1|2|0|0|0|0|</code><br>
+                <br>
+                For comparison if the capacity would not be preserved the internal buffer would then result in
+                <code>|1|2|0|0|0|0|0|3|4|</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de">rinsert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1faeda7342f4717d7fb6b4589cb43b74e">rinsert(iterator,
+                InputIterator, InputIterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_145877a0d46400f4894a13d25d138c130">insert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1dc2060ce1105d80429ff3f004ca0691b">insert(iterator,
+                size_type, value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_19eec983bc010f2e8415618455dd81da0">insert(iterator,
+                InputIterator, InputIterator)</a></code>
               </dd>
             </dl>
           </td>
@@ -3110,16 +3427,165 @@ public:
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a> pos,
             InputIterator first, InputIterator last);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.
+            Insert the range <code>[first, last)</code> before the specified position.
             <dl>
               <dt>
-                <b>Warning:</b>
+                <b>Precondition:</b>
               </dt>
               <dd>
-                The rules for iterator invalidation differ from the original <a href=
-                "circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href=
-                "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or
+                its end.<br>
+                Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
+                requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                Elements from the range <code>[first, last - max[0, distance(first, last) - (<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> -
+                pos) - <a href=
+                "#classboost_1_1circular__buffer__space__optimized_170eec72a6e8d088b58e26ac7e2dd7c9f">reserve()</a>])</code>
+                will be inserted before the position <code>pos</code>.<br>
+                The number of <code>min[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> -
+                pos, max[0, distance(first, last) - <a href=
+                "#classboost_1_1circular__buffer__space__optimized_170eec72a6e8d088b58e26ac7e2dd7c9f">reserve()</a>]]</code>
+                elements will be overwritten at the end of the <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a></code>.<br>
+                (See <i>Example</i> for the explanation.)<br>
+                <br>
+                The amount of allocated memory in the internal buffer may be predictively increased.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator specifying the position where the range will be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be inserted.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be inserted.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in <code>[<a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> +
+                std::distance(first, last)]</code>; in <code>min[<a href=
+                "#classboost_1_1circular__buffer__space__optimized_1aa2695c84ac9fc912e28d1a5920dadfa">capacity()</a>.capacity(),
+                <a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> +
+                std::distance(first, last)]</code> if the <code>InputIterator</code> is a <a href=
+                "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Example:</b>
+              </dt>
+              <dd>
+                Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
+                internal buffer may look like the one below.<br>
+                <br>
+                <code>|1|2|3|4| | |</code><br>
+                <code>p ---^</code><br>
+                <br>
+                After inserting a range of elements before the position <code>p</code>:<br>
+                <br>
+                <code>int array[] = { 5, 6, 7, 8, 9 };</code><br>
+                <code>insert(p, array, array + 5);</code><br>
+                <br>
+                actually only elements <code>5</code>, <code>6</code>, <code>7</code> and <code>8</code> from the
+                specified range get inserted and elements <code>3</code> and <code>4</code> are overwritten. This is
+                due to the fact the rinsert operation preserves the capacity. After insertion the internal buffer looks
+                like this:<br>
+                <br>
+                <code>|1|2|5|6|7|8|</code><br>
+                <br>
+                For comparison if the capacity would not be preserved the internal buffer would then result in
+                <code>|1|2|5|6|7|8|9|3|4|</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1cb3586429e49eeb2df2d2a09e19775de">rinsert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_11eff7ec0eb603d489bd12f8c48928c9d">rinsert(iterator,
+                size_type, value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_145877a0d46400f4894a13d25d138c130">insert(iterator,
+                value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_1dc2060ce1105d80429ff3f004ca0691b">insert(iterator,
+                size_type, value_type)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_19eec983bc010f2e8415618455dd81da0">insert(iterator,
+                InputIterator, InputIterator)</a></code>
               </dd>
             </dl>
           </td>
@@ -3133,16 +3599,103 @@ public:
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             pos);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.
+            Remove an element at the specified position.
             <dl>
               <dt>
-                <b>Warning:</b>
+                <b>Precondition:</b>
               </dt>
               <dd>
-                The rules for iterator invalidation differ from the original <a href=
-                "circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href=
-                "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> (but
+                not an <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                The element at the position <code>pos</code> is removed.<br>
+                <br>
+                The amount of allocated memory in the internal buffer may be predictively decreased.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator pointing at the element to be removed.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                Iterator to the first element remaining beyond the removed element or <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>
+                if no such element exists.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_19e9a4e0dfca27329da78e014d97201ca">erase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_16e96800422211d02621526c894b71fa1">rerase(iterator)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_154fd4c2a67c7d6de6cbf6c8255729e98">rerase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_12aa1dd29bd9509b5482ca2666c61deab">clear()</a></code>
               </dd>
             </dl>
           </td>
@@ -3158,16 +3711,112 @@ public:
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             last);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.
+            Erase the range <code>[first, last)</code>.
             <dl>
               <dt>
-                <b>Warning:</b>
+                <b>Precondition:</b>
               </dt>
               <dd>
-                The rules for iterator invalidation differ from the original <a href=
-                "circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href=
-                "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                Valid range <code>[first, last)</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                The elements from the range <code>[first, last)</code> are removed. (If <code>first == last</code>
+                nothing is removed.)<br>
+                <br>
+                The amount of allocated memory in the internal buffer may be predictively decreased.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be removed.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be removed.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                Iterator to the first element remaining beyond the removed elements or <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>
+                if no such element exists.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_136feadef225bd8a10962a92c4ffcdfd3">erase(iterator)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_16e96800422211d02621526c894b71fa1">rerase(iterator)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_154fd4c2a67c7d6de6cbf6c8255729e98">rerase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_12aa1dd29bd9509b5482ca2666c61deab">clear()</a></code>
               </dd>
             </dl>
           </td>
@@ -3181,16 +3830,104 @@ public:
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             pos);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.
+            Remove an element at the specified position.
             <dl>
               <dt>
-                <b>Warning:</b>
+                <b>Precondition:</b>
               </dt>
               <dd>
-                The rules for iterator invalidation differ from the original <a href=
-                "circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href=
-                "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> (but
+                not an <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).<br>
+
+                <br>
+                The amount of allocated memory in the internal buffer may be predictively decreased.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                The element at the position <code>pos</code> is removed.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>pos</code>
+                  </dt>
+                  <dd>
+                    An iterator pointing at the element to be removed.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                Iterator to the first element remaining in front of the removed element or <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code>
+                if no such element exists.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_136feadef225bd8a10962a92c4ffcdfd3">erase(iterator)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_19e9a4e0dfca27329da78e014d97201ca">erase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_154fd4c2a67c7d6de6cbf6c8255729e98">rerase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_12aa1dd29bd9509b5482ca2666c61deab">clear()</a></code>
               </dd>
             </dl>
           </td>
@@ -3206,16 +3943,112 @@ public:
             "circular_buffer.html#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>
             last);</b></code><br>
             <br>
-            See the <a href="circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a> source
-            documentation.
+            Erase the range <code>[first, last)</code>.
             <dl>
               <dt>
-                <b>Warning:</b>
+                <b>Precondition:</b>
               </dt>
               <dd>
-                The rules for iterator invalidation differ from the original <a href=
-                "circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a>. See the <a href=
-                "../circular_buffer_adaptor.html#invalidation">documentation</a>.
+                Valid range <code>[first, last)</code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                The elements from the range <code>[first, last)</code> are removed. (If <code>first == last</code>
+                nothing is removed.)<br>
+                <br>
+                The amount of allocated memory in the internal buffer may be predictively decreased.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>first</code>
+                  </dt>
+                  <dd>
+                    The beginning of the range to be removed.
+                  </dd>
+                </dl>
+              </dd>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>last</code>
+                  </dt>
+                  <dd>
+                    The end of the range to be removed.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                Iterator to the first element remaining in front of the removed elements or <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code>
+                if no such element exists.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_136feadef225bd8a10962a92c4ffcdfd3">erase(iterator)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_19e9a4e0dfca27329da78e014d97201ca">erase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_16e96800422211d02621526c894b71fa1">rerase(iterator)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer__space__optimized_12aa1dd29bd9509b5482ca2666c61deab">clear()</a></code>
               </dd>
             </dl>
           </td>
@@ -3227,9 +4060,6 @@ public:
             clear();</b></code><br>
             <br>
             Remove all stored elements from the space optimized circular buffer.
-            <p>
-              TODO
-            </p>
             <dl>
               <dt>
                 <b>Effect:</b>
@@ -3237,7 +4067,9 @@ public:
               <dd>
                 <code><a href=
                 "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
-                0</code>
+                0</code><br>
+                <br>
+                The amount of allocated memory in the internal buffer may be predictively decreased.
               </dd>
             </dl>
             <dl>
@@ -3245,7 +4077,8 @@ public:
                 <b>Throws:</b>
               </dt>
               <dd>
-                Nothing.
+                An allocation error if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
               </dd>
             </dl>
             <dl>
@@ -3253,7 +4086,7 @@ public:
                 <b>Exception Safety:</b>
               </dt>
               <dd>
-                No-throw.
+                Basic.
               </dd>
             </dl>
             <dl>
@@ -3261,7 +4094,9 @@ public:
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except
+                iterators equal to <code><a href=
+                "circular_buffer.html#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
               </dd>
             </dl>
             <dl>
@@ -3269,8 +4104,7 @@ public:
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code><a href=
-                "circular_buffer.html#classboost_1_1circular__buffer">circular_buffer</a></code>).
+                Linear (in the size of the <code>circular_buffer_space_optimized</code>).
               </dd>
             </dl>
             <dl>

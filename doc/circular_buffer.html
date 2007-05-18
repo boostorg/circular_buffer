@@ -1474,7 +1474,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the <code>capacity</code>/<code>std::distance(first, last)</code>).
+                Linear (in <code>std::distance(first, last)</code>; in <code>min[capacity, std::distance(first,
+                last)]</code> if the <code>InputIterator</code> is a <a href=
+                "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
               </dd>
             </dl>
           </td>
@@ -3607,7 +3609,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer</code>).
+                Linear (in <code>min[<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>, new_capacity]</code>).
               </dd>
             </dl>
             <dl>
@@ -3803,7 +3806,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size/new capacity of the <code>circular_buffer</code>).
+                Linear (in <code>min[<a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>, new_capacity]</code>).
               </dd>
             </dl>
             <dl>
@@ -4459,7 +4463,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the <code>std::distance(first, last)</code>).
+                Linear (in <code>std::distance(first, last)</code>; in <code>min[capacity, std::distance(first,
+                last)]</code> if the <code>InputIterator</code> is a <a href=
+                "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
               </dd>
             </dl>
             <dl>
@@ -4490,8 +4496,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code>this</code> contains elements of <code>cb</code> and vice versa; capacity of <code>this</code>
-                equals to capacity of <code>cb</code> and vice versa.
+                <code>this</code> contains elements of <code>cb</code> and vice versa; the capacity of
+                <code>this</code> equals to the capacity of <code>cb</code> and vice versa.
               </dd>
             </dl>
             <dl>
@@ -4949,8 +4955,9 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-                iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
-                overwritten element.
+                iterators behind the insertion point (towards the end; except iterators equal to <code><a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>). It also
+                invalidates iterators pointing to the overwritten element.
               </dd>
             </dl>
             <dl>
@@ -4958,7 +4965,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>std::distance(pos, <a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>)</code>).
               </dd>
             </dl>
             <dl>
@@ -5074,8 +5082,9 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-                iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
-                overwritten elements.
+                iterators behind the insertion point (towards the end; except iterators equal to <code><a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>). It also
+                invalidates iterators pointing to the overwritten elements.
               </dd>
             </dl>
             <dl>
@@ -5083,7 +5092,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>min[<a href=
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>, std::distance(pos,
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) + n]</code>).
               </dd>
             </dl>
             <dl>
@@ -5226,8 +5237,9 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-                iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
-                overwritten elements.
+                iterators behind the insertion point (towards the end; except iterators equal to <code><a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>). It also
+                invalidates iterators pointing to the overwritten elements.
               </dd>
             </dl>
             <dl>
@@ -5235,7 +5247,13 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>[std::distance(pos, <a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) + std::distance(first,
+                last)]</code>; in <code>min[<a href=
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>, std::distance(pos,
+                <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) +
+                std::distance(first, last)]</code> if the <code>InputIterator</code> is a <a href=
+                "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
               </dd>
             </dl>
             <dl>
@@ -5382,7 +5400,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>std::distance(<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, pos)</code>).
               </dd>
             </dl>
             <dl>
@@ -5506,7 +5525,10 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>min[<a href=
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>,
+                std::distance(<a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>,
+                pos) + n]</code>).
               </dd>
             </dl>
             <dl>
@@ -5657,7 +5679,13 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>[std::distance(<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, pos) +
+                std::distance(first, last)]</code>; in <code>min[<a href=
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>,
+                std::distance(<a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>,
+                pos) + std::distance(first, last)]</code> if the <code>InputIterator</code> is a <a href=
+                "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
               </dd>
             </dl>
             <dl>
@@ -5678,7 +5706,7 @@ template &lt;class T, class Alloc&gt;
                 <br>
                 actually only elements <code>5</code>, <code>6</code>, <code>7</code> and <code>8</code> from the
                 specified range get inserted and elements <code>3</code> and <code>4</code> are overwritten. This is
-                due to the fact the insert operation preserves the capacity. After insertion the internal buffer looks
+                due to the fact the rinsert operation preserves the capacity. After insertion the internal buffer looks
                 like this:<br>
                 <br>
                 <code>|1|2|5|6|7|8|</code><br>
@@ -5778,7 +5806,8 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates iterators pointing to the erased element and iterators pointing to the elements behind the
-                erased element (towards the end).
+                erased element (towards the end; except iterators equal to <code><a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
               </dd>
             </dl>
             <dl>
@@ -5786,7 +5815,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>std::distance(pos, <a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>)</code>).
               </dd>
             </dl>
             <dl>
@@ -5887,7 +5917,8 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Invalidates iterators pointing to the erased elements and iterators pointing to the elements behind the
-                erased range (towards the end).
+                erased range (towards the end; except iterators equal to <code><a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
               </dd>
             </dl>
             <dl>
@@ -5895,7 +5926,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>std::distance(first, <a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>)</code>).
               </dd>
             </dl>
             <dl>
@@ -5994,7 +6026,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>std::distance(<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, pos)</code>).
               </dd>
             </dl>
             <dl>
@@ -6035,7 +6068,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                The elements from the range <code>[first, last)</code> are removed.
+                The elements from the range <code>[first, last)</code> are removed. (If <code>first == last</code>
+                nothing is removed.)
               </dd>
             </dl>
             <dl>
@@ -6103,7 +6137,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Complexity:</b>
               </dt>
               <dd>
-                Linear (in the size of the <code>circular_buffer</code>).
+                Linear (in <code>std::distance(<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, last)</code>).
               </dd>
             </dl>
             <dl>
@@ -6158,7 +6193,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Iterator Invalidation:</b>
               </dt>
               <dd>
-                Invalidates all iterators pointing to the <code>circular_buffer</code>.
+                Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+                <code><a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>).
               </dd>
             </dl>
             <dl>

@@ -770,7 +770,7 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
              <code>end()</code>) if the new capacity is different from the original.
         \par Complexity
-             Linear (in the size/new capacity of the <code>circular_buffer</code>).
+             Linear (in <code>min[size(), new_capacity]</code>).
         \sa <code>rset_capacity()</code>, <code>resize()</code>
     */
     void set_capacity(capacity_type new_capacity) {
@@ -840,7 +840,7 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
              <code>end()</code>) if the new capacity is different from the original.
         \par Complexity
-             Linear (in the size/new capacity of the <code>circular_buffer</code>).
+             Linear (in <code>min[size(), new_capacity]</code>).
         \sa <code>set_capacity()</code>, <code>rresize()</code>
     */
     void rset_capacity(capacity_type new_capacity) {
@@ -1048,7 +1048,9 @@ public:
                 used).
         \throws Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
-             Linear (in the <code>capacity</code>/<code>std::distance(first, last)</code>).
+             Linear (in <code>std::distance(first, last)</code>; in
+             <code>min[capacity, std::distance(first, last)]</code> if the <code>InputIterator</code> is a
+             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
     */
     template <class InputIterator>
     circular_buffer(capacity_type capacity, InputIterator first, InputIterator last,
@@ -1229,7 +1231,9 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
              <code>end()</code>).
         \par Complexity
-             Linear (in the <code>std::distance(first, last)</code>).
+             Linear (in <code>std::distance(first, last)</code>; in
+             <code>min[capacity, std::distance(first, last)]</code> if the <code>InputIterator</code> is a
+             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
         \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
             assign(size_type, const_reference)\endlink</code>,
             <code>\link assign(capacity_type, size_type, param_value_type)
@@ -1243,8 +1247,8 @@ public:
 
     //! Swap the contents of two <code>circular_buffer</code>s.
     /*!
-        \post <code>this</code> contains elements of <code>cb</code> and vice versa; capacity of <code>this</code>
-              equals to capacity of <code>cb</code> and vice versa.
+        \post <code>this</code> contains elements of <code>cb</code> and vice versa; the capacity of <code>this</code>
+              equals to the capacity of <code>cb</code> and vice versa.
         \param cb The <code>circular_buffer</code> whose content will be swapped.
         \throws Nothing.
         \par Exception Safety
@@ -1397,10 +1401,10 @@ public:
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
              Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-             iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
-             overwritten element.
+             iterators behind the insertion point (towards the end; except iterators equal to <code>end()</code>). It
+             also invalidates iterators pointing to the overwritten element.
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>std::distance(pos, end())</code>).
         \sa <code>\link insert(iterator, size_type, param_value_type)
             insert(iterator, size_type, value_type)\endlink</code>,
             <code>insert(iterator, InputIterator, InputIterator)</code>,
@@ -1432,10 +1436,10 @@ public:
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
              Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-             iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
-             overwritten elements.
+             iterators behind the insertion point (towards the end; except iterators equal to <code>end()</code>). It
+             also invalidates iterators pointing to the overwritten elements.
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>min[capacity(), std::distance(pos, end()) + n]</code>).
         \par Example
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
@@ -1484,10 +1488,13 @@ public:
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
              Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
-             iterators behind the insertion point (towards the end). It also invalidates iterators pointing to the
-             overwritten elements.
+             iterators behind the insertion point (towards the end; except iterators equal to <code>end()</code>). It
+             also invalidates iterators pointing to the overwritten elements.
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>[std::distance(pos, end()) + std::distance(first, last)]</code>; in
+             <code>min[capacity(), std::distance(pos, end()) + std::distance(first, last)]</code> if the
+             <code>InputIterator</code> is a
+             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
         \par Example
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
@@ -1531,7 +1538,7 @@ public:
              Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
              excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten element.
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>std::distance(begin(), pos)</code>).
         \sa <code>\link rinsert(iterator, size_type, param_value_type)
             rinsert(iterator, size_type, value_type)\endlink</code>,
             <code>rinsert(iterator, InputIterator, InputIterator)</code>,
@@ -1604,7 +1611,7 @@ public:
              Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
              excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>min[capacity(), std::distance(begin(), pos) + n]</code>).
         \par Example
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
@@ -1648,7 +1655,10 @@ public:
              Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
              excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten elements.
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>[std::distance(begin(), pos) + std::distance(first, last)]</code>; in
+             <code>min[capacity(), std::distance(begin(), pos) + std::distance(first, last)]</code> if the
+             <code>InputIterator</code> is a
+             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
         \par Example
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
@@ -1657,7 +1667,7 @@ public:
              <code>int array[] = { 5, 6, 7, 8, 9 };</code><br><code>insert(p, array, array + 5);</code><br><br>
              actually only elements <code>5</code>, <code>6</code>, <code>7</code> and <code>8</code> from the
              specified range get inserted and elements <code>3</code> and <code>4</code> are overwritten. This is due
-             to the fact the insert operation preserves the capacity. After insertion the internal buffer looks like
+             to the fact the rinsert operation preserves the capacity. After insertion the internal buffer looks like
              this:<br><br><code>|1|2|5|6|7|8|</code><br><br>For comparison if the capacity would not be preserved the
              internal buffer would then result in <code>|1|2|5|6|7|8|9|3|4|</code>.
         \sa <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
@@ -1688,9 +1698,9 @@ public:
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
              Invalidates iterators pointing to the erased element and iterators pointing to the elements behind
-             the erased element (towards the end).
+             the erased element (towards the end; except iterators equal to <code>end()</code>).
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>std::distance(pos, end())</code>).
         \sa <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
@@ -1725,9 +1735,9 @@ public:
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
              Invalidates iterators pointing to the erased elements and iterators pointing to the elements behind
-             the erased range (towards the end).
+             the erased range (towards the end; except iterators equal to <code>end()</code>).
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>std::distance(first, end())</code>).
         \sa <code>erase(iterator)</code>, <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>,
             <code>clear()</code>
     */
@@ -1763,7 +1773,7 @@ public:
              Invalidates iterators pointing to the erased element and iterators pointing to the elements in front of
              the erased element (towards the beginning).
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>std::distance(begin(), pos)</code>).
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
@@ -1787,7 +1797,8 @@ public:
     //! Erase the range <code>[first, last)</code>.
     /*!
         \pre Valid range <code>[first, last)</code>.
-        \post The elements from the range <code>[first, last)</code> are removed.
+        \post The elements from the range <code>[first, last)</code> are removed. (If <code>first == last</code>
+              nothing is removed.)
         \param first The beginning of the range to be removed.
         \param last The end of the range to be removed.
         \return Iterator to the first element remaining in front of the removed elements or <code>begin()</code> if no
@@ -1799,7 +1810,7 @@ public:
              Invalidates iterators pointing to the erased elements and iterators pointing to the elements in front of
              the erased range (towards the beginning).
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Linear (in <code>std::distance(begin(), last)</code>).
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
             <code>clear()</code>
     */
@@ -1834,7 +1845,8 @@ public:
         \par Exception Safety
              No-throw.
         \par Iterator Invalidation
-             Invalidates all iterators pointing to the <code>circular_buffer</code>.
+             Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
+             <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>).
         \sa <code>~circular_buffer()</code>, <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,

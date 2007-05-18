@@ -153,7 +153,7 @@ void allocator_test() {
     alloc_ref.max_size();
     alloc.max_size();
 
-    generic_test(cb1); 
+    generic_test(cb1);
 }
 
 void begin_and_end_test() {
@@ -162,10 +162,10 @@ void begin_and_end_test() {
     v.push_back(11);
     v.push_back(12);
     v.push_back(13);
-    
+
     CB_CONTAINER<MyInteger> cb1(10, v.begin(), v.end());
     const CB_CONTAINER<MyInteger> cb2(10, v.begin(), v.end());
-    
+
     CB_CONTAINER<MyInteger> cb3(10);
     cb3.push_back(1);
     cb3.push_back(2);
@@ -195,10 +195,10 @@ void rbegin_and_rend_test() {
     v.push_back(11);
     v.push_back(12);
     v.push_back(13);
-    
+
     CB_CONTAINER<MyInteger> cb1(10, v.begin(), v.end());
     const CB_CONTAINER<MyInteger> cb2(10, v.begin(), v.end());
-    
+
     CB_CONTAINER<MyInteger> cb3(3);
     cb3.push_back(1);
     cb3.push_back(2);
