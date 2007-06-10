@@ -15,8 +15,8 @@ rb ../../../boost/circular_buffer/space_optimized.hpp
 rb ../index.html
 rb circular_buffer.html
 rb circular_buffer.xslt
-rb circular_buffer_space_optimized.html
-rb circular_buffer_space_optimized.xslt
+rb space_optimized.html
+rb space_optimized.xslt
 rb copy.xslt
 rb Doxyfile
 rb doxygen2html.xslt
