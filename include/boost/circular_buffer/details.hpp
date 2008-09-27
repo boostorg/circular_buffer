@@ -1,6 +1,6 @@
 // Helper classes and functions for the circular buffer.
 
-// Copyright (c) 2003-2007 Jan Gaspar
+// Copyright (c) 2003-2008 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -64,16 +64,6 @@ struct nonconst_traits {
 
     // Non-const traits
     typedef nonconst_traits<Traits> nonconst_self;
-};
-
-/*!
-    \struct helper_pointer
-    \brief Helper pointer used in the iterator.
-*/
-template <class Traits>
-struct helper_pointer {
-    bool m_end;
-    typename Traits::pointer m_it;
 };
 
 /*!
@@ -141,7 +131,7 @@ private:
 };
 
 /*!
-    \struct capacity_control
+    \class capacity_control
     \brief Capacity controller of the space optimized circular buffer.
 */
 template <class Size>
@@ -176,7 +166,7 @@ public:
 };
 
 /*!
-    \class iterator
+    \struct iterator
     \brief Random access iterator for the circular buffer.
     \param Buff The type of the underlying circular buffer.
     \param Traits Basic iterator types.
@@ -184,7 +174,7 @@ public:
           for iterating from begin() to end() of the circular buffer.
 */
 template <class Buff, class Traits>
-class iterator :
+struct iterator :
     public boost::iterator<
     std::random_access_iterator_tag,
     typename Traits::value_type,
@@ -195,7 +185,6 @@ class iterator :
     , public debug_iterator_base
 #endif // #if BOOST_CB_ENABLE_DEBUG
 {
-private:
 // Helper types
 
     //! Base iterator.
@@ -209,7 +198,6 @@ private:
     //! Non-const iterator.
     typedef iterator<Buff, typename Traits::nonconst_self> nonconst_self;
 
-public:
 // Basic types
 
     //! The type of the elements stored in the circular buffer.
@@ -227,9 +215,6 @@ public:
     //! Difference type.
     typedef typename base_iterator::difference_type difference_type;
 
-#if !defined(BOOST_CB_TEST) && !BOOST_CB_ENABLE_DEBUG
-private:
-#endif
 // Member variables
 
     //! The circular buffer where the iterator points to.
@@ -238,7 +223,6 @@ private:
     //! An internal iterator.
     pointer m_it;
 
-public:
 // Construction & assignment
 
     // Default copy constructor.
@@ -290,16 +274,11 @@ public:
     pointer operator -> () const { return &(operator*()); }
 
     //! Difference operator.
-    difference_type operator - (const iterator& it) const {
+    template <class Traits0>
+    difference_type operator - (const iterator<Buff, Traits0>& it) const {
         BOOST_CB_ASSERT(is_valid(m_buff));    // check for uninitialized or invalidated iterator
         BOOST_CB_ASSERT(it.is_valid(m_buff)); // check for uninitialized or invalidated iterator
-        helper_pointer<Traits> lhs = create_helper_pointer(*this);
-        helper_pointer<Traits> rhs = create_helper_pointer(it);
-        if (less(rhs, lhs) && lhs.m_it <= rhs.m_it)
-            return (lhs.m_it - rhs.m_it) + static_cast<difference_type>(m_buff->capacity());
-        if (less(lhs, rhs) && lhs.m_it >= rhs.m_it)
-            return (lhs.m_it - rhs.m_it) - static_cast<difference_type>(m_buff->capacity());
-        return lhs.m_it - rhs.m_it;
+        return linearize_pointer(*this) - linearize_pointer(it);
     }
 
     //! Increment operator (prefix).
@@ -357,7 +336,7 @@ public:
     iterator& operator -= (difference_type n) {
         BOOST_CB_ASSERT(is_valid(m_buff)); // check for uninitialized or invalidated iterator
         if (n > 0) {
-            BOOST_CB_ASSERT(m_buff->begin() - *this <= -n); // check for too large n
+            BOOST_CB_ASSERT(*this - m_buff->begin() >= n); // check for too large n
             m_it = m_buff->sub(m_it == 0 ? m_buff->m_last : m_it, n);
         } else if (n < 0) {
             *this += -n;
@@ -394,12 +373,12 @@ public:
     bool operator < (const iterator<Buff, Traits0>& it) const {
         BOOST_CB_ASSERT(is_valid(m_buff));    // check for uninitialized or invalidated iterator
         BOOST_CB_ASSERT(it.is_valid(m_buff)); // check for uninitialized or invalidated iterator
-        return less(create_helper_pointer(*this), create_helper_pointer(it));
+        return linearize_pointer(*this) < linearize_pointer(it);
     }
 
     //! Greater.
     template <class Traits0>
-    bool operator > (const iterator<Buff, Traits0>& it) const  { return it < *this; }
+    bool operator > (const iterator<Buff, Traits0>& it) const { return it < *this; }
 
     //! Less or equal.
     template <class Traits0>
@@ -409,44 +388,14 @@ public:
     template <class Traits0>
     bool operator >= (const iterator<Buff, Traits0>& it) const { return !(*this < it); }
 
-private:
 // Helpers
 
-    //! Create helper pointer.
+    //! Get a pointer which would point to the same element as the iterator in case the circular buffer is linearized.
     template <class Traits0>
-    helper_pointer<Traits0> create_helper_pointer(const iterator<Buff, Traits0>& it) const {
-        helper_pointer<Traits0> helper;
-        helper.m_end = (it.m_it == 0);
-        helper.m_it = helper.m_end ? m_buff->m_last : it.m_it;
-        return helper;
-    }
-
-    //! Less.
-    template <class InternalIterator0, class InternalIterator1>
-    bool less(const InternalIterator0& lhs, const InternalIterator1& rhs) const {
-        difference_type ldiff = lhs.m_it - m_buff->m_first;
-        difference_type rdiff = rhs.m_it - m_buff->m_first;
-        if (ldiff < 0) {
-            if (rdiff < 0)
-                return lhs.m_it < rhs.m_it;
-            else if (rdiff == 0)
-                return rhs.m_end;
-        } else if (ldiff == 0) {
-            if (rdiff < 0)
-                return !lhs.m_end;
-            else if (rdiff == 0)
-                return !lhs.m_end && rhs.m_end;
-            else
-                return !lhs.m_end;
-        } else { // ldiff > 0
-            if (rdiff < 0)
-                return true;
-            else if (rdiff == 0)
-                return rhs.m_end;
-            else
-                return lhs.m_it < rhs.m_it;
-        }
-        return false;
+    typename Traits0::pointer linearize_pointer(const iterator<Buff, Traits0>& it) const {
+        return it.m_it == 0 ? m_buff->m_buff + m_buff->size() :
+            (it.m_it < m_buff->m_first ? it.m_it + (m_buff->m_end - m_buff->m_first)
+                : m_buff->m_buff + (it.m_it - m_buff->m_first));
     }
 };
 

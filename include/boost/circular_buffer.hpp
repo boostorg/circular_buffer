@@ -1,10 +1,12 @@
 // Circular buffer library header file.
 
-// Copyright (c) 2003-2007 Jan Gaspar
+// Copyright (c) 2003-2008 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+
+//  See www.boost.org/libs/circular_buffer for documentation.
 
 #if !defined(BOOST_CIRCULAR_BUFFER_HPP)
 #define BOOST_CIRCULAR_BUFFER_HPP
@@ -13,7 +15,7 @@
     #pragma once
 #endif
 
-#include "circular_buffer_fwd.hpp"
+#include <boost/circular_buffer_fwd.hpp>
 #include <boost/detail/workaround.hpp>
 
 // BOOST_CB_ENABLE_DEBUG: Debug support control.
@@ -58,10 +60,10 @@
     #define BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS ((void)0);
 #endif
 
-#include "circular_buffer/debug.hpp"
-#include "circular_buffer/details.hpp"
-#include "circular_buffer/base.hpp"
-#include "circular_buffer/space_optimized.hpp"
+#include <boost/circular_buffer/debug.hpp>
+#include <boost/circular_buffer/details.hpp>
+#include <boost/circular_buffer/base.hpp>
+#include <boost/circular_buffer/space_optimized.hpp>
 
 #undef BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS
 #undef BOOST_CB_IS_CONVERTIBLE

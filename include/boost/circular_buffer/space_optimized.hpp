@@ -1,6 +1,6 @@
 // Implementation of the circular buffer adaptor.
 
-// Copyright (c) 2003-2007 Jan Gaspar
+// Copyright (c) 2003-2008 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -90,6 +90,8 @@ public:
     using circular_buffer<T, Alloc>::array_one;
     using circular_buffer<T, Alloc>::array_two;
     using circular_buffer<T, Alloc>::linearize;
+    using circular_buffer<T, Alloc>::is_linearized;
+    using circular_buffer<T, Alloc>::rotate;
     using circular_buffer<T, Alloc>::size;
     using circular_buffer<T, Alloc>::max_size;
     using circular_buffer<T, Alloc>::empty;
@@ -150,7 +152,8 @@ public:
              Does not invalidate any iterators.
         \par Complexity
              Constant (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>reserve()</code>, <code>size()</code>, <code>max_size()</code>, <code>set_capacity()</code>
+        \sa <code>reserve()</code>, <code>size()</code>, <code>max_size()</code>,
+            <code>set_capacity(const capacity_type&)</code>
     */
     const capacity_type& capacity() const { return m_capacity_ctrl; }
 
@@ -191,7 +194,8 @@ public:
               boost::%circular_buffer_space_optimized\<int\>(cb).swap(cb);</code><br><br>
               For more information about the shrink-to-fit technique in STL see
               <a href="http://www.gotw.ca/gotw/054.htm">http://www.gotw.ca/gotw/054.htm</a>.
-        \sa <code>rset_capacity()</code>, <code>resize()</code>
+        \sa <code>rset_capacity(const capacity_type&)</code>,
+            <code>\link resize() resize(size_type, const_reference)\endlink</code>
     */
     void set_capacity(const capacity_type& capacity_ctrl) {
         m_capacity_ctrl = capacity_ctrl;
@@ -226,7 +230,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>rresize()</code>, <code>set_capacity()</code>
+        \sa <code>\link rresize() rresize(size_type, const_reference)\endlink</code>,
+            <code>set_capacity(const capacity_type&)</code>
     */
     void resize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
@@ -260,7 +265,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in <code>min[size(), capacity_ctrl.%capacity()]</code>).
-        \sa <code>set_capacity()</code>, <code>rresize()</code>
+        \sa <code>set_capacity(const capacity_type&)</code>,
+            <code>\link rresize() rresize(size_type, const_reference)\endlink</code>
     */
     void rset_capacity(const capacity_type& capacity_ctrl) {
         m_capacity_ctrl = capacity_ctrl;
@@ -295,7 +301,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>rresize()</code>, <code>set_capacity()</code>
+        \sa <code>\link resize() resize(size_type, const_reference)\endlink</code>,
+            <code>rset_capacity(const capacity_type&)</code>
     */
     void rresize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
@@ -307,18 +314,19 @@ public:
         }
     }
 
-    //! Create an empty space optimized circular buffer with a maximum capacity.
+    //! Create an empty space optimized circular buffer with zero capacity.
     /*!
-        \post <code>capacity().%capacity() == max_size() \&\& capacity().min_capacity() == 0 \&\& size() == 0</code>
-              <br><br>There is no memory allocated in the internal buffer.
+        \post <code>capacity().%capacity() == 0 \&\& capacity().min_capacity() == 0 \&\& size() == 0</code>
         \param alloc The allocator.
         \throws Nothing.
         \par Complexity
              Constant.
+        \warning Since Boost version 1.36 the behaviour of this constructor has changed. Now it creates a space
+                 optimized circular buffer with zero capacity.
     */
     explicit circular_buffer_space_optimized(const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(0, alloc)
-    , m_capacity_ctrl(max_size()) {}
+    , m_capacity_ctrl(0) {}
 
     //! Create an empty space optimized circular buffer with the specified capacity.
     /*!
@@ -717,7 +725,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>push_front()</code>, <code>pop_back()</code>, <code>pop_front()</code>
+        \sa <code>\link push_front() push_front(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
     */
     void push_back(param_value_type item = value_type()) {
         check_low_capacity();
@@ -741,7 +750,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>push_back()</code>, <code>pop_back()</code>, <code>pop_front()</code>
+        \sa <code>\link push_back() push_back(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
     */
     void push_front(param_value_type item = value_type()) {
         check_low_capacity();
@@ -762,7 +772,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>pop_front()</code>, <code>push_back()</code>, <code>push_front()</code>
+        \sa <code>pop_front()</code>, <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>\link push_front() push_front(const_reference)\endlink</code>
     */
     void pop_back() {
         circular_buffer<T, Alloc>::pop_back();
@@ -783,7 +794,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>pop_back()</code>, <code>push_back()</code>, <code>push_front()</code>
+        \sa <code>pop_back()</code>, <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>\link push_front() push_front(const_reference)\endlink</code>
     */
     void pop_front() {
         circular_buffer<T, Alloc>::pop_front();
@@ -1141,6 +1153,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \note Basically there is no difference between <code>erase(iterator)</code> and this method. It is implemented
+              only for consistency with the base <code><a href="circular_buffer.html">circular_buffer</a></code>.
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
@@ -1171,6 +1185,9 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \note Basically there is no difference between <code>erase(iterator, iterator)</code> and this method. It is
+              implemented only for consistency with the base
+              <code><a href="circular_buffer.html">circular_buffer</a></code>.
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
             <code>clear()</code>
     */
@@ -1230,7 +1247,7 @@ private:
         if (new_size > new_capacity) {
             if (new_capacity == 0)
                 new_capacity = 1;
-            for (; new_size > new_capacity; new_capacity *= 2);
+            for (; new_size > new_capacity; new_capacity *= 2) {}
             circular_buffer<T, Alloc>::set_capacity(
                 ensure_reserve(new_capacity, new_size));
         }
