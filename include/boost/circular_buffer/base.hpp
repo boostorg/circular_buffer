@@ -690,7 +690,7 @@ public:
                         break;
                     }
                     if (is_uninitialized(dest)) {
-                        ::new (dest) value_type(this_type::move_if_noexcept(*src));
+                        cb_details::do_construct<value_type>(dest, this_type::move_if_noexcept(*src), m_alloc);
                         ++constructed;
                     } else {
                         value_type tmp = this_type::move_if_noexcept(*src); 
@@ -902,7 +902,7 @@ public:
         iterator b = begin();
         BOOST_TRY {
             reset(buff,
-                cb_details::uninitialized_move_if_noexcept<value_type>(b, b + (std::min)(new_capacity, size()), buff),
+                cb_details::uninitialized_move_if_noexcept(b, b + (std::min)(new_capacity, size()), buff, m_alloc),
                 new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
@@ -977,8 +977,8 @@ public:
         pointer buff = allocate(new_capacity);
         iterator e = end();
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_move_if_noexcept<value_type>(e - (std::min)(new_capacity, size()),
-                e, buff), new_capacity);
+            reset(buff, cb_details::uninitialized_move_if_noexcept(e - (std::min)(new_capacity, size()),
+                e, buff, m_alloc), new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -1125,7 +1125,7 @@ public:
         initialize_buffer(cb.capacity());
         m_first = m_buff;
         BOOST_TRY {
-            m_last = cb_details::uninitialized_copy<value_type>(cb.begin(), cb.end(), m_buff);
+            m_last = cb_details::uninitialized_copy(cb.begin(), cb.end(), m_buff, m_alloc);
         } BOOST_CATCH(...) {
             deallocate(m_buff, cb.capacity());
             BOOST_RETHROW
@@ -1249,7 +1249,7 @@ public:
             return *this;
         pointer buff = allocate(cb.capacity());
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy<value_type>(cb.begin(), cb.end(), buff), cb.capacity());
+            reset(buff, cb_details::uninitialized_copy(cb.begin(), cb.end(), buff, m_alloc), cb.capacity());
         } BOOST_CATCH(...) {
             deallocate(buff, cb.capacity());
             BOOST_RETHROW
@@ -1446,7 +1446,7 @@ private:
             increment(m_last);
             m_first = m_last;
         } else {
-            ::new (m_last) value_type(static_cast<ValT>(item));
+            cb_details::do_construct<value_type>(m_last, static_cast<ValT>(item), m_alloc);
             increment(m_last);
             ++m_size;
         }        
@@ -1463,7 +1463,7 @@ private:
                 m_last = m_first;
             } else {
                 decrement(m_first);
-                ::new (m_first) value_type(static_cast<ValT>(item));
+                cb_details::do_construct<value_type>(m_first, static_cast<ValT>(item), m_alloc);
                 ++m_size;
             }
         } BOOST_CATCH(...) {
@@ -2397,7 +2397,7 @@ private:
             throw_exception(std::length_error("circular_buffer"));
 #if BOOST_CB_ENABLE_DEBUG
         pointer p = (n == 0) ? 0 : m_alloc.allocate(n, 0);
-        std::memset(p, cb_details::UNINITIALIZED, sizeof(value_type) * n);
+        std::memset(boost::addressof(*p), cb_details::UNINITIALIZED, sizeof(value_type) * n);
         return p;
 #else
         return (n == 0) ? 0 : m_alloc.allocate(n, 0);
@@ -2438,7 +2438,7 @@ private:
     */
     void construct_or_replace(bool construct, pointer pos, param_value_type item) {
         if (construct)
-            ::new (pos) value_type(item);
+            cb_details::do_construct<value_type>(pos, item, m_alloc);
         else
             replace(pos, item);
     }
@@ -2450,7 +2450,7 @@ private:
     */
     void construct_or_replace(bool construct, pointer pos, rvalue_type item) {
         if (construct)
-            ::new (pos) value_type(boost::move(item));
+            cb_details::do_construct<value_type>(pos, boost::move(item), m_alloc);
         else
             replace(pos, boost::move(item));
     }
@@ -2460,7 +2460,7 @@ private:
         m_alloc.destroy(p);
 #if BOOST_CB_ENABLE_DEBUG
         invalidate_iterators(iterator(this, p));
-        std::memset(p, cb_details::UNINITIALIZED, sizeof(value_type));
+        std::memset(boost::addressof(*p), cb_details::UNINITIALIZED, sizeof(value_type));
 #endif
     }
 
@@ -2590,7 +2590,7 @@ private:
         if (buffer_capacity == 0)
             return;
         while (first != last && !full()) {
-            ::new (m_last) value_type(*first++);
+            cb_details::do_construct<value_type>(m_last, *first++, m_alloc);
             increment(m_last);
             ++m_size;
         }
@@ -2626,7 +2626,7 @@ private:
             m_size = distance;
         }
         BOOST_TRY {
-            m_last = cb_details::uninitialized_copy<value_type>(first, last, m_buff);
+            m_last = cb_details::uninitialized_copy(first, last, m_buff, m_alloc);
         } BOOST_CATCH(...) {
             deallocate(m_buff, buffer_capacity);
             BOOST_RETHROW
@@ -2680,8 +2680,8 @@ private:
         std::deque<value_type, allocator_type> tmp(first, last, m_alloc);
         size_type distance = tmp.size();
         assign_n(distance, distance,
-            cb_details::make_assign_range<value_type>
-                (boost::make_move_iterator(tmp.begin()), boost::make_move_iterator(tmp.end())));
+            cb_details::make_assign_range
+                (boost::make_move_iterator(tmp.begin()), boost::make_move_iterator(tmp.end()), m_alloc));
     }
 
     //! Specialized assign method.
@@ -2689,7 +2689,7 @@ private:
     void assign(ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         size_type distance = std::distance(first, last);
-        assign_n(distance, distance, cb_details::make_assign_range<value_type>(first, last));
+        assign_n(distance, distance, cb_details::make_assign_range(first, last, m_alloc));
     }
 
     //! Specialized assign method.
@@ -2732,7 +2732,7 @@ private:
             distance = new_capacity;
         }
         assign_n(new_capacity, distance,
-            cb_details::make_assign_range<value_type>(first, last));
+            cb_details::make_assign_range(first, last, m_alloc));
     }
 
     //! Helper assign method.
@@ -2855,7 +2855,7 @@ private:
             pointer p = m_last;
             BOOST_TRY {
                 for (; ii < construct; ++ii, increment(p))
-                    ::new (p) value_type(*wrapper());
+                    cb_details::do_construct<value_type>(p, *wrapper(), m_alloc);
                 for (;ii < n; ++ii, increment(p))
                     replace(p, *wrapper());
             } BOOST_CATCH(...) {
@@ -2949,7 +2949,7 @@ private:
                 for (;ii > construct; --ii, increment(p))
                     replace(p, *wrapper());
                 for (; ii > 0; --ii, increment(p))
-                    ::new (p) value_type(*wrapper());
+                    cb_details::do_construct<value_type>(p, *wrapper(), m_alloc);
             } BOOST_CATCH(...) {
                 size_type constructed = ii < construct ? construct - ii : 0;
                 m_last = add(m_last, constructed);
