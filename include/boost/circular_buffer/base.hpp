@@ -34,20 +34,9 @@
 #include <utility>
 #include <deque>
 #include <stdexcept>
-#if BOOST_CB_ENABLE_DEBUG
-    #include <cstring>
-#endif
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
     #include <stddef.h>
 #endif
-
-#if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std {
-    using ::memset;
-}
-#endif
-
-
 
 namespace boost {
 
@@ -2397,7 +2386,7 @@ private:
             throw_exception(std::length_error("circular_buffer"));
 #if BOOST_CB_ENABLE_DEBUG
         pointer p = (n == 0) ? 0 : m_alloc.allocate(n, 0);
-        std::memset(boost::addressof(*p), cb_details::UNINITIALIZED, sizeof(value_type) * n);
+        cb_details::do_fill_uninitialized_memory(p, sizeof(value_type) * n);
         return p;
 #else
         return (n == 0) ? 0 : m_alloc.allocate(n, 0);
@@ -2460,7 +2449,7 @@ private:
         m_alloc.destroy(p);
 #if BOOST_CB_ENABLE_DEBUG
         invalidate_iterators(iterator(this, p));
-        std::memset(boost::addressof(*p), cb_details::UNINITIALIZED, sizeof(value_type));
+        cb_details::do_fill_uninitialized_memory(p, sizeof(value_type));
 #endif
     }
 
