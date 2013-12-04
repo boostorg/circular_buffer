@@ -46,13 +46,13 @@ ForwardIterator uninitialized_move_if_noexcept(InputIterator first, InputIterato
 
 
 //! Those `do_construct` methods are required because in C++03 default allocators
-//! have `construct` method that accepts second parameter in as a const reference; 
-//! while move-only types emulated by Boost.Move require constructor that accepts 
+//! have `construct` method that accepts second parameter in as a const reference;
+//! while move-only types emulated by Boost.Move require constructor that accepts
 //! a non-const reference.
 //!
-//! So when we need to call `construct` and pointer to value_type is provided, we 
+//! So when we need to call `construct` and pointer to value_type is provided, we
 //! assume that it is safe to call placement new instead of Alloc::construct.
-//! Otherwise we are asume that user has made his own allocator or uses allocator 
+//! Otherwise we are asume that user has made his own allocator or uses allocator
 //! from other libraries. In that case it's users ability to provide Alloc::construct
 //! with non-const reference parameter or just do not use move-only types.
 template <class ValueType, class Alloc>
