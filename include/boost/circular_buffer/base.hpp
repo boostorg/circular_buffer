@@ -3,7 +3,7 @@
 // Copyright (c) 2003-2008 Jan Gaspar
 // Copyright (c) 2013 Paul A. Bristow  // Doxygen comments changed.
 // Copyright (c) 2013 Antony Polukhin  // Move semantics implementation.
-
+// Copyright (c) 2014 Glen Fernandes   // C++11 allocator model support.
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -20,6 +20,7 @@
 #include <boost/call_traits.hpp>
 #include <boost/concept_check.hpp>
 #include <boost/limits.hpp>
+#include <boost/container/allocator_traits.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/type_traits/is_stateless.hpp>
@@ -30,10 +31,12 @@
 #include <boost/type_traits/is_copy_constructible.hpp>
 #include <boost/type_traits/conditional.hpp>
 #include <boost/move/move.hpp>
+#include <boost/utility/addressof.hpp>
 #include <algorithm>
 #include <utility>
 #include <deque>
 #include <stdexcept>
+
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
     #include <stddef.h>
 #endif
@@ -92,31 +95,31 @@ public:
     typedef circular_buffer<T, Alloc> this_type;
 
     //! The type of elements stored in the <code>circular_buffer</code>.
-    typedef typename Alloc::value_type value_type;
+    typedef typename boost::container::allocator_traits<Alloc>::value_type value_type;
 
     //! A pointer to an element.
-    typedef typename Alloc::pointer pointer;
+    typedef typename boost::container::allocator_traits<Alloc>::pointer pointer;
 
     //! A const pointer to the element.
-    typedef typename Alloc::const_pointer const_pointer;
+    typedef typename boost::container::allocator_traits<Alloc>::const_pointer const_pointer;
 
     //! A reference to an element.
-    typedef typename Alloc::reference reference;
+    typedef typename boost::container::allocator_traits<Alloc>::reference reference;
 
     //! A const reference to an element.
-    typedef typename Alloc::const_reference const_reference;
+    typedef typename boost::container::allocator_traits<Alloc>::const_reference const_reference;
 
     //! The distance type.
     /*!
         (A signed integral type used to represent the distance between two iterators.)
     */
-    typedef typename Alloc::difference_type difference_type;
+    typedef typename boost::container::allocator_traits<Alloc>::difference_type difference_type;
 
     //! The size type.
     /*!
         (An unsigned integral type that can represent any non-negative value of the container's distance type.)
     */
-    typedef typename Alloc::size_type size_type;
+    typedef typename boost::container::allocator_traits<Alloc>::size_type size_type;
 
     //! The type of an allocator used in the <code>circular_buffer</code>.
     typedef Alloc allocator_type;
@@ -124,10 +127,10 @@ public:
 // Iterators
 
     //! A const (random access) iterator used to iterate through the <code>circular_buffer</code>.
-    typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::const_traits<Alloc> > const_iterator;
+    typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::const_traits<boost::container::allocator_traits<Alloc> > > const_iterator;
 
     //! A (random access) iterator used to iterate through the <code>circular_buffer</code>.
-    typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::nonconst_traits<Alloc> > iterator;
+    typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::nonconst_traits<boost::container::allocator_traits<Alloc> > > iterator;
 
     //! A const iterator used to iterate backwards through a <code>circular_buffer</code>.
     typedef boost::reverse_iterator<const_iterator> const_reverse_iterator;
@@ -800,7 +803,7 @@ public:
         \sa <code>size()</code>, <code>capacity()</code>, <code>reserve()</code>
     */
     size_type max_size() const BOOST_NOEXCEPT {
-        return (std::min<size_type>)(m_alloc.max_size(), (std::numeric_limits<difference_type>::max)());
+        return (std::min<size_type>)(boost::container::allocator_traits<Alloc>::max_size(m_alloc), (std::numeric_limits<difference_type>::max)());
     }
 
     //! Is the <code>circular_buffer</code> empty?
@@ -2385,11 +2388,11 @@ private:
         if (n > max_size())
             throw_exception(std::length_error("circular_buffer"));
 #if BOOST_CB_ENABLE_DEBUG
-        pointer p = (n == 0) ? 0 : m_alloc.allocate(n, 0);
+        pointer p = (n == 0) ? 0 : m_alloc.allocate(n);
         cb_details::do_fill_uninitialized_memory(p, sizeof(value_type) * n);
         return p;
 #else
-        return (n == 0) ? 0 : m_alloc.allocate(n, 0);
+        return (n == 0) ? 0 : m_alloc.allocate(n);
 #endif
     }
 
@@ -2446,7 +2449,7 @@ private:
 
     //! Destroy an item.
     void destroy_item(pointer p) {
-        m_alloc.destroy(p);
+        boost::container::allocator_traits<Alloc>::destroy(m_alloc, boost::addressof(*p));
 #if BOOST_CB_ENABLE_DEBUG
         invalidate_iterators(iterator(this, p));
         cb_details::do_fill_uninitialized_memory(p, sizeof(value_type));
