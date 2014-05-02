@@ -2,6 +2,7 @@
 
 // Copyright (c) 2003-2008 Jan Gaspar
 // Copyright (c) 2013 Antony Polukhin
+// Copyright (c) 2014 Glen Fernandes   // C++11 allocator model support.
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -163,8 +164,10 @@ public:
    typedef typename base_t::size_type               size_type;
    typedef typename base_t::difference_type         difference_type;
 
+private:
    template<class U>
    struct const_pointer_;
+
    template<class U>
    struct pointer_ {
        pointer_(){}

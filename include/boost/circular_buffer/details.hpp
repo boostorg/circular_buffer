@@ -47,37 +47,6 @@ ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, Forw
 template<class InputIterator, class ForwardIterator, class Alloc>
 ForwardIterator uninitialized_move_if_noexcept(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& a);
 
-
-//! Those `do_construct` methods are required because in C++03 default allocators
-//! have `construct` method that accepts second parameter in as a const reference;
-//! while move-only types emulated by Boost.Move require constructor that accepts
-//! a non-const reference.
-//!
-//! So when we need to call `construct` and pointer to value_type is provided, we
-//! assume that it is safe to call placement new instead of Alloc::construct.
-//! Otherwise we are asume that user has made his own allocator or uses allocator
-//! from other libraries. In that case it's users ability to provide Alloc::construct
-//! with non-const reference parameter or just do not use move-only types.
-template <class ValueType, class Alloc>
-inline void do_construct(ValueType* p, BOOST_RV_REF(ValueType) item, Alloc&) {
-    ::new (p) ValueType(boost::move(item));
-}
-
-template <class ValueType, class Alloc>
-inline void do_construct(ValueType* p, const ValueType& item, Alloc&) {
-    ::new (p) ValueType(item);
-}
-
-template <class ValueType, class Alloc, class PointerT>
-inline void do_construct(PointerT& p, BOOST_RV_REF(ValueType) item, Alloc& a) {
-    boost::container::allocator_traits<Alloc>::construct(a, boost::addressof(*p), boost::move(item));
-}
-
-template <class ValueType, class Alloc, class PointerT>
-inline void do_construct(PointerT& p, const ValueType& item, Alloc& a) {
-    boost::container::allocator_traits<Alloc>::construct(a, boost::addressof(*p), item);
-}
-
 /*!
     \struct const_traits
     \brief Defines the data types for a const iterator.
@@ -467,7 +436,7 @@ inline ForwardIterator uninitialized_copy(InputIterator first, InputIterator las
     ForwardIterator next = dest;
     BOOST_TRY {
         for (; first != last; ++first, ++dest)
-            do_construct<typename boost::container::allocator_traits<Alloc>::value_type>(dest, *first, a);
+            boost::container::allocator_traits<Alloc>::construct(a, boost::addressof(*dest), *first);
     } BOOST_CATCH(...) {
         for (; next != dest; ++next)
             boost::container::allocator_traits<Alloc>::destroy(a, boost::addressof(*next));
@@ -481,7 +450,7 @@ template<class InputIterator, class ForwardIterator, class Alloc>
 ForwardIterator uninitialized_move_if_noexcept_impl(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& a,
     true_type) {
     for (; first != last; ++first, ++dest)
-        do_construct<typename boost::container::allocator_traits<Alloc>::value_type>(dest, boost::move(*first), a);
+        boost::container::allocator_traits<Alloc>::construct(a, boost::addressof(*dest), boost::move(*first));
     return dest;
 }
 
@@ -510,7 +479,7 @@ inline void uninitialized_fill_n_with_alloc(ForwardIterator first, Diff n, const
     ForwardIterator next = first;
     BOOST_TRY {
         for (; n > 0; ++first, --n)
-            do_construct<typename boost::container::allocator_traits<Alloc>::value_type>(first, item, alloc);
+            boost::container::allocator_traits<Alloc>::construct(alloc, boost::addressof(*first), item);
     } BOOST_CATCH(...) {
         for (; next != first; ++next)
             boost::container::allocator_traits<Alloc>::destroy(alloc, boost::addressof(*next));
