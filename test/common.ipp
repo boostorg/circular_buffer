@@ -185,7 +185,7 @@ private:
        pointer_ operator+(size_type s) const { return hidden_ptr_ + s; }
        pointer_ operator++(int) { pointer_ p = *this; ++hidden_ptr_; return p; }
        pointer_ operator--(int) { pointer_ p = *this; --hidden_ptr_; return p; }
-       T& operator*() const { return *hidden_ptr_; }
+       U& operator*() const { return *hidden_ptr_; }
 
        U* hidden_ptr_;
    };
@@ -208,7 +208,7 @@ private:
        const_pointer_ operator+(size_type s) const { return hidden_ptr_ + s; }
        const_pointer_ operator++(int) { const_pointer_ p = *this; ++hidden_ptr_; return p; }
        const_pointer_ operator--(int) { const_pointer_ p = *this; --hidden_ptr_; return p; }
-       const T& operator*() const { return *hidden_ptr_; }
+       const U& operator*() const { return *hidden_ptr_; }
 
        const U* hidden_ptr_;
    };
