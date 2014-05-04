@@ -532,6 +532,10 @@ Type: Patches
 
 [section:release Release Notes]
 
+[h4 Boost 1.56]
+
+* C++11 allocator model support implemented by Glen Fernandes using Boost allocator_traits.
+
 [h4 Boost 1.55]
 
 * Documentation refactored by Paul A. Bristow using Quickbook, Doxygen and Autoindexing.
