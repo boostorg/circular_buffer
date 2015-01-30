@@ -6,7 +6,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-# Added warning supression Paul A. Bristow 25 Nov 2008
+# Added warning suppression Paul A. Bristow 25 Nov 2008
 
 # Bring in rules for testing.
 import testing ;
