@@ -334,9 +334,9 @@ so for example: iterators `(begin() - 1)` and `(end() + 1)` are both invalid.
 [h3 Debug Support]
 
 In order to help a programmer to avoid and find common bugs,
-the __cb contains a kind of debug support.
+the __cb can be enabled to provide a kind of debug support.
 
-The __cb maintains a list of valid iterators.
+When the debugging functionality is enabled, the __cb maintains a list of valid iterators.
 As soon as any element gets destroyed all iterators pointing to this element
 are removed from this list and explicitly invalidated (an invalidation flag is set).
 The debug support also consists of many assertions (`BOOST_ASSERT` macros)
@@ -349,9 +349,13 @@ Moreover, the uninitialized memory allocated by __cb is filled with the value `0
 When debugging the code, this can help the programmer  to recognize the initialized memory from the uninitialized.
 For details refer the source code [@boost:boost/circular_buffer/debug.hpp circular_buffer/debug.hpp].
 
-The debug support is enabled only in the debug mode (when the `NDEBUG` is not defined).
-It can also be explicitly disabled (only for __cb)
-by defining macro BOOST_CB_DISABLE_DEBUG.
+[caution Since the debugging code makes __cb and its iterators more interconnected, thread safety guarantees of __cb
+are different when debug support is enabled. In addition to the container itself, all iterators tracked by the container
+(including any copies thereof) must be protected from concurrent access. In particular, this includes copying, destroying or
+obtaining iterators from the container, even if for read-only access.]
+
+The debug support is disabled by default. To enable it, one has to define `BOOST_CB_ENABLE_DEBUG` macro with the value of 1
+while compiling the code using __cb.
 
 [h3 Compatibility with Interprocess library]
 
@@ -360,7 +364,7 @@ The __cb is compatible with the [@boost:libs/interprocess/index.html  Boost.Inte
 library used for interprocess communication.
 Considering that the circular_buffer's debug support relies on 'raw' pointers
 (which is not permited by the Interprocess library)
-the code has to compiled with `-DBOOST_CB_DISABLE_DEBUG` or `-DNDEBUG` (which disables the Debug Support).
+the code has to compiled with debug support disabled (i.e. with `BOOST_CB_ENABLE_DEBUG` macro not defined or defined to 0).
 Not doing that will cause the compilation to fail.
 
 [endsect] [/section:implementation Implementation ]
