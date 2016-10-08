@@ -208,5 +208,12 @@ install png_install : [ glob $(here)/*.png ] : <location>$(here)/../../../doc/ht
 
 install pdfinstall : standalone : <install-type>PDF <location>. <name>circular_buffer.pdf ;
 
-
-
+###############################################################################
+alias boostdoc
+    : standalone/<format>docbook
+    :
+    :
+    : ;
+explicit boostdoc ;
+alias boostrelease ;
+explicit boostrelease ;
