@@ -19,7 +19,6 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/call_traits.hpp>
 #include <boost/concept_check.hpp>
 #include <boost/limits.hpp>
 #include <boost/container/allocator_traits.hpp>
