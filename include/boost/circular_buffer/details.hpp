@@ -19,7 +19,7 @@
 #include <boost/move/move.hpp>
 #include <boost/type_traits/is_nothrow_move_constructible.hpp>
 #include <boost/utility/addressof.hpp>
-#include <boost/detail/no_exceptions_support.hpp>
+#include <boost/core/no_exceptions_support.hpp>
 #include <iterator>
 
 // Silence MS /W4 warnings like C4913:
