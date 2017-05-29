@@ -2,7 +2,7 @@
 
 // Copyright (c) 2003-2008 Jan Gaspar
 // Copyright (c) 2013 Antony Polukhin
-// Copyright (c) 2014 Glen Fernandes   // C++11 allocator model support.
+// Copyright (c) 2014 Glen Joseph Fernandes   // C++11 allocator model support.
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -186,6 +186,7 @@ private:
        pointer_ operator++(int) { pointer_ p = *this; ++hidden_ptr_; return p; }
        pointer_ operator--(int) { pointer_ p = *this; --hidden_ptr_; return p; }
        U& operator*() const { return *hidden_ptr_; }
+       U* operator->() const { return hidden_ptr_; }
 
        U* hidden_ptr_;
    };
