@@ -1454,6 +1454,82 @@ private:
         BOOST_CATCH_END
     }
 
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+    template <class ...Args>
+    void emplace_back_impl(BOOST_FWD_REF(Args) ...args) {
+        if (full()) {
+            if (empty())
+                return;
+            replace(m_last, ::boost::forward<Args>(args)...);
+            increment(m_last);
+            m_first = m_last;
+        } else {
+            boost::allocator_construct(alloc(), boost::to_address(m_last), ::boost::forward<Args>(args)...);
+            increment(m_last);
+            ++m_size;
+        }
+    }
+#else
+    template <class V>
+    void emplace_back_impl(BOOST_FWD_REF(V) value) {
+        if (full()) {
+            if (empty())
+                return;
+            replace(m_last, ::boost::forward<V>(value));
+            increment(m_last);
+            m_first = m_last;
+        } else {
+            boost::allocator_construct(alloc(), boost::to_address(m_last), ::boost::forward<V>(value));
+            increment(m_last);
+            ++m_size;
+        }
+    }
+#endif
+
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+    template <class ...Args>
+    void emplace_front_impl(BOOST_FWD_REF(Args) ...args) {
+        BOOST_TRY {
+            if (full()) {
+                if (empty())
+                    return;
+                decrement(m_first);
+                replace(m_first, ::boost::forward<Args>(args)...);
+                m_last = m_first;
+            } else {
+                decrement(m_first);
+                boost::allocator_construct(alloc(), boost::to_address(m_first), ::boost::forward<Args>(args)...);
+                ++m_size;
+            }
+        } BOOST_CATCH(...) {
+            increment(m_first);
+            BOOST_RETHROW
+        }
+        BOOST_CATCH_END
+    }
+#else
+    template <class V>
+    void emplace_front_impl(BOOST_FWD_REF(V) value) {
+        BOOST_TRY {
+            if (full()) {
+                if (empty())
+                    return;
+                decrement(m_first);
+                replace(m_first, ::boost::forward<V>(value));
+                m_last = m_first;
+            } else {
+                decrement(m_first);
+                boost::allocator_construct(alloc(), boost::to_address(m_first), ::boost::forward<V>(value));
+                ++m_size;
+            }
+        } BOOST_CATCH(...) {
+            increment(m_first);
+            BOOST_RETHROW
+        }
+        BOOST_CATCH_END
+    }
+#endif
+
 public:
     //! Insert a new element at the end of the <code>circular_buffer</code>.
     /*!
@@ -1582,6 +1658,64 @@ public:
         value_type temp;
         push_front(boost::move(temp));
     }
+
+    //! Construct a new element at the end of the <code>circular_buffer</code>.
+    /*!
+        \post if <code>capacity() > 0</code> then <code>back() == item</code><br>
+              If the <code>circular_buffer</code> is full, the first element will be removed. If the capacity is
+              <code>0</code>, nothing will be inserted.
+        \param item The element to be inserted.
+        \throws Whatever <code>T::T(Args...)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \sa <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>pop_back()</code>, <code>emplace_front()</code>
+    */
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+    template <class ...Args>
+    void emplace_back(BOOST_FWD_REF(Args) ...args) {
+        emplace_back_impl(::boost::forward<Args>(args)...);
+    }
+#else
+    template <class V>
+    void emplace_back(BOOST_FWD_REF(V) value) {
+        emplace_back_impl(::boost::forward<V>(value));
+    }
+#endif
+
+    //! Construct a new element at the beginning of the <code>circular_buffer</code>.
+    /*!
+        \post if <code>capacity() > 0</code> then <code>back() == item</code><br>
+              If the <code>circular_buffer</code> is full, the last element will be removed. If the capacity is
+              <code>0</code>, nothing will be inserted.
+        \param item The element to be inserted.
+        \throws Whatever <code>T::T(Args...)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \sa <code>\link push_front() push_front(const_reference)\endlink</code>,
+            <code>pop_front()</code>, <code>emplace_back()</code>
+    */
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+    template <class ...Args>
+    void emplace_front(BOOST_FWD_REF(Args) ...args) {
+        emplace_front_impl(::boost::forward<Args>(args)...);
+    }
+#else
+    template <class V>
+    void emplace_front(BOOST_FWD_REF(V) value) {
+        emplace_front_impl(::boost::forward<V>(value));
+    }
+#endif
 
     //! Remove the last element from the <code>circular_buffer</code>.
     /*!
@@ -2425,6 +2559,28 @@ private:
         invalidate_iterators(iterator(this, pos));
 #endif
     }
+
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+    /*! INTERNAL ONLY */
+    template <class ...Args>
+    void replace(pointer pos, BOOST_FWD_REF(Args) ...args) {
+        boost::allocator_destroy(alloc(), boost::to_address(pos));
+        boost::allocator_construct(alloc(), boost::to_address(pos), ::boost::forward<Args>(args)...);
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators(iterator(this, pos));
+#endif
+     }
+#else /* BOOST_NO_CXX11_VARIADIC_TEMPLATES */
+    /*! INTERNAL ONLY */
+    template <class V>
+    void replace(pointer pos, BOOST_FWD_REF(V) value) {
+        boost::allocator_destroy(alloc(), boost::to_address(pos));
+        boost::allocator_construct(alloc(), boost::to_address(pos), ::boost::forward<V>(value));
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators(iterator(this, pos));
+#endif
+    }
+#endif /* BOOST_NO_CXX11_VARIADIC_TEMPLATES */
 
     /*! INTERNAL ONLY */
     void construct_or_replace(bool construct, pointer pos, param_value_type item) {
