@@ -195,46 +195,33 @@ public:
           for iterating from begin() to end() of the circular buffer.
 */
 template <class Buff, class Traits>
-struct iterator :
-    public std::iterator<
-    std::random_access_iterator_tag,
-    typename Traits::value_type,
-    typename Traits::difference_type,
-    typename Traits::pointer,
-    typename Traits::reference>
+struct iterator
 #if BOOST_CB_ENABLE_DEBUG
-    , public debug_iterator_base
+    : public debug_iterator_base
 #endif // #if BOOST_CB_ENABLE_DEBUG
 {
 // Helper types
-
-    //! Base iterator.
-    typedef std::iterator<
-        std::random_access_iterator_tag,
-        typename Traits::value_type,
-        typename Traits::difference_type,
-        typename Traits::pointer,
-        typename Traits::reference> base_iterator;
 
     //! Non-const iterator.
     typedef iterator<Buff, typename Traits::nonconst_self> nonconst_self;
 
 // Basic types
+    typedef std::random_access_iterator_tag iterator_category;
 
     //! The type of the elements stored in the circular buffer.
-    typedef typename base_iterator::value_type value_type;
+    typedef typename Traits::value_type value_type;
 
     //! Pointer to the element.
-    typedef typename base_iterator::pointer pointer;
+    typedef typename Traits::pointer pointer;
 
     //! Reference to the element.
-    typedef typename base_iterator::reference reference;
+    typedef typename Traits::reference reference;
 
     //! Size type.
     typedef typename Traits::size_type size_type;
 
     //! Difference type.
-    typedef typename base_iterator::difference_type difference_type;
+    typedef typename Traits::difference_type difference_type;
 
 // Member variables
 
