@@ -1207,6 +1207,11 @@ void insert_n_test() {
     cb4.push_back(4);
     cb4.insert(cb4.begin() + 2, 5, 6);
     cb4.insert(cb4.begin() + 2, 0, 7);
+    CB_CONTAINER<MyInteger> cb5(3);
+    cb5.push_back(1);
+    cb5.push_back(2);
+    cb5.pop_front();
+    cb5.insert(cb5.begin(), 2, 3);
 
     BOOST_CHECK(cb1.full());
     BOOST_CHECK(cb1[0] == 10);
@@ -1224,11 +1229,16 @@ void insert_n_test() {
     BOOST_CHECK(cb4[3] == 6);
     BOOST_CHECK(cb4[4] == 3);
     BOOST_CHECK(cb4[5] == 4);
+    BOOST_CHECK(cb5.size() == 3);
+    BOOST_CHECK(cb5[0] == 3);
+    BOOST_CHECK(cb5[1] == 3);
+    BOOST_CHECK(cb5[2] == 2);
 
     generic_test(cb1);
     generic_test(cb2);
     generic_test(cb3);
     generic_test(cb4);
+    generic_test(cb5);
 }
 
 void insert_range_test() {
