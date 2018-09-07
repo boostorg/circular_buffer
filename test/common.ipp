@@ -2,7 +2,9 @@
 
 // Copyright (c) 2003-2008 Jan Gaspar
 // Copyright (c) 2013 Antony Polukhin
-// Copyright (c) 2014 Glen Joseph Fernandes   // C++11 allocator model support.
+
+// Copyright 2014,2018 Glen Joseph Fernandes
+// (glenjofe@gmail.com)
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -252,7 +254,7 @@ void allocator_test() {
     generic_test(cb_a);
 }
 
-#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+#if !defined(BOOST_CB_NO_CXX11_ALLOCATOR)
 template<class T>
 class cxx11_allocator {
 public:
@@ -2474,7 +2476,7 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&move_container_on_cpp11));
     tests->add(BOOST_TEST_CASE(&move_container_values_noexcept));    
     tests->add(BOOST_TEST_CASE(&check_containers_exception_specifications));
-#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+#if !defined(BOOST_CB_NO_CXX11_ALLOCATOR)
     tests->add(BOOST_TEST_CASE(&cxx11_allocator_test));
 #endif
 }

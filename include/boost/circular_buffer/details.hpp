@@ -1,7 +1,9 @@
 // Helper classes and functions for the circular buffer.
 
 // Copyright (c) 2003-2008 Jan Gaspar
-// Copyright (c) 2014 Glen Joseph Fernandes   // C++11 allocator model support.
+
+// Copyright 2014,2018 Glen Joseph Fernandes
+// (glenjofe@gmail.com)
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -15,11 +17,10 @@
 #endif
 
 #include <boost/throw_exception.hpp>
-#include <boost/container/allocator_traits.hpp>
+#include <boost/circular_buffer/allocators.hpp>
 #include <boost/core/pointer_traits.hpp>
 #include <boost/move/move.hpp>
 #include <boost/type_traits/is_nothrow_move_constructible.hpp>
-#include <boost/utility/addressof.hpp>
 #include <boost/core/no_exceptions_support.hpp>
 #include <iterator>
 
@@ -56,7 +57,7 @@ struct const_traits {
     // Basic types
     typedef typename Traits::value_type value_type;
     typedef typename Traits::const_pointer pointer;
-    typedef typename Traits::const_reference reference;
+    typedef const value_type& reference;
     typedef typename Traits::size_type size_type;
     typedef typename Traits::difference_type difference_type;
 
@@ -73,7 +74,7 @@ struct nonconst_traits {
     // Basic types
     typedef typename Traits::value_type value_type;
     typedef typename Traits::pointer pointer;
-    typedef typename Traits::reference reference;
+    typedef value_type& reference;
     typedef typename Traits::size_type size_type;
     typedef typename Traits::difference_type difference_type;
 
@@ -113,7 +114,7 @@ private:
 */
 template <class Value, class Alloc>
 struct assign_n {
-    typedef typename boost::container::allocator_traits<Alloc>::size_type size_type;
+    typedef typename allocator_traits<Alloc>::size_type size_type;
     size_type m_n;
     Value m_item;
     Alloc& m_alloc;
@@ -423,10 +424,10 @@ inline ForwardIterator uninitialized_copy(InputIterator first, InputIterator las
     ForwardIterator next = dest;
     BOOST_TRY {
         for (; first != last; ++first, ++dest)
-            boost::container::allocator_traits<Alloc>::construct(a, boost::to_address(dest), *first);
+            allocator_traits<Alloc>::construct(a, boost::to_address(dest), *first);
     } BOOST_CATCH(...) {
         for (; next != dest; ++next)
-            boost::container::allocator_traits<Alloc>::destroy(a, boost::to_address(next));
+            allocator_traits<Alloc>::destroy(a, boost::to_address(next));
         BOOST_RETHROW
     }
     BOOST_CATCH_END
@@ -437,7 +438,7 @@ template<class InputIterator, class ForwardIterator, class Alloc>
 ForwardIterator uninitialized_move_if_noexcept_impl(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& a,
     true_type) {
     for (; first != last; ++first, ++dest)
-        boost::container::allocator_traits<Alloc>::construct(a, boost::to_address(dest), boost::move(*first));
+        allocator_traits<Alloc>::construct(a, boost::to_address(dest), boost::move(*first));
     return dest;
 }
 
@@ -453,7 +454,7 @@ ForwardIterator uninitialized_move_if_noexcept_impl(InputIterator first, InputIt
 */
 template<class InputIterator, class ForwardIterator, class Alloc>
 ForwardIterator uninitialized_move_if_noexcept(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& a) {
-    typedef typename boost::is_nothrow_move_constructible<typename boost::container::allocator_traits<Alloc>::value_type>::type tag_t;
+    typedef typename boost::is_nothrow_move_constructible<typename allocator_traits<Alloc>::value_type>::type tag_t;
     return uninitialized_move_if_noexcept_impl(first, last, dest, a, tag_t());
 }
 
@@ -466,10 +467,10 @@ inline void uninitialized_fill_n_with_alloc(ForwardIterator first, Diff n, const
     ForwardIterator next = first;
     BOOST_TRY {
         for (; n > 0; ++first, --n)
-            boost::container::allocator_traits<Alloc>::construct(alloc, boost::to_address(first), item);
+            allocator_traits<Alloc>::construct(alloc, boost::to_address(first), item);
     } BOOST_CATCH(...) {
         for (; next != first; ++next)
-            boost::container::allocator_traits<Alloc>::destroy(alloc, boost::to_address(next));
+            allocator_traits<Alloc>::destroy(alloc, boost::to_address(next));
         BOOST_RETHROW
     }
     BOOST_CATCH_END
