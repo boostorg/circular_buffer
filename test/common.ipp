@@ -2189,7 +2189,7 @@ public:
     void reinit() { is_moved_ = false; value_ = next_value ++; }
 };
 
-#ifdef BOOST_NO_CXX11_NOEXCEPT
+#if defined(BOOST_NO_CXX11_NOEXCEPT) || !defined(BOOST_IS_NOTHROW_MOVE_CONSTRUCT)
 namespace boost {
     template <>
     struct is_nothrow_move_constructible<noncopyable_movable_noexcept_t>
@@ -2423,8 +2423,12 @@ void check_containers_exception_specifications() {
 #endif
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+#ifdef BOOST_IS_NOTHROW_MOVE_ASSIGN
     BOOST_CHECK(boost::is_nothrow_move_assignable<CB_CONTAINER<int> >::value);
+#endif
+#ifdef BOOST_IS_NOTHROW_MOVE_CONSTRUCT
     BOOST_CHECK(boost::is_nothrow_move_constructible<CB_CONTAINER<int> >::value);
+#endif
 #endif
 #endif // BOOST_NO_CXX11_NOEXCEPT
 }
