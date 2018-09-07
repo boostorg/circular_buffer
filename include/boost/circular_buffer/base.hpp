@@ -23,7 +23,6 @@
 #include <boost/limits.hpp>
 #include <boost/circular_buffer/allocators.hpp>
 #include <boost/core/empty_value.hpp>
-#include <boost/iterator/reverse_iterator.hpp>
 #include <boost/type_traits/is_stateless.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_scalar.hpp>
@@ -34,6 +33,7 @@
 #include <boost/move/adl_move_swap.hpp>
 #include <boost/move/move.hpp>
 #include <algorithm>
+#include <iterator>
 #include <utility>
 #include <deque>
 #include <stdexcept>
@@ -137,10 +137,10 @@ public:
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::nonconst_traits<cb_details::allocator_traits<Alloc> > > iterator;
 
     //! A const iterator used to iterate backwards through a <code>circular_buffer</code>.
-    typedef boost::reverse_iterator<const_iterator> const_reverse_iterator;
+    typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
     //! An iterator used to iterate backwards through a <code>circular_buffer</code>.
-    typedef boost::reverse_iterator<iterator> reverse_iterator;
+    typedef std::reverse_iterator<iterator> reverse_iterator;
 
 // Container specific types
 
@@ -2518,9 +2518,9 @@ private:
     void initialize(Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
-        initialize(first, last, iterator_category<Iterator>::type());
+        initialize(first, last, std::iterator_traits<Iterator>::iterator_category());
 #else
-        initialize(first, last, BOOST_DEDUCED_TYPENAME iterator_category<Iterator>::type());
+        initialize(first, last, BOOST_DEDUCED_TYPENAME std::iterator_traits<Iterator>::iterator_category());
 #endif
     }
 
@@ -2557,9 +2557,9 @@ private:
     void initialize(capacity_type buffer_capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
-        initialize(buffer_capacity, first, last, iterator_category<Iterator>::type());
+        initialize(buffer_capacity, first, last, std::iterator_traits<Iterator>::iterator_category());
 #else
-        initialize(buffer_capacity, first, last, BOOST_DEDUCED_TYPENAME iterator_category<Iterator>::type());
+        initialize(buffer_capacity, first, last, BOOST_DEDUCED_TYPENAME std::iterator_traits<Iterator>::iterator_category());
 #endif
     }
 
@@ -2651,9 +2651,9 @@ private:
     void assign(Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
-        assign(first, last, iterator_category<Iterator>::type());
+        assign(first, last, std::iterator_traits<Iterator>::iterator_category());
 #else
-        assign(first, last, BOOST_DEDUCED_TYPENAME iterator_category<Iterator>::type());
+        assign(first, last, BOOST_DEDUCED_TYPENAME std::iterator_traits<Iterator>::iterator_category());
 #endif
     }
 
@@ -2688,9 +2688,9 @@ private:
     void assign(capacity_type new_capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
-        assign(new_capacity, first, last, iterator_category<Iterator>::type());
+        assign(new_capacity, first, last, std::iterator_traits<Iterator>::iterator_category());
 #else
-        assign(new_capacity, first, last, BOOST_DEDUCED_TYPENAME iterator_category<Iterator>::type());
+        assign(new_capacity, first, last, BOOST_DEDUCED_TYPENAME std::iterator_traits<Iterator>::iterator_category());
 #endif
     }
 
@@ -2797,9 +2797,9 @@ private:
     void insert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
-        insert(pos, first, last, iterator_category<Iterator>::type());
+        insert(pos, first, last, std::iterator_traits<Iterator>::iterator_category());
 #else
-        insert(pos, first, last, BOOST_DEDUCED_TYPENAME iterator_category<Iterator>::type());
+        insert(pos, first, last, BOOST_DEDUCED_TYPENAME std::iterator_traits<Iterator>::iterator_category());
 #endif
     }
 
@@ -2888,9 +2888,9 @@ private:
     void rinsert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
-        rinsert(pos, first, last, iterator_category<Iterator>::type());
+        rinsert(pos, first, last, std::iterator_traits<Iterator>::iterator_category());
 #else
-        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME iterator_category<Iterator>::type());
+        rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME std::iterator_traits<Iterator>::iterator_category());
 #endif
     }
 
