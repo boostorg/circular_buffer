@@ -16,7 +16,7 @@
 #endif
 
 #include <boost/type_traits/is_same.hpp>
-#include <boost/detail/workaround.hpp>
+#include <boost/config/workaround.hpp>
 
 namespace boost {
 

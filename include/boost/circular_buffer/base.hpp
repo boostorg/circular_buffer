@@ -24,7 +24,6 @@
 #include <boost/circular_buffer/allocators.hpp>
 #include <boost/core/empty_value.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
-#include <boost/iterator/iterator_traits.hpp>
 #include <boost/type_traits/is_stateless.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_scalar.hpp>
