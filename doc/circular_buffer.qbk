@@ -538,7 +538,7 @@ Type: Patches
 
 [h4 Boost 1.56]
 
-* C++11 allocator model support implemented by Glen Fernandes using Boost allocator_traits.
+* C++11 allocator model support implemented by Glen Fernandes.
 
 [h4 Boost 1.55]
 
