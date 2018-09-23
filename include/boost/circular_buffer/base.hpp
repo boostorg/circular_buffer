@@ -1246,7 +1246,7 @@ public:
     */
     circular_buffer<T, Alloc>& operator = (circular_buffer<T, Alloc>&& cb) BOOST_NOEXCEPT {
         cb.swap(*this); // now `this` holds `cb`
-        circular_buffer<T, Alloc>(get_allocator()) // temprary that holds initial `cb` allocator
+        circular_buffer<T, Alloc>(get_allocator()) // temporary that holds initial `cb` allocator
             .swap(cb); // makes `cb` empty
         return *this;
     }
@@ -2174,7 +2174,7 @@ public:
              the erased element (towards the beginning).
         \par Complexity
              Linear (in <code>std::distance(begin(), pos)</code>).
-        \note This method is symetric to the <code>erase(iterator)</code> method and is more effective than
+        \note This method is symmetric to the <code>erase(iterator)</code> method and is more effective than
               <code>erase(iterator)</code> if the iterator <code>pos</code> is close to the beginning of the
               <code>circular_buffer</code>. (See the <i>Complexity</i>.)
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
@@ -2215,7 +2215,7 @@ public:
              the erased range (towards the beginning).
         \par Complexity
              Linear (in <code>std::distance(begin(), last)</code>).
-        \note This method is symetric to the <code>erase(iterator, iterator)</code> method and is more effective than
+        \note This method is symmetric to the <code>erase(iterator, iterator)</code> method and is more effective than
               <code>erase(iterator, iterator)</code> if <code>std::distance(begin(), first)</code> is lower that
               <code>std::distance(last, end())</code>.
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,

@@ -600,7 +600,7 @@ void validity_swap_test() {
     cb1.swap(cb2);
 
     // Although iterators refer to the original elements,
-    // their interal state is inconsistent and no other operation
+    // their internal state is inconsistent and no other operation
     // (except dereferencing) can be invoked on them any more.
     BOOST_CHECK(*it11 == 1);
     BOOST_CHECK(*it12 == 2);

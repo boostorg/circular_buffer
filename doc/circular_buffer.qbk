@@ -46,7 +46,7 @@
 [def __min_capacity [memberref boost::circular_buffer_space_optimized::min_capacity() min_capacity]]
 [def __capacity_control [memberref boost::circular_buffer_space_optimized::capacity_control () capacity_control ]]
 
-[def __debug_support  [link circular_buffer.implmentation.debug_support debug support]]
+[def __debug_support  [link circular_buffer.implementation.debug_support debug support]]
 
 [include ../../../tools/auto_index/include/auto_index_helpers.qbk]
 [/ Must be first included file!]
@@ -114,7 +114,7 @@ Here is a simple example to introduce the class __cb.
 
 [circular_buffer_example_1]
 
-This example shows contruction, inserting elements, overwriting and popping.
+This example shows construction, inserting elements, overwriting and popping.
 
 [circular_buffer_example_2]
 
@@ -363,7 +363,7 @@ The __cb is compatible with the [@boost:libs/interprocess/index.html  Boost.Inte
 [/ This should be in @boost:libs/interprocess/doc/index.html ]
 library used for interprocess communication.
 Considering that the circular_buffer's debug support relies on 'raw' pointers
-(which is not permited by the Interprocess library)
+(which is not permitted by the Interprocess library)
 the code has to compiled with debug support disabled (i.e. with `BOOST_CB_ENABLE_DEBUG` macro not defined or defined to 0).
 Not doing that will cause the compilation to fail.
 
