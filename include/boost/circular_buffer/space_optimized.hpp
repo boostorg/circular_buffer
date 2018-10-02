@@ -579,7 +579,7 @@ public:
     */
     circular_buffer_space_optimized<T, Alloc>& operator = (circular_buffer_space_optimized<T, Alloc>&& cb) BOOST_NOEXCEPT {
         cb.swap(*this); // now `this` holds `cb`
-        circular_buffer<T, Alloc>(get_allocator()) // temprary that holds initial `cb` allocator
+        circular_buffer<T, Alloc>(get_allocator()) // temporary that holds initial `cb` allocator
             .swap(cb); // makes `cb` empty
         return *this;
     }
