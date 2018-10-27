@@ -89,6 +89,7 @@ public:
         eVirtual
     };
     Dummy() : m_n(eVar) {}
+    virtual ~Dummy() {}
     DummyEnum fnc() { return eFnc; }
     DummyEnum const_fnc() const { return eConst; }
     virtual DummyEnum virtual_fnc() { return eVirtual; }

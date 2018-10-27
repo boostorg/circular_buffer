@@ -52,10 +52,17 @@ struct allocator_traits {
     }
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+    template<class U, class... Args>
+    static void construct(const A&, U* ptr, Args&&... args) {
+        ::new((void*)ptr) U(std::forward<Args>(args)...);
+    }
+#else
     template<class U, class V>
     static void construct(const A&, U* ptr, V&& value) {
         ::new((void*)ptr) U(std::forward<V>(value));
     }
+#endif
 #else
     template<class U, class V>
     static void construct(const A&, U* ptr, const V& value) {
