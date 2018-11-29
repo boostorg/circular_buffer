@@ -35,7 +35,7 @@ struct allocator_traits
     using typename std::allocator_traits<A>::size_type;
 
     static size_type max_size(const A&) BOOST_NOEXCEPT {
-        return std::numeric_limits<size_type>::max() / sizeof(value_type);
+        return (std::numeric_limits<size_type>::max)() / sizeof(value_type);
     }
 };
 #else
@@ -48,7 +48,7 @@ struct allocator_traits {
     typedef typename A::size_type size_type;
 
     static size_type max_size(const A&) BOOST_NOEXCEPT {
-        return std::numeric_limits<size_type>::max() / sizeof(value_type);
+        return (std::numeric_limits<size_type>::max)() / sizeof(value_type);
     }
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
