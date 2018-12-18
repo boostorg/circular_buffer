@@ -12,6 +12,7 @@ project
     : requirements
 			<library>/boost/system//boost_system
 			<library>/boost/thread//boost_thread
+            <library>/boost/serialization
 			#<define>BOOST_ALL_NO_LIB=1
 			<threading>multi
 
@@ -39,4 +40,5 @@ run bounded_buffer_comparison.cpp ;
 run circular_buffer_iter_example.cpp ;
 run circular_buffer_sum_example.cpp ;
 run circular_buffer_bound_example.cpp ../../thread/build//boost_thread ../../timer/build//boost_timer ;
+run circular_buffer_serialization.cpp ;
 

@@ -13,6 +13,9 @@ import testing ;
 
 project
     : requirements
+      <library>/boost/test//boost_unit_test_framework
+      <library>/boost/serialization
+      <link>static
       <toolset>msvc:<warnings>all
       <toolset>msvc:<asynch-exceptions>on
       <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
@@ -29,4 +32,5 @@ test-suite "circular_buffer"
     [ run soft_iterator_invalidation.cpp : : : <threading>single : ]
     [ run constant_erase_test.cpp : : : <threading>single : ]
     [ compile bounded_buffer_comparison.cpp : <threading>multi : ]
+    [ run serialization_test.cpp : : : <threading>single : ]
   ;

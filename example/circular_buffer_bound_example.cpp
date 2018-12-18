@@ -11,6 +11,7 @@ This example shows how the `circular_buffer` can be utilized
 as an underlying container of the bounded buffer.
 */
 
+#include <iostream>
 #include <boost/circular_buffer.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>

@@ -54,6 +54,7 @@
 #include <boost/circular_buffer/details.hpp>
 #include <boost/circular_buffer/base.hpp>
 #include <boost/circular_buffer/space_optimized.hpp>
+#include <boost/circular_buffer/serialization.hpp>
 
 #undef BOOST_CB_ASSERT_TEMPLATED_ITERATOR_CONSTRUCTORS
 #undef BOOST_CB_IS_CONVERTIBLE
