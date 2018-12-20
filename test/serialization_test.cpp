@@ -9,11 +9,11 @@
 
 using namespace boost::unit_test;
 
-const auto buffer_size = 100000;
+const int buffer_size = 100000;
 
 void basic_test() {
     boost::circular_buffer<double> cb1(buffer_size);
-    for (auto i = 0; i < buffer_size; ++i) {
+    for (int i = 0; i < buffer_size; ++i) {
         cb1.push_back(i);
     }
 
@@ -33,7 +33,7 @@ void basic_test() {
 
 void spaced_optimized_test() {
     boost::circular_buffer_space_optimized<double> cb1(buffer_size);
-    for (auto i = 0; i < buffer_size; ++i) {
+    for (int i = 0; i < buffer_size; ++i) {
         cb1.push_back(i);
     }
 
@@ -51,7 +51,6 @@ void spaced_optimized_test() {
     }
 }
 
-
 // test main
 test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
 
@@ -62,4 +61,5 @@ test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
 
     return tests;
 }
+
 
