@@ -16,8 +16,10 @@ void save(Archive& ar, const circular_buffer<T>& b, const unsigned int /* versio
 {
     ar << b.capacity();
     ar << b.size();
-    for (const auto& e : b) {
-        ar << e;
+    const typename circular_buffer<T>::const_iterator it_end = b.end();
+    typename circular_buffer<T>::const_iterator it = b.begin();
+    for (; it != it_end; ++it) {
+        ar << *it;
     }
 }
 
@@ -87,8 +89,10 @@ void save(Archive& ar, const circular_buffer_space_optimized<T>& b, const unsign
     ar << b.capacity().capacity();
     ar << b.capacity().min_capacity();
     ar << b.size();
-    for (const auto& e : b) {
-        ar << e;
+    const typename circular_buffer_space_optimized<T>::const_iterator it_end = b.end();
+    typename circular_buffer_space_optimized<T>::const_iterator it = b.begin();
+    for (; it != it_end; ++it) {
+        ar << *it;
     }
 }
 

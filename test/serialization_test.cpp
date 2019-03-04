@@ -42,9 +42,9 @@ template<typename buffer_type, typename oarchive_type, typename iarchive_type>
 void fragmented_buffer_test() {
 
     buffer_type cb1(buffer_size);
-    for (auto i = 0; i < buffer_size/4; ++i)
+    for (int i = 0; i < buffer_size/4; ++i)
         cb1.push_back(i+1);
-    for (auto i = 0; i < buffer_size/4; ++i)
+    for (int i = 0; i < buffer_size/4; ++i)
         cb1.push_front((i+1)*100);
 
     // making sure we are testing a fragmented buffer
