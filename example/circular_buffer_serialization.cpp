@@ -11,6 +11,8 @@
 #include <fstream>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
 
 int main(int argc, char** argv)
 {
@@ -42,7 +44,7 @@ int main(int argc, char** argv)
         }
 
         {
-            // in-memory storage 
+            // in-memory storage text
             std::stringstream ss;
 
             boost::archive::text_oarchive oa(ss);
@@ -66,8 +68,32 @@ int main(int argc, char** argv)
         }
 
         {
+            // in-memory storage binary
+            std::stringstream ss;
+
+            boost::archive::binary_oarchive oa(ss);
+            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+            boost::serialization::serialize(oa, cb1, 0);
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            std::cout << "in-memory binary serialization for buffer: " << buffer_size << " took: " << 
+                std::chrono::duration_cast<std::chrono::microseconds> (end - begin).count() << " usec" << std::endl;
+
+            boost::circular_buffer<double> cb2(0);
+            boost::archive::binary_iarchive ia(ss);
+            begin = std::chrono::steady_clock::now();
+            boost::serialization::serialize(ia, cb2, 0);
+            end = std::chrono::steady_clock::now();
+            std::cout << "in-memory binary deserialization for buffer: " << buffer_size << " took: " << 
+                std::chrono::duration_cast<std::chrono::microseconds> (end - begin).count() << " usec" << std::endl;
+
+            if (cb1 != cb2) {
+                std::cout << "circular buffer did not recover correctly" << std::endl;
+            }
+        }
+        
+        {
             const std::string filename = "cb.tmp";
-            // file storage
+            // file storage text
             {
                 std::ofstream ofs(filename);
 
@@ -137,6 +163,7 @@ int main(int argc, char** argv)
                     std::cout << "space optimized circular buffer did not recover correctly" << std::endl;
                 }
             }
+            std::remove(filename.c_str());
         }
     }
 
