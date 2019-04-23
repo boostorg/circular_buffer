@@ -280,6 +280,7 @@ void cxx11_allocator_test() {
     CB_CONTAINER<MyInteger, cxx11_allocator<MyInteger> > cb(10, 0);
     generic_test(cb);
 }
+
 #endif
 
 void begin_and_end_test() {
@@ -1148,6 +1149,32 @@ void pop_back_test() {
     BOOST_CHECK(cb[0] == 2);
 
     generic_test(cb);
+}
+
+void emplace_test(){
+    CB_CONTAINER<MyInteger> cb(4);
+    cb.emplace_back(4);
+    cb.emplace_back(5);
+    cb.emplace_back(6);
+    cb.emplace_back(7);
+
+    BOOST_CHECK(cb.size() == 4);
+    BOOST_CHECK(cb.front() == 4);
+    BOOST_CHECK(cb.back() == 7);
+
+    cb.emplace_front(3);
+    cb.emplace_front(2);
+
+    BOOST_CHECK(cb.front() == 2);
+    BOOST_CHECK(cb.back() == 5);
+
+    cb.emplace_front(1);
+    cb.emplace_front(0);
+
+    BOOST_CHECK(cb.size() == 4);
+    BOOST_CHECK(*cb.begin() == 0);
+    BOOST_CHECK(cb.front() == 0);
+    BOOST_CHECK(cb.back() == 3);
 }
 
 void insert_test() {
@@ -2453,6 +2480,7 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&swap_test));
     tests->add(BOOST_TEST_CASE(&push_back_test));
     tests->add(BOOST_TEST_CASE(&pop_back_test));
+    tests->add(BOOST_TEST_CASE(&emplace_test));
     tests->add(BOOST_TEST_CASE(&insert_test));
     tests->add(BOOST_TEST_CASE(&insert_n_test));
     tests->add(BOOST_TEST_CASE(&insert_range_test));
