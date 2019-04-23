@@ -2356,13 +2356,13 @@ private:
     //! Add <code>n</code> to the pointer.
     template <class Pointer>
     Pointer add(Pointer p, difference_type n) const {
-        return p + (n < (m_end - p) ? n : n - capacity());
+        return p + (n < (m_end - p) ? n : n - (m_end - m_buff));
     }
 
     //! Subtract <code>n</code> from the pointer.
     template <class Pointer>
     Pointer sub(Pointer p, difference_type n) const {
-        return p - (n > (p - m_buff) ? n - capacity() : n);
+        return p - (n > (p - m_buff) ? n - (m_end - m_buff) : n);
     }
 
     //! Map the null pointer to virtual end of circular buffer.
