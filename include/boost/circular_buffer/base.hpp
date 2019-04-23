@@ -49,14 +49,14 @@ namespace boost {
     \brief Circular buffer - a STL compliant container.
     \tparam T The type of the elements stored in the <code>circular_buffer</code>.
     \par Type Requirements T
-         The <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/Assignable.html">
+         The <code>T</code> has to be <a href="https://www.boost.org/sgi/stl/Assignable.html">
          SGIAssignable</a> (SGI STL defined combination of <a href="../../../utility/Assignable.html">
          Assignable</a> and <a href="../../../utility/CopyConstructible.html">CopyConstructible</a>).
-         Moreover <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">
+         Moreover <code>T</code> has to be <a href="https://www.boost.org/sgi/stl/DefaultConstructible.html">
          DefaultConstructible</a> if supplied as a default parameter when invoking some of the
          <code>circular_buffer</code>'s methods e.g.
          <code>insert(iterator pos, const value_type& item = %value_type())</code>. And
-         <a href="http://www.sgi.com/tech/stl/EqualityComparable.html">EqualityComparable</a> and/or
+         <a href="https://www.boost.org/sgi/stl/EqualityComparable.html">EqualityComparable</a> and/or
          <a href="../../../utility/LessThanComparable.html">LessThanComparable</a> if the <code>circular_buffer</code>
          will be compared with another container.
     \tparam Alloc The allocator type used for all internal memory management.
@@ -146,7 +146,7 @@ public:
 
     //! An array range.
     /*!
-        (A typedef for the <a href="http://www.sgi.com/tech/stl/pair.html"><code>std::pair</code></a> where
+        (A typedef for the <a href="https://www.boost.org/sgi/stl/pair.html"><code>std::pair</code></a> where
         its first element is a pointer to a beginning of an array and its second element represents
         a size of the array.)
     */
@@ -154,7 +154,7 @@ public:
 
     //! A range of a const array.
     /*!
-        (A typedef for the <a href="http://www.sgi.com/tech/stl/pair.html"><code>std::pair</code></a> where
+        (A typedef for the <a href="https://www.boost.org/sgi/stl/pair.html"><code>std::pair</code></a> where
         its first element is a pointer to a beginning of a const array and its second element represents
         a size of the const array.)
     */
@@ -711,7 +711,7 @@ public:
     //! Rotate elements in the <code>circular_buffer</code>.
     /*!
         A more effective implementation of
-        <code><a href="http://www.sgi.com/tech/stl/rotate.html">std::rotate</a></code>.
+        <code><a href="https://www.boost.org/sgi/stl/rotate.html">std::rotate</a></code>.
         \pre <code>new_begin</code> is a valid iterator pointing to the <code>circular_buffer</code> <b>except</b> its
              end.
         \post Before calling the method suppose:<br><br>
@@ -733,7 +733,7 @@ public:
              <code>circular_buffer</code> is full.
         \par Complexity
              Linear (in <code>(std::min)(m, n)</code>); constant if the <code>circular_buffer</code> is full.
-        \sa <code><a href="http://www.sgi.com/tech/stl/rotate.html">std::rotate</a></code>
+        \sa <code><a href="https://www.boost.org/sgi/stl/rotate.html">std::rotate</a></code>
     */
     void rotate(const_iterator new_begin) {
         BOOST_CB_ASSERT(new_begin.is_valid(this)); // check for uninitialized or invalidated iterator
@@ -1131,7 +1131,7 @@ public:
     /*!
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
-             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post <code>capacity() == std::distance(first, last) \&\& full() \&\& (*this)[0]== *first \&\&
               (*this)[1] == *(first + 1) \&\& ... \&\& (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
         \param first The beginning of the range to be copied.
@@ -1153,7 +1153,7 @@ public:
     /*!
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
-             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post <code>capacity() == buffer_capacity \&\& size() \<= std::distance(first, last) \&\&
              (*this)[0]== *(last - buffer_capacity) \&\& (*this)[1] == *(last - buffer_capacity + 1) \&\& ... \&\&
              (*this)[buffer_capacity - 1] == *(last - 1)</code><br><br>
@@ -1170,7 +1170,7 @@ public:
         \par Complexity
              Linear (in <code>std::distance(first, last)</code>; in
              <code>min[capacity, std::distance(first, last)]</code> if the <code>InputIterator</code> is a
-             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+             <a href="https://www.boost.org/sgi/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
     */
     template <class InputIterator>
     circular_buffer(capacity_type buffer_capacity, InputIterator first, InputIterator last,
@@ -1316,7 +1316,7 @@ public:
         specified range.
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
-             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post <code>capacity() == std::distance(first, last) \&\& size() == std::distance(first, last) \&\&
              (*this)[0]== *first \&\& (*this)[1] == *(first + 1) \&\& ... \&\& (*this)[std::distance(first, last) - 1]
              == *(last - 1)</code>
@@ -1349,7 +1349,7 @@ public:
         <code>circular_buffer</code> will be removed and replaced with copies of elements from the specified range.
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
-             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post <code>capacity() == buffer_capacity \&\& size() \<= std::distance(first, last) \&\&
              (*this)[0]== *(last - buffer_capacity) \&\& (*this)[1] == *(last - buffer_capacity + 1) \&\& ... \&\&
              (*this)[buffer_capacity - 1] == *(last - 1)</code><br><br>
@@ -1370,7 +1370,7 @@ public:
         \par Complexity
              Linear (in <code>std::distance(first, last)</code>; in
              <code>min[capacity, std::distance(first, last)]</code> if the <code>InputIterator</code> is a
-             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+             <a href="https://www.boost.org/sgi/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
         \sa <code>\link operator=(const circular_buffer&) operator=\endlink</code>,
             <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
             <code>\link assign(capacity_type, size_type, param_value_type)
@@ -1791,7 +1791,7 @@ public:
     /*!
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.<br>
              Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
-             requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             requirements of an <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post Elements from the range
               <code>[first + max[0, distance(first, last) - (pos - begin()) - reserve()], last)</code> will be
               inserted at the position <code>pos</code>.<br>The number of <code>min[pos - begin(), max[0,
@@ -1814,7 +1814,7 @@ public:
              Linear (in <code>[std::distance(pos, end()) + std::distance(first, last)]</code>; in
              <code>min[capacity(), std::distance(pos, end()) + std::distance(first, last)]</code> if the
              <code>InputIterator</code> is a
-             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+             <a href="https://www.boost.org/sgi/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
         \par Example
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
@@ -2035,7 +2035,7 @@ public:
     /*!
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.<br>
              Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
-             requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             requirements of an <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post Elements from the range
               <code>[first, last - max[0, distance(first, last) - (end() - pos) - reserve()])</code> will be inserted
               before the position <code>pos</code>.<br>The number of <code>min[end() - pos, max[0,
@@ -2057,7 +2057,7 @@ public:
              Linear (in <code>[std::distance(begin(), pos) + std::distance(first, last)]</code>; in
              <code>min[capacity(), std::distance(begin(), pos) + std::distance(first, last)]</code> if the
              <code>InputIterator</code> is a
-             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+             <a href="https://www.boost.org/sgi/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
         \par Example
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
@@ -2998,7 +2998,7 @@ private:
     \param lhs The <code>circular_buffer</code> to compare.
     \param rhs The <code>circular_buffer</code> to compare.
     \return <code>lhs.\link circular_buffer::size() size()\endlink == rhs.\link circular_buffer::size() size()\endlink
-            && <a href="http://www.sgi.com/tech/stl/equal.html">std::equal</a>(lhs.\link circular_buffer::begin()
+            && <a href="https://www.boost.org/sgi/stl/equal.html">std::equal</a>(lhs.\link circular_buffer::begin()
             begin()\endlink, lhs.\link circular_buffer::end() end()\endlink,
             rhs.\link circular_buffer::begin() begin()\endlink)</code>
     \throws Nothing.
@@ -3017,7 +3017,7 @@ inline bool operator == (const circular_buffer<T, Alloc>& lhs, const circular_bu
            right one.
     \param lhs The <code>circular_buffer</code> to compare.
     \param rhs The <code>circular_buffer</code> to compare.
-    \return <code><a href="http://www.sgi.com/tech/stl/lexicographical_compare.html">
+    \return <code><a href="https://www.boost.org/sgi/stl/lexicographical_compare.html">
             std::lexicographical_compare</a>(lhs.\link circular_buffer::begin() begin()\endlink,
             lhs.\link circular_buffer::end() end()\endlink, rhs.\link circular_buffer::begin() begin()\endlink,
             rhs.\link circular_buffer::end() end()\endlink)</code>
