@@ -22,11 +22,11 @@ void validity_example_test() {
 
     circular_buffer<int>::iterator it = cb.begin();
 
-    BOOST_CHECK(*it == 1);
+    BOOST_TEST(*it == 1);
 
     cb.push_back(4);
 
-    BOOST_CHECK(*it == 4);
+    BOOST_TEST(*it == 4);
 }
 
 void validity_insert_test() {
@@ -46,13 +46,13 @@ void validity_insert_test() {
 
     // memory placement: { 1, 4, 2, 3 }
     // circular buffer:  { 1, 4, 2, 3 }
-    BOOST_CHECK(*it1 == 1);
-    BOOST_CHECK(*it2 == 4);
-    BOOST_CHECK(*it3 == 2);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 4);
-    BOOST_CHECK(cb[2] == 2);
-    BOOST_CHECK(cb[3] == 3);
+    BOOST_TEST(*it1 == 1);
+    BOOST_TEST(*it2 == 4);
+    BOOST_TEST(*it3 == 2);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 4);
+    BOOST_TEST(cb[2] == 2);
+    BOOST_TEST(cb[3] == 3);
 
     // it4 -> 3
     circular_buffer<int>::iterator it4 = it1 + 3;
@@ -61,14 +61,14 @@ void validity_insert_test() {
 
     // memory placement: { 3, 5, 4, 2 }
     // circular buffer:  { 5, 4, 2, 3 }
-    BOOST_CHECK(*it1 == 3);
-    BOOST_CHECK(*it2 == 5);
-    BOOST_CHECK(*it3 == 4);
-    BOOST_CHECK(*it4 == 2);
-    BOOST_CHECK(cb[0] == 5);
-    BOOST_CHECK(cb[1] == 4);
-    BOOST_CHECK(cb[2] == 2);
-    BOOST_CHECK(cb[3] == 3);
+    BOOST_TEST(*it1 == 3);
+    BOOST_TEST(*it2 == 5);
+    BOOST_TEST(*it3 == 4);
+    BOOST_TEST(*it4 == 2);
+    BOOST_TEST(cb[0] == 5);
+    BOOST_TEST(cb[1] == 4);
+    BOOST_TEST(cb[2] == 2);
+    BOOST_TEST(cb[3] == 3);
 }
 
 void validity_insert_n_test() {
@@ -89,14 +89,14 @@ void validity_insert_n_test() {
 
     // memory placement: { 1, 4, 4, 2, 3 }
     // circular buffer:  { 1, 4, 4, 2, 3 }
-    BOOST_CHECK(*it1 == 1);
-    BOOST_CHECK(*it2 == 4);
-    BOOST_CHECK(*it3 == 4);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 4);
-    BOOST_CHECK(cb[2] == 4);
-    BOOST_CHECK(cb[3] == 2);
-    BOOST_CHECK(cb[4] == 3);
+    BOOST_TEST(*it1 == 1);
+    BOOST_TEST(*it2 == 4);
+    BOOST_TEST(*it3 == 4);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 4);
+    BOOST_TEST(cb[2] == 4);
+    BOOST_TEST(cb[3] == 2);
+    BOOST_TEST(cb[4] == 3);
 
     // it4 -> 2, it5 -> 3
     circular_buffer<int>::iterator it4 = it1 + 3;
@@ -106,16 +106,16 @@ void validity_insert_n_test() {
 
     // memory placement: { 3, 5, 4, 4, 2 } - 5 inserted only once
     // circular buffer:  { 5, 4, 4, 2, 3 }
-    BOOST_CHECK(*it1 == 3);
-    BOOST_CHECK(*it2 == 5);
-    BOOST_CHECK(*it3 == 4);
-    BOOST_CHECK(*it4 == 4);
-    BOOST_CHECK(*it5 == 2);
-    BOOST_CHECK(cb[0] == 5);
-    BOOST_CHECK(cb[1] == 4);
-    BOOST_CHECK(cb[2] == 4);
-    BOOST_CHECK(cb[3] == 2);
-    BOOST_CHECK(cb[4] == 3);
+    BOOST_TEST(*it1 == 3);
+    BOOST_TEST(*it2 == 5);
+    BOOST_TEST(*it3 == 4);
+    BOOST_TEST(*it4 == 4);
+    BOOST_TEST(*it5 == 2);
+    BOOST_TEST(cb[0] == 5);
+    BOOST_TEST(cb[1] == 4);
+    BOOST_TEST(cb[2] == 4);
+    BOOST_TEST(cb[3] == 2);
+    BOOST_TEST(cb[4] == 3);
 }
 
 void validity_insert_range_test() {
@@ -145,14 +145,14 @@ void validity_insert_range_test() {
 
     // memory placement: { 1, 4, 5, 2, 3 }
     // circular buffer:  { 1, 4, 5, 2, 3 }
-    BOOST_CHECK(*it11 == 1);
-    BOOST_CHECK(*it12 == 4);
-    BOOST_CHECK(*it13 == 5);
-    BOOST_CHECK(cb1[0] == 1);
-    BOOST_CHECK(cb1[1] == 4);
-    BOOST_CHECK(cb1[2] == 5);
-    BOOST_CHECK(cb1[3] == 2);
-    BOOST_CHECK(cb1[4] == 3);
+    BOOST_TEST(*it11 == 1);
+    BOOST_TEST(*it12 == 4);
+    BOOST_TEST(*it13 == 5);
+    BOOST_TEST(cb1[0] == 1);
+    BOOST_TEST(cb1[1] == 4);
+    BOOST_TEST(cb1[2] == 5);
+    BOOST_TEST(cb1[3] == 2);
+    BOOST_TEST(cb1[4] == 3);
 
     // it14 -> 2, it15 -> 3
     circular_buffer<int>::iterator it14 = it11 + 3;
@@ -162,16 +162,16 @@ void validity_insert_range_test() {
 
     // memory placement: { 3, 7, 4, 5, 2 } - 7 inserted only
     // circular buffer:  { 7, 4, 5, 2, 3 }
-    BOOST_CHECK(*it11 == 3);
-    BOOST_CHECK(*it12 == 7);
-    BOOST_CHECK(*it13 == 4);
-    BOOST_CHECK(*it14 == 5);
-    BOOST_CHECK(*it15 == 2);
-    BOOST_CHECK(cb1[0] == 7);
-    BOOST_CHECK(cb1[1] == 4);
-    BOOST_CHECK(cb1[2] == 5);
-    BOOST_CHECK(cb1[3] == 2);
-    BOOST_CHECK(cb1[4] == 3);
+    BOOST_TEST(*it11 == 3);
+    BOOST_TEST(*it12 == 7);
+    BOOST_TEST(*it13 == 4);
+    BOOST_TEST(*it14 == 5);
+    BOOST_TEST(*it15 == 2);
+    BOOST_TEST(cb1[0] == 7);
+    BOOST_TEST(cb1[1] == 4);
+    BOOST_TEST(cb1[2] == 5);
+    BOOST_TEST(cb1[3] == 2);
+    BOOST_TEST(cb1[4] == 3);
 
     // memory placement: { 1, 2, 3 }
     // circular buffer:  { 1, 2, 3 }
@@ -189,14 +189,14 @@ void validity_insert_range_test() {
 
     // memory placement: { 1, 4, 5, 2, 3 }
     // circular buffer:  { 1, 4, 5, 2, 3 }
-    BOOST_CHECK(*it21 == 1);
-    BOOST_CHECK(*it22 == 4);
-    BOOST_CHECK(*it23 == 5);
-    BOOST_CHECK(cb2[0] == 1);
-    BOOST_CHECK(cb2[1] == 4);
-    BOOST_CHECK(cb2[2] == 5);
-    BOOST_CHECK(cb2[3] == 2);
-    BOOST_CHECK(cb2[4] == 3);
+    BOOST_TEST(*it21 == 1);
+    BOOST_TEST(*it22 == 4);
+    BOOST_TEST(*it23 == 5);
+    BOOST_TEST(cb2[0] == 1);
+    BOOST_TEST(cb2[1] == 4);
+    BOOST_TEST(cb2[2] == 5);
+    BOOST_TEST(cb2[3] == 2);
+    BOOST_TEST(cb2[4] == 3);
 
     // it24 -> 2, it25 -> 3
     circular_buffer<int>::iterator it24 = it21 + 3;
@@ -206,16 +206,16 @@ void validity_insert_range_test() {
 
     // memory placement: { 2, 3, 7, 4, 5 } - using input iterator inserts all items even if they are later replaced
     // circular buffer:  { 7, 4, 5, 2, 3 }
-    BOOST_CHECK(*it21 == 2);
-    BOOST_CHECK(*it22 == 3);
-    BOOST_CHECK(*it23 == 7);
-    BOOST_CHECK(*it24 == 4);
-    BOOST_CHECK(*it25 == 5);
-    BOOST_CHECK(cb2[0] == 7);
-    BOOST_CHECK(cb2[1] == 4);
-    BOOST_CHECK(cb2[2] == 5);
-    BOOST_CHECK(cb2[3] == 2);
-    BOOST_CHECK(cb2[4] == 3);
+    BOOST_TEST(*it21 == 2);
+    BOOST_TEST(*it22 == 3);
+    BOOST_TEST(*it23 == 7);
+    BOOST_TEST(*it24 == 4);
+    BOOST_TEST(*it25 == 5);
+    BOOST_TEST(cb2[0] == 7);
+    BOOST_TEST(cb2[1] == 4);
+    BOOST_TEST(cb2[2] == 5);
+    BOOST_TEST(cb2[3] == 2);
+    BOOST_TEST(cb2[4] == 3);
 }
 
 void validity_rinsert_test() {
@@ -235,13 +235,13 @@ void validity_rinsert_test() {
 
     // memory placement: { 2, 4, 3, 1 }
     // circular buffer:  { 1, 2, 4, 3 }
-    BOOST_CHECK(*it1 == 2);
-    BOOST_CHECK(*it2 == 4);
-    BOOST_CHECK(*it3 == 3);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 2);
-    BOOST_CHECK(cb[2] == 4);
-    BOOST_CHECK(cb[3] == 3);
+    BOOST_TEST(*it1 == 2);
+    BOOST_TEST(*it2 == 4);
+    BOOST_TEST(*it3 == 3);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 2);
+    BOOST_TEST(cb[2] == 4);
+    BOOST_TEST(cb[3] == 3);
 
     // it4 -> 1
     circular_buffer<int>::iterator it4 = it1 - 1;
@@ -250,14 +250,14 @@ void validity_rinsert_test() {
 
     // memory placement: { 5, 4, 1, 2 }
     // circular buffer:  { 1, 2, 5, 4 }
-    BOOST_CHECK(*it1 == 5);
-    BOOST_CHECK(*it2 == 4);
-    BOOST_CHECK(*it3 == 1);
-    BOOST_CHECK(*it4 == 2);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 2);
-    BOOST_CHECK(cb[2] == 5);
-    BOOST_CHECK(cb[3] == 4);
+    BOOST_TEST(*it1 == 5);
+    BOOST_TEST(*it2 == 4);
+    BOOST_TEST(*it3 == 1);
+    BOOST_TEST(*it4 == 2);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 2);
+    BOOST_TEST(cb[2] == 5);
+    BOOST_TEST(cb[3] == 4);
 }
 
 void validity_rinsert_n_test() {
@@ -278,14 +278,14 @@ void validity_rinsert_n_test() {
 
     // memory placement: { 4, 4, 3, 1, 2 }
     // circular buffer:  { 1, 2, 4, 4, 3 }
-    BOOST_CHECK(*it1 == 4);
-    BOOST_CHECK(*it2 == 4);
-    BOOST_CHECK(*it3 == 3);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 2);
-    BOOST_CHECK(cb[2] == 4);
-    BOOST_CHECK(cb[3] == 4);
-    BOOST_CHECK(cb[4] == 3);
+    BOOST_TEST(*it1 == 4);
+    BOOST_TEST(*it2 == 4);
+    BOOST_TEST(*it3 == 3);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 2);
+    BOOST_TEST(cb[2] == 4);
+    BOOST_TEST(cb[3] == 4);
+    BOOST_TEST(cb[4] == 3);
 
     // it4 -> 1, it5 -> 2
     circular_buffer<int>::iterator it4 = it1 - 2;
@@ -295,16 +295,16 @@ void validity_rinsert_n_test() {
 
     // memory placement: { 4, 5, 1, 2, 4 } - 5 inserted only once
     // circular buffer:  { 1, 2, 4, 4, 5 }
-    BOOST_CHECK(*it1 == 4);
-    BOOST_CHECK(*it2 == 5);
-    BOOST_CHECK(*it3 == 1);
-    BOOST_CHECK(*it4 == 2);
-    BOOST_CHECK(*it5 == 4);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 2);
-    BOOST_CHECK(cb[2] == 4);
-    BOOST_CHECK(cb[3] == 4);
-    BOOST_CHECK(cb[4] == 5);
+    BOOST_TEST(*it1 == 4);
+    BOOST_TEST(*it2 == 5);
+    BOOST_TEST(*it3 == 1);
+    BOOST_TEST(*it4 == 2);
+    BOOST_TEST(*it5 == 4);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 2);
+    BOOST_TEST(cb[2] == 4);
+    BOOST_TEST(cb[3] == 4);
+    BOOST_TEST(cb[4] == 5);
 }
 
 void validity_rinsert_range_test() {
@@ -334,14 +334,14 @@ void validity_rinsert_range_test() {
 
     // memory placement: { 4, 5, 3, 1, 2 }
     // circular buffer:  { 1, 2, 4, 5, 3 }
-    BOOST_CHECK(*it11 == 4);
-    BOOST_CHECK(*it12 == 5);
-    BOOST_CHECK(*it13 == 3);
-    BOOST_CHECK(cb1[0] == 1);
-    BOOST_CHECK(cb1[1] == 2);
-    BOOST_CHECK(cb1[2] == 4);
-    BOOST_CHECK(cb1[3] == 5);
-    BOOST_CHECK(cb1[4] == 3);
+    BOOST_TEST(*it11 == 4);
+    BOOST_TEST(*it12 == 5);
+    BOOST_TEST(*it13 == 3);
+    BOOST_TEST(cb1[0] == 1);
+    BOOST_TEST(cb1[1] == 2);
+    BOOST_TEST(cb1[2] == 4);
+    BOOST_TEST(cb1[3] == 5);
+    BOOST_TEST(cb1[4] == 3);
 
     // it14 -> 1, it15 -> 2
     circular_buffer<int>::iterator it14 = it11 - 2;
@@ -351,16 +351,16 @@ void validity_rinsert_range_test() {
 
     // memory placement: { 5, 6, 1, 2, 4 } - 6 inserted only
     // circular buffer:  { 1, 2, 4, 5, 6 }
-    BOOST_CHECK(*it11 == 5);
-    BOOST_CHECK(*it12 == 6);
-    BOOST_CHECK(*it13 == 1);
-    BOOST_CHECK(*it14 == 2);
-    BOOST_CHECK(*it15 == 4);
-    BOOST_CHECK(cb1[0] == 1);
-    BOOST_CHECK(cb1[1] == 2);
-    BOOST_CHECK(cb1[2] == 4);
-    BOOST_CHECK(cb1[3] == 5);
-    BOOST_CHECK(cb1[4] == 6);
+    BOOST_TEST(*it11 == 5);
+    BOOST_TEST(*it12 == 6);
+    BOOST_TEST(*it13 == 1);
+    BOOST_TEST(*it14 == 2);
+    BOOST_TEST(*it15 == 4);
+    BOOST_TEST(cb1[0] == 1);
+    BOOST_TEST(cb1[1] == 2);
+    BOOST_TEST(cb1[2] == 4);
+    BOOST_TEST(cb1[3] == 5);
+    BOOST_TEST(cb1[4] == 6);
 
     // memory placement: { 1, 2, 3 }
     // circular buffer:  { 1, 2, 3 }
@@ -378,14 +378,14 @@ void validity_rinsert_range_test() {
 
     // memory placement: { 4, 5, 3, 1, 2 }
     // circular buffer:  { 1, 2, 4, 5, 3 }
-    BOOST_CHECK(*it21 == 4);
-    BOOST_CHECK(*it22 == 5);
-    BOOST_CHECK(*it23 == 3);
-    BOOST_CHECK(cb2[0] == 1);
-    BOOST_CHECK(cb2[1] == 2);
-    BOOST_CHECK(cb2[2] == 4);
-    BOOST_CHECK(cb2[3] == 5);
-    BOOST_CHECK(cb2[4] == 3);
+    BOOST_TEST(*it21 == 4);
+    BOOST_TEST(*it22 == 5);
+    BOOST_TEST(*it23 == 3);
+    BOOST_TEST(cb2[0] == 1);
+    BOOST_TEST(cb2[1] == 2);
+    BOOST_TEST(cb2[2] == 4);
+    BOOST_TEST(cb2[3] == 5);
+    BOOST_TEST(cb2[4] == 3);
 
     // it24 -> 1, it25 -> 2
     circular_buffer<int>::iterator it24 = it21 - 2;
@@ -395,16 +395,16 @@ void validity_rinsert_range_test() {
 
     // memory placement: { 5, 6, 1, 2, 4 }
     // circular buffer:  { 1, 2, 4, 5, 6 }
-    BOOST_CHECK(*it21 == 5);
-    BOOST_CHECK(*it22 == 6);
-    BOOST_CHECK(*it23 == 1);
-    BOOST_CHECK(*it24 == 2);
-    BOOST_CHECK(*it25 == 4);
-    BOOST_CHECK(cb2[0] == 1);
-    BOOST_CHECK(cb2[1] == 2);
-    BOOST_CHECK(cb2[2] == 4);
-    BOOST_CHECK(cb2[3] == 5);
-    BOOST_CHECK(cb2[4] == 6);
+    BOOST_TEST(*it21 == 5);
+    BOOST_TEST(*it22 == 6);
+    BOOST_TEST(*it23 == 1);
+    BOOST_TEST(*it24 == 2);
+    BOOST_TEST(*it25 == 4);
+    BOOST_TEST(cb2[0] == 1);
+    BOOST_TEST(cb2[1] == 2);
+    BOOST_TEST(cb2[2] == 4);
+    BOOST_TEST(cb2[3] == 5);
+    BOOST_TEST(cb2[4] == 6);
 }
 
 void validity_erase_test() {
@@ -430,14 +430,14 @@ void validity_erase_test() {
 
     // memory placement: { 5, X, 1, 3, 4 }
     // circular buffer:  { 1, 3, 4, 5 }
-    BOOST_CHECK(*it1 == 1);
-    BOOST_CHECK(*it2 == 3);
-    BOOST_CHECK(*it3 == 4);
-    BOOST_CHECK(*it4 == 5);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 3);
-    BOOST_CHECK(cb[2] == 4);
-    BOOST_CHECK(cb[3] == 5);
+    BOOST_TEST(*it1 == 1);
+    BOOST_TEST(*it2 == 3);
+    BOOST_TEST(*it3 == 4);
+    BOOST_TEST(*it4 == 5);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 3);
+    BOOST_TEST(cb[2] == 4);
+    BOOST_TEST(cb[3] == 5);
 }
 
 void validity_erase_range_test() {
@@ -465,14 +465,14 @@ void validity_erase_range_test() {
 
     // memory placement: { 6, X, X, 1, 2, 5 }
     // circular buffer:  { 1, 2, 5, 6 }
-    BOOST_CHECK(*it1 == 1);
-    BOOST_CHECK(*it2 == 2);
-    BOOST_CHECK(*it3 == 5);
-    BOOST_CHECK(*it4 == 6);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 2);
-    BOOST_CHECK(cb[2] == 5);
-    BOOST_CHECK(cb[3] == 6);
+    BOOST_TEST(*it1 == 1);
+    BOOST_TEST(*it2 == 2);
+    BOOST_TEST(*it3 == 5);
+    BOOST_TEST(*it4 == 6);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 2);
+    BOOST_TEST(cb[2] == 5);
+    BOOST_TEST(cb[3] == 6);
 }
 
 void validity_rerase_test() {
@@ -498,14 +498,14 @@ void validity_rerase_test() {
 
     // memory placement: { 4, 5, X, 1, 3 }
     // circular buffer:  { 1, 3, 4, 5 }
-    BOOST_CHECK(*it1 == 1);
-    BOOST_CHECK(*it2 == 3);
-    BOOST_CHECK(*it3 == 4);
-    BOOST_CHECK(*it4 == 5);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 3);
-    BOOST_CHECK(cb[2] == 4);
-    BOOST_CHECK(cb[3] == 5);
+    BOOST_TEST(*it1 == 1);
+    BOOST_TEST(*it2 == 3);
+    BOOST_TEST(*it3 == 4);
+    BOOST_TEST(*it4 == 5);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 3);
+    BOOST_TEST(cb[2] == 4);
+    BOOST_TEST(cb[3] == 5);
 }
 
 void validity_rerase_range_test() {
@@ -533,14 +533,14 @@ void validity_rerase_range_test() {
 
     // memory placement: { 2, 5, 6, X, X, 1 }
     // circular buffer:  { 1, 2, 5, 6 }
-    BOOST_CHECK(*it1 == 1);
-    BOOST_CHECK(*it2 == 2);
-    BOOST_CHECK(*it3 == 5);
-    BOOST_CHECK(*it4 == 6);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 2);
-    BOOST_CHECK(cb[2] == 5);
-    BOOST_CHECK(cb[3] == 6);
+    BOOST_TEST(*it1 == 1);
+    BOOST_TEST(*it2 == 2);
+    BOOST_TEST(*it3 == 5);
+    BOOST_TEST(*it4 == 6);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 2);
+    BOOST_TEST(cb[2] == 5);
+    BOOST_TEST(cb[3] == 6);
 }
 
 void validity_linearize_test() {
@@ -562,12 +562,12 @@ void validity_linearize_test() {
 
     // memory placement: { 1, 2, 3 }
     // circular buffer:  { 1, 2, 3 }
-    BOOST_CHECK(*it1 == 2);
-    BOOST_CHECK(*it2 == 3);
-    BOOST_CHECK(*it3 == 1);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 2);
-    BOOST_CHECK(cb[2] == 3);
+    BOOST_TEST(*it1 == 2);
+    BOOST_TEST(*it2 == 3);
+    BOOST_TEST(*it3 == 1);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 2);
+    BOOST_TEST(cb[2] == 3);
 }
 
 void validity_swap_test() {
@@ -602,18 +602,18 @@ void validity_swap_test() {
     // Although iterators refer to the original elements,
     // their internal state is inconsistent and no other operation
     // (except dereferencing) can be invoked on them any more.
-    BOOST_CHECK(*it11 == 1);
-    BOOST_CHECK(*it12 == 2);
-    BOOST_CHECK(*it13 == 3);
-    BOOST_CHECK(*it21 == 4);
-    BOOST_CHECK(*it22 == 5);
-    BOOST_CHECK(*it23 == 6);
-    BOOST_CHECK(cb1[0] == 4);
-    BOOST_CHECK(cb1[1] == 5);
-    BOOST_CHECK(cb1[2] == 6);
-    BOOST_CHECK(cb2[0] == 1);
-    BOOST_CHECK(cb2[1] == 2);
-    BOOST_CHECK(cb2[2] == 3);
+    BOOST_TEST(*it11 == 1);
+    BOOST_TEST(*it12 == 2);
+    BOOST_TEST(*it13 == 3);
+    BOOST_TEST(*it21 == 4);
+    BOOST_TEST(*it22 == 5);
+    BOOST_TEST(*it23 == 6);
+    BOOST_TEST(cb1[0] == 4);
+    BOOST_TEST(cb1[1] == 5);
+    BOOST_TEST(cb1[2] == 6);
+    BOOST_TEST(cb2[0] == 1);
+    BOOST_TEST(cb2[1] == 2);
+    BOOST_TEST(cb2[2] == 3);
 }
 
 void validity_push_back_test() {
@@ -635,12 +635,12 @@ void validity_push_back_test() {
 
     // memory placement: { 3, 4, 2 }
     // circular buffer:  { 2, 3, 4 }
-    BOOST_CHECK(*it1 == 4);
-    BOOST_CHECK(*it2 == 2);
-    BOOST_CHECK(*it3 == 3);
-    BOOST_CHECK(cb[0] == 2);
-    BOOST_CHECK(cb[1] == 3);
-    BOOST_CHECK(cb[2] == 4);
+    BOOST_TEST(*it1 == 4);
+    BOOST_TEST(*it2 == 2);
+    BOOST_TEST(*it3 == 3);
+    BOOST_TEST(cb[0] == 2);
+    BOOST_TEST(cb[1] == 3);
+    BOOST_TEST(cb[2] == 4);
 }
 
 void validity_push_front_test() {
@@ -662,12 +662,12 @@ void validity_push_front_test() {
 
     // memory placement: { 4, 1, 2 }
     // circular buffer:  { 4, 1, 2 }
-    BOOST_CHECK(*it1 == 1);
-    BOOST_CHECK(*it2 == 2);
-    BOOST_CHECK(*it3 == 4);
-    BOOST_CHECK(cb[0] == 4);
-    BOOST_CHECK(cb[1] == 1);
-    BOOST_CHECK(cb[2] == 2);
+    BOOST_TEST(*it1 == 1);
+    BOOST_TEST(*it2 == 2);
+    BOOST_TEST(*it3 == 4);
+    BOOST_TEST(cb[0] == 4);
+    BOOST_TEST(cb[1] == 1);
+    BOOST_TEST(cb[2] == 2);
 }
 
 void validity_pop_back_test() {
@@ -688,10 +688,10 @@ void validity_pop_back_test() {
 
     // memory placement: { X, 1, 2 }
     // circular buffer:  { 1, 2 }
-    BOOST_CHECK(*it1 == 1);
-    BOOST_CHECK(*it2 == 2);
-    BOOST_CHECK(cb[0] == 1);
-    BOOST_CHECK(cb[1] == 2);
+    BOOST_TEST(*it1 == 1);
+    BOOST_TEST(*it2 == 2);
+    BOOST_TEST(cb[0] == 1);
+    BOOST_TEST(cb[1] == 2);
 }
 
 void validity_pop_front_test() {
@@ -712,34 +712,31 @@ void validity_pop_front_test() {
 
     // memory placement: { 3, X, 2 }
     // circular buffer:  { 2, 3 }
-    BOOST_CHECK(*it1 == 2);
-    BOOST_CHECK(*it2 == 3);
-    BOOST_CHECK(cb[0] == 2);
-    BOOST_CHECK(cb[1] == 3);
+    BOOST_TEST(*it1 == 2);
+    BOOST_TEST(*it2 == 3);
+    BOOST_TEST(cb[0] == 2);
+    BOOST_TEST(cb[1] == 3);
 }
 
 // test main
-test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
-
-    test_suite* tests = BOOST_TEST_SUITE("Unit tests for the iterator of the circular_buffer.");
-
-    tests->add(BOOST_TEST_CASE(&validity_example_test));
-    tests->add(BOOST_TEST_CASE(&validity_insert_test));
-    tests->add(BOOST_TEST_CASE(&validity_insert_n_test));
-    tests->add(BOOST_TEST_CASE(&validity_insert_range_test));
-    tests->add(BOOST_TEST_CASE(&validity_rinsert_test));
-    tests->add(BOOST_TEST_CASE(&validity_rinsert_n_test));
-    tests->add(BOOST_TEST_CASE(&validity_rinsert_range_test));
-    tests->add(BOOST_TEST_CASE(&validity_erase_test));
-    tests->add(BOOST_TEST_CASE(&validity_erase_range_test));
-    tests->add(BOOST_TEST_CASE(&validity_rerase_test));
-    tests->add(BOOST_TEST_CASE(&validity_rerase_range_test));
-    tests->add(BOOST_TEST_CASE(&validity_linearize_test));
-    tests->add(BOOST_TEST_CASE(&validity_swap_test));
-    tests->add(BOOST_TEST_CASE(&validity_push_back_test));
-    tests->add(BOOST_TEST_CASE(&validity_push_front_test));
-    tests->add(BOOST_TEST_CASE(&validity_pop_back_test));
-    tests->add(BOOST_TEST_CASE(&validity_pop_front_test));
-
-    return tests;
+int main()
+{
+    validity_example_test();
+    validity_insert_test();
+    validity_insert_n_test();
+    validity_insert_range_test();
+    validity_rinsert_test();
+    validity_rinsert_n_test();
+    validity_rinsert_range_test();
+    validity_erase_test();
+    validity_erase_range_test();
+    validity_rerase_test();
+    validity_rerase_range_test();
+    validity_linearize_test();
+    validity_swap_test();
+    validity_push_back_test();
+    validity_push_front_test();
+    validity_pop_back_test();
+    validity_pop_front_test();
+    return boost::report_errors();
 }
