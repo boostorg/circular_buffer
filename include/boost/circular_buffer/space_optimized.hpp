@@ -453,7 +453,7 @@ public:
     /*!
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
-             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post <code>capacity().%capacity() == std::distance(first, last) \&\& capacity().min_capacity() == 0 \&\&
               full() \&\& (*this)[0]== *first \&\& (*this)[1] == *(first + 1) \&\& ... \&\&
               (*this)[std::distance(first, last) - 1] == *(last - 1)</code><br><br>
@@ -478,7 +478,7 @@ public:
                of allocated memory) filled with a copy of the range.
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
-             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post <code>capacity() == capacity_ctrl \&\& size() \<= std::distance(first, last) \&\& (*this)[0]==
               *(last - capacity_ctrl.%capacity()) \&\& (*this)[1] == *(last - capacity_ctrl.%capacity() + 1) \&\& ...
               \&\& (*this)[capacity_ctrl.%capacity() - 1] == *(last - 1)</code><br><br>
@@ -499,7 +499,7 @@ public:
         \par Complexity
              Linear (in <code>std::distance(first, last)</code>; in
              <code>min[capacity_ctrl.%capacity(), std::distance(first, last)]</code> if the <code>InputIterator</code>
-             is a <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+             is a <a href="https://www.boost.org/sgi/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
     */
     template <class InputIterator>
     circular_buffer_space_optimized(capacity_type capacity_ctrl, InputIterator first, InputIterator last,
@@ -655,7 +655,7 @@ public:
         elements from the specified range.
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
-             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post <code>capacity().%capacity() == std::distance(first, last) \&\& capacity().min_capacity() == 0 \&\&
               size() == std::distance(first, last) \&\& (*this)[0]== *first \&\& (*this)[1] == *(first + 1) \&\& ...
               \&\& (*this)[std::distance(first, last) - 1] == *(last - 1)</code><br><br>
@@ -692,7 +692,7 @@ public:
         elements from the specified range.
         \pre Valid range <code>[first, last)</code>.<br>
              <code>first</code> and <code>last</code> have to meet the requirements of
-             <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post <code>capacity() == capacity_ctrl \&\& size() \<= std::distance(first, last) \&\&
              (*this)[0]== *(last - capacity) \&\& (*this)[1] == *(last - capacity + 1) \&\& ... \&\&
              (*this)[capacity - 1] == *(last - 1)</code><br><br>
@@ -715,7 +715,7 @@ public:
         \par Complexity
              Linear (in <code>std::distance(first, last)</code>; in
              <code>min[capacity_ctrl.%capacity(), std::distance(first, last)]</code> if the <code>InputIterator</code>
-             is a <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+             is a <a href="https://www.boost.org/sgi/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
         \sa <code>\link operator=(const circular_buffer_space_optimized&) operator=\endlink</code>,
             <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
             <code>\link assign(capacity_type, size_type, param_value_type)
@@ -1114,7 +1114,7 @@ public:
     /*!
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or its
              end.<br>Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
-             requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             requirements of an <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post Elements from the range
               <code>[first + max[0, distance(first, last) - (pos - begin()) - reserve()], last)</code> will be
               inserted at the position <code>pos</code>.<br>The number of <code>min[pos - begin(), max[0,
@@ -1136,7 +1136,7 @@ public:
              Linear (in <code>[size() + std::distance(first, last)]</code>; in
              <code>min[capacity().%capacity(), size() + std::distance(first, last)]</code> if the
              <code>InputIterator</code> is a
-             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+             <a href="https://www.boost.org/sgi/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
         \par Example
              Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
              internal buffer may look like the one below.<br><br>
@@ -1326,7 +1326,7 @@ public:
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or its
              end.<br>
              Valid range <code>[first, last)</code> where <code>first</code> and <code>last</code> meet the
-             requirements of an <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>.
+             requirements of an <a href="https://www.boost.org/sgi/stl/InputIterator.html">InputIterator</a>.
         \post Elements from the range
               <code>[first, last - max[0, distance(first, last) - (end() - pos) - reserve()])</code> will be inserted
               before the position <code>pos</code>.<br>The number of <code>min[end() - pos, max[0,
@@ -1349,7 +1349,7 @@ public:
              Linear (in <code>[size() + std::distance(first, last)]</code>; in
              <code>min[capacity().%capacity(), size() + std::distance(first, last)]</code> if the
              <code>InputIterator</code> is a
-             <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
+             <a href="https://www.boost.org/sgi/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
         \par Example
              Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
              internal buffer may look like the one below.<br><br>
