@@ -2397,7 +2397,9 @@ private:
 
     //! Does the pointer point to the uninitialized memory?
     bool is_uninitialized(const_pointer p) const BOOST_NOEXCEPT {
-        return p >= m_last && (m_first < m_last || p < m_first);
+        return (m_first < m_last)
+            ? (p >= m_last || p < m_first)
+            : (p >= m_last && p < m_first);
     }
 
     //! Replace an element.
