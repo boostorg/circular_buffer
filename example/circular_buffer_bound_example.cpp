@@ -19,6 +19,7 @@ as an underlying container of the bounded buffer.
 #include <boost/bind.hpp>
 
 #include <boost/timer/timer.hpp> // for auto_cpu_timer
+#include <iostream>
 
 template <class T>
 class bounded_buffer

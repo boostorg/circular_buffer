@@ -67,8 +67,8 @@ new data is written starting at the beginning of the buffer and overwriting the 
 
 [classref boost::circular_buffer] is a STL compliant container.
 
-It is a kind of sequence similar to [@http://www.sgi.com/tech/stl/List.html std::list]
-or [@http://www.sgi.com/tech/stl/Deque.html std::deque].
+It is a kind of sequence similar to [@https://www.boost.org/sgi/stl/List.html std::list]
+or [@https://www.boost.org/sgi/stl/Deque.html std::deque].
 It supports random access iterators, constant time insert and erase operations
 at the beginning or the end of the buffer and interoperability with std algorithms.
 
@@ -470,9 +470,9 @@ The __cbso is defined in the file [@boost:boost/circular_buffer/space_optimized.
 
 [section:concepts Modelled Concepts]
 
-[@http://www.sgi.com/tech/stl/RandomAccessContainer.html Random Access Container],
-[@http://www.sgi.com/tech/stl/FrontInsertionSequence.html Front Insertion Sequence], and
-[@http://www.sgi.com/tech/stl/BackInsertionSequence.html Back Insertion sequence]
+[@https://www.boost.org/sgi/stl/RandomAccessContainer.html Random Access Container],
+[@https://www.boost.org/sgi/stl/FrontInsertionSequence.html Front Insertion Sequence], and
+[@https://www.boost.org/sgi/stl/BackInsertionSequence.html Back Insertion sequence]
 
 [endsect] [/section:concepts Modelled Concepts]
 
@@ -483,10 +483,10 @@ The __cbso is defined in the file [@boost:boost/circular_buffer/space_optimized.
 [[T] [The type of the elements stored in the circular_buffer.
 The T has to be [@boost:libs/utility/Assignable.html Assignable]
 and [@boost:libs/utility/CopyConstructible.html CopyConstructible].
-Moreover T has to be [@http://www.sgi.com/tech/stl/DefaultConstructible.html DefaultConstructible]
+Moreover T has to be [@https://www.boost.org/sgi/stl/DefaultConstructible.html DefaultConstructible]
 if supplied as a default parameter when invoking some of the circular_buffer's methods,
 e.g. `insert(iterator pos, const value_type& item = value_type())`.
-And [@http://www.sgi.com/tech/stl/EqualityComparable.html EqualityComparable]
+And [@https://www.boost.org/sgi/stl/EqualityComparable.html EqualityComparable]
 and/or [@boost:libs/utility/LessThanComparable.html LessThanComparable]
 if the circular_buffer will be compared with another container.]]
 [[Alloc] [The allocator type used for all internal memory management.

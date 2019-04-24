@@ -35,7 +35,7 @@ project
       <toolset>msvc:<cxxflags>/wd4305
     ;
     
-run bounded_buffer_comparison.cpp ;
+run bounded_buffer_comparison.cpp ../../timer/build//boost_timer ;
 run circular_buffer_iter_example.cpp ;
 run circular_buffer_sum_example.cpp ;
 run circular_buffer_bound_example.cpp ../../thread/build//boost_thread ../../timer/build//boost_timer ;
