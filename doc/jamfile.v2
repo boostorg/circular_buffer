@@ -29,8 +29,6 @@ doxygen autodoc
       [ glob ../../../boost/circular_buffer.hpp ]
       [ glob ../../../boost/circular_buffer/base.hpp ]
       [ glob ../../../boost/circular_buffer/space_optimized.hpp ]
-      [ glob ../../../boost/circular_buffer/details.hpp ] # Needed for capacity_control at least.
-      [ glob ../../../boost/circular_buffer/debug.hpp ] # not needed?
       
    :
    # Pass some setting parameters to Doxygen.

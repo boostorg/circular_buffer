@@ -1522,7 +1522,7 @@ public:
 private:
 // Helper methods
 
-    //! Adjust the amount of allocated memory.
+    /*! INTERNAL ONLY */
     void adjust_min_capacity() {
         if (m_capacity_ctrl.min_capacity() > circular_buffer<T, Alloc>::capacity())
             circular_buffer<T, Alloc>::set_capacity(m_capacity_ctrl.min_capacity());
@@ -1530,7 +1530,7 @@ private:
             check_high_capacity();
     }
 
-    //! Ensure the reserve for possible growth up.
+    /*! INTERNAL ONLY */
     size_type ensure_reserve(size_type new_capacity, size_type buffer_size) const {
         if (buffer_size + new_capacity / 5 >= new_capacity)
             new_capacity *= 2; // ensure at least 20% reserve
@@ -1539,10 +1539,7 @@ private:
         return new_capacity;
     }
 
-    //! Check for low capacity.
-    /*
-        \post If the capacity is low it will be increased.
-    */
+    /*! INTERNAL ONLY */
     void check_low_capacity(size_type n = 1) {
         size_type new_size = size() + n;
         size_type new_capacity = circular_buffer<T, Alloc>::capacity();
@@ -1558,10 +1555,7 @@ private:
 #endif
     }
 
-    //! Check for high capacity.
-    /*
-        \post If the capacity is high it will be decreased.
-    */
+    /*! INTERNAL ONLY */
     void check_high_capacity() {
         size_type new_capacity = circular_buffer<T, Alloc>::capacity();
         while (new_capacity / 3 >= size()) { // (new_capacity / 3) -> avoid oscillations
@@ -1578,28 +1572,28 @@ private:
 #endif
     }
 
-    //! Specialized method for reducing the capacity.
+    /*! INTERNAL ONLY */
     void reduce_capacity(const true_type&) {
         circular_buffer<T, Alloc>::set_capacity((std::max)(m_capacity_ctrl.min_capacity(), size()));
     }
 
-    //! Specialized method for reducing the capacity.
+    /*! INTERNAL ONLY */
     void reduce_capacity(const false_type&) {}
 
-    //! Determine the initial capacity.
+    /*! INTERNAL ONLY */
     static size_type init_capacity(const capacity_type& capacity_ctrl, size_type n) {
         BOOST_CB_ASSERT(capacity_ctrl.capacity() >= n); // check for capacity lower than n
         return (std::max)(capacity_ctrl.min_capacity(), n);
     }
 
-    //! Specialized method for determining the initial capacity.
+    /*! INTERNAL ONLY */
     template <class IntegralType>
     static size_type init_capacity(const capacity_type& capacity_ctrl, IntegralType n, IntegralType,
         const true_type&) {
         return init_capacity(capacity_ctrl, static_cast<size_type>(n));
     }
 
-    //! Specialized method for determining the initial capacity.
+    /*! INTERNAL ONLY */
     template <class Iterator>
     static size_type init_capacity(const capacity_type& capacity_ctrl, Iterator first, Iterator last,
         const false_type&) {
@@ -1612,14 +1606,14 @@ private:
 #endif
     }
 
-    //! Specialized method for determining the initial capacity.
+    /*! INTERNAL ONLY */
     template <class InputIterator>
     static size_type init_capacity(const capacity_type& capacity_ctrl, InputIterator, InputIterator,
         const std::input_iterator_tag&) {
         return capacity_ctrl.capacity();
     }
 
-    //! Specialized method for determining the initial capacity.
+    /*! INTERNAL ONLY */
     template <class ForwardIterator>
     static size_type init_capacity(const capacity_type& capacity_ctrl, ForwardIterator first, ForwardIterator last,
         const std::forward_iterator_tag&) {
@@ -1628,13 +1622,13 @@ private:
             (std::min)(capacity_ctrl.capacity(), static_cast<size_type>(std::distance(first, last))));
     }
 
-    //! Specialized insert method.
+    /*! INTERNAL ONLY */
     template <class IntegralType>
     void insert(const iterator& pos, IntegralType n, IntegralType item, const true_type&) {
         insert(pos, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
-    //! Specialized insert method.
+    /*! INTERNAL ONLY */
     template <class Iterator>
     void insert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         size_type index = pos - begin();
@@ -1642,13 +1636,13 @@ private:
         circular_buffer<T, Alloc>::insert(begin() + index, first, last);
     }
 
-    //! Specialized rinsert method.
+    /*! INTERNAL ONLY */
     template <class IntegralType>
     void rinsert(const iterator& pos, IntegralType n, IntegralType item, const true_type&) {
         rinsert(pos, static_cast<size_type>(n), static_cast<value_type>(item));
     }
 
-    //! Specialized rinsert method.
+    /*! INTERNAL ONLY */
     template <class Iterator>
     void rinsert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         size_type index = pos - begin();
