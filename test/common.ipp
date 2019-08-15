@@ -236,6 +236,9 @@ public:
    void destroy(value_type* ptr)
    {  ptr->~value_type();  }
 
+   size_type max_size() const {
+      return ~static_cast<size_type>(0) / sizeof(size_type);
+   }
 };
 
 void allocator_test() {
