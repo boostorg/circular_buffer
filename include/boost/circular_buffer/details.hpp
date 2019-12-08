@@ -20,7 +20,9 @@
 #include <boost/circular_buffer/allocators.hpp>
 #include <boost/core/pointer_traits.hpp>
 #include <boost/move/move.hpp>
+#include <boost/type_traits/enable_if.hpp>
 #include <boost/type_traits/is_nothrow_move_constructible.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/core/no_exceptions_support.hpp>
 #include <iterator>
 
@@ -241,8 +243,21 @@ struct iterator
 
 #if BOOST_CB_ENABLE_DEBUG
 
-    //! Copy constructor (used for converting from a non-const to a const iterator).
-    iterator(const nonconst_self& it) : debug_iterator_base(it), m_buff(it.m_buff), m_it(it.m_it) {}
+    //! Copy constructor.
+    iterator(const iterator& it) : debug_iterator_base(it), m_buff(it.m_buff), m_it(it.m_it) {}
+    
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    //! Move constructor.
+    iterator(iterator&& it) BOOST_NOEXCEPT : debug_iterator_base(it), m_buff(it.m_buff), m_it(it.m_it) {}
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
+    //! Converting constructor (used for converting from a non-const to a const iterator).
+    //! Only available, if it is not the same as the copy constructor.
+    template<typename NonconstSelf>
+    iterator(const NonconstSelf& it,
+             typename boost::enable_if_<boost::is_same<NonconstSelf, nonconst_self>::value &&
+                                        !boost::is_same<NonconstSelf, iterator>::value, bool>::type = true)
+        : debug_iterator_base(it), m_buff(it.m_buff), m_it(it.m_it) {}
 
     //! Internal constructor.
     /*!
@@ -252,7 +267,17 @@ struct iterator
 
 #else
 
-    iterator(const nonconst_self& it) : m_buff(it.m_buff), m_it(it.m_it) {}
+    iterator(const iterator& it) : m_buff(it.m_buff), m_it(it.m_it) {}
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    iterator(iterator&& it) BOOST_NOEXCEPT : m_buff(it.m_buff), m_it(it.m_it) {}
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
+    template<typename NonconstSelf>
+    iterator(const NonconstSelf& it,
+             typename boost::enable_if_<boost::is_same<NonconstSelf, nonconst_self>::value &&
+                                        !boost::is_same<NonconstSelf, iterator>::value, bool>::type = true)
+        : m_buff(it.m_buff), m_it(it.m_it) {}
 
     iterator(const Buff* cb, const pointer p) : m_buff(cb), m_it(p) {}
 
@@ -269,6 +294,14 @@ struct iterator
         m_it = it.m_it;
         return *this;
     }
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    //! Move assign operator.
+    iterator& operator = (iterator&& it) BOOST_NOEXCEPT {
+        // We don't need any moving, this is just to silence GCCs -Wdeprecated-copy
+        return operator =(it); // calls the copy assignment
+    }
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 // Random access iterator methods
 

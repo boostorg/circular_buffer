@@ -74,6 +74,11 @@ public:
     //! Copy constructor.
     debug_iterator_base(const debug_iterator_base& rhs);
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    //! Move constructor.
+    debug_iterator_base(debug_iterator_base&& rhs) BOOST_NOEXCEPT;
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
     //! Destructor.
     ~debug_iterator_base();
 
@@ -81,6 +86,11 @@ public:
 
     //! Assign operator.
     debug_iterator_base& operator = (const debug_iterator_base& rhs);
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    //! Move assign operator.
+    debug_iterator_base& operator = (debug_iterator_base&& rhs) BOOST_NOEXCEPT;
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
     //! Is the iterator valid?
     bool is_valid(const debug_iterator_registry* registry) const;
@@ -208,6 +218,13 @@ inline debug_iterator_base::debug_iterator_base(const debug_iterator_base& rhs)
     register_self();
 }
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+inline debug_iterator_base::debug_iterator_base(debug_iterator_base&& rhs) BOOST_NOEXCEPT
+: m_registry(rhs.m_registry), m_next(0) {
+    register_self();
+}
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
 inline debug_iterator_base::~debug_iterator_base() { unregister_self(); }
 
 inline debug_iterator_base& debug_iterator_base::operator = (const debug_iterator_base& rhs) {
@@ -218,6 +235,13 @@ inline debug_iterator_base& debug_iterator_base::operator = (const debug_iterato
     register_self();
     return *this;
 }
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+inline debug_iterator_base& debug_iterator_base::operator = (debug_iterator_base&& rhs) BOOST_NOEXCEPT {
+    // We don't need any moving, this is just to silence GCCs -Wdeprecated-copy
+    return operator = (rhs); // calls the copy assignment
+}
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 inline bool debug_iterator_base::is_valid(const debug_iterator_registry* registry) const {
     return m_registry == registry;
