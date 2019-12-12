@@ -287,6 +287,7 @@ public:
     */
     const_iterator begin() const BOOST_NOEXCEPT { return const_iterator(this, empty() ? 0 : m_first); }
 
+    const_iterator cbegin() const BOOST_NOEXCEPT { return const_iterator(this, empty() ? 0 : m_first); }
     //! Get the const iterator pointing to the end of the <code>circular_buffer</code>.
     /*!
         \return A const random access iterator pointing to the element "one behind" the last element of the <code>
@@ -303,6 +304,7 @@ public:
     */
     const_iterator end() const BOOST_NOEXCEPT { return const_iterator(this, 0); }
 
+    const_iterator cend() const BOOST_NOEXCEPT { return const_iterator(this, 0); }
     //! Get the iterator pointing to the beginning of the "reversed" <code>circular_buffer</code>.
     /*!
         \return A reverse random access iterator pointing to the last element of the <code>circular_buffer</code>.
