@@ -257,7 +257,7 @@ void allocator_test() {
     generic_test(cb_a);
 }
 
-#if !defined(BOOST_CB_NO_CXX11_ALLOCATOR)
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class T>
 class cxx11_allocator {
 public:
@@ -2490,7 +2490,7 @@ void run_common_tests()
     move_container_on_cpp11();
     move_container_values_noexcept();
     check_containers_exception_specifications();
-#if !defined(BOOST_CB_NO_CXX11_ALLOCATOR)
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
     cxx11_allocator_test();
 #endif
 }
