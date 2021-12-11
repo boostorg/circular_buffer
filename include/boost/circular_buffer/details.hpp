@@ -259,7 +259,7 @@ struct iterator
 #endif // #if BOOST_CB_ENABLE_DEBUG
 
     //! Assign operator.
-    iterator& operator = (const iterator& it) {
+    BOOST_DEFAULTED_FUNCTION(iterator& operator = (const iterator& it), {
         if (this == &it)
             return *this;
 #if BOOST_CB_ENABLE_DEBUG
@@ -268,7 +268,7 @@ struct iterator
         m_buff = it.m_buff;
         m_it = it.m_it;
         return *this;
-    }
+    })
 
 // Random access iterator methods
 
