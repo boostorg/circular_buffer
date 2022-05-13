@@ -1460,7 +1460,8 @@ private:
         if (full()) {
             if (empty())
                 return;
-            replace(m_last, value_type(::boost::forward<Args>(args)...));
+            destroy_item(m_last);
+            boost::allocator_construct(alloc(), boost::to_address(m_last), ::boost::forward<Args>(args)...);
             increment(m_last);
             m_first = m_last;
         } else {
@@ -1475,7 +1476,8 @@ private:
         if (full()) {
             if (empty())
                 return;
-            replace(m_last, value_type(::boost::forward<V>(value)));
+            destroy_item(m_last);
+            boost::allocator_construct(alloc(), boost::to_address(m_last), ::boost::forward<Args>(args)...);
             increment(m_last);
             m_first = m_last;
         } else {
@@ -1494,7 +1496,8 @@ private:
                 if (empty())
                     return;
                 decrement(m_first);
-                replace(m_first, value_type(::boost::forward<Args>(args)...));
+                destroy_item(m_first);
+                boost::allocator_construct(alloc(), boost::to_address(m_first), ::boost::forward<Args>(args)...);
                 m_last = m_first;
             } else {
                 decrement(m_first);
@@ -1515,7 +1518,8 @@ private:
                 if (empty())
                     return;
                 decrement(m_first);
-                replace(m_first, value_type(::boost::forward<V>(value)));
+                destroy_item(m_first);
+                boost::allocator_construct(alloc(), boost::to_address(m_first), ::boost::forward<Args>(args)...);
                 m_last = m_first;
             } else {
                 decrement(m_first);
