@@ -1160,23 +1160,23 @@ void emplace_test(){
     cb.emplace_back(6);
     cb.emplace_back(7);
 
-    BOOST_CHECK(cb.size() == 4);
-    BOOST_CHECK(cb.front() == 4);
-    BOOST_CHECK(cb.back() == 7);
+    BOOST_TEST(cb.size() == 4);
+    BOOST_TEST(cb.front() == 4);
+    BOOST_TEST(cb.back() == 7);
 
     cb.emplace_front(3);
     cb.emplace_front(2);
 
-    BOOST_CHECK(cb.front() == 2);
-    BOOST_CHECK(cb.back() == 5);
+    BOOST_TEST(cb.front() == 2);
+    BOOST_TEST(cb.back() == 5);
 
     cb.emplace_front(1);
     cb.emplace_front(0);
 
-    BOOST_CHECK(cb.size() == 4);
-    BOOST_CHECK(*cb.begin() == 0);
-    BOOST_CHECK(cb.front() == 0);
-    BOOST_CHECK(cb.back() == 3);
+    BOOST_TEST(cb.size() == 4);
+    BOOST_TEST(*cb.begin() == 0);
+    BOOST_TEST(cb.front() == 0);
+    BOOST_TEST(cb.back() == 3);
 }
 
 void insert_test() {

@@ -1429,7 +1429,7 @@ private:
             boost::allocator_construct(alloc(), boost::to_address(m_last), static_cast<ValT>(item));
             increment(m_last);
             ++m_size;
-        }        
+        }
     }
 
     /*! INTERNAL ONLY */
@@ -1464,7 +1464,7 @@ private:
             increment(m_last);
             m_first = m_last;
         } else {
-            cb_details::allocator_traits<Alloc>::construct(alloc(), boost::to_address(m_last), ::boost::forward<Args>(args)...);
+            boost::allocator_construct(alloc(), boost::to_address(m_last), ::boost::forward<Args>(args)...);
             increment(m_last);
             ++m_size;
         }
@@ -1479,7 +1479,7 @@ private:
             increment(m_last);
             m_first = m_last;
         } else {
-            cb_details::allocator_traits<Alloc>::construct(alloc(), boost::to_address(m_last), ::boost::forward<V>(value));
+            boost::allocator_construct(alloc(), boost::to_address(m_last), ::boost::forward<V>(value));
             increment(m_last);
             ++m_size;
         }
@@ -1498,7 +1498,7 @@ private:
                 m_last = m_first;
             } else {
                 decrement(m_first);
-                cb_details::allocator_traits<Alloc>::construct(alloc(), boost::to_address(m_first), ::boost::forward<Args>(args)...);
+                boost::allocator_construct(alloc(), boost::to_address(m_first), ::boost::forward<Args>(args)...);
                 ++m_size;
             }
         } BOOST_CATCH(...) {
@@ -1519,7 +1519,7 @@ private:
                 m_last = m_first;
             } else {
                 decrement(m_first);
-                cb_details::allocator_traits<Alloc>::construct(alloc(), boost::to_address(m_first), ::boost::forward<V>(value));
+                boost::allocator_construct(alloc(), boost::to_address(m_first), ::boost::forward<V>(value));
                 ++m_size;
             }
         } BOOST_CATCH(...) {
