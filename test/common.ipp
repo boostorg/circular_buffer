@@ -1153,6 +1153,32 @@ void pop_back_test() {
     generic_test(cb);
 }
 
+void emplace_test(){
+    CB_CONTAINER<MyInteger> cb(4);
+    cb.emplace_back(4);
+    cb.emplace_back(5);
+    cb.emplace_back(6);
+    cb.emplace_back(7);
+
+    BOOST_CHECK(cb.size() == 4);
+    BOOST_CHECK(cb.front() == 4);
+    BOOST_CHECK(cb.back() == 7);
+
+    cb.emplace_front(3);
+    cb.emplace_front(2);
+
+    BOOST_CHECK(cb.front() == 2);
+    BOOST_CHECK(cb.back() == 5);
+
+    cb.emplace_front(1);
+    cb.emplace_front(0);
+
+    BOOST_CHECK(cb.size() == 4);
+    BOOST_CHECK(*cb.begin() == 0);
+    BOOST_CHECK(cb.front() == 0);
+    BOOST_CHECK(cb.back() == 3);
+}
+
 void insert_test() {
 
     CB_CONTAINER<MyInteger> cb1(4);
@@ -2467,6 +2493,7 @@ void run_common_tests()
     swap_test();
     push_back_test();
     pop_back_test();
+    emplace_test();
     insert_test();
     insert_n_test();
     insert_range_test();
