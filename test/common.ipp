@@ -283,7 +283,6 @@ void cxx11_allocator_test() {
     CB_CONTAINER<MyInteger, cxx11_allocator<MyInteger> > cb(10, 0);
     generic_test(cb);
 }
-
 #endif
 
 void begin_and_end_test() {
@@ -1152,32 +1151,6 @@ void pop_back_test() {
     BOOST_TEST(cb[0] == 2);
 
     generic_test(cb);
-}
-
-void emplace_test(){
-    CB_CONTAINER<MyInteger> cb(4);
-    cb.emplace_back(4);
-    cb.emplace_back(5);
-    cb.emplace_back(6);
-    cb.emplace_back(7);
-
-    BOOST_CHECK(cb.size() == 4);
-    BOOST_CHECK(cb.front() == 4);
-    BOOST_CHECK(cb.back() == 7);
-
-    cb.emplace_front(3);
-    cb.emplace_front(2);
-
-    BOOST_CHECK(cb.front() == 2);
-    BOOST_CHECK(cb.back() == 5);
-
-    cb.emplace_front(1);
-    cb.emplace_front(0);
-
-    BOOST_CHECK(cb.size() == 4);
-    BOOST_CHECK(*cb.begin() == 0);
-    BOOST_CHECK(cb.front() == 0);
-    BOOST_CHECK(cb.back() == 3);
 }
 
 void insert_test() {
@@ -2469,56 +2442,56 @@ void check_containers_exception_specifications() {
 }
 
 // add common tests into a test suite
-void add_common_tests(test_suite* tests) {
-    tests->add(BOOST_TEST_CASE(&basic_test));
-    tests->add(BOOST_TEST_CASE(&constructor_and_element_access_test));
-    tests->add(BOOST_TEST_CASE(&size_test));
-    tests->add(BOOST_TEST_CASE(&allocator_test));
-    tests->add(BOOST_TEST_CASE(&begin_and_end_test));
-    tests->add(BOOST_TEST_CASE(&rbegin_and_rend_test));
-    tests->add(BOOST_TEST_CASE(&element_access_and_insert_test));
-    tests->add(BOOST_TEST_CASE(&at_test));
-    tests->add(BOOST_TEST_CASE(&front_and_back_test));
-    tests->add(BOOST_TEST_CASE(&linearize_test));
-    tests->add(BOOST_TEST_CASE(&array_range_test));
-    tests->add(BOOST_TEST_CASE(&capacity_and_reserve_test));
-    tests->add(BOOST_TEST_CASE(&full_and_empty_test));
-    tests->add(BOOST_TEST_CASE(&set_capacity_test));
-    tests->add(BOOST_TEST_CASE(&rset_capacity_test));
-    tests->add(BOOST_TEST_CASE(&resize_test));
-    tests->add(BOOST_TEST_CASE(&rresize_test));
-    tests->add(BOOST_TEST_CASE(&constructor_test));
-    tests->add(BOOST_TEST_CASE(&assign_test));
-    tests->add(BOOST_TEST_CASE(&copy_constructor_and_assign_test));
-    tests->add(BOOST_TEST_CASE(&swap_test));
-    tests->add(BOOST_TEST_CASE(&push_back_test));
-    tests->add(BOOST_TEST_CASE(&pop_back_test));
-    tests->add(BOOST_TEST_CASE(&emplace_test));
-    tests->add(BOOST_TEST_CASE(&insert_test));
-    tests->add(BOOST_TEST_CASE(&insert_n_test));
-    tests->add(BOOST_TEST_CASE(&insert_range_test));
-    tests->add(BOOST_TEST_CASE(&push_front_test));
-    tests->add(BOOST_TEST_CASE(&pop_front_test));
-    tests->add(BOOST_TEST_CASE(&rinsert_test));
-    tests->add(BOOST_TEST_CASE(&rinsert_n_test));
-    tests->add(BOOST_TEST_CASE(&rinsert_range_test));
-    tests->add(BOOST_TEST_CASE(&erase_test));
-    tests->add(BOOST_TEST_CASE(&erase_range_test));
-    tests->add(BOOST_TEST_CASE(&rerase_test));
-    tests->add(BOOST_TEST_CASE(&rerase_range_test));
-    tests->add(BOOST_TEST_CASE(&clear_test));
-    tests->add(BOOST_TEST_CASE(&equality_test));
-    tests->add(BOOST_TEST_CASE(&lexicographical_comparison_test));
-    tests->add(BOOST_TEST_CASE(&assign_range_test));
-    tests->add(BOOST_TEST_CASE(&example_test));
-    tests->add(BOOST_TEST_CASE(&element_destruction_test));
-    tests->add(BOOST_TEST_CASE(&const_methods_test));
-    tests->add(BOOST_TEST_CASE(&rotate_test));
-    tests->add(BOOST_TEST_CASE(&move_container_on_cpp11));
-    tests->add(BOOST_TEST_CASE(&move_container_values_noexcept));    
-    tests->add(BOOST_TEST_CASE(&check_containers_exception_specifications));
-#if !defined(BOOST_CB_NO_CXX11_ALLOCATOR)
-    tests->add(BOOST_TEST_CASE(&cxx11_allocator_test));
+void run_common_tests()
+{
+    basic_test();
+    constructor_and_element_access_test();
+    size_test();
+    allocator_test();
+    begin_and_end_test();
+    rbegin_and_rend_test();
+    element_access_and_insert_test();
+    at_test();
+    front_and_back_test();
+    linearize_test();
+    array_range_test();
+    capacity_and_reserve_test();
+    full_and_empty_test();
+    set_capacity_test();
+    rset_capacity_test();
+    resize_test();
+    rresize_test();
+    constructor_test();
+    assign_test();
+    copy_constructor_and_assign_test();
+    swap_test();
+    push_back_test();
+    pop_back_test();
+    insert_test();
+    insert_n_test();
+    insert_range_test();
+    push_front_test();
+    pop_front_test();
+    rinsert_test();
+    rinsert_n_test();
+    rinsert_range_test();
+    erase_test();
+    erase_range_test();
+    rerase_test();
+    rerase_range_test();
+    clear_test();
+    equality_test();
+    lexicographical_comparison_test();
+    assign_range_test();
+    example_test();
+    element_destruction_test();
+    const_methods_test();
+    rotate_test();
+    move_container_on_cpp11();
+    move_container_values_noexcept();
+    check_containers_exception_specifications();
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+    cxx11_allocator_test();
 #endif
 }
 
