@@ -258,22 +258,6 @@ struct iterator
 
 #endif // #if BOOST_CB_ENABLE_DEBUG
 
-    //! Assign operator.
-#if !defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS)
-    iterator& operator=(const iterator&) = default;
-#else
-    iterator& operator=(const iterator& it) {
-        if (this == &it)
-            return *this;
-#if BOOST_CB_ENABLE_DEBUG
-        debug_iterator_base::operator =(it);
-#endif // #if BOOST_CB_ENABLE_DEBUG
-        m_buff = it.m_buff;
-        m_it = it.m_it;
-        return *this;
-    }
-#endif
-
 // Random access iterator methods
 
     //! Dereferencing operator.
