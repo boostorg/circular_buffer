@@ -283,6 +283,7 @@ void cxx11_allocator_test() {
     CB_CONTAINER<MyInteger, cxx11_allocator<MyInteger> > cb(10, 0);
     generic_test(cb);
 }
+
 #endif
 
 void begin_and_end_test() {
@@ -1151,6 +1152,32 @@ void pop_back_test() {
     BOOST_TEST(cb[0] == 2);
 
     generic_test(cb);
+}
+
+void emplace_test(){
+    CB_CONTAINER<MyInteger> cb(4);
+    cb.emplace_back(4);
+    cb.emplace_back(5);
+    cb.emplace_back(6);
+    cb.emplace_back(7);
+
+    BOOST_TEST(cb.size() == 4);
+    BOOST_TEST(cb.front() == 4);
+    BOOST_TEST(cb.back() == 7);
+
+    cb.emplace_front(3);
+    cb.emplace_front(2);
+
+    BOOST_TEST(cb.front() == 2);
+    BOOST_TEST(cb.back() == 5);
+
+    cb.emplace_front(1);
+    cb.emplace_front(0);
+
+    BOOST_TEST(cb.size() == 4);
+    BOOST_TEST(*cb.begin() == 0);
+    BOOST_TEST(cb.front() == 0);
+    BOOST_TEST(cb.back() == 3);
 }
 
 void insert_test() {
@@ -2467,6 +2494,7 @@ void run_common_tests()
     swap_test();
     push_back_test();
     pop_back_test();
+    emplace_test();
     insert_test();
     insert_n_test();
     insert_range_test();
