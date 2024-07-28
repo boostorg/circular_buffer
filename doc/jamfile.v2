@@ -26,9 +26,9 @@ using quickbook ;
 doxygen autodoc
    :
    #  List all the files individually (RECURSIVE=NO ).
-      [ glob ../include/circular_buffer.hpp ]
-      [ glob ../include/circular_buffer/base.hpp ]
-      [ glob ../include/circular_buffer/space_optimized.hpp ]
+      [ glob ../include/boost/circular_buffer.hpp ]
+      [ glob ../include/boost/circular_buffer/base.hpp ]
+      [ glob ../include/boost/circular_buffer/space_optimized.hpp ]
 
    :
    # Pass some setting parameters to Doxygen.
