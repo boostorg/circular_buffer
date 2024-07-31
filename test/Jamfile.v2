@@ -13,6 +13,7 @@ import testing ;
 
 project
     : requirements
+      <library>/boost/circular_buffer//boost_circular_buffer
       <toolset>msvc:<warnings>all
       <toolset>msvc:<asynch-exceptions>on
       <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
