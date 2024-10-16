@@ -25,10 +25,10 @@
 #include <boost/core/empty_value.hpp>
 #include <boost/type_traits/is_stateless.hpp>
 #include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_scalar.hpp>
 #include <boost/type_traits/is_nothrow_move_constructible.hpp>
 #include <boost/type_traits/is_nothrow_move_assignable.hpp>
 #include <boost/type_traits/is_copy_constructible.hpp>
+#include <boost/type_traits/has_trivial_destructor.hpp>
 #include <boost/type_traits/conditional.hpp>
 #include <boost/move/adl_move_swap.hpp>
 #include <boost/move/move.hpp>
@@ -2279,7 +2279,7 @@ public:
 #if BOOST_CB_ENABLE_DEBUG
         erase_begin(n, false_type());
 #else
-        erase_begin(n, is_scalar<value_type>());
+        erase_begin(n, has_trivial_destructor<value_type>());
 #endif
     }
 
@@ -2311,7 +2311,7 @@ public:
 #if BOOST_CB_ENABLE_DEBUG
         erase_end(n, false_type());
 #else
-        erase_end(n, is_scalar<value_type>());
+        erase_end(n, has_trivial_destructor<value_type>());
 #endif
     }
 
@@ -2462,7 +2462,7 @@ private:
 #if BOOST_CB_ENABLE_DEBUG
         destroy_content(false_type());
 #else
-        destroy_content(is_scalar<value_type>());
+        destroy_content(has_trivial_destructor<value_type>());
 #endif
     }
 

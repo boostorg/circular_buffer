@@ -68,6 +68,31 @@ void erase_begin_test() {
     BOOST_TEST(cb3[0] == 4);
     BOOST_TEST(cb3[1] == 5);
     BOOST_TEST(cb3[2] == 6);
+
+
+    circular_buffer<MyDefaultConstructible> cb4(5);
+    cb4.push_back(1);
+    cb4.push_back(2);
+    cb4.push_back(3);
+    cb4.push_back(4);
+    cb4.push_back(5);
+    cb4.push_back(6);
+
+
+    circular_buffer<MyDefaultConstructible>::pointer p4 = &cb4[0];
+    cb4.erase_begin(5);
+    BOOST_TEST(cb4.empty());
+    BOOST_TEST(p4->m_n == 2);
+    BOOST_TEST((p4 + 1)->m_n == 3);
+    BOOST_TEST((p4 + 2)->m_n == 4);
+    BOOST_TEST((p4 + 3)->m_n == 5);
+    BOOST_TEST((p4 - 1)->m_n == 6);
+
+    cb4.push_back(10);
+    cb4.push_back(11);
+    BOOST_TEST(cb4.size() == 2);
+    BOOST_TEST(cb4[0].m_n == 10);
+    BOOST_TEST(cb4[1].m_n == 11);
 }
 
 void erase_end_test() {
@@ -127,6 +152,31 @@ void erase_end_test() {
     BOOST_TEST(cb3[0] == 2);
     BOOST_TEST(cb3[1] == 3);
     BOOST_TEST(cb3[2] == 4);
+
+
+    circular_buffer<MyDefaultConstructible> cb4(5);
+    cb4.push_back(1);
+    cb4.push_back(2);
+    cb4.push_back(3);
+    cb4.push_back(4);
+    cb4.push_back(5);
+    cb4.push_back(6);
+
+    circular_buffer<MyDefaultConstructible>::pointer p4 = &cb4[0];
+
+    cb4.erase_end(5);
+    BOOST_TEST(cb4.empty());
+    BOOST_TEST(p4->m_n == 2);
+    BOOST_TEST((p4 + 1)->m_n == 3);
+    BOOST_TEST((p4 + 2)->m_n == 4);
+    BOOST_TEST((p4 + 3)->m_n == 5);
+    BOOST_TEST((p4 - 1)->m_n == 6);
+
+    cb4.push_back(10);
+    cb4.push_back(11);
+    BOOST_TEST(cb4.size() == 2);
+    BOOST_TEST(cb4[0].m_n == 10);
+    BOOST_TEST(cb4[1].m_n == 11);
 }
 
 void clear_test() {
@@ -170,6 +220,25 @@ void clear_test() {
     cb3.clear();
 
     BOOST_TEST(cb3.empty());
+
+    circular_buffer<MyDefaultConstructible> cb4(5);
+    cb4.push_back(1);
+    cb4.push_back(2);
+    cb4.push_back(3);
+    cb4.push_back(4);
+    cb4.push_back(5);
+    cb4.push_back(6);
+
+    circular_buffer<MyDefaultConstructible>::pointer p4 = &cb4[0];
+
+    cb4.clear();
+
+    BOOST_TEST(cb4.empty());
+    BOOST_TEST(p4->m_n == 2);
+    BOOST_TEST((p4 + 1)->m_n == 3);
+    BOOST_TEST((p4 + 2)->m_n == 4);
+    BOOST_TEST((p4 + 3)->m_n == 5);
+    BOOST_TEST((p4 - 1)->m_n == 6);
 }
 
 // test main
