@@ -17,11 +17,12 @@ constant boost_dependencies :
 
 project /boost/circular_buffer
     : common-requirements
-        <include>include
+
     ;
 
 explicit
-    [ alias boost_circular_buffer : : : : <library>$(boost_dependencies) ]
+    [ alias boost_circular_buffer : : :
+        : <include>include <library>$(boost_dependencies) ]
     [ alias all : boost_circular_buffer example test ]
     ;
 
