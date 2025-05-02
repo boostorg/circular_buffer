@@ -34,7 +34,8 @@ const int UNINITIALIZED = 0xcc;
 
 template <class T>
 inline void do_fill_uninitialized_memory(T* data, std::size_t size_in_bytes) BOOST_NOEXCEPT {
-    std::memset(static_cast<void*>(data), UNINITIALIZED, size_in_bytes);
+    if(size_in_bytes)
+        std::memset(static_cast<void*>(data), UNINITIALIZED, size_in_bytes);
 }
 
 template <class T>
