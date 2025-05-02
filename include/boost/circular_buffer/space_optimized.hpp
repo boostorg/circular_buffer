@@ -905,6 +905,76 @@ public:
         circular_buffer<T, Alloc>::push_front();
     }
 
+    //! Construct a new element at the end of the space optimized circular buffer.
+    /*!
+        \post if <code>capacity().%capacity() > 0</code> then <code>back() == item</code><br>
+              If the <code>circular_buffer_space_optimized</code> is full, the first element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \param item The element to be inserted.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+                Whatever <code>T::T(Args...)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link push_front() push_front(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
+    */
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+    template <class ...Args>
+    void emplace_back(BOOST_FWD_REF(Args) ...args) {
+        check_low_capacity();
+        circular_buffer<T, Alloc>::emplace_back(::boost::forward<Args>(args)...);
+    }
+#else
+    template <class V>
+    void emplace_back(BOOST_FWD_REF(V) value) {
+        check_low_capacity();
+        circular_buffer<T, Alloc>::emplace_back(::boost::forward<V>(value));
+    }
+#endif
+
+    //! Construct a new element at the beginning of the space optimized circular buffer.
+    /*!
+        \post if <code>capacity().%capacity() > 0</code> then <code>front() == item</code><br>
+              If the <code>circular_buffer_space_optimized</code> is full, the last element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \param item The element to be inserted.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+                Whatever <code>T::T(Args...)</code> throws or nothing if <code>T::T(T&&)</code> is noexcept.
+                Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link push_back() push_back(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
+    */
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+    template <class ...Args>
+    void emplace_front(BOOST_FWD_REF(Args) ...args) {
+        check_low_capacity();
+        circular_buffer<T, Alloc>::emplace_front(::boost::forward<Args>(args)...);
+    }
+#else
+    template <class V>
+    void emplace_front(BOOST_FWD_REF(V) value) {
+        check_low_capacity();
+        circular_buffer<T, Alloc>::emplace_front(::boost::forward<V>(value));
+    }
+#endif
+
     //! Remove the last element from the space optimized circular buffer.
     /*!
         \pre <code>!empty()</code>
