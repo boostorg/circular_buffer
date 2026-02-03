@@ -7,7 +7,32 @@ cmake_minimum_required(VERSION 3.5...3.31)
 project(cmake_subdir_test LANGUAGES CXX)
 
 add_subdirectory(../.. boostorg/circular_buffer)
-add_subdirectory(../../../config boostorg/config)
+
+# boostdep --brief circular_buffer
+
+set(deps
+
+# Primary dependencies
+
+assert
+concept_check
+config
+core
+move
+throw_exception
+type_traits
+
+# Secondary dependencies
+
+preprocessor
+
+)
+
+foreach(dep IN LISTS deps)
+
+    add_subdirectory(../../../${dep} boostorg/${dep})
+
+endforeach()
 
 add_executable(main main.cpp)
 target_link_libraries(main Boost::circular_buffer)
