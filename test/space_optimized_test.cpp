@@ -6,6 +6,9 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+// Include the adaptor header first to check that it is self-contained.
+#define BOOST_CB_TEST
+#include <boost/circular_buffer/space_optimized.hpp>
 #include "test.hpp"
 
 #define CB_CONTAINER circular_buffer_space_optimized

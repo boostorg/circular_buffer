@@ -8,6 +8,12 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+// Include the main header before this file's guard so it can include this file
+// while the internal configuration macros are still defined.
+#if !defined(BOOST_CIRCULAR_BUFFER_HPP)
+#include <boost/circular_buffer.hpp>
+#endif
+
 #if !defined(BOOST_CIRCULAR_BUFFER_SPACE_OPTIMIZED_HPP)
 #define BOOST_CIRCULAR_BUFFER_SPACE_OPTIMIZED_HPP
 
